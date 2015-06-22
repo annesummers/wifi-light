@@ -31,6 +31,11 @@ public class HSVFragment extends RXFragment {
         super();
     }
 
+    @Override
+    protected void destroyViews() {
+
+    }
+
     private SeekBar mHueSeekBar;
     private SeekBar mSaturationSeekBar;
     private SeekBar mValueSeekBar;

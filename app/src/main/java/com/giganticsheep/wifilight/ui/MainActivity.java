@@ -11,7 +11,6 @@ import com.giganticsheep.wifilight.ui.rx.ActivityLayout;
 import com.giganticsheep.wifilight.ui.rx.RXActivity;
 
 
-
 public class MainActivity extends RXActivity {
 
     private LightNetwork mLightNetwork;
@@ -92,7 +91,7 @@ public class MainActivity extends RXActivity {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "MainActivity{" +
                 "mLightNetwork=" + mLightNetwork.toString() +
                 '}';

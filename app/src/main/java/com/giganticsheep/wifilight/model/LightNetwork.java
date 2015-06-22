@@ -1,13 +1,17 @@
 package com.giganticsheep.wifilight.model;
 
+import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit.RestAdapter;
 import retrofit.client.Response;
 import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -16,11 +20,17 @@ import rx.schedulers.Schedulers;
  */
 public class LightNetwork {
 
-    static final RestAdapter mRestAdapter;
-    static final LightService mLightService;
+    private static final RestAdapter mRestAdapter;
+    private static final LightService mLightService;
 
-    private static final String LIGHTS = "/lights";
-    private static final String ALL = "/all";
+    @NonNls private static final char SPACE = ' ';
+
+    @NonNls private static final String URK_ALL = "/all";
+    @NonNls private static final String URL_COLOR = "/color";
+    @NonNls private static final String LABEL_BEARER = "Bearer";
+
+    @SuppressWarnings("FieldNotUsedInToString")
+    protected final Logger mLogger = new Logger(getClass().getName());
 
     static {
         mRestAdapter = new RestAdapter.Builder()
@@ -30,42 +40,88 @@ public class LightNetwork {
         mLightService = mRestAdapter.create(LightService.class);
     }
 
-    private final List<Light> mLights = new ArrayList<>();
+    private final Iterable<Light> mLights = new ArrayList<>();
+    private final String mAPIKey;
 
-    public LightNetwork(String aPIKey) {
-        findLights();
-        mLights.add(new Light(this, "Nyan"));
+    /**
+     * @param aPIKey
+     */
+    public LightNetwork(final String aPIKey) {
+        mAPIKey = aPIKey;
+
+        findLights()
+        .subscribe();
     }
 
-    private void findLights() {
-        service().listLights(baseUrl(), authorisation());
-    }
-
-    public void setHue(int hue) {
-        for(Light light : mLights) {
+    /**
+     * @param hue the hue to set the enabled lights
+     */
+    public final void setHue(final int hue) {
+        for(final Light light : mLights) {
             if(light.enabled()) {
                 light.setHue(hue);
             }
-
         }
     }
 
-    public void setSaturation(int saturation) {
-        for(Light light : mLights) {
+    /**
+     * @param saturation the saturation to set the enabled lights
+     */
+    public final void setSaturation(final int saturation) {
+        for(final Light light : mLights) {
             if(light.enabled()) {
-                light.setSaturation(saturation);
+                light.setSaturation((float)saturation/100);
             }
-
         }
     }
 
-    public void setValue(int value) {
-        for(Light light : mLights) {
+    /**
+     * @param value the value (brightness) to set the enabled lights
+     */
+    public final void setValue(final int value) {
+        for(final Light light : mLights) {
             if(light.enabled()) {
-                light.setValue(value);
+                light.setValue((float)value/100);
             }
-
         }
+    }
+
+    /**
+     * @param query the colour query
+     * @return the Observable to subscribe to
+     */
+    final Observable<Response> setColour(final String query) {
+        return service().setColour(baseUrl() + URL_COLOR, authorisation(), query)
+                .subscribeOn(Schedulers.io());
+    }
+
+    private String authorisation() {
+        return LABEL_BEARER + SPACE + mAPIKey;
+    }
+
+    private final LightService service() {
+        return mLightService;
+    }
+
+    private final String baseUrl() {
+        return WifiLightApplication.application().baseUrl() + URK_ALL;
+    }
+
+    private Observable<String> findLights() {
+        return service().listLights(baseUrl(), authorisation())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        mLogger.error(throwable);
+                    }
+                })
+                .flatMap(new Func1<Response, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(final Response response) {
+                        mLogger.debug(response.toString());
+                        return Observable.just(response.toString());
+                    }
+                });
     }
 
     @Override
@@ -73,22 +129,5 @@ public class LightNetwork {
         return "LightNetwork{" +
                 "mLights=" + mLights +
                 '}';
-    }
-
-    public String authorisation() {
-        return "Bearer " + WifiLightApplication.application().aPIKey();
-    }
-
-    public LightService service() {
-        return mLightService;
-    }
-
-    public String baseUrl() {
-        return WifiLightApplication.application().baseUrl() + ALL;
-    }
-
-    public Observable<Response> setColour(String query) {
-        return service().setColour(baseUrl() + "/color", authorisation(), query)
-                .subscribeOn(Schedulers.io());
     }
 }
