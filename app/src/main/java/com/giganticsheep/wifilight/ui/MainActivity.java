@@ -12,6 +12,8 @@ import com.giganticsheep.wifilight.ui.rx.RXActivity;
 
 
 public class MainActivity extends RXActivity {
+    private static final float DEFAULT_DURATION = 1.0F;
+
     private LightNetwork mLightNetwork;
 
     @Override
@@ -77,15 +79,19 @@ public class MainActivity extends RXActivity {
     }
 
     public final void setHue(final int hue) {
-        mLightNetwork.setHue(hue);
+        mLightNetwork.setHue(hue, DEFAULT_DURATION);
     }
 
     public final void setSaturation(final int saturation) {
-        mLightNetwork.setSaturation(saturation);
+        mLightNetwork.setSaturation(saturation, DEFAULT_DURATION);
     }
 
-    public final void setValue(final int value) {
-        mLightNetwork.setValue(value);
+    public final void setBrightness(final int brightness) {
+        mLightNetwork.setBrightness(brightness, DEFAULT_DURATION);
+    }
+
+    public final void setKelvin(final int kelvin) {
+        mLightNetwork.setKelvin(kelvin, DEFAULT_DURATION);
     }
 
     @Override

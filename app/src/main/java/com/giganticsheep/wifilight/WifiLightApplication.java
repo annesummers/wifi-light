@@ -5,6 +5,7 @@ import android.util.Log;
 import com.giganticsheep.wifilight.ui.HSVFragment;
 import com.giganticsheep.wifilight.ui.rx.RXApplication;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
+import com.squareup.otto.Bus;
 
 import org.jetbrains.annotations.NonNls;
 
@@ -19,13 +20,17 @@ public class WifiLightApplication extends RXApplication {
 
     @NonNls private static final String DEFAULT_API_KEY = "c5e3c4b06448baa75d3a849b7cdb70930e4b95e9e7160a4415c49bf03ffa45f8";
     @NonNls private static final String DEFAULT_SERVER_STRING = "https://api.lifx.com";
-    @NonNls private static final String DEFAULT_URL_STRING = "/v1beta1/lights";
+    @NonNls private static final String DEFAULT_URL_STRING1 = "v1beta1";
+    @NonNls private static final String DEFAULT_URL_STRING2 = "lights";
 
     private String mAPIKey;
     private String mServerURL;
-    private String mBaseUrl;
+    private String mBaseUrl1;
+    private String mBaseUrl2;
 
     private static WifiLightApplication mApplication;
+
+    private Bus bus = new Bus();
 
     /**
      * @return the singleton object that is this application
@@ -43,7 +48,12 @@ public class WifiLightApplication extends RXApplication {
         // TODO private api key
         mAPIKey = DEFAULT_API_KEY;//getString(R.string.DEFAULT_API_KEY);
         mServerURL = DEFAULT_SERVER_STRING;
-        mBaseUrl = DEFAULT_URL_STRING;
+        mBaseUrl1 = DEFAULT_URL_STRING1;
+        mBaseUrl2 = DEFAULT_URL_STRING2;
+    }
+
+    public void postMessage(Object messageObject) {
+        bus.post(messageObject);
     }
 
     /**
@@ -83,8 +93,15 @@ public class WifiLightApplication extends RXApplication {
     /**
      * @return a String representing the current base path URL
      */
-    public final String baseUrl() {
-        return mBaseUrl;
+    public final String baseUrl1() {
+        return mBaseUrl1;
+    }
+
+    /**
+     * @return a String representing the current base path URL
+     */
+    public final String baseUrl2() {
+        return mBaseUrl2;
     }
 
     // Logging
@@ -110,7 +127,8 @@ public class WifiLightApplication extends RXApplication {
         return "WifiLightApplication{" +
                 " APIKey='" + mAPIKey + '\'' +
                 ", ServerURL='" + mServerURL + '\'' +
-                ", BaseUrl='" + mBaseUrl + '\'' +
+                ", BaseUrl1='" + mBaseUrl1 + '\'' +
+                ", BaseUrl2='" + mBaseUrl2 + '\'' +
                 " }";
     }
 }

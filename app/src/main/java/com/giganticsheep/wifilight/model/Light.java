@@ -1,8 +1,8 @@
 package com.giganticsheep.wifilight.model;
 
-import com.giganticsheep.wifilight.Logger;
-
-import org.jetbrains.annotations.NonNls;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit.client.Response;
 import rx.Subscriber;
@@ -11,33 +11,61 @@ import rx.Subscriber;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class Light {
-
-    @NonNls private static final String LABEL_HUE = "hue:";
-    @NonNls private static final String LABEL_SATURATION = "saturation:";
-    @NonNls private static final String LABEL_VALUE = "value:";
-
-    @NonNls private static final char SPACE = ' ';
-
-    @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger mLogger = new Logger(getClass().getName());
+public class Light extends WifiLightObject{
 
     private final String mName;
-    private final LightNetwork mNetwork;
+    private boolean mConnected;
+    private double mHue;
+    private double mSaturation;
+    private long mKelvin;
+    private double mBrightness;
 
-    private int mHue = 0;
-    private float mSaturation = 1.0F;
-    private float mValue = 1.0F;
+    private ModelConstants.Power mPower;
+
+    private String mProductName;
+    private Date mLastSeen;
+    private double mSecondsSinceLastSeen;
+
+    private boolean mHasColour;
+    private boolean mHasVariableColourTemp;
 
     private boolean mEnabled;
+
+    private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ");
 
     /**
      * @param network the network this light is part of
      * @param name the name of this light
      */
-    public Light(final LightNetwork network, final String name) {
-        mNetwork = network;
+    public Light(final LightNetwork network, final String id, final String name) {
+        super(network, id);
+
         mName = name;
+    }
+
+    public Light(final LightNetwork network, boolean enabled, LightNetwork.LightDataResponse dataEnvelope) {
+        super(network, dataEnvelope.id);
+
+        mEnabled = enabled;
+
+        mName = dataEnvelope.label;
+        mConnected = dataEnvelope.connected;
+        mPower = dataEnvelope.power.equals("on") ? ModelConstants.Power.ON : ModelConstants.Power.OFF;
+        mBrightness = dataEnvelope.brightness;
+        mProductName = dataEnvelope.product_name;
+        try {
+            mLastSeen = mDateFormat.parse(dataEnvelope.last_seen);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        mSecondsSinceLastSeen = dataEnvelope.seconds_since_last_seen;
+
+        mHue = dataEnvelope.color.hue;
+        mSaturation = dataEnvelope.color.saturation;
+        mKelvin = dataEnvelope.color.kelvin;
+
+        mHasColour = dataEnvelope.capabilities.has_color;
+        mHasVariableColourTemp = dataEnvelope.capabilities.has_variable_color_temp;
     }
 
     /**
@@ -55,6 +83,14 @@ public class Light {
         return mEnabled;
     }
 
+    public final boolean connected() {
+        return mConnected;
+    }
+
+    public final double hue() {
+        return mHue;
+    }
+
     /**
      * @param enabled is this light enabled
      */
@@ -65,49 +101,37 @@ public class Light {
     /**
      * @param hue the hue to set this light
      */
-    public final void setHue(final int hue) {
+    public final void setHue(final float hue) {
         mHue = hue;
-
-        setHSVColour();
     }
 
     /**
      * @param saturation the saturation to set this light
      */
-    public final void setSaturation(final float saturation) {
+    public final void setSaturation(final double saturation) {
         mSaturation = saturation;
-
-        setHSVColour();
     }
 
     /**
-     * @param value the value (brightness) to set this light
+     * @param brightness the value (brightness) to set this light
      */
-    public final void setValue(final float value) {
-        mValue = value;
-
-        setHSVColour();
+    public final void setBrightness(final double brightness) {
+        mBrightness = brightness;
     }
 
-    private void setHSVColour() {
-        final String query = LABEL_HUE + Integer.toString(mHue) + SPACE +
-                LABEL_SATURATION + Float.toString(mSaturation) + SPACE +
-                LABEL_VALUE + Float.toString(mValue);
+    /**
+     * @param kelvin the kelvin (warmth) to set this light
+     */
+    public final void setKelvin(final long kelvin) {
+        mKelvin = kelvin;
+    }
 
-        mNetwork.setColour(query).subscribe(new Subscriber<Response>() {
-            @Override
-            public void onCompleted() { }
+    public void toggle() {
+        mPower = (mPower == ModelConstants.Power.ON ) ? ModelConstants.Power.OFF : ModelConstants.Power.ON;
+    }
 
-            @Override
-            public void onError(final Throwable e) {
-                mLogger.error(e);
-            }
-
-            @Override
-            public void onNext(final Response t) {
-                mLogger.debug(t.toString());
-            }
-        });
+    public void setPower(ModelConstants.Power power) {
+        mPower = power;
     }
 
     @Override
@@ -118,7 +142,8 @@ public class Light {
                 ", enabled" + mEnabled +
                 ", hue=" + mHue +
                 ", saturation=" + mSaturation +
-                ", value=" + mValue +
+                ", brightness=" + mBrightness +
+                ", kelvin=" + mKelvin +
                 " }";
     }
 }

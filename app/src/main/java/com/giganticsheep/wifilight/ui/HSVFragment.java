@@ -32,9 +32,7 @@ public class HSVFragment extends RXFragment {
     }
 
     @Override
-    protected void destroyViews() {
-
-    }
+    protected void destroyViews() { }
 
     private SeekBar mHueSeekBar;
     private SeekBar mSaturationSeekBar;
@@ -80,20 +78,16 @@ public class HSVFragment extends RXFragment {
                 }
 
                 if (seekBar.equals(mValueSeekBar)) {
-                    ((MainActivity)activity()).setValue(value);
+                    ((MainActivity)activity()).setBrightness(value);
                     return;
                 }
             }
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
+        public void onStartTrackingTouch(SeekBar seekBar) { }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
+        public void onStopTrackingTouch(SeekBar seekBar) { }
     }
 }
