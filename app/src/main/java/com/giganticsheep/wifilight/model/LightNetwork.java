@@ -90,6 +90,7 @@ public class LightNetwork {
      * @param brightness the brightness to set the enabled lights
      */
     public final Observable setBrightness(final int brightness, float duration) {
+        // TODO brightness
         return doSetColour(makeBrightnessString(brightness), makeDurationString(duration));
     }
 
@@ -116,9 +117,9 @@ public class LightNetwork {
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
-    // TODO colour set power on
 
     final Observable<List<Light>> fetchLights() {
+        logger.debug("fetchLights()");
         lights.clear();
 
         return service().listLights(baseUrl1(), baseUrl2(), ModelConstants.URL_ALL, authorisation())
@@ -131,7 +132,6 @@ public class LightNetwork {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        WifiLightApplication.application().postMessage(new SuccessEvent());
                     }
                 })
                 .flatMap(new Func1<List<LightDataResponse>, Observable<List<Light>>>() {
@@ -139,12 +139,11 @@ public class LightNetwork {
                              public Observable<List<Light>> call(List<LightDataResponse> lightDataResponses) {
                                  List<Light> lights = new ArrayList();
                                  for (LightDataResponse lightDataResponse : lightDataResponses) {
-                                     if (lightDataResponse.httpCode != 200) {
-                                         return Observable.error(
-                                                 new HttpException("Problem fetching light data"));
-                                     }
+                                     Light light = new Light(LightNetwork.this, true, lightDataResponse);
+                                     lights.add(light);
+                                     WifiLightApplication.application().postMessage(new LightDetailsEvent(light)).subscribe();
 
-                                     lights.add(new Light(LightNetwork.this, true, lightDataResponse));
+                                     logger.debug(lightDataResponse.toString());
                                  }
 
                                  return Observable.just(lights);
@@ -158,6 +157,9 @@ public class LightNetwork {
      * @param durationQuery the colour query
      */
     private Observable doSetColour(final String colourQuery, final String durationQuery) {
+        logger.debug("doSetColour()");
+
+        // TODO colour set power on
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put(ModelConstants.URL_COLOUR, colourQuery);
         queryMap.put(ModelConstants.URL_DURATION, durationQuery);
@@ -168,6 +170,12 @@ public class LightNetwork {
                 ModelConstants.URL_ALL,
                 authorisation(),
                 queryMap)
+                .doOnNext(new Action1<List<StatusResponse>>() {
+                    @Override
+                    public void call(List<StatusResponse> statusResponses) {
+                        statusResponses.toString();
+                    }
+                })
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
@@ -178,10 +186,18 @@ public class LightNetwork {
     }
 
     private Observable doToggleLights() {
+        logger.debug("doToggleLights()");
+
         return service().togglePower(baseUrl1(),
                 baseUrl2(),
                 ModelConstants.URL_ALL,
                 authorisation())
+                .doOnNext(new Action1<List<StatusResponse>>() {
+                    @Override
+                    public void call(List<StatusResponse> statusResponses) {
+                        statusResponses.toString();
+                    }
+                })
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
@@ -192,6 +208,9 @@ public class LightNetwork {
     }
 
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
+        logger.debug("doSetPower()");
+
+        // TODO set power
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put(ModelConstants.URL_STATE, powerQuery);
         queryMap.put(ModelConstants.URL_DURATION, durationQuery);
@@ -201,6 +220,12 @@ public class LightNetwork {
                 ModelConstants.URL_ALL,
                 authorisation(),
                 queryMap)
+                .doOnNext(new Action1<List<StatusResponse>>() {
+                    @Override
+                    public void call(List<StatusResponse> statusResponses) {
+                        statusResponses.toString();
+                    }
+                })
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
@@ -259,10 +284,26 @@ public class LightNetwork {
 
         public String id;
         public String label;
+
+        @Override
+        public String toString() {
+            return "LightResponse{" +
+                    "httpCode=" + httpCode +
+                    ", id='" + id + '\'' +
+                    ", label='" + label + '\'' +
+                    '}';
+        }
     }
 
     class StatusResponse extends LightResponse {
         public String status;
+
+        @Override
+        public String toString() {
+            return "StatusResponse{" +
+                    "status='" + status + '\'' +
+                    '}';
+        }
     }
 
     class LightDataResponse extends LightResponse {
@@ -294,9 +335,38 @@ public class LightNetwork {
             public boolean has_color;
             public boolean has_variable_color_temp;
         }
+
+        @Override
+        public String toString() {
+            return "LightDataResponse{" +
+                    "uuid='" + uuid + '\'' +
+                    ", connected=" + connected +
+                    ", power='" + power + '\'' +
+                    ", brightness=" + brightness +
+                    ", product_name='" + product_name + '\'' +
+                    ", last_seen='" + last_seen + '\'' +
+                    ", seconds_since_last_seen=" + seconds_since_last_seen +
+                    ", color=" + color +
+                    ", location=" + location +
+                    ", group=" + group +
+                    ", capabilities=" + capabilities +
+                    '}';
+        }
     }
 
     public class SuccessEvent { }
+
+    public class LightDetailsEvent {
+        private final Light light;
+
+        private LightDetailsEvent(Light light) {
+            this.light = light;
+        }
+
+        public final Light light() {
+            return light;
+        }
+    }
 
     /**
      * Created by anne on 22/06/15.
@@ -309,26 +379,26 @@ public class LightNetwork {
                                                                        @Header("Authorization") String authorisation);
 
         @GET("/{url}/{url2}/{selector}/toggle")
-        Observable<StatusResponse> togglePower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
+        Observable<List<StatusResponse>> togglePower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
                                          @Header("Authorization") String authorisation);
 
         @POST("/{url}/{url2}/{selector}/power")
-        Observable<StatusResponse> setPower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
+        Observable<List<StatusResponse>> setPower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
                                       @Header("Authorization") String authorization,
                                       @QueryMap Map<String, String> options);
 
         @PUT("/{url}/{url2}/{selector}/color")
-        Observable<StatusResponse> setColour(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
+        Observable<List<StatusResponse>> setColour(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
                                        @Header("Authorization") String authorization,
                                        @QueryMap Map<String, String> options);
 
         @POST("/{url}/{url2}/{selector}/effects/breathe")
-        Observable<StatusResponse> breathe(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
+        Observable<List<StatusResponse>> breathe(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
                                      @Header("Authorization") String authorization,
                                      @QueryMap Map<String, String> options);
 
         @POST("/{url}/{url2}/{selector}/effects/pulse")
-        Observable<StatusResponse> pulse(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
+        Observable<List<StatusResponse>> pulse(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
                                    @Header("Authorization") String authorization,
                                    @QueryMap Map<String, String> options);
 

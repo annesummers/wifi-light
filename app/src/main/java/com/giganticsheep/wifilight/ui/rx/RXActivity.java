@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.rx;
 
 import android.app.FragmentManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -83,6 +84,11 @@ public abstract class RXActivity extends ActionBarActivity {
         super.onStop();
 
         WifiLightApplication.application().unregisterForEvents(this);
+    }
+
+    @Override
+    public final void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -176,12 +182,6 @@ public abstract class RXActivity extends ActionBarActivity {
      */
     public final boolean fragmentsResumed() {
         return fragmentsResumed;
-    }
-
-    @Subscribe
-    public void lightChangeSuccessful(LightNetwork.SuccessEvent event) {
-        // TODO: React to the event somehow!
-        showToast("Changed!");
     }
 
     /**

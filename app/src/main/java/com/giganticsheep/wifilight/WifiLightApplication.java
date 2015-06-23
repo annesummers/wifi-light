@@ -10,6 +10,8 @@ import com.squareup.otto.Bus;
 import org.jetbrains.annotations.NonNls;
 
 import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by anne on 22/06/15.
@@ -59,8 +61,20 @@ public class WifiLightApplication extends RXApplication {
      *
      * @param messageObject the object to post to the bus
      */
-    public void postMessage(Object messageObject) {
-        bus.post(messageObject);
+    public Observable postMessage(final Object messageObject) {
+        return Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber<? super Object> subscriber) {
+                try {
+                    bus.post(messageObject);
+                } catch(Exception e) {
+                    subscriber.onError(e);
+                }
+
+                subscriber.onNext(messageObject);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(AndroidSchedulers.mainThread());
     }
 
     public void registerForEvents(Object myClass) {

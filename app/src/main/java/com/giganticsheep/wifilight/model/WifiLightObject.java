@@ -14,7 +14,7 @@ public class WifiLightObject {
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger = new Logger(getClass().getName());
 
-    private final long id;
+    private final String id;
     private List<String> labels = new ArrayList();
 
     protected final LightNetwork network;
@@ -25,10 +25,10 @@ public class WifiLightObject {
      */
     protected WifiLightObject(final LightNetwork network, final String id) {
         this.network = network;
-        this.id = Long.getLong(id);
+        this.id = id;
     }
 
-    final long id() {
+    public final String id() {
         return id;
     }
 

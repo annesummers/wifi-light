@@ -21,13 +21,6 @@ public class Light extends WifiLightObject{
 
     private String productName;
 
-    /**
-     * @return if this light is enabled or not
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
-
     private Date lastSeen;
     private double secondsSinceLastSeen;
 
@@ -36,7 +29,8 @@ public class Light extends WifiLightObject{
 
     private boolean enabled;
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
+    // TODO date
 
     /**
      * @param network the network this light is part of
@@ -71,6 +65,13 @@ public class Light extends WifiLightObject{
 
         hasColour = dataEnvelope.capabilities.has_color;
         hasVariableColourTemp = dataEnvelope.capabilities.has_variable_color_temp;
+    }
+
+    /**
+     * @return if this light is enabled or not
+     */
+    public boolean isEnabled() {
+        return enabled;
     }
 
     /**

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.giganticsheep.wifilight.Logger;
+import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.model.LightNetwork;
 import com.squareup.otto.Subscribe;
 
@@ -119,6 +120,16 @@ public abstract class RXFragment extends Fragment {
         destroyViews();
 
         compositeSubscription.unsubscribe();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override

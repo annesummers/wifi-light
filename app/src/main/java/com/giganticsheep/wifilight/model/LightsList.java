@@ -10,7 +10,7 @@ import java.util.Iterator;
  */
 public class LightsList extends ArrayList<Light> {
 
-    Light findLight(long id) {
+  /*  Light findLight(long id) {
         Iterator<Light> iterator = iterator();
         while (iterator.hasNext()) {
             Light light = iterator.next();
@@ -34,7 +34,7 @@ public class LightsList extends ArrayList<Light> {
         }
 
         return subList;
-    }
+    }*/
 
    /* LightsList locationSubList(long groupId) {
 

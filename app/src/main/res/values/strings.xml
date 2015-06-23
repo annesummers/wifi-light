@@ -2,8 +2,15 @@
 <resources>
 
     <string name="app_name">WifiLight</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="app_version">0.1</string>
+    <string name="label_light_name">Name:</string>
+    <string name="label_light_id">Id:</string>
+    <string name="label_light_hue">Hue:</string>
+    <string name="label_light_saturation">Sat:</string>
+    <string name="label_light_brightness">Bright:</string>
+    <string name="label_light_kelvin">Kelvin:</string>
+    <string name="label_light_power">Power</string>
+    <string name="label_light_details">Light Details</string>
 
 </resources>

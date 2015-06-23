@@ -10,6 +10,7 @@ import com.giganticsheep.wifilight.model.LightNetwork;
 import com.giganticsheep.wifilight.model.ModelConstants;
 import com.giganticsheep.wifilight.ui.rx.ActivityLayout;
 import com.giganticsheep.wifilight.ui.rx.RXActivity;
+import com.squareup.otto.Subscribe;
 
 import rx.functions.Action1;
 
@@ -76,6 +77,11 @@ public class MainActivity extends RXActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    public void lightChangeSuccess(LightNetwork.SuccessEvent event) {
+        showToast("Changed!");
     }
 
     public final void setHue(final int hue) {
