@@ -23,37 +23,52 @@ public class WifiLightApplication extends RXApplication {
     @NonNls private static final String DEFAULT_URL_STRING1 = "v1beta1";
     @NonNls private static final String DEFAULT_URL_STRING2 = "lights";
 
-    private String mAPIKey;
-    private String mServerURL;
-    private String mBaseUrl1;
-    private String mBaseUrl2;
+    private static WifiLightApplication thisInstance;
 
-    private static WifiLightApplication mApplication;
+    private String apiKey;
+    private String serverURL;
+    private String baseURL1;
+    private String baseURL2;
+    // TODO this is truly horrible
 
     private Bus bus = new Bus();
 
     /**
-     * @return the singleton object that is this application
+     * @return the singleton object that is this thisInstance
      */
     public static WifiLightApplication application() {
-        return mApplication;
+        return thisInstance;
     }
 
     @Override
     public final void onCreate() {
         super.onCreate();
 
-        mApplication = this;
+        thisInstance = this;
 
         // TODO private api key
-        mAPIKey = DEFAULT_API_KEY;//getString(R.string.DEFAULT_API_KEY);
-        mServerURL = DEFAULT_SERVER_STRING;
-        mBaseUrl1 = DEFAULT_URL_STRING1;
-        mBaseUrl2 = DEFAULT_URL_STRING2;
+        this.apiKey = DEFAULT_API_KEY;//getString(R.string.DEFAULT_API_KEY);
+        this.serverURL = DEFAULT_SERVER_STRING;
+        this.baseURL1 = DEFAULT_URL_STRING1;
+        this.baseURL2 = DEFAULT_URL_STRING2;
     }
 
+    /**
+     * Posts a message to the global message bus.  Classes must register to receive messages
+     * and much subscribe to  a specific message to receive it
+     *
+     * @param messageObject the object to post to the bus
+     */
     public void postMessage(Object messageObject) {
         bus.post(messageObject);
+    }
+
+    public void registerForEvents(Object myClass) {
+        bus.register(myClass);
+    }
+
+    public void unRegisterForEvents(Object myClass) {
+        bus.unregister(myClass);
     }
 
     /**
@@ -70,38 +85,38 @@ public class WifiLightApplication extends RXApplication {
     }
 
     /**
-     * @param aPIKey a string representing the current API key
+     * @param apiKey a string representing the current API key
      */
-    public final void setAPIKey(final String aPIKey) {
-        mAPIKey = aPIKey;
+    public final void setAPIKey(final String apiKey) {
+        this.apiKey = apiKey;
     }
 
     /**
      * @return a String representing the current API key
      */
-    public final String aPIKey() {
-        return mAPIKey;
+    public final String apiKey() {
+        return apiKey;
     }
 
     /**
      * @return a String representing the current server URL
      */
     public final String serverURL() {
-        return mServerURL;
+        return serverURL;
     }
 
     /**
      * @return a String representing the current base path URL
      */
-    public final String baseUrl1() {
-        return mBaseUrl1;
+    public final String baseURL1() {
+        return baseURL1;
     }
 
     /**
      * @return a String representing the current base path URL
      */
-    public final String baseUrl2() {
-        return mBaseUrl2;
+    public final String baseURL2() {
+        return baseURL2;
     }
 
     // Logging
@@ -123,12 +138,13 @@ public class WifiLightApplication extends RXApplication {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "WifiLightApplication{" +
-                " APIKey='" + mAPIKey + '\'' +
-                ", ServerURL='" + mServerURL + '\'' +
-                ", BaseUrl1='" + mBaseUrl1 + '\'' +
-                ", BaseUrl2='" + mBaseUrl2 + '\'' +
-                " }";
+                "apiKey='" + apiKey + '\'' +
+                ", serverURL='" + serverURL + '\'' +
+                ", baseURL1='" + baseURL1 + '\'' +
+                ", baseURL2='" + baseURL2 + '\'' +
+                ", bus=" + bus +
+                '}';
     }
 }

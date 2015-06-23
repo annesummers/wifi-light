@@ -1,15 +1,12 @@
 package com.giganticsheep.wifilight.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by anne on 23/06/15.
  * (*_*)
  */
 public class LightGroup extends WifiLightObject {
 
-    private final LightsList mLights = new LightsList();
+    private final LightsList lights = new LightsList();
 
     /**
      * @param network the network this object is part of
@@ -20,10 +17,10 @@ public class LightGroup extends WifiLightObject {
     }
 
     void addLightToGroup(Light light) {
-        mLights.add(light);
+        lights.add(light);
     }
 
     void removeLightFromGroup(Light light) {
-        mLights.remove(light);
+        lights.remove(light);
     }
 }

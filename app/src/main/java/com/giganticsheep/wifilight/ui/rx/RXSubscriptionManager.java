@@ -1,14 +1,11 @@
 package com.giganticsheep.wifilight.ui.rx;
 
-import android.app.Activity;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.observables.AndroidObservable;
 import rx.functions.Action0;
@@ -17,13 +14,13 @@ import rx.functions.Action0;
  * Created by anne on 22/06/15.
  */
 public class RXSubscriptionManager {
-    private final Map<Integer, Subscription> mSubscriptions = new HashMap<Integer, Subscription>();
+    private final Map<Integer, Subscription> subscriptions = new HashMap<Integer, Subscription>();
 
-    private int mNextNumber = 1;
-    private final List<Integer> mFreeList = new ArrayList<Integer>();
+    private int nextNumber = 1;
+    private final List<Integer> freeList = new ArrayList<Integer>();
 
-    private final RXActivity mActivity;
-    private final RXFragment mFragment;
+    private final RXActivity activity;
+    private final RXFragment fragment;
 
     /**
      * Instantiates a new Subscription manager.
@@ -31,8 +28,8 @@ public class RXSubscriptionManager {
      * @param activity the activity
      */
     public RXSubscriptionManager(RXActivity activity) {
-        mActivity = activity;
-        mFragment = null;
+        this.activity = activity;
+        fragment = null;
     }
 
     /**
@@ -41,8 +38,8 @@ public class RXSubscriptionManager {
      * @param fragment the fragment
      */
     public RXSubscriptionManager(RXFragment fragment) {
-        mActivity = null;
-        mFragment = fragment;
+        activity = null;
+        this.fragment = fragment;
     }
 
     /**
@@ -51,10 +48,10 @@ public class RXSubscriptionManager {
      * @param which the which
      */
     void remove(int which) {
-        synchronized (mSubscriptions) {
-            mSubscriptions.remove(which);
+        synchronized (subscriptions) {
+            subscriptions.remove(which);
 
-            mFreeList.add(which);
+            freeList.add(which);
         }
     }
 
@@ -65,16 +62,16 @@ public class RXSubscriptionManager {
      * @return the int
      */
     int add(Subscription subscription) {
-        synchronized (mSubscriptions) {
-            int nextNumber = mNextNumber;
-            if(mFreeList.size() > 0) {
-                nextNumber = mFreeList.get(0);
+        synchronized (subscriptions) {
+            int nextNumber = this.nextNumber;
+            if(freeList.size() > 0) {
+                nextNumber = freeList.get(0);
             }
 
-            mSubscriptions.put(nextNumber, subscription);
+            subscriptions.put(nextNumber, subscription);
 
-            if(nextNumber == mNextNumber) {
-                mNextNumber++;
+            if(nextNumber == this.nextNumber) {
+                this.nextNumber++;
             }
 
             return nextNumber;
@@ -85,14 +82,14 @@ public class RXSubscriptionManager {
      * Unsubscribe void.
      */
     public void unsubscribe() {
-        synchronized (mSubscriptions) {
-            for (Subscription subscription : mSubscriptions.values()) {
+        synchronized (subscriptions) {
+            for (Subscription subscription : subscriptions.values()) {
                 if (subscription != null) {
                     subscription.unsubscribe();
                 }
             }
 
-            mSubscriptions.clear();
+            subscriptions.clear();
         }
     }
 
@@ -103,28 +100,14 @@ public class RXSubscriptionManager {
      *
      * @param <T> the type of objects received from the observable
      * @param observable the observable
-     * @param subscriber the subscriber
      */
-   /* public <T> void call(final Observable<? extends T> observable, final Subscriber<T> subscriber) {
+    public <T> Observable<? extends T> call(final Observable<? extends T> observable) {
         final int[] subscriptionNumber = new int[1];
 
-        if(mActivity != null) {
-            subscriptionNumber[0] = add(AndroidObservable.bindActivity(mActivity, observable)
-                    .doOnTerminate(new Action0() {
-                        @Override
-                        public void call() {
-                            remove(subscriptionNumber[0]);
-                        }
-                    }).subscribe(subscriber));
+        if(activity != null) {
+            return AndroidObservable.bindActivity(activity, observable);
         } else {
-            subscriptionNumber[0] = add(AndroidObservable.bindFragment(mFragment, observable)
-                    .doOnTerminate(new Action0() {
-                        @Override
-                        public void call() {
-                            remove(subscriptionNumber[0]);
-                        }
-                    })
-                    .subscribe(subscriber));
+            return AndroidObservable.bindFragment(activity, observable);
         }
-    }*/
+    }
 }

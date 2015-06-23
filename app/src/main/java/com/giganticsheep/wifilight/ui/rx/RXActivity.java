@@ -11,10 +11,14 @@ import com.giganticsheep.wifilight.Logger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
+import rx.Subscription;
+import rx.android.observables.AndroidObservable;
 import rx.functions.Func1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by anne on 22/06/15.
@@ -25,24 +29,26 @@ public abstract class RXActivity extends ActionBarActivity {
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger mLogger = new Logger(getClass().getName());
+    protected final Logger logger = new Logger(getClass().getName());
 
-    private final Map<Integer, FragmentAttachmentDetails> mAttachedFragments = new HashMap<>();
-    private ActivityLayout mActivityLayout;
-    private boolean mFragmentsResumed = true;
-    private final Collection<RXFragment> mFragmentAttachmentQueue = new ArrayList<>();
+    private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
+    private ActivityLayout activityLayout;
+    private boolean fragmentsResumed = true;
+    private final Collection<RXFragment> fragmentAttachmentQueue = new ArrayList<>();
+
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActivityLayout = createActivityLayout();
+        activityLayout = createActivityLayout();
 
         if(savedInstanceState != null) {
             final int containerCount = activityLayout().fragmentContainerCount();
             for (int i = 0; i < containerCount; i++) {
-                if (mAttachedFragments.containsKey(i)) {
-                    final FragmentAttachmentDetails fragmentAttachmentDetails = mAttachedFragments.get(i);
+                if (attachedFragments.containsKey(i)) {
+                    final FragmentAttachmentDetails fragmentAttachmentDetails = attachedFragments.get(i);
 
                     attachNewFragment(fragmentAttachmentDetails.name(),
                             fragmentAttachmentDetails.position(),
@@ -55,26 +61,33 @@ public abstract class RXActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        compositeSubscription.unsubscribe();
+    }
+
+    @Override
     public final void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        final FragmentAttachmentDetails[] fragments = mAttachedFragments.values().toArray(
-                new FragmentAttachmentDetails[mAttachedFragments.size()]);
+        final FragmentAttachmentDetails[] fragments = attachedFragments.values().toArray(
+                new FragmentAttachmentDetails[attachedFragments.size()]);
 
         outState.putParcelableArray(ATTACHED_FRAGMENTS_EXTRA, fragments);
 
-        mFragmentsResumed = false;
+        fragmentsResumed = false;
     }
 
     @Override
     public final void onResumeFragments() {
         super.onResumeFragments();
 
-        mFragmentsResumed = true;
+        fragmentsResumed = true;
 
-        for(final RXFragment fragment : mFragmentAttachmentQueue) {
+        for(final RXFragment fragment : fragmentAttachmentQueue) {
             fragment.attachToActivity(this);
-            mFragmentAttachmentQueue.remove(fragment);
+            fragmentAttachmentQueue.remove(fragment);
             break;
         }
     }
@@ -101,7 +114,7 @@ public abstract class RXActivity extends ActionBarActivity {
      * @param fragment the Fragment to queue for attachment
      */
     public final void queueFragmentForAttachment(final RXFragment fragment) {
-        mFragmentAttachmentQueue.add(fragment);
+        fragmentAttachmentQueue.add(fragment);
     }
 
     /**
@@ -110,16 +123,17 @@ public abstract class RXActivity extends ActionBarActivity {
      * @param addToBackStack whether to attach the fragment to the backstack or not
      */
     protected final void attachNewFragment(final String name, final int position, final boolean addToBackStack) {
-        RXFragment.create(name, getRXApplication())
+        Subscription subscription = null;
+
+        compositeSubscription.add(RXFragment.create(name, getRXApplication())
                 .flatMap(new Func1<RXFragment, Observable<?>>() {
                     @Override
                     public Observable<RXFragment> call(final RXFragment fragment) {
                         return fragment.attachToActivity(RXActivity.this, name, position, addToBackStack);
                     }
                 })
-                .subscribe();
+                .subscribe());
     }
-
     /**
      * Adds a fragment to the hash of attached fragments.  This does not actually attach the fragment.
      *
@@ -127,23 +141,23 @@ public abstract class RXActivity extends ActionBarActivity {
      * @param position the position of the attached Fragment
      */
     void addFragment(final String name, final int position, final boolean addToBackStack) {
-        if(mAttachedFragments.containsKey(position)) {
-            final String oldName = mAttachedFragments.get(position).name();
+        if(attachedFragments.containsKey(position)) {
+            final String oldName = attachedFragments.get(position).name();
             if(oldName.equals(name)) {
                 return;
             } else {
-                mAttachedFragments.remove(position);
+                attachedFragments.remove(position);
             }
         }
 
-        mAttachedFragments.put(position, new FragmentAttachmentDetails(position, name, addToBackStack));
+        attachedFragments.put(position, new FragmentAttachmentDetails(position, name, addToBackStack));
     }
 
     /**
      * @return whether the fragments have been resumed or not
      */
     public final boolean fragmentsResumed() {
-        return mFragmentsResumed;
+        return fragmentsResumed;
     }
 
     /**
@@ -151,7 +165,7 @@ public abstract class RXActivity extends ActionBarActivity {
      * @return the resource container id
      */
     final int containerIdFromPosition(final int position) {
-        return mActivityLayout.fragmentContainer(position);
+        return activityLayout.fragmentContainer(position);
     }
 
     /**
@@ -176,8 +190,12 @@ public abstract class RXActivity extends ActionBarActivity {
         return findFragment(fragmentDetails.position());
     }
 
+    protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
+        return AndroidObservable.bindActivity(this, observable);
+    }
+
     private ActivityLayout activityLayout() {
-        return mActivityLayout;
+        return activityLayout;
     }
 
     private RXApplication getRXApplication() {
@@ -242,16 +260,5 @@ public abstract class RXActivity extends ActionBarActivity {
         public boolean addToBackStack() {
             return mAddToBackStack;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "RXActivity{" +
-                "mLogger=" + mLogger +
-                ", mAttachedFragments=" + mAttachedFragments +
-                ", mActivityLayout=" + mActivityLayout +
-                ", mFragmentsResumed=" + mFragmentsResumed +
-                ", mFragmentAttachmentQueue=" + mFragmentAttachmentQueue +
-                '}';
     }
 }

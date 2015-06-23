@@ -5,41 +5,34 @@ package com.giganticsheep.wifilight.ui.rx;
  * (*_*)
  */
 class AttachDetails {
-    private final RXFragment mFragment;
-    private final int mPosition;
-    private final boolean mAddToBackStack;
-    private final String mName;
+    private final RXFragment fragment;
+    private final int position;
+    private final boolean addToBackStack;
+    private final String name;
 
-    AttachDetails(final RXFragment fragment, final String name, final int position, final boolean addtoBackStack) {
-        mFragment = fragment;
-        mName = name;
-        mPosition = position;
-        mAddToBackStack = addtoBackStack;
+    AttachDetails(final RXFragment fragment,
+                  final String name,
+                  final int position,
+                  final boolean addtoBackStack) {
+        this.fragment = fragment;
+        this.name = name;
+        this.position = position;
+        this.addToBackStack = addtoBackStack;
     }
 
     public final RXFragment fragment() {
-        return mFragment;
+        return fragment;
     }
 
     public final int position() {
-        return mPosition;
+        return position;
     }
 
     public final boolean addToBackStack() {
-        return mAddToBackStack;
+        return addToBackStack;
     }
 
     public final String name() {
-        return mName;
-    }
-
-    @Override
-    public final String toString() {
-        return "AttachDetails{" +
-                "mFragment=" + mFragment +
-                ", mPosition=" + mPosition +
-                ", mAddToBackStack=" + mAddToBackStack +
-                ", mName='" + mName + '\'' +
-                '}';
+        return name;
     }
 }

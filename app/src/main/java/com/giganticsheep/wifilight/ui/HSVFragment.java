@@ -15,7 +15,7 @@ import rx.Observable;
  */
 public class HSVFragment extends RXFragment {
 
-    private SeekBar.OnSeekBarChangeListener mSeekBarChangeListener = new OnSeekBarChangeListener();
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
 
     public static HSVFragment newInstance(String name) {
         HSVFragment fragment = new HSVFragment();
@@ -34,9 +34,9 @@ public class HSVFragment extends RXFragment {
     @Override
     protected void destroyViews() { }
 
-    private SeekBar mHueSeekBar;
-    private SeekBar mSaturationSeekBar;
-    private SeekBar mValueSeekBar;
+    private SeekBar hueSeekBar;
+    private SeekBar saturationSeekBar;
+    private SeekBar valueSeekBar;
 
     @Override
     protected int layoutId() {
@@ -55,11 +55,11 @@ public class HSVFragment extends RXFragment {
 
     @Override
     protected void initialiseViews(View view) {
-        mHueSeekBar = (SeekBar) view.findViewById(R.id.hueSeekBar);
-        mSaturationSeekBar = (SeekBar) view.findViewById(R.id.saturationSeekBar);
-        mValueSeekBar = (SeekBar) view.findViewById(R.id.valueSeekBar);
+        hueSeekBar = (SeekBar) view.findViewById(R.id.hueSeekBar);
+        saturationSeekBar = (SeekBar) view.findViewById(R.id.saturationSeekBar);
+        valueSeekBar = (SeekBar) view.findViewById(R.id.valueSeekBar);
 
-        mHueSeekBar.setOnSeekBarChangeListener(mSeekBarChangeListener);
+        hueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
     private class OnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
@@ -67,17 +67,17 @@ public class HSVFragment extends RXFragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
             if(fromUser) {
-                if (seekBar.equals(mHueSeekBar)) {
+                if (seekBar.equals(hueSeekBar)) {
                     ((MainActivity)activity()).setHue(value);
                     return;
                 }
 
-                if (seekBar.equals(mSaturationSeekBar)) {
+                if (seekBar.equals(saturationSeekBar)) {
                     ((MainActivity)activity()).setSaturation(value);
                     return;
                 }
 
-                if (seekBar.equals(mValueSeekBar)) {
+                if (seekBar.equals(valueSeekBar)) {
                     ((MainActivity)activity()).setBrightness(value);
                     return;
                 }

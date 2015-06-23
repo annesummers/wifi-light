@@ -21,7 +21,6 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.QueryMap;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -40,18 +39,18 @@ public class LightNetwork {
     // TODO locations
     // TODO selectors
 
-    private final RestAdapter mRestAdapter;
-    private final LightService mLightService;
+    private final RestAdapter restAdapter;
+    private final LightService lightService;
 
-    private final Iterable<Light> mLights = new ArrayList<>();
-    private final String mAPIKey;
+    private final Iterable<Light> lights = new ArrayList<>();
+    private final String apiKey;
 
     /**
      * @param aPIKey
      */
     public LightNetwork(final String aPIKey) {
-        mAPIKey = aPIKey;
-        mRestAdapter = new RestAdapter.Builder()
+        apiKey = aPIKey;
+        restAdapter = new RestAdapter.Builder()
                 .setEndpoint(WifiLightApplication.application().serverURL())
                 .setErrorHandler(new ErrorHandler() {
                     @Override
@@ -63,7 +62,7 @@ public class LightNetwork {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
-        mLightService = mRestAdapter.create(LightService.class);
+        lightService = restAdapter.create(LightService.class);
 
         fetchLights()
                 .doOnCompleted(new Action0() {
@@ -177,19 +176,19 @@ public class LightNetwork {
     }
 
     private String authorisation() {
-        return ModelConstants.LABEL_BEARER + ModelConstants.SPACE + mAPIKey;
+        return ModelConstants.LABEL_BEARER + ModelConstants.SPACE + apiKey;
     }
 
     private final LightService service() {
-        return mLightService;
+        return lightService;
     }
 
     private final String baseUrl1() {
-        return WifiLightApplication.application().baseUrl1();
+        return WifiLightApplication.application().baseURL1();
     }
 
     private final String baseUrl2() {
-        return WifiLightApplication.application().baseUrl2();
+        return WifiLightApplication.application().baseURL2();
     }
 
     private String makeHueString(double hue) {
@@ -215,7 +214,7 @@ public class LightNetwork {
     @Override
     public String toString() {
         return "LightNetwork{" +
-                "mLights=" + mLights +
+                "lights=" + lights +
                 '}';
     }
 

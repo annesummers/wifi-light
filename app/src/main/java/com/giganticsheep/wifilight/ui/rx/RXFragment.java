@@ -11,8 +11,15 @@ import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.observables.AndroidObservable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 
 /**
@@ -28,19 +35,20 @@ public abstract class RXFragment extends Fragment {
     private static final String FRAGMENT_ARGS_ATTACH_TO_ROOT = "attach_to_root";
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger mLogger = new Logger(getClass().getName());
+    protected final Logger logger = new Logger(getClass().getName());
 
-    private String mName;
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
-    private final RXSubscriptionManager mSubscriptions;
-    private AttachDetails mAttachDetails;
-    private LayoutInflater mLayoutInflater;
+    private String name;
 
-    private RXActivity mActivity;
+    private AttachDetails attachDetails;
+    private LayoutInflater layoutInflater;
 
-    private boolean mShowAsDialog;
-    private boolean mAttachToRoot;
-    private int mOrientation;
+    private RXActivity activity;
+
+    private boolean showAsDialog;
+    private boolean attachToRoot;
+    private int orientation;
 
     /**
      * Creates the named Fragment
@@ -55,33 +63,31 @@ public abstract class RXFragment extends Fragment {
     /**
      * Constructs a new RXFragment.
      */
-    protected RXFragment() {
-        mSubscriptions = new RXSubscriptionManager(this);
-    }
+    protected RXFragment() { }
 
     @Override
     public final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //mLogger.debug(" onCreate()");
+        //logger.debug(" onCreate()");
 
         final Bundle args = getArguments();
 
         if(args != null) {
-            if(mName == null) {
-                mName = args.getString(FRAGMENT_ARGS_NAME);
+            if(name == null) {
+                name = args.getString(FRAGMENT_ARGS_NAME);
             }
 
-            mShowAsDialog = args.getBoolean(FRAGMENT_ARGS_SHOW_AS_DIALOG, false);
-            mAttachToRoot = args.getBoolean(FRAGMENT_ARGS_ATTACH_TO_ROOT, false);
+            showAsDialog = args.getBoolean(FRAGMENT_ARGS_SHOW_AS_DIALOG, false);
+            attachToRoot = args.getBoolean(FRAGMENT_ARGS_ATTACH_TO_ROOT, false);
         }
 
-       /* if(mShowAsDialog) {
+       /* if(showAsDialog) {
             setStyle(PureSoloUIEngine.engine().dialogStyle(),
                     PureSoloUIEngine.engine().dialogTheme());
         }*/
 
-        mOrientation = getResources().getConfiguration().orientation;
+        orientation = getResources().getConfiguration().orientation;
 
        // setupScreen(getResources().getConfiguration());
 
@@ -96,9 +102,9 @@ public abstract class RXFragment extends Fragment {
                                    final Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        mLayoutInflater = inflater;
+        layoutInflater = inflater;
 
-        final View view = mLayoutInflater.inflate(layoutId(), container, mAttachToRoot);
+        final View view = layoutInflater.inflate(layoutId(), container, attachToRoot);
 
         initialiseViews(view);
 
@@ -106,11 +112,20 @@ public abstract class RXFragment extends Fragment {
     }
 
     @Override
+    public final void onDestroyView() {
+        super.onDestroyView();
+
+        destroyViews();
+
+        compositeSubscription.unsubscribe();
+    }
+
+    @Override
     public final void onConfigurationChanged(final Configuration config) {
         super.onConfigurationChanged(config);
 
-        if(reinitialiseOnRotate() && config.orientation != mOrientation) {
-            mOrientation = config.orientation;
+        if(reinitialiseOnRotate() && config.orientation != orientation) {
+            orientation = config.orientation;
             reinitialiseViews();
         }
     }
@@ -119,7 +134,7 @@ public abstract class RXFragment extends Fragment {
      * @return the name of this Fragment
      */
     public final String name() {
-        return mName;
+        return name;
     }
 
     /**
@@ -134,7 +149,7 @@ public abstract class RXFragment extends Fragment {
                                                          final String name,
                                                          final int position,
                                                          final boolean addToBackStack) {
-        mAttachDetails = new AttachDetails(this, name, position, addToBackStack);
+        attachDetails = new AttachDetails(this, name, position, addToBackStack);
 
         return Observable.just(doAttachToActivity(activity))
                 .subscribeOn(AndroidSchedulers.mainThread());
@@ -156,7 +171,7 @@ public abstract class RXFragment extends Fragment {
      */
     public final void hide() {
         if(activityExists() && activity().fragmentsResumed()) {
-            final FragmentManager fragmentManager = mActivity.getFragmentManager();
+            final FragmentManager fragmentManager = activity.getFragmentManager();
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.remove(this);
             fragmentTransaction.commit();
@@ -194,14 +209,14 @@ public abstract class RXFragment extends Fragment {
      * @return Whether this Fragment is attached to the Activity root or not
      */
     protected final boolean isAttachedToRoot() {
-        return mAttachToRoot;
+        return attachToRoot;
     }
 
     /**
      * @return the Activity associated with this Fragment
      */
     protected final RXActivity activity() {
-        return mActivity;
+        return activity;
     }
 
     /**
@@ -215,22 +230,26 @@ public abstract class RXFragment extends Fragment {
             rootView.removeAllViews();
         }
 
-        mLayoutInflater.inflate(layoutId(), rootView);
+        layoutInflater.inflate(layoutId(), rootView);
 
         initialiseViews(rootView);
     }
 
-    private RXFragment doAttachToActivity(final RXActivity activity) {
-        mActivity = activity;
+    protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
+        return AndroidObservable.bindFragment(this, observable);
+    }
 
-        final String name = mAttachDetails.name();
-        final int position = mAttachDetails.position();
-        final boolean addToBackStack = mAttachDetails.addToBackStack();
+    private RXFragment doAttachToActivity(final RXActivity activity) {
+        this.activity = activity;
+
+        final String name = attachDetails.name();
+        final int position = attachDetails.position();
+        final boolean addToBackStack = attachDetails.addToBackStack();
 
         activity().addFragment(name, position, addToBackStack);
 
-        if(mActivity.fragmentsResumed()) {
-            final FragmentManager fragmentManager = mActivity.getFragmentManager();
+        if(this.activity.fragmentsResumed()) {
+            final FragmentManager fragmentManager = this.activity.getFragmentManager();
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             int attachId = 0;
@@ -304,18 +323,4 @@ public abstract class RXFragment extends Fragment {
      *
      */
     protected abstract void destroyViews();
-
-    @Override
-    public final String toString() {
-        return "RXFragment{" +
-                "mSubscriptions=" + mSubscriptions +
-                ", mAttachDetails=" + mAttachDetails +
-                ", mActivity=" + mActivity +
-                ", mName='" + mName + '\'' +
-                ", mShowAsDialog=" + mShowAsDialog +
-                ", mAttachToRoot=" + mAttachToRoot +
-                ", mLayoutInflater=" + mLayoutInflater +
-                ", mOrientation=" + mOrientation +
-                '}';
-    }
 }

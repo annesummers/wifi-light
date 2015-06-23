@@ -2,9 +2,7 @@ package com.giganticsheep.wifilight.model;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by anne on 23/06/15.
@@ -12,11 +10,11 @@ import java.util.Map;
  */
 public class LightsList extends ArrayList<Light> {
 
-    Light findLight(String id) {
+    Light findLight(long id) {
         Iterator<Light> iterator = iterator();
         while (iterator.hasNext()) {
             Light light = iterator.next();
-            if(light.id().equals( id)) {
+            if(light.id() == id) {
                 return light;
             }
         }

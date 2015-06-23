@@ -12,31 +12,31 @@ import java.util.List;
 public class WifiLightObject {
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger mLogger = new Logger(getClass().getName());
+    protected final Logger logger = new Logger(getClass().getName());
 
-    private final String mId;
-    private List<String> mLabels = new ArrayList();
+    private final long id;
+    private List<String> labels = new ArrayList();
 
-    protected final LightNetwork mNetwork;
+    protected final LightNetwork network;
 
     /**
      * @param network the network this object is part of
      * @param id the id of this object
      */
     protected WifiLightObject(final LightNetwork network, final String id) {
-        mNetwork = network;
-        mId = id;
+        this.network = network;
+        this.id = Long.getLong(id);
     }
 
-    final String id() {
-        return  mId;
+    final long id() {
+        return id;
     }
 
     final List<String> labels() {
-        return mLabels;
+        return labels;
     }
 
     void addLabel(String label) {
-        mLabels.add(label);
+        labels.add(label);
     }
 }
