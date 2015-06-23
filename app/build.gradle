@@ -13,13 +13,13 @@ android {
         applicationId "com.giganticsheep.wifilight"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 1;//manifestVersionNumber()
-        versionName "0.1";//manifestVersionName()
+        versionCode manifestVersionNumber()
+        versionName manifestVersionName()
     }
 
     buildTypes {
         release {
-            //resValue("String", "DEFAULT_API_KEY", DUNCAN_API_KEY)
+            resValue("String", "DEFAULT_API_KEY", DUNCAN_API_KEY)
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -27,32 +27,39 @@ android {
     }
 }
 
-//def parseManifest() {
- //   def manifestFile = file(project.projectDir.absolutePath + '/src/main/AndroidManifest.xml')
-  //  return new XmlParser().parse(manifestFile)
-//}
+//apply plugin: 'groovy'
 
-//def getNamespace() {
- //   return new groovy.xml.Namespace("http://schemas.android.com/apk/res/android", "android")
-//}
+def parseManifest() {
+    def manifestFile = file(project.projectDir.absolutePath + '/src/main/AndroidManifest.xml')
+    return new XmlParser().parse(manifestFile)
+}
 
-//def manifestVersionName() {
- //   return parseManifest().attributes()[getNamespace().versionName].toString()
-//}
+def getNamespace() {
+    return new groovy.xml.Namespace("http://schemas.android.com/apk/res/android", "android")
+}
 
-//def manifestVersionNumber() {
-//    return parseManifest().attributes()[getNamespace().versionNumber]
-//}
+def manifestVersionName() {
+    return parseManifest().attributes()[getNamespace().versionName].toString()
+}
+
+def manifestVersionNumber() {
+    return parseManifest().attributes()[getNamespace().versionNumber]
+}
 
 dependencies {
-   // compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.2'
+
     compile 'com.netflix.rxjava:rxjava-core:0.20.7'
     compile 'com.netflix.rxjava:rxjava-android:0.20.7'
+
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup:otto:1.3.8'
+
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
+
     compile 'com.intellij:annotations:12.0'
 
-    //testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
 }
