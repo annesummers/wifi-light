@@ -40,6 +40,7 @@ public class WifiLightApplication extends RXApplication {
 
         mApplication = this;
 
+        // TODO private api key
         mAPIKey = DEFAULT_API_KEY;//getString(R.string.DEFAULT_API_KEY);
         mServerURL = DEFAULT_SERVER_STRING;
         mBaseUrl = DEFAULT_URL_STRING;

@@ -13,13 +13,13 @@ android {
         applicationId "com.giganticsheep.wifilight"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode manifestVersionNumber()
-        versionName manifestVersionName()
+        versionCode 1;//manifestVersionNumber()
+        versionName "0.1";//manifestVersionName()
     }
 
     buildTypes {
         release {
-            resValue("String", "DEFAULT_API_KEY", DUNCAN_API_KEY)
+            //resValue("String", "DEFAULT_API_KEY", DUNCAN_API_KEY)
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -27,22 +27,22 @@ android {
     }
 }
 
-def parseManifest() {
-    def manifestFile = file(project.projectDir.absolutePath + '/src/main/AndroidManifest.xml')
-    return new XmlParser().parse(manifestFile)
-}
+//def parseManifest() {
+ //   def manifestFile = file(project.projectDir.absolutePath + '/src/main/AndroidManifest.xml')
+  //  return new XmlParser().parse(manifestFile)
+//}
 
-def getNamespace() {
-    return new groovy.xml.Namespace("http://schemas.android.com/apk/res/android", "android")
-}
+//def getNamespace() {
+ //   return new groovy.xml.Namespace("http://schemas.android.com/apk/res/android", "android")
+//}
 
-def manifestVersionName() {
-    return parseManifest().attributes()[getNamespace().versionName].toString()
-}
+//def manifestVersionName() {
+ //   return parseManifest().attributes()[getNamespace().versionName].toString()
+//}
 
-def manifestVersionNumber() {
-    return parseManifest().attributes()[getNamespace().versionNumber]
-}
+//def manifestVersionNumber() {
+//    return parseManifest().attributes()[getNamespace().versionNumber]
+//}
 
 dependencies {
    // compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -53,4 +53,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.intellij:annotations:12.0'
+
+    //testCompile 'junit:junit:4.12'
 }

@@ -12,11 +12,10 @@ import com.giganticsheep.wifilight.ui.rx.RXActivity;
 
 
 public class MainActivity extends RXActivity {
-
     private LightNetwork mLightNetwork;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mLightNetwork = new LightNetwork(WifiLightApplication.application().aPIKey());
@@ -35,10 +34,10 @@ public class MainActivity extends RXActivity {
     }
 
     @Override
-    protected ActivityLayout createActivityLayout() {
+    protected final ActivityLayout createActivityLayout() {
         return new ActivityLayout() {
             @Override
-            public int fragmentContainer(int position) {
+            public int fragmentContainer(final int position) {
                 switch (position) {
                     case 0:
                         return R.id.container;
@@ -57,20 +56,19 @@ public class MainActivity extends RXActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public final boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public final boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -78,15 +76,15 @@ public class MainActivity extends RXActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setHue(int hue) {
+    public final void setHue(final int hue) {
         mLightNetwork.setHue(hue);
     }
 
-    public void setSaturation(int saturation) {
+    public final void setSaturation(final int saturation) {
         mLightNetwork.setSaturation(saturation);
     }
 
-    public void setValue(int value) {
+    public final void setValue(final int value) {
         mLightNetwork.setValue(value);
     }
 
