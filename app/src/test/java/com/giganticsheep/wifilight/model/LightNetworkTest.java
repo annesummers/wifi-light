@@ -7,8 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
-import rx.Subscriber;
+import retrofit.http.Header;
+import retrofit.http.Path;
+import retrofit.http.QueryMap;
+import rx.Observable;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
@@ -23,12 +27,25 @@ public class LightNetworkTest extends TestCase {
     private static final float DEFAULT_DURATION = 1.0F;
     private static final float OVERFLOW_DURATION = 2.0F;
 
+    private class TestLightNetwork extends LightNetwork {
+        /**
+         * @param apiKey
+         */
+        public TestLightNetwork(String apiKey) {
+            super(apiKey);
+        }
+
+        protected LightNetwork.LightService createLightService() {
+            return new MockLightService();
+        }
+    }
+
     LightNetwork testNetwork;
     private Throwable mError = null;
 
     @Before
     public void setUp() throws Exception {
-        testNetwork = new LightNetwork("c5e3c4b06448baa75d3a849b7cdb70930e4b95e9e7160a4415c49bf03ffa45f8");
+        testNetwork = new TestLightNetwork("c5e3c4b06448baa75d3a849b7cdb70930e4b95e9e7160a4415c49bf03ffa45f8");
     }
 
     @After
@@ -64,7 +81,7 @@ public class LightNetworkTest extends TestCase {
                     @Override
                     public void call(List<Light> lights) {
                         for(Light light : lights) {
-                            assertThat(light.hue(), is((double)300));
+                            assertThat(light.getHue(), is((double)300));
                         }
 
                         notify();
@@ -158,5 +175,37 @@ public class LightNetworkTest extends TestCase {
 
     private void setError(Throwable e) {
         mError = e;
+    }
+
+    private class MockLightService implements LightNetwork.LightService {
+        @Override
+        public Observable<List<LightNetwork.LightDataResponse>> listLights(@Path("url1") String url1, @Path("url2") String url2, @Path("selector") String selector, @Header("Authorization") String authorisation) {
+            return null;
+        }
+
+        @Override
+        public Observable<LightNetwork.StatusResponse> togglePower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector, @Header("Authorization") String authorisation) {
+            return null;
+        }
+
+        @Override
+        public Observable<LightNetwork.StatusResponse> setPower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector, @Header("Authorization") String authorization, @QueryMap Map<String, String> options) {
+            return null;
+        }
+
+        @Override
+        public Observable<LightNetwork.StatusResponse> setColour(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector, @Header("Authorization") String authorization, @QueryMap Map<String, String> options) {
+            return null;
+        }
+
+        @Override
+        public Observable<LightNetwork.StatusResponse> breathe(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector, @Header("Authorization") String authorization, @QueryMap Map<String, String> options) {
+            return null;
+        }
+
+        @Override
+        public Observable<LightNetwork.StatusResponse> pulse(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector, @Header("Authorization") String authorization, @QueryMap Map<String, String> options) {
+            return null;
+        }
     }
 }

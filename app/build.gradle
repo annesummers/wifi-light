@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'groovyx.grooid.groovy-android'
 
 dependencies {
     compile 'com.intellij:annotations:12.0'
@@ -15,6 +16,11 @@ android {
         targetSdkVersion 21
         versionCode manifestVersionNumber()
         versionName manifestVersionName()
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/org.codehaus.groovy.transform.ASTTransformation'
+        exclude 'LICENSE.txt'
     }
 
     buildTypes {
@@ -61,5 +67,15 @@ dependencies {
 
     compile 'com.intellij:annotations:12.0'
 
+   // testCompile 'org.codehaus.groovy:groovy:2.4.2:grooid'
+   // testCompile "com.andrewreitz:spock-android:1.2.0"
+   // testCompile 'com.android.support.test:testing-support-lib:0.1'
+
+   // testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+   //     exclude group: 'org.codehaus.groovy'
+   //     exclude group: 'junit'
+   // }
+
     testCompile 'junit:junit:4.12'
+    //testCompile 'org.mockito:mockito-core:1.10.19'
 }

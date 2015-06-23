@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.giganticsheep.wifilight.Logger;
+import com.giganticsheep.wifilight.model.LightNetwork;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +71,6 @@ public abstract class RXFragment extends Fragment {
     @Override
     public final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //logger.debug(" onCreate()");
 
         final Bundle args = getArguments();
 

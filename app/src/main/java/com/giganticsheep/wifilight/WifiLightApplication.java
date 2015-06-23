@@ -67,7 +67,7 @@ public class WifiLightApplication extends RXApplication {
         bus.register(myClass);
     }
 
-    public void unRegisterForEvents(Object myClass) {
+    public void unregisterForEvents(Object myClass) {
         bus.unregister(myClass);
     }
 

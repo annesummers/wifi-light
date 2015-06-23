@@ -33,45 +33,43 @@ import rx.schedulers.Schedulers;
 public class LightNetwork {
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected static final Logger mLogger = new Logger("LightNetwork");
+    protected static final Logger logger = new Logger("LightNetwork");
 
     // TODO groups
     // TODO locations
     // TODO selectors
 
-    private final RestAdapter restAdapter;
+    protected RestAdapter restAdapter;
     private final LightService lightService;
 
-    private final Iterable<Light> lights = new ArrayList<>();
+    private final List<Light> lights = new ArrayList<>();
     private final String apiKey;
 
     /**
-     * @param aPIKey
+     * @param apiKey
      */
-    public LightNetwork(final String aPIKey) {
-        apiKey = aPIKey;
+    public LightNetwork(final String apiKey) {
+        this.apiKey = apiKey;
+
+        lightService = createLightService();
+
+        fetchLights().subscribe();
+    }
+
+    protected LightService createLightService() {
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint(WifiLightApplication.application().serverURL())
                 .setErrorHandler(new ErrorHandler() {
                     @Override
                     public Throwable handleError(RetrofitError cause) {
-                        mLogger.error(cause.getResponse().getReason());
-                        return null;
+                        logger.error(cause.getResponse().getReason());
+                        return new Exception(cause.getMessage());
                     }
                 })
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
-        lightService = restAdapter.create(LightService.class);
-
-        fetchLights()
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        // TODO send a message to say we are set up
-                    }
-                })
-                .subscribe();
+        return restAdapter.create(LightService.class);
     }
 
     /**
@@ -114,18 +112,26 @@ public class LightNetwork {
      * @param power ON or OFF
      * @param duration how long to set the power change for
      */
-    public final Observable setPower(ModelConstants.Power power, float duration) {
+    public final Observable setPower(final ModelConstants.Power power, final float duration) {
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
     // TODO colour set power on
 
     final Observable<List<Light>> fetchLights() {
+        lights.clear();
+
         return service().listLights(baseUrl1(), baseUrl2(), ModelConstants.URL_ALL, authorisation())
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(final Throwable throwable) {
-                        mLogger.error(throwable);
+                        logger.error(throwable);
+                    }
+                })
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        WifiLightApplication.application().postMessage(new SuccessEvent());
                     }
                 })
                 .flatMap(new Func1<List<LightDataResponse>, Observable<List<Light>>>() {
@@ -157,21 +163,50 @@ public class LightNetwork {
         queryMap.put(ModelConstants.URL_DURATION, durationQuery);
         queryMap.put(ModelConstants.URL_POWER_ON, "true");
 
-        return service().setColour(baseUrl1(), baseUrl2(), ModelConstants.URL_ALL, authorisation(), queryMap)
-                            .subscribeOn(Schedulers.io());
-    }
-
-    private Observable doToggleLights() {
-        return service().togglePower(baseUrl1(), baseUrl2(), ModelConstants.URL_ALL, authorisation())
+        return service().setColour(baseUrl1(),
+                baseUrl2(),
+                ModelConstants.URL_ALL,
+                authorisation(),
+                queryMap)
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        fetchLights().subscribe();
+                    }
+                })
                 .subscribeOn(Schedulers.io());
     }
 
-    private Observable doSetPower(String powerQuery, String durationQuery) {
+    private Observable doToggleLights() {
+        return service().togglePower(baseUrl1(),
+                baseUrl2(),
+                ModelConstants.URL_ALL,
+                authorisation())
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        fetchLights().subscribe();
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+    }
+
+    private Observable doSetPower(final String powerQuery, final String durationQuery) {
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put(ModelConstants.URL_STATE, powerQuery);
         queryMap.put(ModelConstants.URL_DURATION, durationQuery);
 
-        return service().setPower(baseUrl1(), baseUrl2(), ModelConstants.URL_ALL, authorisation(), queryMap)
+        return service().setPower(baseUrl1(),
+                baseUrl2(),
+                ModelConstants.URL_ALL,
+                authorisation(),
+                queryMap)
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        fetchLights().subscribe();
+                    }
+                })
                 .subscribeOn(Schedulers.io());
     }
 
@@ -191,23 +226,23 @@ public class LightNetwork {
         return WifiLightApplication.application().baseURL2();
     }
 
-    private String makeHueString(double hue) {
+    private String makeHueString(final double hue) {
         return ModelConstants.LABEL_HUE + Double.toString(hue);
     }
 
-    private String makeSaturationString(double saturation) {
+    private String makeSaturationString(final double saturation) {
         return ModelConstants.LABEL_SATURATION + Double.toString(saturation);
     }
 
-    private String makeKelvinString(long kelvin) {
+    private String makeKelvinString(final long kelvin) {
         return ModelConstants.LABEL_KELVIN + Long.toString(kelvin);
     }
 
-    private String makeBrightnessString(double brightness) {
+    private String makeBrightnessString(final double brightness) {
         return ModelConstants.LABEL_BRIGHTNESS + Double.toString(brightness);
     }
 
-    private String makeDurationString(float duration) {
+    private String makeDurationString(final float duration) {
         return Float.toString(duration);
     }
 
@@ -226,7 +261,7 @@ public class LightNetwork {
         public String label;
     }
 
-    private class StatusResponse extends LightResponse {
+    class StatusResponse extends LightResponse {
         public String status;
     }
 
@@ -260,6 +295,8 @@ public class LightNetwork {
             public boolean has_variable_color_temp;
         }
     }
+
+    public class SuccessEvent { }
 
     /**
      * Created by anne on 22/06/15.

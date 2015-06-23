@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
 
 import com.giganticsheep.wifilight.Logger;
+import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.model.LightNetwork;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +40,7 @@ public abstract class RXActivity extends ActionBarActivity {
     private boolean fragmentsResumed = true;
     private final Collection<RXFragment> fragmentAttachmentQueue = new ArrayList<>();
 
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -65,6 +69,20 @@ public abstract class RXActivity extends ActionBarActivity {
         super.onDestroy();
 
         compositeSubscription.unsubscribe();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        WifiLightApplication.application().registerForEvents(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        WifiLightApplication.application().unregisterForEvents(this);
     }
 
     @Override
@@ -107,7 +125,7 @@ public abstract class RXActivity extends ActionBarActivity {
      * @param message the message to show in the toast
      */
     public final void showToast(final String message) {
-        // TODO show a toast
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -158,6 +176,12 @@ public abstract class RXActivity extends ActionBarActivity {
      */
     public final boolean fragmentsResumed() {
         return fragmentsResumed;
+    }
+
+    @Subscribe
+    public void lightChangeSuccessful(LightNetwork.SuccessEvent event) {
+        // TODO: React to the event somehow!
+        showToast("Changed!");
     }
 
     /**
