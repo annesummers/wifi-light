@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
@@ -35,6 +37,7 @@ public abstract class RXActivity extends ActionBarActivity {
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
     private final Map<RXFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
+    private Handler mainThreadHandler;
 
     protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
@@ -43,6 +46,8 @@ public abstract class RXActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         activityLayout = createActivityLayout();
+
+        mainThreadHandler = new Handler(Looper.getMainLooper());
 
         if(savedInstanceState != null) {
             Parcelable[] fragments = savedInstanceState.getParcelableArray(ATTACHED_FRAGMENTS_EXTRA);
@@ -133,7 +138,12 @@ public abstract class RXActivity extends ActionBarActivity {
      * @param message the message to show in the toast
      */
     public final void showToast(final String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(RXActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     /**

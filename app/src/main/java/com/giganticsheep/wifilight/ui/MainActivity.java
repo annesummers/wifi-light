@@ -6,12 +6,16 @@ import android.view.MenuItem;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.model.Light;
 import com.giganticsheep.wifilight.model.LightNetwork;
 import com.giganticsheep.wifilight.model.ModelConstants;
 import com.giganticsheep.wifilight.ui.rx.ActivityLayout;
 import com.giganticsheep.wifilight.ui.rx.RXActivity;
 import com.squareup.otto.Subscribe;
 
+import java.util.List;
+
+import rx.Subscriber;
 import rx.functions.Action1;
 
 
@@ -81,79 +85,105 @@ public class MainActivity extends RXActivity {
     }
 
     public final void setHue(final int hue) {
-        compositeSubscription.add(bind(lightNetwork.setHue(hue, DEFAULT_DURATION)
-                .doOnError(new Action1<Throwable>() {
+        compositeSubscription.add(bind(lightNetwork.setHue(hue, DEFAULT_DURATION))
+                .subscribe(new Subscriber() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onCompleted() { }
+
+                    @Override
+                    public void onError(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                }))
-                .subscribe());
+
+                    @Override
+                    public void onNext(Object o) { }
+                }));
     }
 
     public final void setSaturation(final int saturation) {
-        compositeSubscription.add(bind(lightNetwork.setSaturation(saturation, DEFAULT_DURATION)
-                .doOnError(new Action1<Throwable>() {
+        compositeSubscription.add(bind(lightNetwork.setSaturation(saturation, DEFAULT_DURATION))
+                .subscribe(new Subscriber() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onCompleted() { }
+
+                    @Override
+                    public void onError(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                }))
-                .subscribe());
+
+                    @Override
+                    public void onNext(Object o) { }
+                }));
     }
 
     public final void setBrightness(final int brightness) {
-        compositeSubscription.add(bind(lightNetwork.setBrightness(brightness, DEFAULT_DURATION)
-                .doOnError(new Action1<Throwable>() {
+        compositeSubscription.add(bind(lightNetwork.setBrightness(brightness, DEFAULT_DURATION))
+                .subscribe(new Subscriber() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                }))
-                .subscribe());
+
+                    @Override
+                    public void onNext(Object o) {
+                    }
+                }));
     }
 
     public final void setKelvin(final int kelvin) {
-        compositeSubscription.add(bind(lightNetwork.setKelvin(kelvin, DEFAULT_DURATION)
-                .doOnError(new Action1<Throwable>() {
+        compositeSubscription.add(bind(lightNetwork.setKelvin(kelvin, DEFAULT_DURATION))
+                .subscribe(new Subscriber() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onCompleted() { }
+
+                    @Override
+                    public void onError(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                }))
-                .subscribe());
+
+                    @Override
+                    public void onNext(Object o) { }
+                }));
     }
 
     public final void togglePower() {
-        compositeSubscription.add(bind(lightNetwork.toggleLights()
-                .doOnError(new Action1<Throwable>() {
+        compositeSubscription.add(bind(lightNetwork.toggleLights())
+                .subscribe(new Subscriber() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onCompleted() { }
+
+                    @Override
+                    public void onError(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                }))
-                .subscribe());
+
+                    @Override
+                    public void onNext(Object o) { }
+                }));
     }
 
     public final void setPower(ModelConstants.Power power) {
-        compositeSubscription.add(bind(lightNetwork.setPower(power, DEFAULT_DURATION)
-                .doOnError(new Action1<Throwable>() {
+        compositeSubscription.add(bind(lightNetwork.setPower(power, DEFAULT_DURATION))
+                .subscribe(new Subscriber() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onCompleted() { }
+
+                    @Override
+                    public void onError(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                }))
-                .subscribe());
+
+                    @Override
+                    public void onNext(Object o) { }
+                }));
     }
 
     public final void fetchLights() {
-        compositeSubscription.add(bind(lightNetwork.fetchLights()
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        showToast(throwable.getMessage());
-                    }
-                }))
+        compositeSubscription.add(bind(lightNetwork.fetchLights())
                 .subscribe());
     }
 

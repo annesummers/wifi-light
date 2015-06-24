@@ -159,8 +159,8 @@ public class HSVFragment extends RXFragment {
     
     private void setLightDetails() {
         int hue = (int)light.getHue();
-        int saturation = (int)light.getSaturation()*100;
-        int brightness = (int)light.getBrightness()*100;
+        int saturation = (int)(light.getSaturation()*100);
+        int brightness = (int)(light.getBrightness()*100);
         int kelvin = (int) light.getKelvin();
 
         nameTextView.setText(light.getName());
@@ -173,7 +173,7 @@ public class HSVFragment extends RXFragment {
         hueSeekBar.setProgress(hue);
         saturationSeekBar.setProgress(saturation);
         valueSeekBar.setProgress(brightness);
-        kelvinSeekBar.setProgress(kelvin);
+        kelvinSeekBar.setProgress(kelvin - 2500);
 
         powerToggle.setChecked(light.getPower() == ModelConstants.Power.ON);
     }

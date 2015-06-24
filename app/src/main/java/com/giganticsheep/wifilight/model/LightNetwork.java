@@ -21,6 +21,7 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.QueryMap;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -83,7 +84,7 @@ public class LightNetwork {
      * @param saturation the saturation to set the enabled lights
      */
     public final Observable setSaturation(final int saturation, float duration) {
-        return doSetColour(makeSaturationString(saturation), makeDurationString(duration));
+        return doSetColour(makeSaturationString((double)saturation/100), makeDurationString(duration));
     }
 
     /**
@@ -97,7 +98,7 @@ public class LightNetwork {
      * @param kelvin the kelvin (warmth to set the enabled lights
      */
     public final Observable setKelvin(final int kelvin, float duration) {
-        return doSetColour(makeKelvinString(kelvin), makeDurationString(duration));
+        return doSetColour(makeKelvinString(kelvin+2500), makeDurationString(duration));
     }
 
     /**
@@ -180,7 +181,8 @@ public class LightNetwork {
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private Observable doToggleLights() {
@@ -202,7 +204,8 @@ public class LightNetwork {
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
     }
 
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
@@ -230,7 +233,8 @@ public class LightNetwork {
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
     }
 
     private String authorisation() {
@@ -372,11 +376,11 @@ public class LightNetwork {
         Observable<List<LightDataResponse>> listLights(@Path("url1") String url1, @Path("url2") String url2, @Path("selector") String selector,
                                                                        @Header("Authorization") String authorisation);
 
-        @GET("/{url}/{url2}/{selector}/toggle")
+        @POST("/{url}/{url2}/{selector}/toggle")
         Observable<List<StatusResponse>> togglePower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
                                          @Header("Authorization") String authorisation);
 
-        @POST("/{url}/{url2}/{selector}/power")
+        @PUT("/{url}/{url2}/{selector}/power")
         Observable<List<StatusResponse>> setPower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
                                       @Header("Authorization") String authorization,
                                       @QueryMap Map<String, String> options);
