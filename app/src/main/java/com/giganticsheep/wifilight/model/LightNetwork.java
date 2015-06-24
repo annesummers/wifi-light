@@ -90,8 +90,7 @@ public class LightNetwork {
      * @param brightness the brightness to set the enabled lights
      */
     public final Observable setBrightness(final int brightness, float duration) {
-        // TODO brightness
-        return doSetColour(makeBrightnessString(brightness), makeDurationString(duration));
+        return doSetColour(makeBrightnessString((double)brightness/100), makeDurationString(duration));
     }
 
     /**
@@ -117,7 +116,7 @@ public class LightNetwork {
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
-    final Observable<List<Light>> fetchLights() {
+    public final Observable<List<Light>> fetchLights() {
         logger.debug("fetchLights()");
         lights.clear();
 
@@ -138,7 +137,7 @@ public class LightNetwork {
                              public Observable<List<Light>> call(List<LightDataResponse> lightDataResponses) {
                                  List<Light> lights = new ArrayList();
                                  for (LightDataResponse lightDataResponse : lightDataResponses) {
-                                     Light light = new Light(LightNetwork.this, true, lightDataResponse);
+                                     Light light = new Light(true, lightDataResponse);
                                      lights.add(light);
                                      WifiLightApplication.application().postMessage(new LightDetailsEvent(light)).subscribe();
 
@@ -156,7 +155,7 @@ public class LightNetwork {
      * @param durationQuery the colour query
      */
     private Observable doSetColour(final String colourQuery, final String durationQuery) {
-        logger.debug("doSetColour()");
+        logger.debug("doSetColour() " + colourQuery + ModelConstants.SPACE + durationQuery);
 
         // TODO colour set power on
         Map<String, String> queryMap = new HashMap<>();
@@ -207,7 +206,7 @@ public class LightNetwork {
     }
 
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
-        logger.debug("doSetPower()");
+        logger.debug("doSetPower() " + powerQuery + ModelConstants.SPACE + durationQuery);
 
         // TODO set power
         Map<String, String> queryMap = new HashMap<>();
@@ -367,10 +366,6 @@ public class LightNetwork {
         }
     }
 
-    /**
-     * Created by anne on 22/06/15.
-     * (*_*)
-     */
     interface LightService {
 
         @GET("/{url1}/{url2}/{selector}")

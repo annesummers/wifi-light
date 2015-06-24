@@ -10,6 +10,7 @@ import android.widget.ToggleButton;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.model.Light;
 import com.giganticsheep.wifilight.model.LightNetwork;
 import com.giganticsheep.wifilight.model.ModelConstants;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
@@ -19,10 +20,13 @@ import rx.Observable;
 
 /**
  * Created by anne on 22/06/15.
+ * (*_*)
  */
 public class HSVFragment extends RXFragment {
 
-    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
+    private static final String CURRENT_LIGHT_ARGUMENT = "current_light";
+
+    private Light light;
 
     public static HSVFragment newInstance(String name) {
         HSVFragment fragment = new HSVFragment();
@@ -38,14 +42,10 @@ public class HSVFragment extends RXFragment {
         super();
     }
 
-    @Override
-    protected void destroyViews() {
-        WifiLightApplication.application().unregisterForEvents(this);
-    }
-
     private SeekBar hueSeekBar;
     private SeekBar saturationSeekBar;
     private SeekBar valueSeekBar;
+    private SeekBar kelvinSeekBar;
 
     private ToggleButton powerToggle;
 
@@ -56,14 +56,44 @@ public class HSVFragment extends RXFragment {
     private TextView brightnessTextView;
     private TextView kelvinTextView;
 
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
+
     @Override
-    protected int layoutId() {
-        return R.layout.fragment_hsv;
+    public void onStop() {
+        super.onStop();
+
+        logger.debug("onStop()");
+
+        getArguments().putSerializable(CURRENT_LIGHT_ARGUMENT, light);
     }
 
     @Override
-    public Observable<RXFragment> layoutScreen(Configuration configuration) {
-        return Observable.empty();
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        logger.debug("onViewStateRestored()");
+
+        if(light == null) {
+            Bundle mySavedInstanceState = getArguments();
+            light = (Light) mySavedInstanceState.getSerializable(CURRENT_LIGHT_ARGUMENT);
+
+            if(light == null) {
+                getMainActivity().fetchLights();
+            }
+        }
+
+        if(light != null) {
+            setLightDetails();
+        }
+    }
+
+    public MainActivity getMainActivity() {
+        return (MainActivity)activity();
+    }
+
+    @Override
+    protected int layoutId() {
+        return R.layout.fragment_hsv;
     }
 
     @Override
@@ -73,6 +103,8 @@ public class HSVFragment extends RXFragment {
 
     @Override
     protected void initialiseViews(View view) {
+        logger.debug("initialiseViews()");
+
         hueSeekBar = (SeekBar) view.findViewById(R.id.hue_seekbar);
         hueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
@@ -81,6 +113,9 @@ public class HSVFragment extends RXFragment {
 
         valueSeekBar = (SeekBar) view.findViewById(R.id.brightness_seekbar);
         valueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+
+        kelvinSeekBar = (SeekBar) view.findViewById(R.id.kelvin_seekbar);
+        kelvinSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         nameTextView = (TextView) view.findViewById(R.id.name_textview);
         idTextView = (TextView) view.findViewById(R.id.id_textview);
@@ -93,35 +128,54 @@ public class HSVFragment extends RXFragment {
         powerToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked) {
+                if(isChecked && light != null && light.getPower() != ModelConstants.Power.ON) {
                     getMainActivity().setPower(ModelConstants.Power.ON);
-                } else {
+                } else if(!isChecked && light != null && light.getPower() != ModelConstants.Power.OFF){
                     getMainActivity().setPower(ModelConstants.Power.OFF);
                 }
             }
         });
 
         WifiLightApplication.application().registerForEvents(this);
+
+        if(light != null) {
+            setLightDetails();
+        }
+    }
+
+    @Override
+    protected void destroyViews() {
+        logger.debug("destroyViews()");
+        WifiLightApplication.application().unregisterForEvents(this);
     }
 
     @Subscribe
     public void lightChange(LightNetwork.LightDetailsEvent event) {
-        int hue =(int)event.light().getHue();
-        int saturation = (int)event.light().getSaturation()*100;
-        int brightness = (int)event.light().getBrightness()*100;
+        logger.debug("lightChange()");
 
-        nameTextView.setText(event.light().getName());
-        idTextView.setText(event.light().id());
+        light = event.light();
+        setLightDetails();
+    }
+    
+    private void setLightDetails() {
+        int hue = (int)light.getHue();
+        int saturation = (int)light.getSaturation()*100;
+        int brightness = (int)light.getBrightness()*100;
+        int kelvin = (int) light.getKelvin();
+
+        nameTextView.setText(light.getName());
+        idTextView.setText(light.id());
         hueTextView.setText(Integer.toString(hue));
         saturationTextView.setText(Integer.toString(saturation));
         brightnessTextView.setText(Integer.toString(brightness));
-        kelvinTextView.setText(Integer.toString((int) event.light().getKelvin()));
+        kelvinTextView.setText(Integer.toString(kelvin));
 
         hueSeekBar.setProgress(hue);
         saturationSeekBar.setProgress(saturation);
         valueSeekBar.setProgress(brightness);
+        kelvinSeekBar.setProgress(kelvin);
 
-        powerToggle.setChecked(event.light().getPower() == ModelConstants.Power.ON ? true : false);
+        powerToggle.setChecked(light.getPower() == ModelConstants.Power.ON);
     }
 
     private class OnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
@@ -143,6 +197,11 @@ public class HSVFragment extends RXFragment {
                     getMainActivity().setBrightness(value);
                     return;
                 }
+
+                if (seekBar.equals(kelvinSeekBar)) {
+                    getMainActivity().setKelvin(value);
+                    return;
+                }
             }
         }
 
@@ -151,9 +210,5 @@ public class HSVFragment extends RXFragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) { }
-    }
-
-    public MainActivity getMainActivity() {
-        return (MainActivity)activity();
     }
 }

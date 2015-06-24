@@ -34,31 +34,6 @@ public class MainActivity extends RXActivity {
     }
 
     @Override
-    protected void initialiseViews() { }
-
-    @Override
-    protected final ActivityLayout createActivityLayout() {
-        return new ActivityLayout() {
-            @Override
-            public int fragmentContainer(final int position) {
-                switch (position) {
-                    case 0:
-                        return R.id.container;
-                    default:
-                        return 0;
-
-                }
-            }
-
-            @Override
-            public int fragmentContainerCount() {
-                return 1;
-            }
-        };
-    }
-
-
-    @Override
     public final boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -84,69 +59,101 @@ public class MainActivity extends RXActivity {
         showToast("Changed!");
     }
 
+    @Override
+    protected final ActivityLayout createActivityLayout() {
+        return new ActivityLayout() {
+            @Override
+            public int fragmentContainer(final int position) {
+                switch (position) {
+                    case 0:
+                        return R.id.container;
+                    default:
+                        return 0;
+
+                }
+            }
+
+            @Override
+            public int fragmentContainerCount() {
+                return 1;
+            }
+        };
+    }
+
     public final void setHue(final int hue) {
-        compositeSubscription.add(lightNetwork.setHue(hue, DEFAULT_DURATION)
+        compositeSubscription.add(bind(lightNetwork.setHue(hue, DEFAULT_DURATION)
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                })
+                }))
                 .subscribe());
     }
 
     public final void setSaturation(final int saturation) {
-        compositeSubscription.add(lightNetwork.setSaturation(saturation, DEFAULT_DURATION)
+        compositeSubscription.add(bind(lightNetwork.setSaturation(saturation, DEFAULT_DURATION)
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                })
+                }))
                 .subscribe());
     }
 
     public final void setBrightness(final int brightness) {
-        compositeSubscription.add(lightNetwork.setBrightness(brightness, DEFAULT_DURATION)
+        compositeSubscription.add(bind(lightNetwork.setBrightness(brightness, DEFAULT_DURATION)
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                })
+                }))
                 .subscribe());
     }
 
     public final void setKelvin(final int kelvin) {
-        compositeSubscription.add(lightNetwork.setKelvin(kelvin, DEFAULT_DURATION)
+        compositeSubscription.add(bind(lightNetwork.setKelvin(kelvin, DEFAULT_DURATION)
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                })
+                }))
                 .subscribe());
     }
 
     public final void togglePower() {
-        compositeSubscription.add(lightNetwork.toggleLights()
+        compositeSubscription.add(bind(lightNetwork.toggleLights()
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                })
+                }))
                 .subscribe());
     }
 
     public final void setPower(ModelConstants.Power power) {
-        compositeSubscription.add(lightNetwork.setPower(power, DEFAULT_DURATION)
+        compositeSubscription.add(bind(lightNetwork.setPower(power, DEFAULT_DURATION)
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         showToast(throwable.getMessage());
                     }
-                })
+                }))
+                .subscribe());
+    }
+
+    public final void fetchLights() {
+        compositeSubscription.add(bind(lightNetwork.fetchLights()
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        showToast(throwable.getMessage());
+                    }
+                }))
                 .subscribe());
     }
 

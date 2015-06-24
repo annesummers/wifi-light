@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,20 +41,23 @@ public abstract class RXFragment extends Fragment {
     private static final String FRAGMENT_ARGS_ATTACH_TO_ROOT = "attach_to_root";
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger logger = new Logger(getClass().getName());
+    protected final Logger logger = new Logger(Integer.toHexString(System.identityHashCode(this)) +
+            " " + getClass().getName());
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     private String name;
 
-    private AttachDetails attachDetails;
     private LayoutInflater layoutInflater;
+    RXActivity.FragmentAttachmentDetails attachmentDetails;
 
     private RXActivity activity;
 
     private boolean showAsDialog;
     private boolean attachToRoot;
     private int orientation;
+
+    private Handler mainThreadHandler;
 
     /**
      * Creates the named Fragment
@@ -83,6 +88,8 @@ public abstract class RXFragment extends Fragment {
             showAsDialog = args.getBoolean(FRAGMENT_ARGS_SHOW_AS_DIALOG, false);
             attachToRoot = args.getBoolean(FRAGMENT_ARGS_ATTACH_TO_ROOT, false);
         }
+
+        mainThreadHandler = new Handler(Looper.getMainLooper());
 
        /* if(showAsDialog) {
             setStyle(PureSoloUIEngine.engine().dialogStyle(),
@@ -153,28 +160,13 @@ public abstract class RXFragment extends Fragment {
      * Attaches this Fragment to the specified Activity
      *
      * @param activity the Activity to attach to
-     * @param position the position to attach to
-     * @param addToBackStack whether to add the fragment to the Activity's backstack
      * @return the Observable to subscribe to
      */
-    public final Observable<RXFragment> attachToActivity(final RXActivity activity,
-                                                         final String name,
-                                                         final int position,
-                                                         final boolean addToBackStack) {
-        attachDetails = new AttachDetails(this, name, position, addToBackStack);
+    public final void attachToActivity(final RXActivity activity,
+                                       final RXActivity.FragmentAttachmentDetails attachmentDetails) {
+        this.attachmentDetails = attachmentDetails;
 
-        return Observable.just(doAttachToActivity(activity))
-                .subscribeOn(AndroidSchedulers.mainThread());
-    }
-
-    /**
-     * Attaches this Fragment to the specified Activity
-     *
-     * @param activity the Activity to attach to@return the Observable to subscribe to
-     */
-    public final Observable<RXFragment> attachToActivity(final RXActivity activity) {
-        return Observable.just(doAttachToActivity(activity))
-                .subscribeOn(AndroidSchedulers.mainThread());
+        doAttachToActivity(activity);
     }
 
     /**
@@ -185,7 +177,7 @@ public abstract class RXFragment extends Fragment {
         if(activityExists() && activity().fragmentsResumed()) {
             final FragmentManager fragmentManager = activity.getFragmentManager();
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.remove(this);
+            fragmentTransaction.hide(this);
             fragmentTransaction.commit();
         }
     }
@@ -251,52 +243,42 @@ public abstract class RXFragment extends Fragment {
         return AndroidObservable.bindFragment(this, observable);
     }
 
-    private RXFragment doAttachToActivity(final RXActivity activity) {
+    private void doAttachToActivity(final RXActivity activity) {
         this.activity = activity;
 
-        final String name = attachDetails.name();
-        final int position = attachDetails.position();
-        final boolean addToBackStack = attachDetails.addToBackStack();
+        final int position = attachmentDetails.position();
+        final boolean addToBackStack = attachmentDetails.addToBackStack();
 
-        activity().addFragment(name, position, addToBackStack);
+        final FragmentManager fragmentManager = this.activity.getFragmentManager();
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if(this.activity.fragmentsResumed()) {
-            final FragmentManager fragmentManager = this.activity.getFragmentManager();
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        int attachId = 0;
 
-            int attachId = 0;
-
-            if(position != INVALID) {
-                attachId = activity().containerIdFromPosition(position);
-            }
-
-            if(attachId != 0) {
-                final RXFragment existingFragment = (RXFragment) fragmentManager.findFragmentById(attachId);
-                if (existingFragment != null) {
-                    fragmentTransaction.remove(existingFragment);
-                }
-
-                fragmentTransaction.add(attachId, this);
-
-                if(existingFragment != null) {
-                    fragmentTransaction.add(existingFragment, existingFragment.name());
-                }
-            }
-
-            if (addToBackStack) {
-                fragmentTransaction.addToBackStack(null);
-            }
-
-            fragmentTransaction.commit();
-
-         //   layoutScreen(getResources().getConfiguration());
-        } else {
-            activity().queueFragmentForAttachment(this);
+        if(position != INVALID) {
+            attachId = activity().containerIdFromPosition(position);
         }
 
-        //getWindow().setTitle(activityTitle());
+        if(attachId != 0) {
+            final RXFragment existingFragment = (RXFragment) fragmentManager.findFragmentById(attachId);
+            if (existingFragment != null) {
+               // fragmentTransaction.detach(existingFragment);
+                fragmentTransaction.remove(existingFragment);
+            }
 
-        return this;
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+            //if(fragmentManager.findFragmentByTag(name()).equals(this)) {
+            //    fragmentTransaction.attach(this);
+            //} else {
+                fragmentTransaction.add(attachId, this, name());
+            //}
+        }
+
+        if (addToBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+
+        fragmentTransaction.commit();
     }
 
     private boolean activityExists() {
@@ -304,14 +286,6 @@ public abstract class RXFragment extends Fragment {
     }
 
     // abstract methods
-
-    /**
-     * Lays out the Fragment UI elements
-     *
-     * @param configuration the current Configuration
-     * @return the Observable to subscribe to
-     */
-    public abstract Observable<RXFragment> layoutScreen(Configuration configuration);
 
     /**
      * @return the resource id of the layout for this Fragment

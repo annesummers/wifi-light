@@ -1,5 +1,8 @@
 package com.giganticsheep.wifilight.model;
 
+import org.apache.http.impl.entity.EntityDeserializer;
+
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +11,7 @@ import java.util.Date;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class Light extends WifiLightObject{
+public class Light extends WifiLightObject implements Serializable {
 
     private final String name;
     private boolean connected;
@@ -36,14 +39,14 @@ public class Light extends WifiLightObject{
      * @param network the network this light is part of
      * @param name the name of this light
      */
-    public Light(final LightNetwork network, final String id, final String name) {
-        super(network, id);
+    public Light(/*final LightNetwork network, */final String id, final String name) {
+        super(/*network, */id);
 
         this.name = name;
     }
 
-    public Light(final LightNetwork network, boolean enabled, LightNetwork.LightDataResponse dataEnvelope) {
-        super(network, dataEnvelope.id);
+    public Light(/*final LightNetwork network, */boolean enabled, LightNetwork.LightDataResponse dataEnvelope) {
+        super(/*network, */dataEnvelope.id);
 
         this.enabled = enabled;
 
@@ -131,6 +134,7 @@ public class Light extends WifiLightObject{
     public boolean hasVariableColourTemp() {
         return hasVariableColourTemp;
     }
+
     /**
      * @param enabled is this light enabled
      */

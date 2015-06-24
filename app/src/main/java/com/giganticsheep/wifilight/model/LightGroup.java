@@ -13,7 +13,7 @@ public class LightGroup extends WifiLightObject {
      * @param id      the id of this object
      */
     protected LightGroup(LightNetwork network, String id) {
-        super(network, id);
+        super(/*network, */id);
     }
 
     void addLightToGroup(Light light) {

@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.ui.rx;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,19 +11,13 @@ import android.widget.Toast;
 
 import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.model.LightNetwork;
-import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.android.observables.AndroidObservable;
-import rx.functions.Func1;
+import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -39,7 +34,7 @@ public abstract class RXActivity extends ActionBarActivity {
     private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
-    private final Collection<RXFragment> fragmentAttachmentQueue = new ArrayList<>();
+    private final Map<RXFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
 
     protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
@@ -50,19 +45,26 @@ public abstract class RXActivity extends ActionBarActivity {
         activityLayout = createActivityLayout();
 
         if(savedInstanceState != null) {
-            final int containerCount = activityLayout().fragmentContainerCount();
-            for (int i = 0; i < containerCount; i++) {
-                if (attachedFragments.containsKey(i)) {
-                    final FragmentAttachmentDetails fragmentAttachmentDetails = attachedFragments.get(i);
+            Parcelable[] fragments = savedInstanceState.getParcelableArray(ATTACHED_FRAGMENTS_EXTRA);
 
-                    attachNewFragment(fragmentAttachmentDetails.name(),
-                            fragmentAttachmentDetails.position(),
-                            fragmentAttachmentDetails.addToBackStack());
+            if(fragments != null) {
+                for (Parcelable fragment : fragments) {
+                    FragmentAttachmentDetails fragmentDetails = ((FragmentAttachmentDetails) fragment);
+                    attachedFragments.put(fragmentDetails.position, fragmentDetails);
                 }
             }
         }
 
-        initialiseViews();
+        final int containerCount = activityLayout().fragmentContainerCount();
+        for (int i = 0; i < containerCount; i++) {
+            if (attachedFragments.containsKey(i)) {
+                final FragmentAttachmentDetails fragmentAttachmentDetails = attachedFragments.get(i);
+
+                attachNewFragment(fragmentAttachmentDetails.name(),
+                        fragmentAttachmentDetails.position(),
+                        fragmentAttachmentDetails.addToBackStack());
+            }
+        }
     }
 
     @Override
@@ -109,8 +111,8 @@ public abstract class RXActivity extends ActionBarActivity {
 
         fragmentsResumed = true;
 
-        for(final RXFragment fragment : fragmentAttachmentQueue) {
-            fragment.attachToActivity(this);
+        for(final RXFragment fragment : fragmentAttachmentQueue.keySet()) {
+            fragment.attachToActivity(this, fragmentAttachmentQueue.get(fragment));
             fragmentAttachmentQueue.remove(fragment);
             break;
         }
@@ -135,10 +137,13 @@ public abstract class RXActivity extends ActionBarActivity {
     }
 
     /**
+     * Queues a fragment for attachment to this Activity once the Activity is
+     * in a state to have Fragments attached.
+     *
      * @param fragment the Fragment to queue for attachment
      */
-    public final void queueFragmentForAttachment(final RXFragment fragment) {
-        fragmentAttachmentQueue.add(fragment);
+    public final void queueFragmentForAttachment(final RXFragment fragment, FragmentAttachmentDetails details) {
+        fragmentAttachmentQueue.put(fragment, details);
     }
 
     /**
@@ -147,34 +152,56 @@ public abstract class RXActivity extends ActionBarActivity {
      * @param addToBackStack whether to attach the fragment to the backstack or not
      */
     protected final void attachNewFragment(final String name, final int position, final boolean addToBackStack) {
-        Subscription subscription = null;
-
-        compositeSubscription.add(RXFragment.create(name, getRXApplication())
-                .flatMap(new Func1<RXFragment, Observable<?>>() {
+        compositeSubscription.add(bind(RXFragment.create(name, getRXApplication()))
+                .doOnNext(new Action1<RXFragment>() {
                     @Override
-                    public Observable<RXFragment> call(final RXFragment fragment) {
-                        return fragment.attachToActivity(RXActivity.this, name, position, addToBackStack);
+                    public void call(RXFragment fragment) {
+                        FragmentAttachmentDetails details = new FragmentAttachmentDetails(name, position, addToBackStack);
+                        addFragment(details);
+
+                        if (fragmentsResumed()) {
+                            fragment.attachToActivity(RXActivity.this, details);
+                        } else {
+                            queueFragmentForAttachment(fragment, details);
+                        }
                     }
                 })
                 .subscribe());
     }
+
+    /**
+     * @param name the name of the Fragment to create
+     * @param position the position in the layout to attach the Fragment
+     * @param addToBackStack whether to attach the fragment to the backstack or not
+     */
+    protected final void attachFragment(final String name, final int position, final boolean addToBackStack) {
+        final FragmentManager fragmentManager = getFragmentManager();
+
+        RXFragment fragment = (RXFragment) fragmentManager.findFragmentByTag(name);
+
+        if(fragment == null) {
+            attachNewFragment(name, position, addToBackStack);
+        } else {
+            fragment.attachToActivity(this, new FragmentAttachmentDetails(name, position, addToBackStack));
+        }
+    }
+
     /**
      * Adds a fragment to the hash of attached fragments.  This does not actually attach the fragment.
      *
-     * @param name the name of the attached Fragment
-     * @param position the position of the attached Fragment
+     * @param details the attachment details of the fragment
      */
-    void addFragment(final String name, final int position, final boolean addToBackStack) {
-        if(attachedFragments.containsKey(position)) {
-            final String oldName = attachedFragments.get(position).name();
-            if(oldName.equals(name)) {
+    void addFragment(FragmentAttachmentDetails details) {
+        if(attachedFragments.containsKey(details.position())) {
+            final String oldName = attachedFragments.get(details.position()).name();
+            if(oldName.equals(details.name())) {
                 return;
             } else {
-                attachedFragments.remove(position);
+                attachedFragments.remove(details.position());
             }
         }
 
-        attachedFragments.put(position, new FragmentAttachmentDetails(position, name, addToBackStack));
+        attachedFragments.put(details.position(), details);
     }
 
     /**
@@ -228,25 +255,23 @@ public abstract class RXActivity extends ActionBarActivity {
 
     // abstract methods
 
-    protected abstract void initialiseViews();
-
     protected abstract ActivityLayout createActivityLayout();
 
-    private static class FragmentAttachmentDetails implements Parcelable {
-        private final int mPosition;
-        private final String mName;
-        private boolean mAddToBackStack;
+    public static class FragmentAttachmentDetails implements Parcelable {
+        private final String name;
+        private final int position;
+        private final boolean addToBackStack;
 
-        public FragmentAttachmentDetails(final int position, final String name, final boolean addToBackStack) {
-            mPosition = position;
-            mName = name;
-            mAddToBackStack = addToBackStack;
+        public FragmentAttachmentDetails(final String name, final int position, final boolean addToBackStack) {
+            this.name = name;
+            this.position = position;
+            this.addToBackStack = addToBackStack;
         }
 
         protected FragmentAttachmentDetails(final Parcel in) {
-            mPosition = in.readInt();
-            mName = in.readString();
-            mAddToBackStack = in.readByte() != 0;
+            name = in.readString();
+            position = in.readInt();
+            addToBackStack = in.readByte() != 0;
         }
 
         public static final Parcelable.Creator<FragmentAttachmentDetails> CREATOR = new Parcelable.Creator<FragmentAttachmentDetails>() {
@@ -262,11 +287,11 @@ public abstract class RXActivity extends ActionBarActivity {
         };
 
         public String name() {
-            return mName;
+            return name;
         }
 
         public int position() {
-            return mPosition;
+            return position;
         }
 
         @Override
@@ -276,13 +301,22 @@ public abstract class RXActivity extends ActionBarActivity {
 
         @Override
         public void writeToParcel(final Parcel parcel, final int flags) {
-            parcel.writeString(mName);
-            parcel.writeInt(mPosition);
-            parcel.writeByte((byte) (mAddToBackStack ? 1 : 0));
+            parcel.writeString(name);
+            parcel.writeInt(position);
+            parcel.writeByte((byte) (addToBackStack ? 1 : 0));
         }
 
         public boolean addToBackStack() {
-            return mAddToBackStack;
+            return addToBackStack;
+        }
+
+        @Override
+        public String toString() {
+            return "FragmentAttachmentDetails{" +
+                    "position=" + position +
+                    ", name='" + name + '\'' +
+                    ", addToBackStack=" + addToBackStack +
+                    '}';
         }
     }
 }
