@@ -4,4 +4,8 @@
     <integer name="light_details_row_count">6</integer>
     <integer name="light_sliders_column_count">3</integer>
     <integer name="light_sliders_row_count">4</integer>
+    <integer name="light_slider_hue_max">360</integer>
+    <integer name="light_slider_saturation_max">100</integer>
+    <integer name="light_slider_brightness_max">100</integer>
+    <integer name="light_slider_kelvin_max">9000</integer>
 </resources>

@@ -117,7 +117,6 @@ public class LightNetwork {
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
-
     final Observable<List<Light>> fetchLights() {
         logger.debug("fetchLights()");
         lights.clear();

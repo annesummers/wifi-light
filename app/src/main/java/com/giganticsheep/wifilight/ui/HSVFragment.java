@@ -68,7 +68,7 @@ public class HSVFragment extends RXFragment {
 
     @Override
     protected boolean reinitialiseOnRotate() {
-        return false;
+        return true;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class HSVFragment extends RXFragment {
         saturationSeekBar = (SeekBar) view.findViewById(R.id.saturation_seekbar);
         saturationSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
-        valueSeekBar = (SeekBar) view.findViewById(R.id.value_seekbar);
+        valueSeekBar = (SeekBar) view.findViewById(R.id.brightness_seekbar);
         valueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         nameTextView = (TextView) view.findViewById(R.id.name_textview);
