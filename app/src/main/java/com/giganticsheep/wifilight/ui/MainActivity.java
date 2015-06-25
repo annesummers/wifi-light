@@ -33,7 +33,7 @@ public class MainActivity extends RXActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            attachNewFragment(WifiLightApplication.FRAGMENT_NAME_HSVFRAGMENT, 0, true);
+            attachNewFragment(new FragmentAttachmentDetails(WifiLightApplication.FRAGMENT_NAME_HSVFRAGMENT, 0, true));
         }
     }
 

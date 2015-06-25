@@ -10,21 +10,11 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.giganticsheep.wifilight.Logger;
-import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.model.LightNetwork;
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
 import rx.android.observables.AndroidObservable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
@@ -51,7 +41,7 @@ public abstract class RXFragment extends Fragment {
     private LayoutInflater layoutInflater;
     RXActivity.FragmentAttachmentDetails attachmentDetails;
 
-    private RXActivity activity;
+    //private RXActivity activity;
 
     private boolean showAsDialog;
     private boolean attachToRoot;
@@ -174,8 +164,8 @@ public abstract class RXFragment extends Fragment {
      *
      */
     public final void hide() {
-        if(activityExists() && activity().fragmentsResumed()) {
-            final FragmentManager fragmentManager = activity.getFragmentManager();
+        if(activityExists() && getRXActivity().fragmentsResumed()) {
+            final FragmentManager fragmentManager = getActivity().getFragmentManager();
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.hide(this);
             fragmentTransaction.commit();
@@ -188,7 +178,7 @@ public abstract class RXFragment extends Fragment {
      * @param message the message
      */
     public final void showToast(final String message) {
-        activity().showToast(message);
+        getRXActivity().showToast(message);
     }
 
     /**
@@ -197,7 +187,7 @@ public abstract class RXFragment extends Fragment {
      * @param message the message
      */
     public final void showToast(final int message) {
-        activity().showToast(getString(message));
+        getRXActivity().showToast(getString(message));
     }
 
     /**
@@ -219,8 +209,8 @@ public abstract class RXFragment extends Fragment {
     /**
      * @return the Activity associated with this Fragment
      */
-    protected final RXActivity activity() {
-        return activity;
+    protected final RXActivity getRXActivity() {
+        return (RXActivity) getActivity();
     }
 
     /**
@@ -244,45 +234,46 @@ public abstract class RXFragment extends Fragment {
     }
 
     private void doAttachToActivity(final RXActivity activity) {
-        this.activity = activity;
+        //this.activity = activity;
 
+        final String name = attachmentDetails.name();
         final int position = attachmentDetails.position();
         final boolean addToBackStack = attachmentDetails.addToBackStack();
 
-        final FragmentManager fragmentManager = this.activity.getFragmentManager();
+        final FragmentManager fragmentManager = activity.getFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         int attachId = 0;
 
         if(position != INVALID) {
-            attachId = activity().containerIdFromPosition(position);
+            attachId = activity.containerIdFromPosition(position);
         }
 
         if(attachId != 0) {
             final RXFragment existingFragment = (RXFragment) fragmentManager.findFragmentById(attachId);
-            if (existingFragment != null) {
-               // fragmentTransaction.detach(existingFragment);
-                fragmentTransaction.remove(existingFragment);
+            if (existingFragment != null && !existingFragment.equals(this)) {
+                fragmentTransaction.detach(existingFragment);
+            } else {
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+                Fragment fragment = fragmentManager.findFragmentByTag(name);
+                if (fragment != null && fragment.equals(this)) {
+                    fragmentTransaction.attach(this);
+                } else {
+                    fragmentTransaction.add(attachId, this, name);
+                }
+
+                if (addToBackStack) {
+                    fragmentTransaction.addToBackStack(null);
+                }
             }
-
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-            //if(fragmentManager.findFragmentByTag(name()).equals(this)) {
-            //    fragmentTransaction.attach(this);
-            //} else {
-                fragmentTransaction.add(attachId, this, name());
-            //}
-        }
-
-        if (addToBackStack) {
-            fragmentTransaction.addToBackStack(null);
         }
 
         fragmentTransaction.commit();
     }
 
     private boolean activityExists() {
-        return activity() != null;
+        return getActivity() != null;
     }
 
     // abstract methods

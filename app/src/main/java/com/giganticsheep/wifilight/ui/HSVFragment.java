@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.ui;
 
-import android.content.res.Configuration;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -15,8 +15,6 @@ import com.giganticsheep.wifilight.model.LightNetwork;
 import com.giganticsheep.wifilight.model.ModelConstants;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
 import com.squareup.otto.Subscribe;
-
-import rx.Observable;
 
 /**
  * Created by anne on 22/06/15.
@@ -88,7 +86,7 @@ public class HSVFragment extends RXFragment {
     }
 
     public MainActivity getMainActivity() {
-        return (MainActivity)activity();
+        return (MainActivity) getRXActivity();
     }
 
     @Override
@@ -146,6 +144,7 @@ public class HSVFragment extends RXFragment {
     @Override
     protected void destroyViews() {
         logger.debug("destroyViews()");
+
         WifiLightApplication.application().unregisterForEvents(this);
     }
 

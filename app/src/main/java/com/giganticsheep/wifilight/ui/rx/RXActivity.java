@@ -65,9 +65,7 @@ public abstract class RXActivity extends ActionBarActivity {
             if (attachedFragments.containsKey(i)) {
                 final FragmentAttachmentDetails fragmentAttachmentDetails = attachedFragments.get(i);
 
-                attachNewFragment(fragmentAttachmentDetails.name(),
-                        fragmentAttachmentDetails.position(),
-                        fragmentAttachmentDetails.addToBackStack());
+                attachFragment(fragmentAttachmentDetails);
             }
         }
     }
@@ -157,22 +155,19 @@ public abstract class RXActivity extends ActionBarActivity {
     }
 
     /**
-     * @param name the name of the Fragment to create
-     * @param position the position in the layout to attach the Fragment
-     * @param addToBackStack whether to attach the fragment to the backstack or not
+     * @param attachmentDetails the details of the fragment to attach
      */
-    protected final void attachNewFragment(final String name, final int position, final boolean addToBackStack) {
-        compositeSubscription.add(bind(RXFragment.create(name, getRXApplication()))
+    protected final void attachNewFragment(final FragmentAttachmentDetails attachmentDetails) {
+        compositeSubscription.add(bind(RXFragment.create(attachmentDetails.name(), getRXApplication()))
                 .doOnNext(new Action1<RXFragment>() {
                     @Override
                     public void call(RXFragment fragment) {
-                        FragmentAttachmentDetails details = new FragmentAttachmentDetails(name, position, addToBackStack);
-                        addFragment(details);
+                        addFragment(attachmentDetails);
 
                         if (fragmentsResumed()) {
-                            fragment.attachToActivity(RXActivity.this, details);
+                            fragment.attachToActivity(RXActivity.this, attachmentDetails);
                         } else {
-                            queueFragmentForAttachment(fragment, details);
+                            queueFragmentForAttachment(fragment, attachmentDetails);
                         }
                     }
                 })
@@ -180,19 +175,20 @@ public abstract class RXActivity extends ActionBarActivity {
     }
 
     /**
-     * @param name the name of the Fragment to create
-     * @param position the position in the layout to attach the Fragment
-     * @param addToBackStack whether to attach the fragment to the backstack or not
+     * First looks for an existing Fragment and if it exists, attaches that.
+     * If one is not found, calls attachNewFragment to attach a new Fragment
+     *
+     * @param attachmentDetails the details of the fragment to attach
      */
-    protected final void attachFragment(final String name, final int position, final boolean addToBackStack) {
+    protected final void attachFragment(final FragmentAttachmentDetails attachmentDetails) {
         final FragmentManager fragmentManager = getFragmentManager();
 
-        RXFragment fragment = (RXFragment) fragmentManager.findFragmentByTag(name);
+        RXFragment fragment = (RXFragment) fragmentManager.findFragmentByTag(attachmentDetails.name());
 
         if(fragment == null) {
-            attachNewFragment(name, position, addToBackStack);
+            attachNewFragment(attachmentDetails);
         } else {
-            fragment.attachToActivity(this, new FragmentAttachmentDetails(name, position, addToBackStack));
+            fragment.attachToActivity(this, attachmentDetails);
         }
     }
 
