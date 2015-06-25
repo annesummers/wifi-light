@@ -1,25 +1,24 @@
 package com.giganticsheep.wifilight.ui;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Bundle;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.design.widget.TabLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.model.Light;
 import com.giganticsheep.wifilight.model.LightNetwork;
 import com.giganticsheep.wifilight.model.ModelConstants;
 import com.giganticsheep.wifilight.ui.rx.ActivityLayout;
+import com.giganticsheep.wifilight.ui.rx.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.rx.RXActivity;
 import com.squareup.otto.Subscribe;
 
-import java.util.List;
-
 import rx.Subscriber;
-import rx.functions.Action1;
 
 
 public class MainActivity extends RXActivity {
@@ -27,7 +26,7 @@ public class MainActivity extends RXActivity {
 
     private LightNetwork lightNetwork;
 
-    //private ViewPager viewpager;
+    private ViewPager viewPager;
 
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
@@ -37,10 +36,15 @@ public class MainActivity extends RXActivity {
 
         setContentView(R.layout.activity_main);
 
-      //  viewpager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new LightFragmentPagerAdapter(getSupportFragmentManager()));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         if (savedInstanceState == null) {
-            attachNewFragment(new FragmentAttachmentDetails(WifiLightApplication.FRAGMENT_NAME_HSVFRAGMENT, 0, true));
+            // we are attaching the details fragment at position 0 which is under the view pager
+            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
     }
 
@@ -194,14 +198,11 @@ public class MainActivity extends RXActivity {
                 .subscribe());
     }
 
-   /* public class LightFragmentPagerAdapter extends FragmentPagerAdapter {
-        final int PAGE_COUNT = 3;
-        private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
-        private Context context;
+    public class LightFragmentPagerAdapter extends FragmentPagerAdapter {
+        final int PAGE_COUNT = 2;
 
-        public LightFragmentPagerAdapter(FragmentManager fm, Context context) {
-            super(fm);
-            this.context = context;
+        public LightFragmentPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
         }
 
         @Override
@@ -211,13 +212,32 @@ public class MainActivity extends RXActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PageFragment.newInstance(position + 1);
+            try {
+                switch(position) {
+                    case 0:
+                        return WifiLightApplication.application().createFragment(getString(R.string.fragment_name_light_colour));
+                    case 1:
+                        return WifiLightApplication.application().createFragment(getString(R.string.fragment_name_light_effects));
+                    default:
+                        return null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                return null;
+            }
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            // Generate title based on item position
-            return tabTitles[position];
+            switch(position) {
+                case 0:
+                    return getString(R.string.fragment_name_light_colour);
+                case 1:
+                    return getString(R.string.fragment_name_light_effects);
+                default:
+                    return null;
+            }
         }
     }
 
@@ -226,5 +246,5 @@ public class MainActivity extends RXActivity {
         return "MainActivity{" +
                 "lightNetwork=" + lightNetwork.toString() +
                 '}';
-    }*/
+    }
 }

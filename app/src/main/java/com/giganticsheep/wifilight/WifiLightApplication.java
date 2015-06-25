@@ -2,7 +2,9 @@ package com.giganticsheep.wifilight;
 
 import android.util.Log;
 
-import com.giganticsheep.wifilight.ui.HSVFragment;
+import com.giganticsheep.wifilight.ui.LightColourFragment;
+import com.giganticsheep.wifilight.ui.LightDetailsFragment;
+import com.giganticsheep.wifilight.ui.LightEffectsFragment;
 import com.giganticsheep.wifilight.ui.rx.RXApplication;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
 import com.squareup.otto.Bus;
@@ -18,7 +20,9 @@ import rx.android.schedulers.AndroidSchedulers;
  * (*_*)
  */
 public class WifiLightApplication extends RXApplication {
-    @NonNls public static final String FRAGMENT_NAME_HSVFRAGMENT = "HSVFragment";
+    //@NonNls public static final String FRAGMENT_NAME_LIGHT_COLOUR_FRAGMENT = "Colour";
+    //@NonNls public static final String FRAGMENT_NAME_LIGHT_EFFECT_FRAGMENT = "Effects";
+    //@NonNls public static final String FRAGMENT_NAME_LIGHT_DETAILS_FRAGMENT = "Details";
 
     @NonNls private static final String DEFAULT_API_KEY = "c5e3c4b06448baa75d3a849b7cdb70930e4b95e9e7160a4415c49bf03ffa45f8";
     @NonNls private static final String DEFAULT_SERVER_STRING = "https://api.lifx.com";
@@ -90,12 +94,41 @@ public class WifiLightApplication extends RXApplication {
      * @return the Observable to subscribe to
      */
     @Override
-    protected final Observable<? extends RXFragment> createFragment(final String name) {
-        if(name.equals(FRAGMENT_NAME_HSVFRAGMENT)) {
-            return Observable.just(HSVFragment.newInstance(name));
+    public final Observable<? extends RXFragment> createFragmentAsync(final String name) {
+        if(name.equals(getString(R.string.fragment_name_light_colour))) {
+            return Observable.just(LightColourFragment.newInstance(name));
+        }
+
+        if(name.equals(getString(R.string.fragment_name_light_effects))) {
+            return Observable.just(LightEffectsFragment.newInstance(name));
+        }
+
+        if(name.equals(getString(R.string.fragment_name_light_details))) {
+            return Observable.just(LightDetailsFragment.newInstance(name));
         }
 
         return Observable.error(new Exception("Fragment does not exist"));
+    }
+
+    /**
+     * @param name the name of the fragment to create
+     * @return the Observable to subscribe to
+     */
+    @Override
+    public final RXFragment createFragment(final String name) throws Exception {
+        if(name.equals(getString(R.string.fragment_name_light_colour))) {
+            return LightColourFragment.newInstance(name);
+        }
+
+        if(name.equals(getString(R.string.fragment_name_light_effects))) {
+            return LightEffectsFragment.newInstance(name);
+        }
+
+        if(name.equals(getString(R.string.fragment_name_light_details))) {
+            return LightDetailsFragment.newInstance(name);
+        }
+
+        throw new Exception("Fragment does not exist");
     }
 
     /**

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_grey">#EFEFEF</color>
-    <color name="dark_grey">#767676</color>
+    <color name="details_text">#EFEFEF</color>
+    <color name="details_background">#767676</color>
+    <color name="tab_background">#982198</color>
+    <color name="tab_selected">#984398</color>
+    <color name="tab_text">#EFEFEF</color>
 </resources>

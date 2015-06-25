@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.ui.rx;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +23,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class RXFragment extends Fragment {
+public abstract class RXFragment extends DialogFragment {
 
     private static final int INVALID = -1;
 
@@ -39,9 +40,9 @@ public abstract class RXFragment extends Fragment {
     private String name;
 
     private LayoutInflater layoutInflater;
-    RXActivity.FragmentAttachmentDetails attachmentDetails;
+    FragmentAttachmentDetails attachmentDetails;
 
-    //private RXActivity activity;
+    protected boolean viewsInitialised;
 
     private boolean showAsDialog;
     private boolean attachToRoot;
@@ -53,9 +54,10 @@ public abstract class RXFragment extends Fragment {
      * Creates the named Fragment
      *
      * @param name the name of the Fragment to create
-     * @return the Observable to subscribe to
+     * @return the created Fragment
+     * @throws Exception if the name of the fragment doesn't match any in the application
      */
-    public static Observable<? extends RXFragment> create(final String name, final RXApplication application) {
+    public static RXFragment create(final String name, final RXApplication application) throws Exception {
         return application.createFragment(name);
     }
 
@@ -81,19 +83,25 @@ public abstract class RXFragment extends Fragment {
 
         mainThreadHandler = new Handler(Looper.getMainLooper());
 
-       /* if(showAsDialog) {
-            setStyle(PureSoloUIEngine.engine().dialogStyle(),
-                    PureSoloUIEngine.engine().dialogTheme());
-        }*/
+        if(showAsDialog) {
+            //setStyle();
+        }
 
         orientation = getResources().getConfiguration().orientation;
 
-       // setupScreen(getResources().getConfiguration());
+        initialiseData(savedInstanceState);
 
-       /* if(savedInstanceState != null) {
-            handleRestoreInstanceState(savedInstanceState);
-        }*/
+        viewsInitialised = true;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        compositeSubscription.unsubscribe();
+    }
+
+    protected abstract void initialiseData(Bundle savedInstanceState);
 
     @Override
     public final View onCreateView(final LayoutInflater inflater,
@@ -114,19 +122,9 @@ public abstract class RXFragment extends Fragment {
     public final void onDestroyView() {
         super.onDestroyView();
 
+        viewsInitialised = false;
+
         destroyViews();
-
-        compositeSubscription.unsubscribe();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -153,7 +151,7 @@ public abstract class RXFragment extends Fragment {
      * @return the Observable to subscribe to
      */
     public final void attachToActivity(final RXActivity activity,
-                                       final RXActivity.FragmentAttachmentDetails attachmentDetails) {
+                                       final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;
 
         doAttachToActivity(activity);
@@ -234,8 +232,6 @@ public abstract class RXFragment extends Fragment {
     }
 
     private void doAttachToActivity(final RXActivity activity) {
-        //this.activity = activity;
-
         final String name = attachmentDetails.name();
         final int position = attachmentDetails.position();
         final boolean addToBackStack = attachmentDetails.addToBackStack();

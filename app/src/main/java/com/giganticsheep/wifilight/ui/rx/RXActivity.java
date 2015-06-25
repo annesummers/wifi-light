@@ -1,12 +1,10 @@
 package com.giganticsheep.wifilight.ui.rx;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
@@ -55,7 +53,7 @@ public abstract class RXActivity extends ActionBarActivity {
             if(fragments != null) {
                 for (Parcelable fragment : fragments) {
                     FragmentAttachmentDetails fragmentDetails = ((FragmentAttachmentDetails) fragment);
-                    attachedFragments.put(fragmentDetails.position, fragmentDetails);
+                    attachedFragments.put(fragmentDetails.position(), fragmentDetails);
                 }
             }
         }
@@ -75,20 +73,6 @@ public abstract class RXActivity extends ActionBarActivity {
         super.onDestroy();
 
         compositeSubscription.unsubscribe();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        WifiLightApplication.application().registerForEvents(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        WifiLightApplication.application().unregisterForEvents(this);
     }
 
     @Override
@@ -155,28 +139,31 @@ public abstract class RXActivity extends ActionBarActivity {
     }
 
     /**
+     * Creates a new fragment and attached it to this Activity.
+     *
      * @param attachmentDetails the details of the fragment to attach
      */
     protected final void attachNewFragment(final FragmentAttachmentDetails attachmentDetails) {
-        compositeSubscription.add(bind(RXFragment.create(attachmentDetails.name(), getRXApplication()))
-                .doOnNext(new Action1<RXFragment>() {
-                    @Override
-                    public void call(RXFragment fragment) {
-                        addFragment(attachmentDetails);
+        RXFragment fragment = null;
 
-                        if (fragmentsResumed()) {
-                            fragment.attachToActivity(RXActivity.this, attachmentDetails);
-                        } else {
-                            queueFragmentForAttachment(fragment, attachmentDetails);
-                        }
-                    }
-                })
-                .subscribe());
+        try {
+            fragment = RXFragment.create(attachmentDetails.name(), getRXApplication());
+
+            addFragment(attachmentDetails);
+
+            if (fragmentsResumed()) {
+                fragment.attachToActivity(RXActivity.this, attachmentDetails);
+            } else {
+                queueFragmentForAttachment(fragment, attachmentDetails);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * First looks for an existing Fragment and if it exists, attaches that.
-     * If one is not found, calls attachNewFragment to attach a new Fragment
+     * First looks for an existing Fragment and if it exists, attaches that to this Activity.
+     * If one is not found, calls attachNewFragment to attach a new Fragment.
      *
      * @param attachmentDetails the details of the fragment to attach
      */
@@ -262,67 +249,4 @@ public abstract class RXActivity extends ActionBarActivity {
     // abstract methods
 
     protected abstract ActivityLayout createActivityLayout();
-
-    public static class FragmentAttachmentDetails implements Parcelable {
-        private final String name;
-        private final int position;
-        private final boolean addToBackStack;
-
-        public FragmentAttachmentDetails(final String name, final int position, final boolean addToBackStack) {
-            this.name = name;
-            this.position = position;
-            this.addToBackStack = addToBackStack;
-        }
-
-        protected FragmentAttachmentDetails(final Parcel in) {
-            name = in.readString();
-            position = in.readInt();
-            addToBackStack = in.readByte() != 0;
-        }
-
-        public static final Parcelable.Creator<FragmentAttachmentDetails> CREATOR = new Parcelable.Creator<FragmentAttachmentDetails>() {
-            @Override
-            public FragmentAttachmentDetails createFromParcel(final Parcel source) {
-                return new FragmentAttachmentDetails(source);
-            }
-
-            @Override
-            public FragmentAttachmentDetails[] newArray(final int size) {
-                return new FragmentAttachmentDetails[size];
-            }
-        };
-
-        public String name() {
-            return name;
-        }
-
-        public int position() {
-            return position;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(final Parcel parcel, final int flags) {
-            parcel.writeString(name);
-            parcel.writeInt(position);
-            parcel.writeByte((byte) (addToBackStack ? 1 : 0));
-        }
-
-        public boolean addToBackStack() {
-            return addToBackStack;
-        }
-
-        @Override
-        public String toString() {
-            return "FragmentAttachmentDetails{" +
-                    "position=" + position +
-                    ", name='" + name + '\'' +
-                    ", addToBackStack=" + addToBackStack +
-                    '}';
-        }
-    }
 }

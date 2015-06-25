@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class HSVFragmentTest {
+public class LightColourFragmentTest {
 
     @Test
     public void testNewInstance() throws Exception {

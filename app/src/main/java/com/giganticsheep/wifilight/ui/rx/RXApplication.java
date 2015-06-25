@@ -9,5 +9,6 @@ import rx.Observable;
  */
 public abstract class RXApplication extends Application {
 
-    protected abstract Observable<? extends RXFragment> createFragment(String name);
+    public abstract Observable<? extends RXFragment> createFragmentAsync(String name);
+    public abstract RXFragment createFragment(String name) throws Exception;
 }

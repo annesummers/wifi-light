@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">WifiLight</string>
+
     <string name="action_settings">Settings</string>
-    <string name="app_version">0.1</string>
+
     <string name="label_light_name">Name:</string>
     <string name="label_light_id">Id:</string>
     <string name="label_light_hue">Hue:</string>
@@ -13,4 +13,7 @@
     <string name="label_light_power">Power</string>
     <string name="label_light_details">Light Details</string>
 
+    <string name="fragment_name_light_colour">Colour</string>
+    <string name="fragment_name_light_effects">Effects</string>
+    <string name="fragment_name_light_details">Details</string>
 </resources>
