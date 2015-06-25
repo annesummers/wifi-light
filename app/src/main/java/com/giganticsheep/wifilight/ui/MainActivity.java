@@ -1,5 +1,8 @@
 package com.giganticsheep.wifilight.ui;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +27,8 @@ public class MainActivity extends RXActivity {
 
     private LightNetwork lightNetwork;
 
+    //private ViewPager viewpager;
+
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +36,8 @@ public class MainActivity extends RXActivity {
         lightNetwork = new LightNetwork(WifiLightApplication.application().apiKey());
 
         setContentView(R.layout.activity_main);
+
+      //  viewpager = (ViewPager) findViewById(R.id.pager);
 
         if (savedInstanceState == null) {
             attachNewFragment(new FragmentAttachmentDetails(WifiLightApplication.FRAGMENT_NAME_HSVFRAGMENT, 0, true));
@@ -187,10 +194,37 @@ public class MainActivity extends RXActivity {
                 .subscribe());
     }
 
+   /* public class LightFragmentPagerAdapter extends FragmentPagerAdapter {
+        final int PAGE_COUNT = 3;
+        private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
+        private Context context;
+
+        public LightFragmentPagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return PageFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            // Generate title based on item position
+            return tabTitles[position];
+        }
+    }
+
     @Override
     public final String toString() {
         return "MainActivity{" +
                 "lightNetwork=" + lightNetwork.toString() +
                 '}';
-    }
+    }*/
 }

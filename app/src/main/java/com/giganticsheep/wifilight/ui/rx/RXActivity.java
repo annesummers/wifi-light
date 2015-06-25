@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.ui.rx;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -126,7 +126,7 @@ public abstract class RXActivity extends ActionBarActivity {
      */
     public final void popBackStack() {
         if (fragmentsResumed()) {
-            getFragmentManager().popBackStackImmediate();
+            getSupportFragmentManager().popBackStackImmediate();
         }
 
         // TODO what if the fragments haven't been resumed?
@@ -181,7 +181,7 @@ public abstract class RXActivity extends ActionBarActivity {
      * @param attachmentDetails the details of the fragment to attach
      */
     protected final void attachFragment(final FragmentAttachmentDetails attachmentDetails) {
-        final FragmentManager fragmentManager = getFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
 
         RXFragment fragment = (RXFragment) fragmentManager.findFragmentByTag(attachmentDetails.name());
 
@@ -232,7 +232,7 @@ public abstract class RXActivity extends ActionBarActivity {
      * @return the found fragment
      */
     protected RXFragment findFragment(final int position) {
-        final FragmentManager fragmentManager = getFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
 
         return (RXFragment) fragmentManager.findFragmentById(containerIdFromPosition(position));
     }

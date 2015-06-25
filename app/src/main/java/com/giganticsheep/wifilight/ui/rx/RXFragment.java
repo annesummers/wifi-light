@@ -1,8 +1,8 @@
 package com.giganticsheep.wifilight.ui.rx;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -165,7 +165,7 @@ public abstract class RXFragment extends Fragment {
      */
     public final void hide() {
         if(activityExists() && getRXActivity().fragmentsResumed()) {
-            final FragmentManager fragmentManager = getActivity().getFragmentManager();
+            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.hide(this);
             fragmentTransaction.commit();
@@ -240,7 +240,7 @@ public abstract class RXFragment extends Fragment {
         final int position = attachmentDetails.position();
         final boolean addToBackStack = attachmentDetails.addToBackStack();
 
-        final FragmentManager fragmentManager = activity.getFragmentManager();
+        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         int attachId = 0;
