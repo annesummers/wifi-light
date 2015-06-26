@@ -211,7 +211,6 @@ public class LightNetwork {
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
         logger.debug("doSetPower() " + powerQuery + ModelConstants.SPACE + durationQuery);
 
-        // TODO set power
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put(ModelConstants.URL_STATE, powerQuery);
         queryMap.put(ModelConstants.URL_DURATION, durationQuery);

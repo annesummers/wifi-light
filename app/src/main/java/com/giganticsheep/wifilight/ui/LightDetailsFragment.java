@@ -64,10 +64,6 @@ public class LightDetailsFragment extends LightFragment {
         saturationTextView = (TextView) view.findViewById(R.id.saturation_textview);
         brightnessTextView = (TextView) view.findViewById(R.id.brightness_textview);
         kelvinTextView = (TextView) view.findViewById(R.id.kelvin_textview);
-
-        if(light != null) {
-            setLightDetails();
-        }
     }
 
     @Override

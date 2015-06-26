@@ -2,11 +2,8 @@ package com.giganticsheep.wifilight.ui;
 
 import android.os.Bundle;
 
-import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.model.Light;
-import com.giganticsheep.wifilight.model.LightNetwork;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
-import com.squareup.otto.Subscribe;
 
 /**
  * Created by anne on 25/06/15.
@@ -38,8 +35,11 @@ public abstract class LightFragment extends RXFragment {
             Bundle mySavedInstanceState = getArguments();
             light = (Light) mySavedInstanceState.getSerializable(CURRENT_LIGHT_ARGUMENT);
         }
+    }
 
-        if(light != null) {
+    @Override
+    protected void populateViews() {
+        if(light != null && viewsInitialised) {
             setLightDetails();
         }
     }
@@ -47,9 +47,7 @@ public abstract class LightFragment extends RXFragment {
     protected void handleLightChange(Light light) {
         this.light = light;
 
-        if(viewsInitialised) {
-            setLightDetails();
-        }
+        setLightDetails();
     }
 
     protected abstract void setLightDetails();

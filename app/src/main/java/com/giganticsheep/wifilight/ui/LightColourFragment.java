@@ -8,7 +8,6 @@ import android.widget.ToggleButton;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.model.Light;
 import com.giganticsheep.wifilight.model.LightNetwork;
 import com.giganticsheep.wifilight.model.ModelConstants;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
@@ -91,10 +90,6 @@ public class LightColourFragment extends LightFragment {
                 }
             }
         });
-
-        if(light != null) {
-            setLightDetails();
-        }
     }
 
     @Override

@@ -90,8 +90,6 @@ public abstract class RXFragment extends DialogFragment {
         orientation = getResources().getConfiguration().orientation;
 
         initialiseData(savedInstanceState);
-
-        viewsInitialised = true;
     }
 
     @Override
@@ -114,6 +112,10 @@ public abstract class RXFragment extends DialogFragment {
         final View view = layoutInflater.inflate(layoutId(), container, attachToRoot);
 
         initialiseViews(view);
+
+        viewsInitialised = true;
+
+        populateViews();
 
         return view;
     }
@@ -290,6 +292,12 @@ public abstract class RXFragment extends DialogFragment {
      *
      */
     protected abstract void initialiseViews(View view);
+
+    /**
+     * Populates the views associated with this Fragment
+     *
+     */
+    protected abstract void populateViews();
 
     /**
      * Destroy the views associated with this Fragment
