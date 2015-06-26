@@ -17,6 +17,7 @@ import com.squareup.otto.Subscribe;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by anne on 22/06/15.
@@ -96,8 +97,9 @@ public class LightColourFragment extends LightFragment {
                 }
 
                 if(observable != null) {
-                //    compositeSubscription.add(bind(
-                    observable.subscribe(new Subscriber() {
+                    observable
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber() {
                         @Override
                         public void onCompleted() {
                         }
@@ -163,21 +165,22 @@ public class LightColourFragment extends LightFragment {
                 }
 
                 if(observable != null) {
-                   // compositeSubscription.add(bind(
-                    observable.subscribe(new Subscriber() {
-                        @Override
-                        public void onCompleted() {
-                        }
+                    observable
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber() {
+                                @Override
+                                public void onCompleted() {
+                                }
 
-                        @Override
-                        public void onError(Throwable throwable) {
-                            showToast(throwable.getMessage());
-                        }
+                                @Override
+                                public void onError(Throwable throwable) {
+                                    showToast(throwable.getMessage());
+                                }
 
-                        @Override
-                        public void onNext(Object o) {
-                        }
-                    });
+                                @Override
+                                public void onNext(Object o) {
+                                }
+                            });
                 }
             }
         }

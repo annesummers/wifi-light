@@ -34,7 +34,6 @@ public class LightNetwork implements LightControlInterface{
     // TODO locations
     // TODO selectors
 
-   // protected RestAdapter restAdapter;
     @Inject LightService lightService;
 
     private final List<Light> lights = new ArrayList<>();
@@ -53,22 +52,6 @@ public class LightNetwork implements LightControlInterface{
 
         fetchLights().subscribe();
     }
-
-    /*protected LightService createLightService() {
-        restAdapter = new RestAdapter.Builder()
-                .setEndpoint(WifiLightApplication.application().serverURL())
-                .setErrorHandler(new ErrorHandler() {
-                    @Override
-                    public Throwable handleError(RetrofitError cause) {
-                        logger.error(cause.getResponse().getReason());
-                        return new Exception(cause.getMessage());
-                    }
-                })
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .build();
-
-        return restAdapter.create(LightService.class);
-    }*/
 
     /**
      * @param hue the hue to set the enabled lights
@@ -114,7 +97,7 @@ public class LightNetwork implements LightControlInterface{
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
-    public final Observable<List<LightDataResponse>> fetchLights() {
+    public final Observable<LightDataResponse> fetchLights() {
         logger.debug("fetchLights()");
         lights.clear();
 
@@ -128,31 +111,20 @@ public class LightNetwork implements LightControlInterface{
                         logger.error(throwable);
                     }
                 })
-                .doOnNext(new Action1<List<LightDataResponse>>() {
+                .flatMap(new Func1<List<LightDataResponse>, Observable<LightDataResponse>>() {
                     @Override
-                    public void call(List<LightDataResponse> dataResponses) {
+                    public Observable<LightDataResponse> call(List<LightDataResponse> dataResponses) {
+                        List<Observable<LightDataResponse>> observables = new ArrayList<>(dataResponses.size());
+
                         for (LightDataResponse dataResponse : dataResponses) {
                             logger.debug(dataResponse.toString());
                             WifiLightApplication.application().postMessage(new LightDetailsEvent(dataResponse)).subscribe();
                         }
+
+                        return Observable.merge(observables);
                     }
-                });
-                       /* .flatMap(new Func1<List<LightDataResponse>, Observable<List<LightDataResponse>>>() {
-                             @Override
-                             public Observable<List<Light>> call(List<LightDataResponse> lightDataResponses) {
-                                 List<Light> lights = new ArrayList();
-                                 for (LightDataResponse lightDataResponse : lightDataResponses) {
-                                    // Light light = new LightR(true, lightDataResponse);
-                                     lights.add(light);
-                                     WifiLightApplication.application().postMessage(new LightDetailsEvent(light)).subscribe();
-
-                                     logger.debug(lightDataResponse.toString());
-                                 }
-
-                                 return Observable.just(lights);
-                             }
-                         }*/
-             //   );
+                })
+                .subscribeOn(Schedulers.io());
     }
 
     /**
@@ -179,12 +151,16 @@ public class LightNetwork implements LightControlInterface{
                         logger.error(throwable);
                     }
                 })
-                .doOnNext(new Action1<List<StatusResponse>>() {
+                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
                     @Override
-                    public void call(List<StatusResponse> statusResponses) {
+                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+
                         for (StatusResponse statusResponse : statusResponses) {
                             logger.debug(statusResponse.toString());
                         }
+
+                        return Observable.merge(observables);
                     }
                 })
                 .doOnCompleted(new Action0() {
@@ -209,12 +185,16 @@ public class LightNetwork implements LightControlInterface{
                         logger.error(throwable);
                     }
                 })
-                .doOnNext(new Action1<List<StatusResponse>>() {
+                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
                     @Override
-                    public void call(List<StatusResponse> statusResponses) {
+                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+
                         for (StatusResponse statusResponse : statusResponses) {
                             logger.debug(statusResponse.toString());
                         }
+
+                        return Observable.merge(observables);
                     }
                 })
                 .doOnCompleted(new Action0() {
@@ -223,8 +203,7 @@ public class LightNetwork implements LightControlInterface{
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
@@ -245,12 +224,16 @@ public class LightNetwork implements LightControlInterface{
                         logger.error(throwable);
                     }
                 })
-                .doOnNext(new Action1<List<StatusResponse>>() {
+                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
                     @Override
-                    public void call(List<StatusResponse> statusResponses) {
+                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+
                         for (StatusResponse statusResponse : statusResponses) {
                             logger.debug(statusResponse.toString());
                         }
+
+                        return Observable.merge(observables);
                     }
                 })
                 .doOnCompleted(new Action0() {
@@ -259,8 +242,7 @@ public class LightNetwork implements LightControlInterface{
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 
     private String authorisation() {

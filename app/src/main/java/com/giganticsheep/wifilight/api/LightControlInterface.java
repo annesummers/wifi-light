@@ -19,5 +19,5 @@ public interface LightControlInterface {
     Observable togglePower();
     Observable setPower(ModelConstants.Power power, float duration);
 
-    Observable<List<LightDataResponse>> fetchLights();
+    Observable<LightDataResponse> fetchLights();
 }

@@ -19,8 +19,6 @@ import com.giganticsheep.wifilight.ui.rx.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.rx.RXActivity;
 import com.squareup.otto.Subscribe;
 
-import java.util.List;
-
 import rx.Observable;
 
 
@@ -190,7 +188,7 @@ public class MainActivity extends RXActivity {
         }
 
         @Override
-        public Observable<List<LightDataResponse>> fetchLights() {
+        public Observable<LightDataResponse> fetchLights() {
             return lightNetwork.fetchLights();
         }
     }

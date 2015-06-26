@@ -149,12 +149,12 @@ public abstract class RXActivity extends MosbyActivity {
      * @param message the message to show in the toast
      */
     public final void showToast(final String message) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
+        //mainThreadHandler.post(new Runnable() {
+          // @Override
+           // public void run() {
                 Toast.makeText(RXActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        });
+           /// }
+       // });
     }
 
     /**
