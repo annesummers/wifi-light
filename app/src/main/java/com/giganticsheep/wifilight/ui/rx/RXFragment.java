@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.ui.rx;
 
-import android.support.v4.app.DialogFragment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,9 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.Logger;
+import com.giganticsheep.wifilight.WifiLightApplication;
+import com.hannesdorfmann.fragmentargs.annotation.Arg;
+import com.hannesdorfmann.mosby.MosbyFragment;
 
-import rx.Observable;
-import rx.android.observables.AndroidObservable;
+import javax.inject.Inject;
+
 import rx.subscriptions.CompositeSubscription;
 
 
@@ -23,29 +26,29 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class RXFragment extends DialogFragment {
+public abstract class RXFragment extends MosbyFragment {
 
     private static final int INVALID = -1;
 
     public static final String FRAGMENT_ARGS_NAME = "name";
-    private static final String FRAGMENT_ARGS_SHOW_AS_DIALOG = "show_as_dialog";
     private static final String FRAGMENT_ARGS_ATTACH_TO_ROOT = "attach_to_root";
 
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger = new Logger(Integer.toHexString(System.identityHashCode(this)) +
             " " + getClass().getName());
 
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    @Inject protected WifiLightApplication app;
 
-    private String name;
+    protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
+
+    @Arg String name;
 
     private LayoutInflater layoutInflater;
     FragmentAttachmentDetails attachmentDetails;
 
     protected boolean viewsInitialised;
 
-    private boolean showAsDialog;
-    private boolean attachToRoot;
+    @Arg boolean attachToRoot;
     private int orientation;
 
     private Handler mainThreadHandler;
@@ -77,56 +80,43 @@ public abstract class RXFragment extends DialogFragment {
                 name = args.getString(FRAGMENT_ARGS_NAME);
             }
 
-            showAsDialog = args.getBoolean(FRAGMENT_ARGS_SHOW_AS_DIALOG, false);
             attachToRoot = args.getBoolean(FRAGMENT_ARGS_ATTACH_TO_ROOT, false);
         }
 
         mainThreadHandler = new Handler(Looper.getMainLooper());
-
-        if(showAsDialog) {
-            //setStyle();
-        }
 
         orientation = getResources().getConfiguration().orientation;
 
         initialiseData(savedInstanceState);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        compositeSubscription.unsubscribe();
-    }
-
     protected abstract void initialiseData(Bundle savedInstanceState);
 
     @Override
     public final View onCreateView(final LayoutInflater inflater,
-                                   final ViewGroup container,
-                                   final Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+                                   @Nullable final ViewGroup container,
+                                   @Nullable final Bundle savedInstanceState) {
+        final View view = super.onCreateView(inflater, container, savedInstanceState);
 
         layoutInflater = inflater;
 
-        final View view = layoutInflater.inflate(layoutId(), container, attachToRoot);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         initialiseViews(view);
 
         viewsInitialised = true;
 
         populateViews();
-
-        return view;
     }
 
     @Override
-    public final void onDestroyView() {
-        super.onDestroyView();
-
-        viewsInitialised = false;
-
-        destroyViews();
+    protected void injectDependencies() {
+        ((RXActivity) getActivity()).inject(this);
     }
 
     @Override
@@ -137,6 +127,15 @@ public abstract class RXFragment extends DialogFragment {
             orientation = config.orientation;
             reinitialiseViews();
         }
+    }
+
+    @Override
+    public final void onDestroyView() {
+        super.onDestroyView();
+
+        viewsInitialised = false;
+
+        destroyViews();
     }
 
     /**
@@ -224,14 +223,14 @@ public abstract class RXFragment extends DialogFragment {
             rootView.removeAllViews();
         }
 
-        layoutInflater.inflate(layoutId(), rootView);
+        layoutInflater.inflate(getLayoutRes(), rootView);
 
         initialiseViews(rootView);
     }
 
-    protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
-        return AndroidObservable.bindFragment(this, observable);
-    }
+   // protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
+    //    return AndroidObservable.bindFragment(this, observable);
+   //}
 
     private void doAttachToActivity(final RXActivity activity) {
         final String name = attachmentDetails.name();
@@ -275,11 +274,6 @@ public abstract class RXFragment extends DialogFragment {
     }
 
     // abstract methods
-
-    /**
-     * @return the resource id of the layout for this Fragment
-     */
-    protected abstract int layoutId();
 
     /**
      * Should this Fragment's views be reinitialised on rotation

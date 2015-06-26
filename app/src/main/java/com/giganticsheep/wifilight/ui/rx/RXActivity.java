@@ -1,53 +1,67 @@
 package com.giganticsheep.wifilight.ui.rx;
 
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
 import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.ui.ActivityModule;
+import com.hannesdorfmann.mosby.MosbyActivity;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
-import rx.android.observables.AndroidObservable;
-import rx.functions.Action1;
-import rx.subscriptions.CompositeSubscription;
+import javax.inject.Inject;
+
+import dagger.ObjectGraph;
+import icepick.Icepick;
+import icepick.Icicle;
 
 /**
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class RXActivity extends ActionBarActivity {
+public abstract class RXActivity extends MosbyActivity {
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger = new Logger(getClass().getName());
 
+    @Icicle
     private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
     private final Map<RXFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
     private Handler mainThreadHandler;
 
-    protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    @Inject protected WifiLightApplication app;
+
+    private ObjectGraph activityGraph;
+
+  //  protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Create the activity graph by .plus-ing our modules onto the application graph.
+      //  WifiLightApplication application = (WifiLightApplication) getApplication();
+
+        // Inject ourselves so subclasses will have dependencies fulfilled when this method returns.
 
         activityLayout = createActivityLayout();
 
         mainThreadHandler = new Handler(Looper.getMainLooper());
 
         if(savedInstanceState != null) {
+            // TODO can we get Icepick to handle this?
             Parcelable[] fragments = savedInstanceState.getParcelableArray(ATTACHED_FRAGMENTS_EXTRA);
 
             if(fragments != null) {
@@ -69,15 +83,30 @@ public abstract class RXActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    protected void injectDependencies() {
+        activityGraph = ((WifiLightApplication) getApplication()).getApplicationGraph().plus(getModules().toArray());
+        activityGraph.inject(this);
+    }
 
-        compositeSubscription.unsubscribe();
+    /**
+     * A list of modules to use for the individual activity graph. Subclasses can override this
+     * method to provide additional modules provided they call and include the modules returned by
+     * calling {@code super.getModules()}.
+     */
+    protected List<Object> getModules() {
+        return Arrays.<Object>asList(new ActivityModule(this));
+    }
+
+    /** Inject the supplied {@code object} using the activity-specific graph. */
+    public void inject(Object object) {
+        activityGraph.inject(object);
     }
 
     @Override
-    public final void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    public void onDestroy() {
+        activityGraph = null;
+
+        super.onDestroy();
     }
 
     @Override
@@ -234,9 +263,9 @@ public abstract class RXActivity extends ActionBarActivity {
         return findFragment(fragmentDetails.position());
     }
 
-    protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
-        return AndroidObservable.bindActivity(this, observable);
-    }
+ //   protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
+  //      return AndroidObservable.bindActivity(this, observable);
+  //  }
 
     private ActivityLayout activityLayout() {
         return activityLayout;

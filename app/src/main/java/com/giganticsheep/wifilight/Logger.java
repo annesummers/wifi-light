@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NonNls;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 /**
  * Created by anne on 22/06/15.
  * (*_*)
@@ -17,6 +19,7 @@ public class Logger implements Serializable {
 
     private final String mClassName;
 
+    @Inject
     public Logger(String className) {
         mClassName = className;
     }

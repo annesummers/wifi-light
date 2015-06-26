@@ -1,25 +1,19 @@
-package com.giganticsheep.wifilight.model;
+package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.google.gson.annotations.SerializedName;
-
-import org.apache.http.HttpException;
+import com.giganticsheep.wifilight.api.LightControlInterface;
+import com.giganticsheep.wifilight.api.ModelConstants;
+import com.giganticsheep.wifilight.api.model.Light;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.ErrorHandler;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.POST;
-import retrofit.http.PUT;
-import retrofit.http.Path;
-import retrofit.http.QueryMap;
+import javax.inject.Inject;
+
+import dagger.ObjectGraph;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -31,7 +25,7 @@ import rx.schedulers.Schedulers;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class LightNetwork {
+public class LightNetwork implements LightControlInterface{
 
     @SuppressWarnings("FieldNotUsedInToString")
     protected static final Logger logger = new Logger("LightNetwork");
@@ -40,11 +34,13 @@ public class LightNetwork {
     // TODO locations
     // TODO selectors
 
-    protected RestAdapter restAdapter;
-    private final LightService lightService;
+   // protected RestAdapter restAdapter;
+    @Inject LightService lightService;
 
     private final List<Light> lights = new ArrayList<>();
     private final String apiKey;
+
+    private ObjectGraph objectGraph;
 
     /**
      * @param apiKey
@@ -52,12 +48,13 @@ public class LightNetwork {
     public LightNetwork(final String apiKey) {
         this.apiKey = apiKey;
 
-        lightService = createLightService();
+        objectGraph = ObjectGraph.create(new NetworkModule());
+        objectGraph.inject(this);
 
         fetchLights().subscribe();
     }
 
-    protected LightService createLightService() {
+    /*protected LightService createLightService() {
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint(WifiLightApplication.application().serverURL())
                 .setErrorHandler(new ErrorHandler() {
@@ -71,7 +68,7 @@ public class LightNetwork {
                 .build();
 
         return restAdapter.create(LightService.class);
-    }
+    }*/
 
     /**
      * @param hue the hue to set the enabled lights
@@ -105,7 +102,7 @@ public class LightNetwork {
      * toggles the power of the enabled lights
      *
      */
-    public final Observable toggleLights() {
+    public final Observable togglePower() {
         return doToggleLights();
     }
 
@@ -117,28 +114,35 @@ public class LightNetwork {
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
-    public final Observable<List<Light>> fetchLights() {
+    public final Observable<List<LightDataResponse>> fetchLights() {
         logger.debug("fetchLights()");
         lights.clear();
 
-        return service().listLights(baseUrl1(), baseUrl2(), ModelConstants.URL_ALL, authorisation())
+        return lightService.listLights(baseUrl1(),
+                baseUrl2(),
+                NetworkConstants.URL_ALL,
+                authorisation())
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(final Throwable throwable) {
                         logger.error(throwable);
                     }
                 })
-                .doOnCompleted(new Action0() {
+                .doOnNext(new Action1<List<LightDataResponse>>() {
                     @Override
-                    public void call() {
+                    public void call(List<LightDataResponse> dataResponses) {
+                        for (LightDataResponse dataResponse : dataResponses) {
+                            logger.debug(dataResponse.toString());
+                            WifiLightApplication.application().postMessage(new LightDetailsEvent(dataResponse)).subscribe();
+                        }
                     }
-                })
-                .flatMap(new Func1<List<LightDataResponse>, Observable<List<Light>>>() {
+                });
+                       /* .flatMap(new Func1<List<LightDataResponse>, Observable<List<LightDataResponse>>>() {
                              @Override
                              public Observable<List<Light>> call(List<LightDataResponse> lightDataResponses) {
                                  List<Light> lights = new ArrayList();
                                  for (LightDataResponse lightDataResponse : lightDataResponses) {
-                                     Light light = new Light(true, lightDataResponse);
+                                    // Light light = new LightR(true, lightDataResponse);
                                      lights.add(light);
                                      WifiLightApplication.application().postMessage(new LightDetailsEvent(light)).subscribe();
 
@@ -147,8 +151,8 @@ public class LightNetwork {
 
                                  return Observable.just(lights);
                              }
-                         }
-                );
+                         }*/
+             //   );
     }
 
     /**
@@ -156,23 +160,31 @@ public class LightNetwork {
      * @param durationQuery the colour query
      */
     private Observable doSetColour(final String colourQuery, final String durationQuery) {
-        logger.debug("doSetColour() " + colourQuery + ModelConstants.SPACE + durationQuery);
+        logger.debug("doSetColour() " + colourQuery + NetworkConstants.SPACE + durationQuery);
 
         // TODO colour set power on
         Map<String, String> queryMap = new HashMap<>();
-        queryMap.put(ModelConstants.URL_COLOUR, colourQuery);
-        queryMap.put(ModelConstants.URL_DURATION, durationQuery);
-        queryMap.put(ModelConstants.URL_POWER_ON, "true");
+        queryMap.put(NetworkConstants.URL_COLOUR, colourQuery);
+        queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
+        queryMap.put(NetworkConstants.URL_POWER_ON, "true");
 
-        return service().setColour(baseUrl1(),
+        return lightService.setColour(baseUrl1(),
                 baseUrl2(),
-                ModelConstants.URL_ALL,
+                NetworkConstants.URL_ALL,
                 authorisation(),
                 queryMap)
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        logger.error(throwable);
+                    }
+                })
                 .doOnNext(new Action1<List<StatusResponse>>() {
                     @Override
                     public void call(List<StatusResponse> statusResponses) {
-                        statusResponses.toString();
+                        for (StatusResponse statusResponse : statusResponses) {
+                            logger.debug(statusResponse.toString());
+                        }
                     }
                 })
                 .doOnCompleted(new Action0() {
@@ -181,21 +193,28 @@ public class LightNetwork {
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 
     private Observable doToggleLights() {
         logger.debug("doToggleLights()");
 
-        return service().togglePower(baseUrl1(),
+        return lightService.togglePower(baseUrl1(),
                 baseUrl2(),
-                ModelConstants.URL_ALL,
+                NetworkConstants.URL_ALL,
                 authorisation())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        logger.error(throwable);
+                    }
+                })
                 .doOnNext(new Action1<List<StatusResponse>>() {
                     @Override
                     public void call(List<StatusResponse> statusResponses) {
-                        statusResponses.toString();
+                        for (StatusResponse statusResponse : statusResponses) {
+                            logger.debug(statusResponse.toString());
+                        }
                     }
                 })
                 .doOnCompleted(new Action0() {
@@ -209,21 +228,29 @@ public class LightNetwork {
     }
 
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
-        logger.debug("doSetPower() " + powerQuery + ModelConstants.SPACE + durationQuery);
+        logger.debug("doSetPower() " + powerQuery + NetworkConstants.SPACE + durationQuery);
 
         Map<String, String> queryMap = new HashMap<>();
-        queryMap.put(ModelConstants.URL_STATE, powerQuery);
-        queryMap.put(ModelConstants.URL_DURATION, durationQuery);
+        queryMap.put(NetworkConstants.URL_STATE, powerQuery);
+        queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
 
-        return service().setPower(baseUrl1(),
+        return lightService.setPower(baseUrl1(),
                 baseUrl2(),
-                ModelConstants.URL_ALL,
+                NetworkConstants.URL_ALL,
                 authorisation(),
                 queryMap)
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        logger.error(throwable);
+                    }
+                })
                 .doOnNext(new Action1<List<StatusResponse>>() {
                     @Override
                     public void call(List<StatusResponse> statusResponses) {
-                        statusResponses.toString();
+                        for (StatusResponse statusResponse : statusResponses) {
+                            logger.debug(statusResponse.toString());
+                        }
                     }
                 })
                 .doOnCompleted(new Action0() {
@@ -237,11 +264,7 @@ public class LightNetwork {
     }
 
     private String authorisation() {
-        return ModelConstants.LABEL_BEARER + ModelConstants.SPACE + apiKey;
-    }
-
-    private final LightService service() {
-        return lightService;
+        return NetworkConstants.LABEL_BEARER + NetworkConstants.SPACE + apiKey;
     }
 
     private final String baseUrl1() {
@@ -253,19 +276,19 @@ public class LightNetwork {
     }
 
     private String makeHueString(final double hue) {
-        return ModelConstants.LABEL_HUE + Double.toString(hue);
+        return NetworkConstants.LABEL_HUE + Double.toString(hue);
     }
 
     private String makeSaturationString(final double saturation) {
-        return ModelConstants.LABEL_SATURATION + Double.toString(saturation);
+        return NetworkConstants.LABEL_SATURATION + Double.toString(saturation);
     }
 
     private String makeKelvinString(final long kelvin) {
-        return ModelConstants.LABEL_KELVIN + Long.toString(kelvin);
+        return NetworkConstants.LABEL_KELVIN + Long.toString(kelvin);
     }
 
     private String makeBrightnessString(final double brightness) {
-        return ModelConstants.LABEL_BRIGHTNESS + Double.toString(brightness);
+        return NetworkConstants.LABEL_BRIGHTNESS + Double.toString(brightness);
     }
 
     private String makeDurationString(final float duration) {
@@ -279,125 +302,18 @@ public class LightNetwork {
                 '}';
     }
 
-    private class LightResponse {
-        @SerializedName("cod")
-        public int httpCode;
-
-        public String id;
-        public String label;
-
-        @Override
-        public String toString() {
-            return "LightResponse{" +
-                    "httpCode=" + httpCode +
-                    ", id='" + id + '\'' +
-                    ", label='" + label + '\'' +
-                    '}';
-        }
-    }
-
-    class StatusResponse extends LightResponse {
-        public String status;
-
-        @Override
-        public String toString() {
-            return "StatusResponse{" +
-                    "status='" + status + '\'' +
-                    '}';
-        }
-    }
-
-    class LightDataResponse extends LightResponse {
-        public String uuid;
-        public boolean connected;
-        public String power;
-        public double brightness;
-        public String product_name;
-        public String last_seen;
-        public double seconds_since_last_seen;
-
-        public ColorData color;
-        public GroupData location;
-        public GroupData group;
-        public CapabilitiesData capabilities;
-
-        public class ColorData {
-            public Double hue;
-            public Double saturation;
-            public Long kelvin;
-        }
-
-        public class GroupData {
-            public String id;
-            public String name;
-        }
-
-        public class CapabilitiesData {
-            public boolean has_color;
-            public boolean has_variable_color_temp;
-        }
-
-        @Override
-        public String toString() {
-            return "LightDataResponse{" +
-                    "uuid='" + uuid + '\'' +
-                    ", connected=" + connected +
-                    ", power='" + power + '\'' +
-                    ", brightness=" + brightness +
-                    ", product_name='" + product_name + '\'' +
-                    ", last_seen='" + last_seen + '\'' +
-                    ", seconds_since_last_seen=" + seconds_since_last_seen +
-                    ", color=" + color +
-                    ", location=" + location +
-                    ", group=" + group +
-                    ", capabilities=" + capabilities +
-                    '}';
-        }
-    }
-
     public class SuccessEvent { }
 
     public class LightDetailsEvent {
-        private final Light light;
+        private final LightDataResponse light;
 
-        private LightDetailsEvent(Light light) {
+        private LightDetailsEvent(LightDataResponse light) {
             this.light = light;
         }
 
-        public final Light light() {
+        public final LightDataResponse light() {
             return light;
         }
     }
 
-    interface LightService {
-
-        @GET("/{url1}/{url2}/{selector}")
-        Observable<List<LightDataResponse>> listLights(@Path("url1") String url1, @Path("url2") String url2, @Path("selector") String selector,
-                                                                       @Header("Authorization") String authorisation);
-
-        @POST("/{url}/{url2}/{selector}/toggle")
-        Observable<List<StatusResponse>> togglePower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
-                                         @Header("Authorization") String authorisation);
-
-        @PUT("/{url}/{url2}/{selector}/power")
-        Observable<List<StatusResponse>> setPower(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
-                                      @Header("Authorization") String authorization,
-                                      @QueryMap Map<String, String> options);
-
-        @PUT("/{url}/{url2}/{selector}/color")
-        Observable<List<StatusResponse>> setColour(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
-                                       @Header("Authorization") String authorization,
-                                       @QueryMap Map<String, String> options);
-
-        @POST("/{url}/{url2}/{selector}/effects/breathe")
-        Observable<List<StatusResponse>> breathe(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
-                                     @Header("Authorization") String authorization,
-                                     @QueryMap Map<String, String> options);
-
-        @POST("/{url}/{url2}/{selector}/effects/pulse")
-        Observable<List<StatusResponse>> pulse(@Path("url") String url, @Path("url2") String url2, @Path("selector") String selector,
-                                   @Header("Authorization") String authorization,
-                                   @QueryMap Map<String, String> options);
-
-    }
 }

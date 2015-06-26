@@ -1,6 +1,8 @@
-package com.giganticsheep.wifilight.model;
+package com.giganticsheep.wifilight.api.model;
 
-import org.apache.http.impl.entity.EntityDeserializer;
+import com.giganticsheep.wifilight.api.network.LightDataResponse;
+import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.api.ModelConstants;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -17,7 +19,7 @@ public class Light extends WifiLightObject implements Serializable {
     private boolean connected;
     private double hue;
     private double saturation;
-    private long kelvin;
+    private int kelvin;
     private double brightness;
 
     private ModelConstants.Power power;
@@ -32,21 +34,19 @@ public class Light extends WifiLightObject implements Serializable {
 
     private boolean enabled;
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
     // TODO date
 
     /**
-     * @param network the network this light is part of
      * @param name the name of this light
      */
-    public Light(/*final LightNetwork network, */final String id, final String name) {
-        super(/*network, */id);
+    public Light(final String id, final String name) {
+        super(id);
 
         this.name = name;
     }
 
-    public Light(/*final LightNetwork network, */boolean enabled, LightNetwork.LightDataResponse dataEnvelope) {
-        super(/*network, */dataEnvelope.id);
+    public Light(boolean enabled, LightDataResponse dataEnvelope) {
+        super(dataEnvelope.id);
 
         this.enabled = enabled;
 
@@ -55,11 +55,11 @@ public class Light extends WifiLightObject implements Serializable {
         power = dataEnvelope.power.equals("on") ? ModelConstants.Power.ON : ModelConstants.Power.OFF;
         brightness = dataEnvelope.brightness;
         productName = dataEnvelope.product_name;
-        try {
+       /* try {
             lastSeen = dateFormat.parse(dataEnvelope.last_seen);
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
         secondsSinceLastSeen = dataEnvelope.seconds_since_last_seen;
 
         hue = dataEnvelope.color.hue;
@@ -95,20 +95,20 @@ public class Light extends WifiLightObject implements Serializable {
     /**
      * @return the hue of this light
      */
-    public double getHue() {
-        return hue;
+    public int getHue() {
+        return (int)hue;
     }
 
-    public double getSaturation() {
-        return saturation;
+    public int getSaturation() {
+        return (int)saturation*100;
     }
 
-    public long getKelvin() {
+    public int getKelvin() {
         return kelvin;
     }
 
-    public double getBrightness() {
-        return brightness;
+    public int getBrightness() {
+        return (int) (brightness*100);
     }
 
     public ModelConstants.Power getPower() {
@@ -135,44 +135,6 @@ public class Light extends WifiLightObject implements Serializable {
         return hasVariableColourTemp;
     }
 
-    /**
-     * @param enabled is this light enabled
-     */
-   // public final void setEnabled(final boolean enabled) {
-   //     this.enabled = enabled;
-    //}
-
-    /**
-     * @param hue the hue to set this light
-     */
-   // public final void setHue(final float hue) {
-   //     this.hue = hue;
-   // }
-
-    /**
-     * @param saturation the saturation to set this light
-     */
-    //public final void setSaturation(final double saturation) {
-    //    this.saturation = saturation;
-   // }
-
-    /**
-     * @param brightness the value (brightness) to set this light
-     */
-  //  public final void setBrightness(final double brightness) {
-  //      this.brightness = brightness;
-  //  }
-
-    /**
-     * @param kelvin the kelvin (warmth) to set this light
-     */
-  //  public final void setKelvin(final long kelvin) {
-   //     this.kelvin = kelvin;
-  //  }
-
- //   public void toggle() {
-  ////      power = (power == ModelConstants.Power.ON ) ? ModelConstants.Power.OFF : ModelConstants.Power.ON;
-
     @Override
     public String toString() {
         return "Light{" +
@@ -189,13 +151,7 @@ public class Light extends WifiLightObject implements Serializable {
                 ", hasColour=" + hasColour +
                 ", hasVariableColourTemp=" + hasVariableColourTemp +
                 ", enabled=" + enabled +
-                ", dateFormat=" + dateFormat +
+             //   ", dateFormat=" + dateFormat +
                 '}';
     }
 }
-//
-  //  public void setPower(ModelConstants.Power power) {
-  //      this.power = power;
-    //}
-
-//}

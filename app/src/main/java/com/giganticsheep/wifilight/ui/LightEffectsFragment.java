@@ -5,14 +5,16 @@ import android.view.View;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.model.LightNetwork;
+import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
+import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.squareup.otto.Subscribe;
 
 /**
  * Created by anne on 25/06/15.
  * (*_*)
  */
+@FragmentArgsInherited
 public class LightEffectsFragment extends LightFragment {
 
     public static LightEffectsFragment newInstance(String name) {
@@ -30,7 +32,7 @@ public class LightEffectsFragment extends LightFragment {
     }
 
     @Override
-    protected int layoutId() {
+    protected int getLayoutRes() {
         return R.layout.fragment_effects;
     }
 
@@ -39,11 +41,20 @@ public class LightEffectsFragment extends LightFragment {
         return false;
     }
 
-    @Override
+  /*  @Override
     protected void initialiseData(Bundle savedInstanceState) {
         super.initialiseData(savedInstanceState);
 
-        WifiLightApplication.application().registerForEvents(this);
+
+
+        //app.registerForEvents(this);
+    }*/
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        app.registerForEvents(this);
     }
 
     @Override
@@ -64,7 +75,7 @@ public class LightEffectsFragment extends LightFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        WifiLightApplication.application().unregisterForEvents(this);
+        app.unregisterForEvents(this);
     }
 
     @Subscribe

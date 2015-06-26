@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight;
 
 import android.util.Log;
 
+import com.giganticsheep.wifilight.api.AndroidModule;
 import com.giganticsheep.wifilight.ui.LightColourFragment;
 import com.giganticsheep.wifilight.ui.LightDetailsFragment;
 import com.giganticsheep.wifilight.ui.LightEffectsFragment;
@@ -11,6 +12,10 @@ import com.squareup.otto.Bus;
 
 import org.jetbrains.annotations.NonNls;
 
+import java.util.Arrays;
+import java.util.List;
+
+import dagger.ObjectGraph;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -37,7 +42,9 @@ public class WifiLightApplication extends RXApplication {
     private String baseURL2;
     // TODO this is truly horrible
 
-    private Bus bus = new Bus();
+    private final Bus bus = new Bus();
+
+    private ObjectGraph objectGraph;
 
     /**
      * @return the singleton object that is this thisInstance
@@ -50,6 +57,9 @@ public class WifiLightApplication extends RXApplication {
     public final void onCreate() {
         super.onCreate();
 
+        objectGraph = objectGraph.create(getModules().toArray());
+        //objectGraph.inject(this);
+
         thisInstance = this;
 
         // TODO private api key
@@ -57,6 +67,20 @@ public class WifiLightApplication extends RXApplication {
         this.serverURL = DEFAULT_SERVER_STRING;
         this.baseURL1 = DEFAULT_URL_STRING1;
         this.baseURL2 = DEFAULT_URL_STRING2;
+    }
+
+    public ObjectGraph getApplicationGraph() {
+        return objectGraph;
+    }
+
+    protected List<Object> getModules() {
+        return Arrays.asList(
+                (Object)new AndroidModule(this)
+        );
+    }
+
+    public void inject(Object object) {
+        objectGraph.inject(object);
     }
 
     /**

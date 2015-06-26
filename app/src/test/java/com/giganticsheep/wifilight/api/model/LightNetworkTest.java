@@ -1,4 +1,8 @@
-package com.giganticsheep.wifilight.model;
+package com.giganticsheep.wifilight.api.model;
+
+import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.api.network.LightService;
+import com.giganticsheep.wifilight.api.ModelConstants;
 
 import junit.framework.TestCase;
 
@@ -35,7 +39,7 @@ public class LightNetworkTest extends TestCase {
             super(apiKey);
         }
 
-        protected LightNetwork.LightService createLightService() {
+        protected LightService createLightService() {
             return new MockLightService();
         }
     }
@@ -177,7 +181,7 @@ public class LightNetworkTest extends TestCase {
         mError = e;
     }
 
-    private class MockLightService implements LightNetwork.LightService {
+    private class MockLightService implements LightService {
         @Override
         public Observable<List<LightNetwork.LightDataResponse>> listLights(@Path("url1") String url1, @Path("url2") String url2, @Path("selector") String selector, @Header("Authorization") String authorisation) {
             return null;

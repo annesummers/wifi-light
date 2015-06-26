@@ -1,4 +1,6 @@
-package com.giganticsheep.wifilight.model;
+package com.giganticsheep.wifilight.api.model;
+
+import com.giganticsheep.wifilight.api.network.LightNetwork;
 
 /**
  * Created by anne on 23/06/15.

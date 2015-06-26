@@ -6,14 +6,19 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.model.LightNetwork;
+import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
+import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.squareup.otto.Subscribe;
+
+import butterknife.InjectView;
 
 /**
  * Created by anne on 25/06/15.
  * (*_*)
  */
+
+@FragmentArgsInherited
 public class LightDetailsFragment extends LightFragment {
 
     public static LightDetailsFragment newInstance(String name) {
@@ -30,15 +35,15 @@ public class LightDetailsFragment extends LightFragment {
         super();
     }
 
-    private TextView nameTextView;
-    private TextView idTextView;
-    private TextView hueTextView;
-    private TextView saturationTextView;
-    private TextView brightnessTextView;
-    private TextView kelvinTextView;
+    @InjectView(R.id.name_textview) TextView nameTextView;
+    @InjectView(R.id.id_textview) TextView idTextView;
+    @InjectView(R.id.hue_textview) TextView hueTextView;
+    @InjectView(R.id.saturation_textview) TextView saturationTextView;
+    @InjectView(R.id.brightness_textview) TextView brightnessTextView;
+    @InjectView(R.id.kelvin_textview) TextView kelvinTextView;
 
     @Override
-    protected int layoutId() {
+    protected int getLayoutRes() {
         return R.layout.fragment_details;
     }
 
@@ -47,38 +52,32 @@ public class LightDetailsFragment extends LightFragment {
         return false;
     }
 
-    @Override
+   /* @Override
     protected void initialiseData(Bundle savedInstanceState) {
         super.initialiseData(savedInstanceState);
 
-        WifiLightApplication.application().registerForEvents(this);
+        //app.registerForEvents(this);
+    }*/
+
+    @Override public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        app.registerForEvents(this);
     }
 
     @Override
     protected void initialiseViews(View view) {
         logger.debug("initialiseViews()");
-
-        nameTextView = (TextView) view.findViewById(R.id.name_textview);
-        idTextView = (TextView) view.findViewById(R.id.id_textview);
-        hueTextView = (TextView) view.findViewById(R.id.hue_textview);
-        saturationTextView = (TextView) view.findViewById(R.id.saturation_textview);
-        brightnessTextView = (TextView) view.findViewById(R.id.brightness_textview);
-        kelvinTextView = (TextView) view.findViewById(R.id.kelvin_textview);
     }
 
     @Override
     protected void setLightDetails() {
-        int hue = (int)light.getHue();
-        int saturation = (int)(light.getSaturation()*100);
-        int brightness = (int)(light.getBrightness()*100);
-        int kelvin = (int) light.getKelvin();
-
         nameTextView.setText(light.getName());
         idTextView.setText(light.id());
-        hueTextView.setText(Integer.toString(hue));
-        saturationTextView.setText(Integer.toString(saturation));
-        brightnessTextView.setText(Integer.toString(brightness));
-        kelvinTextView.setText(Integer.toString(kelvin));
+        hueTextView.setText(Integer.toString(light.getHue()));
+        saturationTextView.setText(Integer.toString(light.getSaturation()));
+        brightnessTextView.setText(Integer.toString(light.getBrightness()));
+        kelvinTextView.setText(Integer.toString(light.getKelvin()));
     }
 
     @Override
@@ -90,7 +89,7 @@ public class LightDetailsFragment extends LightFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        WifiLightApplication.application().unregisterForEvents(this);
+        app.unregisterForEvents(this);
     }
 
     @Subscribe

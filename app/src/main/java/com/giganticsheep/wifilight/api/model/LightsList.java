@@ -1,8 +1,7 @@
-package com.giganticsheep.wifilight.model;
+package com.giganticsheep.wifilight.api.model;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by anne on 23/06/15.

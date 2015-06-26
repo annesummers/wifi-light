@@ -15,3 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn icepick.**
+-keep class **$$Icicle { *; }
+-keepnames class * { @icepick.Icicle *;}
+-keepclasseswithmembernames class * {
+    @icepick.* <fields>;
+}
+-keep class com.hannesdorfmann.fragmentargs.** { *; }

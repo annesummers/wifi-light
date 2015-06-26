@@ -2,18 +2,28 @@ package com.giganticsheep.wifilight.ui;
 
 import android.os.Bundle;
 
-import com.giganticsheep.wifilight.model.Light;
+import com.giganticsheep.wifilight.api.LightControlInterface;
+import com.giganticsheep.wifilight.api.network.LightDataResponse;
+import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.ui.rx.RXFragment;
+import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
+
+import javax.inject.Inject;
+
+import icepick.Icicle;
 
 /**
  * Created by anne on 25/06/15.
  * (*_*)
  */
+
+@FragmentArgsInherited
 public abstract class LightFragment extends RXFragment {
 
-    private static final String CURRENT_LIGHT_ARGUMENT = "current_light";
+   // private static final String CURRENT_LIGHT_ARGUMENT = "current_light";
 
-    protected Light light;
+    @Icicle protected LightDataResponse light;
+    @Inject protected LightControlInterface lightController;
 
     @Override
     public void onStop() {
@@ -21,7 +31,7 @@ public abstract class LightFragment extends RXFragment {
 
         logger.debug("onStop()");
 
-        getArguments().putSerializable(CURRENT_LIGHT_ARGUMENT, light);
+        //getArguments().putSerializable(CURRENT_LIGHT_ARGUMENT, light);
     }
 
     public MainActivity getMainActivity() {
@@ -29,12 +39,12 @@ public abstract class LightFragment extends RXFragment {
     }
 
     protected void initialiseData(Bundle savedInstanceState) {
-        if(savedInstanceState != null && light == null) {
+       /* if(savedInstanceState != null && light == null) {
             // we are storing the saved variables in the arguments as
             // the calls to onSaveInstanceState can sometimes be missed
             Bundle mySavedInstanceState = getArguments();
-            light = (Light) mySavedInstanceState.getSerializable(CURRENT_LIGHT_ARGUMENT);
-        }
+            light = (LightDataResponse) mySavedInstanceState.getSerializable(CURRENT_LIGHT_ARGUMENT);
+        }*/
     }
 
     @Override
@@ -44,10 +54,10 @@ public abstract class LightFragment extends RXFragment {
         }
     }
 
-    protected void handleLightChange(Light light) {
+    protected void handleLightChange(LightDataResponse light) {
         this.light = light;
 
-        setLightDetails();
+        populateViews();
     }
 
     protected abstract void setLightDetails();

@@ -10,19 +10,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.model.LightNetwork;
-import com.giganticsheep.wifilight.model.ModelConstants;
+import com.giganticsheep.wifilight.api.LightControlInterface;
+import com.giganticsheep.wifilight.api.network.LightDataResponse;
+import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.ui.rx.ActivityLayout;
 import com.giganticsheep.wifilight.ui.rx.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.rx.RXActivity;
 import com.squareup.otto.Subscribe;
 
-import rx.Subscriber;
+import java.util.List;
+
+import rx.Observable;
 
 
 public class MainActivity extends RXActivity {
-    private static final float DEFAULT_DURATION = 1.0F;
+    static final float DEFAULT_DURATION = 1.0F;
 
     private LightNetwork lightNetwork;
 
@@ -32,7 +35,7 @@ public class MainActivity extends RXActivity {
     protected final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        lightNetwork = new LightNetwork(WifiLightApplication.application().apiKey());
+        lightNetwork = new LightNetwork(app.apiKey());
 
         setContentView(R.layout.activity_main);
 
@@ -95,109 +98,6 @@ public class MainActivity extends RXActivity {
         };
     }
 
-    public final void setHue(final int hue) {
-        compositeSubscription.add(bind(lightNetwork.setHue(hue, DEFAULT_DURATION))
-                .subscribe(new Subscriber() {
-                    @Override
-                    public void onCompleted() { }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        showToast(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Object o) { }
-                }));
-    }
-
-    public final void setSaturation(final int saturation) {
-        compositeSubscription.add(bind(lightNetwork.setSaturation(saturation, DEFAULT_DURATION))
-                .subscribe(new Subscriber() {
-                    @Override
-                    public void onCompleted() { }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        showToast(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Object o) { }
-                }));
-    }
-
-    public final void setBrightness(final int brightness) {
-        compositeSubscription.add(bind(lightNetwork.setBrightness(brightness, DEFAULT_DURATION))
-                .subscribe(new Subscriber() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        showToast(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                    }
-                }));
-    }
-
-    public final void setKelvin(final int kelvin) {
-        compositeSubscription.add(bind(lightNetwork.setKelvin(kelvin, DEFAULT_DURATION))
-                .subscribe(new Subscriber() {
-                    @Override
-                    public void onCompleted() { }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        showToast(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Object o) { }
-                }));
-    }
-
-    public final void togglePower() {
-        compositeSubscription.add(bind(lightNetwork.toggleLights())
-                .subscribe(new Subscriber() {
-                    @Override
-                    public void onCompleted() { }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        showToast(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Object o) { }
-                }));
-    }
-
-    public final void setPower(ModelConstants.Power power) {
-        compositeSubscription.add(bind(lightNetwork.setPower(power, DEFAULT_DURATION))
-                .subscribe(new Subscriber() {
-                    @Override
-                    public void onCompleted() { }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        showToast(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Object o) { }
-                }));
-    }
-
-    public final void fetchLights() {
-        compositeSubscription.add(bind(lightNetwork.fetchLights())
-                .subscribe());
-    }
-
     public class LightFragmentPagerAdapter extends FragmentPagerAdapter {
         final int PAGE_COUNT = 2;
 
@@ -215,9 +115,9 @@ public class MainActivity extends RXActivity {
             try {
                 switch(position) {
                     case 0:
-                        return WifiLightApplication.application().createFragment(getString(R.string.fragment_name_light_colour));
+                        return app.createFragment(getString(R.string.fragment_name_light_colour));
                     case 1:
-                        return WifiLightApplication.application().createFragment(getString(R.string.fragment_name_light_effects));
+                        return app.createFragment(getString(R.string.fragment_name_light_effects));
                     default:
                         return null;
                 }
@@ -246,5 +146,52 @@ public class MainActivity extends RXActivity {
         return "MainActivity{" +
                 "lightNetwork=" + lightNetwork.toString() +
                 '}';
+    }
+
+    /**
+     * Created by anne on 26/06/15.
+     * (*_*)
+     */
+    public static class LightNetworkController implements LightControlInterface {
+        private final LightNetwork lightNetwork;
+
+        public LightNetworkController(MainActivity activity) {
+            lightNetwork = activity.lightNetwork;
+        }
+
+        @Override
+        public Observable setHue(int hue, float duration) {
+            return lightNetwork.setHue(hue, duration);
+        }
+
+        @Override
+        public Observable setSaturation(int saturation, float duration) {
+            return lightNetwork.setSaturation(saturation, duration);
+        }
+
+        @Override
+        public Observable setBrightness(int brightness, float duration) {
+            return lightNetwork.setBrightness(brightness, duration);
+        }
+
+        @Override
+        public Observable setKelvin(int kelvin, float duration) {
+            return lightNetwork.setKelvin(kelvin, duration);
+        }
+
+        @Override
+        public Observable togglePower() {
+            return lightNetwork.togglePower();
+        }
+
+        @Override
+        public Observable setPower(ModelConstants.Power power, float duration) {
+            return lightNetwork.setPower(power, duration);
+        }
+
+        @Override
+        public Observable<List<LightDataResponse>> fetchLights() {
+            return lightNetwork.fetchLights();
+        }
     }
 }

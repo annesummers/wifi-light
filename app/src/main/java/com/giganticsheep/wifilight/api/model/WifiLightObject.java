@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.model;
+package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.Logger;
 

@@ -4,4 +4,4 @@
  *
  * Model for controlling wifi enabled lights.
  */
-package com.giganticsheep.wifilight.model;
+package com.giganticsheep.wifilight.api.model;
