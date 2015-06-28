@@ -3,8 +3,6 @@ package com.giganticsheep.wifilight;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import junit.framework.TestCase;
-
 /**
  * Created by anne on 22/06/15.
  * (*_*)

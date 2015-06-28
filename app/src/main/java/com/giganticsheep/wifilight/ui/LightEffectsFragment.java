@@ -4,9 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.rx.RXFragment;
+import com.giganticsheep.wifilight.ui.rx.BaseFragment;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.squareup.otto.Subscribe;
 
@@ -21,7 +20,7 @@ public class LightEffectsFragment extends LightFragment {
         LightEffectsFragment fragment = new LightEffectsFragment();
 
         Bundle args = new Bundle();
-        args.putString(RXFragment.FRAGMENT_ARGS_NAME, name);
+        args.putString(BaseFragment.FRAGMENT_ARGS_NAME, name);
         fragment.setArguments(args);
 
         return fragment;
@@ -37,45 +36,31 @@ public class LightEffectsFragment extends LightFragment {
     }
 
     @Override
-    protected boolean reinitialiseOnRotate() {
-        return false;
-    }
-
-  /*  @Override
-    protected void initialiseData(Bundle savedInstanceState) {
-        super.initialiseData(savedInstanceState);
-
-
-
-        //app.registerForEvents(this);
-    }*/
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        app.registerForEvents(this);
+        eventBus.registerForEvents(this);
     }
 
     @Override
-    protected void initialiseViews(View view) {
-
-    }
-    @Override
-    protected void setLightDetails() {
-
-    }
+    protected void initialiseViews(View view) {  }
 
     @Override
-    protected void destroyViews() {
+    protected void setLightDetails() { }
 
-    }
+    @Override
+    protected void destroyViews() { }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        app.unregisterForEvents(this);
+        eventBus.unregisterForEvents(this);
+    }
+
+    @Override
+    protected boolean reinitialiseOnRotate() {
+        return false;
     }
 
     @Subscribe

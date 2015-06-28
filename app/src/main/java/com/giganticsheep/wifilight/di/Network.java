@@ -1,7 +1,9 @@
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.di;
 
 import java.lang.annotation.Retention;
+
 import javax.inject.Qualifier;
+import javax.inject.Scope;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -10,6 +12,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * (*_*)
  */
 
-@Qualifier @Retention(RUNTIME)
-public @interface ForApplication {
+@Qualifier
+@Scope
+@Retention(RUNTIME)
+public @interface Network {
 }

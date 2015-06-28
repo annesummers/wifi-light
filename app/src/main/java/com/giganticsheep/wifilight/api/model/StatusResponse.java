@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.network;
+package com.giganticsheep.wifilight.api.model;
 
 /**
  * Created by anne on 26/06/15.

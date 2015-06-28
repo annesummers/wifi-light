@@ -5,9 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.rx.RXFragment;
+import com.giganticsheep.wifilight.ui.rx.BaseFragment;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.squareup.otto.Subscribe;
 
@@ -25,7 +24,7 @@ public class LightDetailsFragment extends LightFragment {
         LightDetailsFragment fragment = new LightDetailsFragment();
 
         Bundle args = new Bundle();
-        args.putString(RXFragment.FRAGMENT_ARGS_NAME, name);
+        args.putString(BaseFragment.FRAGMENT_ARGS_NAME, name);
         fragment.setArguments(args);
 
         return fragment;
@@ -47,28 +46,14 @@ public class LightDetailsFragment extends LightFragment {
         return R.layout.fragment_details;
     }
 
-    @Override
-    protected boolean reinitialiseOnRotate() {
-        return false;
-    }
-
-   /* @Override
-    protected void initialiseData(Bundle savedInstanceState) {
-        super.initialiseData(savedInstanceState);
-
-        //app.registerForEvents(this);
-    }*/
-
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        app.registerForEvents(this);
+        eventBus.registerForEvents(this);
     }
 
     @Override
-    protected void initialiseViews(View view) {
-        logger.debug("initialiseViews()");
-    }
+    protected void initialiseViews(View view) { }
 
     @Override
     protected void setLightDetails() {
@@ -81,15 +66,18 @@ public class LightDetailsFragment extends LightFragment {
     }
 
     @Override
-    protected void destroyViews() {
-
-    }
+    protected void destroyViews() { }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        app.unregisterForEvents(this);
+        eventBus.unregisterForEvents(this);
+    }
+
+    @Override
+    protected boolean reinitialiseOnRotate() {
+        return false;
     }
 
     @Subscribe

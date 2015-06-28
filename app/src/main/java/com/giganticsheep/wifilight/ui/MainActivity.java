@@ -10,30 +10,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.LightControlInterface;
-import com.giganticsheep.wifilight.api.network.LightDataResponse;
+import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.api.ModelConstants;
+import com.giganticsheep.wifilight.api.network.NetworkDetails;
+import com.giganticsheep.wifilight.di.HasComponent;
+import com.giganticsheep.wifilight.di.components.DaggerMainActivityComponent;
+import com.giganticsheep.wifilight.di.components.MainActivityComponent;
+import com.giganticsheep.wifilight.di.components.WifiApplicationComponent;
+import com.giganticsheep.wifilight.di.modules.MainActivityModule;
 import com.giganticsheep.wifilight.ui.rx.ActivityLayout;
+import com.giganticsheep.wifilight.ui.rx.BaseApplication;
+import com.giganticsheep.wifilight.ui.rx.BaseLogger;
 import com.giganticsheep.wifilight.ui.rx.FragmentAttachmentDetails;
-import com.giganticsheep.wifilight.ui.rx.RXActivity;
+import com.giganticsheep.wifilight.ui.rx.BaseActivity;
 import com.squareup.otto.Subscribe;
 
-import rx.Observable;
+import javax.inject.Inject;
 
 
-public class MainActivity extends RXActivity {
+public class MainActivity extends BaseActivity implements HasComponent<MainActivityComponent> {
     static final float DEFAULT_DURATION = 1.0F;
 
-    private LightNetwork lightNetwork;
-
     private ViewPager viewPager;
+    private MainActivityComponent mainActivityComponent;
+
+    @Inject NetworkDetails networkDetails;
+    @Inject BaseApplication.EventBus eventBus;
+    @Inject BaseLogger baseLogger;
 
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        lightNetwork = new LightNetwork(app.apiKey());
 
         setContentView(R.layout.activity_main);
 
@@ -47,6 +54,24 @@ public class MainActivity extends RXActivity {
             // we are attaching the details fragment at position 0 which is under the view pager
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
+    }
+
+    @Override
+    protected void injectDependencies() {
+        super.injectDependencies();
+
+        WifiLightApplication application = ((WifiLightApplication)getApplication());
+
+        mainActivityComponent = DaggerMainActivityComponent.builder()
+                .wifiApplicationComponent((WifiApplicationComponent) application.getApplicationComponent())
+                .baseActivityModule(getBaseActivityModule())
+                .mainActivityModule(new MainActivityModule())//networkDetails, eventBus, baseLogger))
+                .build();
+    }
+
+    @Override
+    public MainActivityComponent getComponent() {
+        return mainActivityComponent;
     }
 
     @Override
@@ -70,11 +95,6 @@ public class MainActivity extends RXActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Subscribe
-    public void lightChangeSuccess(LightNetwork.SuccessEvent event) {
-        showToast("Changed!");
-    }
-
     @Override
     protected final ActivityLayout createActivityLayout() {
         return new ActivityLayout() {
@@ -96,7 +116,12 @@ public class MainActivity extends RXActivity {
         };
     }
 
-    public class LightFragmentPagerAdapter extends FragmentPagerAdapter {
+    @Subscribe
+    public void lightChangeSuccess(LightNetwork.SuccessEvent event) {
+        showToast("Changed!");
+    }
+
+    private class LightFragmentPagerAdapter extends FragmentPagerAdapter {
         final int PAGE_COUNT = 2;
 
         public LightFragmentPagerAdapter(FragmentManager fragmentManager) {
@@ -113,9 +138,9 @@ public class MainActivity extends RXActivity {
             try {
                 switch(position) {
                     case 0:
-                        return app.createFragment(getString(R.string.fragment_name_light_colour));
+                        return fragmentFactory.createFragment(getString(R.string.fragment_name_light_colour));
                     case 1:
-                        return app.createFragment(getString(R.string.fragment_name_light_effects));
+                        return fragmentFactory.createFragment(getString(R.string.fragment_name_light_effects));
                     default:
                         return null;
                 }
@@ -136,60 +161,6 @@ public class MainActivity extends RXActivity {
                 default:
                     return null;
             }
-        }
-    }
-
-    @Override
-    public final String toString() {
-        return "MainActivity{" +
-                "lightNetwork=" + lightNetwork.toString() +
-                '}';
-    }
-
-    /**
-     * Created by anne on 26/06/15.
-     * (*_*)
-     */
-    public static class LightNetworkController implements LightControlInterface {
-        private final LightNetwork lightNetwork;
-
-        public LightNetworkController(MainActivity activity) {
-            lightNetwork = activity.lightNetwork;
-        }
-
-        @Override
-        public Observable setHue(int hue, float duration) {
-            return lightNetwork.setHue(hue, duration);
-        }
-
-        @Override
-        public Observable setSaturation(int saturation, float duration) {
-            return lightNetwork.setSaturation(saturation, duration);
-        }
-
-        @Override
-        public Observable setBrightness(int brightness, float duration) {
-            return lightNetwork.setBrightness(brightness, duration);
-        }
-
-        @Override
-        public Observable setKelvin(int kelvin, float duration) {
-            return lightNetwork.setKelvin(kelvin, duration);
-        }
-
-        @Override
-        public Observable togglePower() {
-            return lightNetwork.togglePower();
-        }
-
-        @Override
-        public Observable setPower(ModelConstants.Power power, float duration) {
-            return lightNetwork.setPower(power, duration);
-        }
-
-        @Override
-        public Observable<LightDataResponse> fetchLights() {
-            return lightNetwork.fetchLights();
         }
     }
 }

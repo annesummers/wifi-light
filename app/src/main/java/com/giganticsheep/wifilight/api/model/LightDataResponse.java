@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.network;
+package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.api.ModelConstants;
 
@@ -40,19 +40,12 @@ public class LightDataResponse extends LightResponse implements Serializable {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ");
 
     /**
-     * @return if this light is enabled or not
-     */
-   // public boolean isEnabled() {
-   //     return enabled;
-   // }
-
-
-    /**
      * @return if this light is connected or not
      */
     public boolean isConnected() {
         return connected;
     }
+
     /**
      * @return the hue of this light
      */

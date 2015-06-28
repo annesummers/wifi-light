@@ -1,11 +1,10 @@
-package com.giganticsheep.wifilight.api.network;
+package com.giganticsheep.wifilight.di.modules;
 
-import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.api.network.LightService;
+import com.giganticsheep.wifilight.di.PerActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,37 +19,24 @@ import retrofit.converter.GsonConverter;
  * (*_*)
  */
 
-@Module(
-        injects = {
-                LightNetwork.class
-        },
-        complete = false,
-        library = true
-)
-
+@Module
 public class NetworkModule {
+    private final String serverURL;
 
-    @Provides
-    @Singleton
-    Endpoint provideEndpoint() {
-        return Endpoints.newFixedEndpoint(WifiLightApplication.application().serverURL());
+    private static final String DEFAULT_SERVER_STRING = "https://api.lifx.com";
+
+    public NetworkModule(String serverURL) {
+        this.serverURL = serverURL;
     }
 
     @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient() {
-        return new OkHttpClient();
+    @PerActivity
+    LightService provideLightService(RestAdapter restAdapter) {
+        return restAdapter.create(LightService.class);
     }
 
     @Provides
-    @Singleton
-    Gson provideGson() {
-        return new GsonBuilder()
-                .create();
-    }
-
-    @Provides
-    @Singleton
+    @PerActivity
     RestAdapter provideRestAdapter(Endpoint endpoint,
                                    OkHttpClient client,
                                    Gson gson) {
@@ -63,8 +49,21 @@ public class NetworkModule {
     }
 
     @Provides
-    @Singleton
-    LightService provideService(RestAdapter restAdapter) {
-        return restAdapter.create(LightService.class);
+    @PerActivity
+    Endpoint provideEndpoint() {
+        return Endpoints.newFixedEndpoint(serverURL);
+    }
+
+    @Provides
+    @PerActivity
+    OkHttpClient provideOkHttpClient() {
+        return new OkHttpClient();
+    }
+
+    @Provides
+    @PerActivity
+    Gson provideGson() {
+        return new GsonBuilder()
+                .create();
     }
 }

@@ -1,7 +1,5 @@
 package com.giganticsheep.wifilight.api;
 
-import org.jetbrains.annotations.NonNls;
-
 /**
  * Created by anne on 23/06/15.
  * (*_*)

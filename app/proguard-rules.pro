@@ -16,10 +16,16 @@
 #   public *;
 #}
 
+#Icepick
 -dontwarn icepick.**
 -keep class **$$Icicle { *; }
 -keepnames class * { @icepick.Icicle *;}
 -keepclasseswithmembernames class * {
     @icepick.* <fields>;
 }
+
+#MVP
 -keep class com.hannesdorfmann.fragmentargs.** { *; }
+
+#retrolambda
+-dontwarn java.lang.invoke.*

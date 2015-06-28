@@ -2,10 +2,10 @@ package com.giganticsheep.wifilight.ui;
 
 import android.os.Bundle;
 
-import com.giganticsheep.wifilight.api.LightControlInterface;
-import com.giganticsheep.wifilight.api.network.LightDataResponse;
+import com.giganticsheep.wifilight.api.model.LightDataResponse;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.rx.RXFragment;
+import com.giganticsheep.wifilight.ui.rx.BaseApplication;
+import com.giganticsheep.wifilight.ui.rx.BaseFragment;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import javax.inject.Inject;
@@ -18,12 +18,29 @@ import icepick.Icicle;
  */
 
 @FragmentArgsInherited
-public abstract class LightFragment extends RXFragment {
+public abstract class LightFragment extends BaseFragment {
 
    // private static final String CURRENT_LIGHT_ARGUMENT = "current_light";
 
     @Icicle protected LightDataResponse light;
-    @Inject protected LightControlInterface lightController;
+
+    @Inject LightNetwork lightNetwork;
+    @Inject BaseApplication.EventBus eventBus;
+
+    @Override
+    protected void injectDependencies() {
+        getMainActivity().getComponent().inject(this);
+    }
+
+    protected void initialiseData(Bundle savedInstanceState) { }
+
+
+    @Override
+    protected void populateViews() {
+        if(light != null && viewsInitialised) {
+            setLightDetails();
+        }
+    }
 
     @Override
     public void onStop() {
@@ -34,30 +51,14 @@ public abstract class LightFragment extends RXFragment {
         //getArguments().putSerializable(CURRENT_LIGHT_ARGUMENT, light);
     }
 
-    public MainActivity getMainActivity() {
-        return (MainActivity) getRXActivity();
-    }
-
-    protected void initialiseData(Bundle savedInstanceState) {
-       /* if(savedInstanceState != null && light == null) {
-            // we are storing the saved variables in the arguments as
-            // the calls to onSaveInstanceState can sometimes be missed
-            Bundle mySavedInstanceState = getArguments();
-            light = (LightDataResponse) mySavedInstanceState.getSerializable(CURRENT_LIGHT_ARGUMENT);
-        }*/
-    }
-
-    @Override
-    protected void populateViews() {
-        if(light != null && viewsInitialised) {
-            setLightDetails();
-        }
-    }
-
     protected void handleLightChange(LightDataResponse light) {
         this.light = light;
 
         populateViews();
+    }
+
+    protected MainActivity getMainActivity() {
+        return (MainActivity) getBaseActivity();
     }
 
     protected abstract void setLightDetails();

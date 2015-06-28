@@ -4,13 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class RXActivityTest {
+public class BaseActivityTest {
 
     @Before
     public void setUp() throws Exception {

@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.Logger;
-import com.giganticsheep.wifilight.WifiLightApplication;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.MosbyFragment;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
 
@@ -26,7 +27,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class RXFragment extends MosbyFragment {
+public abstract class BaseFragment extends MosbyFragment {
 
     private static final int INVALID = -1;
 
@@ -34,10 +35,9 @@ public abstract class RXFragment extends MosbyFragment {
     private static final String FRAGMENT_ARGS_ATTACH_TO_ROOT = "attach_to_root";
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger logger = new Logger(Integer.toHexString(System.identityHashCode(this)) +
-            " " + getClass().getName());
+    protected Logger logger;
 
-    @Inject protected WifiLightApplication app;
+    //@Inject protected WifiLightApplication app;
 
     protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
@@ -52,6 +52,7 @@ public abstract class RXFragment extends MosbyFragment {
     private int orientation;
 
     private Handler mainThreadHandler;
+    @Inject BaseLogger baseLogger;
 
     /**
      * Creates the named Fragment
@@ -60,14 +61,14 @@ public abstract class RXFragment extends MosbyFragment {
      * @return the created Fragment
      * @throws Exception if the name of the fragment doesn't match any in the application
      */
-    public static RXFragment create(final String name, final RXApplication application) throws Exception {
-        return application.createFragment(name);
+    public static BaseFragment create(final String name, final BaseApplication.FragmentFactory fragmentFactory) throws Exception {
+        return fragmentFactory.createFragment(name);
     }
 
     /**
      * Constructs a new RXFragment.
      */
-    protected RXFragment() { }
+    protected BaseFragment() { }
 
     @Override
     public final void onCreate(final Bundle savedInstanceState) {
@@ -90,8 +91,6 @@ public abstract class RXFragment extends MosbyFragment {
         initialiseData(savedInstanceState);
     }
 
-    protected abstract void initialiseData(Bundle savedInstanceState);
-
     @Override
     public final View onCreateView(final LayoutInflater inflater,
                                    @Nullable final ViewGroup container,
@@ -107,16 +106,14 @@ public abstract class RXFragment extends MosbyFragment {
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        logger = new Logger(Integer.toHexString(System.identityHashCode(this)) +
+                " " + getClass().getName(), baseLogger);
+
         initialiseViews(view);
 
         viewsInitialised = true;
 
         populateViews();
-    }
-
-    @Override
-    protected void injectDependencies() {
-        ((RXActivity) getActivity()).inject(this);
     }
 
     @Override
@@ -151,24 +148,11 @@ public abstract class RXFragment extends MosbyFragment {
      * @param activity the Activity to attach to
      * @return the Observable to subscribe to
      */
-    public final void attachToActivity(final RXActivity activity,
+    public final void attachToActivity(final BaseActivity activity,
                                        final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;
 
         doAttachToActivity(activity);
-    }
-
-    /**
-     * Hides this fragment.
-     *
-     */
-    public final void hide() {
-        if(activityExists() && getRXActivity().fragmentsResumed()) {
-            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.hide(this);
-            fragmentTransaction.commit();
-        }
     }
 
     /**
@@ -177,7 +161,7 @@ public abstract class RXFragment extends MosbyFragment {
      * @param message the message
      */
     public final void showToast(final String message) {
-        getRXActivity().showToast(message);
+        getBaseActivity().showToast(message);
     }
 
     /**
@@ -186,7 +170,7 @@ public abstract class RXFragment extends MosbyFragment {
      * @param message the message
      */
     public final void showToast(final int message) {
-        getRXActivity().showToast(getString(message));
+        getBaseActivity().showToast(getString(message));
     }
 
     /**
@@ -208,8 +192,8 @@ public abstract class RXFragment extends MosbyFragment {
     /**
      * @return the Activity associated with this Fragment
      */
-    protected final RXActivity getRXActivity() {
-        return (RXActivity) getActivity();
+    protected final BaseActivity getBaseActivity() {
+        return (BaseActivity) getActivity();
     }
 
     /**
@@ -228,11 +212,12 @@ public abstract class RXFragment extends MosbyFragment {
         initialiseViews(rootView);
     }
 
-   // protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
-    //    return AndroidObservable.bindFragment(this, observable);
-   //}
+    protected <T> void subscribe(final Observable<? extends T> observable, Subscriber<? extends T> subscriber) {
+       // compositeSubscription.add(observable.subscribe(subscriber));
+        // TODO subscruption management
+   }
 
-    private void doAttachToActivity(final RXActivity activity) {
+    private void doAttachToActivity(final BaseActivity activity) {
         final String name = attachmentDetails.name();
         final int position = attachmentDetails.position();
         final boolean addToBackStack = attachmentDetails.addToBackStack();
@@ -247,7 +232,7 @@ public abstract class RXFragment extends MosbyFragment {
         }
 
         if(attachId != 0) {
-            final RXFragment existingFragment = (RXFragment) fragmentManager.findFragmentById(attachId);
+            final BaseFragment existingFragment = (BaseFragment) fragmentManager.findFragmentById(attachId);
             if (existingFragment != null && !existingFragment.equals(this)) {
                 fragmentTransaction.detach(existingFragment);
             } else {
@@ -274,6 +259,8 @@ public abstract class RXFragment extends MosbyFragment {
     }
 
     // abstract methods
+
+    protected abstract void initialiseData(Bundle savedInstanceState);
 
     /**
      * Should this Fragment's views be reinitialised on rotation

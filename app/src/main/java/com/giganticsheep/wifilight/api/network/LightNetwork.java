@@ -2,55 +2,60 @@ package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.api.LightControlInterface;
 import com.giganticsheep.wifilight.api.ModelConstants;
-import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.model.LightDataResponse;
+import com.giganticsheep.wifilight.di.HasComponent;
+import com.giganticsheep.wifilight.di.components.DaggerNetworkComponent;
+import com.giganticsheep.wifilight.di.components.NetworkComponent;
+import com.giganticsheep.wifilight.di.modules.NetworkModule;
+import com.giganticsheep.wifilight.ui.rx.BaseLogger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import dagger.ObjectGraph;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class LightNetwork implements LightControlInterface{
+public class LightNetwork implements HasComponent<NetworkComponent> {
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected static final Logger logger = new Logger("LightNetwork");
+    protected final Logger logger;
 
     // TODO groups
     // TODO locations
     // TODO selectors
 
-    @Inject LightService lightService;
+    private final NetworkDetails networkDetails;
+    private final WifiLightApplication.EventBus eventBus;
 
-    private final List<Light> lights = new ArrayList<>();
-    private final String apiKey;
+    private NetworkComponent networkComponent;
 
-    private ObjectGraph objectGraph;
+    @Inject
+    public LightNetwork(final NetworkDetails networkDetails,
+                        final WifiLightApplication.EventBus eventBus,
+                        final BaseLogger baseLogger) {
+        this.networkDetails = networkDetails;
+        this.eventBus = eventBus;
 
-    /**
-     * @param apiKey
-     */
-    public LightNetwork(final String apiKey) {
-        this.apiKey = apiKey;
+        logger = new Logger("LightNetwork", baseLogger);
 
-        objectGraph = ObjectGraph.create(new NetworkModule());
-        objectGraph.inject(this);
+        networkComponent = DaggerNetworkComponent
+                .builder()
+                .networkModule(new NetworkModule(networkDetails.getServerURL()))
+                .build();
+        networkComponent.inject(this);
 
         fetchLights().subscribe();
+    }
+
+    @Override
+    public NetworkComponent getComponent() {
+        return networkComponent;
     }
 
     /**
@@ -99,10 +104,9 @@ public class LightNetwork implements LightControlInterface{
 
     public final Observable<LightDataResponse> fetchLights() {
         logger.debug("fetchLights()");
-        lights.clear();
 
-        return lightService.listLights(baseUrl1(),
-                baseUrl2(),
+        return Observable.empty();/*lightService.listLights(networkDetails.getBaseURL1(),
+                networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation())
                 .doOnError(new Action1<Throwable>() {
@@ -118,13 +122,13 @@ public class LightNetwork implements LightControlInterface{
 
                         for (LightDataResponse dataResponse : dataResponses) {
                             logger.debug(dataResponse.toString());
-                            WifiLightApplication.application().postMessage(new LightDetailsEvent(dataResponse)).subscribe();
+                            eventBus.postMessage(new LightDetailsEvent(dataResponse)).subscribe();
                         }
 
                         return Observable.merge(observables);
                     }
                 })
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io());*/
     }
 
     /**
@@ -140,8 +144,8 @@ public class LightNetwork implements LightControlInterface{
         queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
         queryMap.put(NetworkConstants.URL_POWER_ON, "true");
 
-        return lightService.setColour(baseUrl1(),
-                baseUrl2(),
+        return Observable.empty();/*lightService.setColour(networkDetails.getBaseURL1(),
+                networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation(),
                 queryMap)
@@ -169,14 +173,14 @@ public class LightNetwork implements LightControlInterface{
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io());*/
     }
 
     private Observable doToggleLights() {
         logger.debug("doToggleLights()");
 
-        return lightService.togglePower(baseUrl1(),
-                baseUrl2(),
+        return Observable.empty();/*lightService.togglePower(networkDetails.getBaseURL1(),
+                networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation())
                 .doOnError(new Action1<Throwable>() {
@@ -203,7 +207,7 @@ public class LightNetwork implements LightControlInterface{
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io());*/
     }
 
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
@@ -213,8 +217,8 @@ public class LightNetwork implements LightControlInterface{
         queryMap.put(NetworkConstants.URL_STATE, powerQuery);
         queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
 
-        return lightService.setPower(baseUrl1(),
-                baseUrl2(),
+        return Observable.empty();/*lightService.setPower(networkDetails.getBaseURL1(),
+                networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation(),
                 queryMap)
@@ -242,19 +246,11 @@ public class LightNetwork implements LightControlInterface{
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io());*/
     }
 
     private String authorisation() {
-        return NetworkConstants.LABEL_BEARER + NetworkConstants.SPACE + apiKey;
-    }
-
-    private final String baseUrl1() {
-        return WifiLightApplication.application().baseURL1();
-    }
-
-    private final String baseUrl2() {
-        return WifiLightApplication.application().baseURL2();
+        return NetworkConstants.LABEL_BEARER + NetworkConstants.SPACE + networkDetails.getApiKey();
     }
 
     private String makeHueString(final double hue) {
@@ -275,13 +271,6 @@ public class LightNetwork implements LightControlInterface{
 
     private String makeDurationString(final float duration) {
         return Float.toString(duration);
-    }
-
-    @Override
-    public String toString() {
-        return "LightNetwork{" +
-                "lights=" + lights +
-                '}';
     }
 
     public class SuccessEvent { }

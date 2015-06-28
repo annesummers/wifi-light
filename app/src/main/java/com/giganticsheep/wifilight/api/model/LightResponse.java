@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.network;
+package com.giganticsheep.wifilight.api.model;
 
 import com.google.gson.annotations.SerializedName;
 

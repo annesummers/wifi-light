@@ -5,12 +5,12 @@ package com.giganticsheep.wifilight.ui.rx;
  * (*_*)
  */
 class AttachDetails {
-    private final RXFragment fragment;
+    private final BaseFragment fragment;
     private final int position;
     private final boolean addToBackStack;
     private final String name;
 
-    AttachDetails(final RXFragment fragment,
+    AttachDetails(final BaseFragment fragment,
                   final String name,
                   final int position,
                   final boolean addtoBackStack) {
@@ -20,7 +20,7 @@ class AttachDetails {
         this.addToBackStack = addtoBackStack;
     }
 
-    public final RXFragment fragment() {
+    public final BaseFragment fragment() {
         return fragment;
     }
 

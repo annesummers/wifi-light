@@ -1,8 +1,6 @@
 package com.giganticsheep.wifilight.api;
 
-import com.giganticsheep.wifilight.api.network.LightDataResponse;
-
-import java.util.List;
+import com.giganticsheep.wifilight.api.model.LightDataResponse;
 
 import rx.Observable;
 

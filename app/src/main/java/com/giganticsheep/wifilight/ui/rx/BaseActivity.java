@@ -7,54 +7,44 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.giganticsheep.wifilight.di.modules.BaseActivityModule;
 import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.ui.ActivityModule;
 import com.hannesdorfmann.mosby.MosbyActivity;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import dagger.ObjectGraph;
-import icepick.Icepick;
 import icepick.Icicle;
 
 /**
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class RXActivity extends MosbyActivity {
+public abstract class BaseActivity extends MosbyActivity {
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger logger = new Logger(getClass().getName());
+    protected Logger logger;
 
     @Icicle
     private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
-    private final Map<RXFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
+    private final Map<BaseFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
     private Handler mainThreadHandler;
 
-    @Inject protected WifiLightApplication app;
-
-    private ObjectGraph activityGraph;
-
-  //  protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    @Inject protected BaseApplication.FragmentFactory fragmentFactory;
+    @Inject BaseLogger baseLogger;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create the activity graph by .plus-ing our modules onto the application graph.
-      //  WifiLightApplication application = (WifiLightApplication) getApplication();
-
-        // Inject ourselves so subclasses will have dependencies fulfilled when this method returns.
+        logger = new Logger(getClass().getName(), baseLogger);
 
         activityLayout = createActivityLayout();
 
@@ -84,29 +74,19 @@ public abstract class RXActivity extends MosbyActivity {
 
     @Override
     protected void injectDependencies() {
-        activityGraph = ((WifiLightApplication) getApplication()).getApplicationGraph().plus(getModules().toArray());
-        activityGraph.inject(this);
+        getWifiLightApplication().getApplicationComponent().inject(this);
     }
 
-    /**
-     * A list of modules to use for the individual activity graph. Subclasses can override this
-     * method to provide additional modules provided they call and include the modules returned by
-     * calling {@code super.getModules()}.
-     */
-    protected List<Object> getModules() {
-        return Arrays.<Object>asList(new ActivityModule(this));
+    private WifiLightApplication getWifiLightApplication() {
+        return (WifiLightApplication)getApplication();
     }
 
-    /** Inject the supplied {@code object} using the activity-specific graph. */
-    public void inject(Object object) {
-        activityGraph.inject(object);
+    protected BaseActivityModule getBaseActivityModule() {
+        return new BaseActivityModule(this);
     }
 
-    @Override
-    public void onDestroy() {
-        activityGraph = null;
-
-        super.onDestroy();
+    BaseApplication getBaseApplication() {
+        return (BaseApplication)getApplication();
     }
 
     @Override
@@ -127,7 +107,7 @@ public abstract class RXActivity extends MosbyActivity {
 
         fragmentsResumed = true;
 
-        for(final RXFragment fragment : fragmentAttachmentQueue.keySet()) {
+        for(final BaseFragment fragment : fragmentAttachmentQueue.keySet()) {
             fragment.attachToActivity(this, fragmentAttachmentQueue.get(fragment));
             fragmentAttachmentQueue.remove(fragment);
             break;
@@ -152,7 +132,7 @@ public abstract class RXActivity extends MosbyActivity {
         //mainThreadHandler.post(new Runnable() {
           // @Override
            // public void run() {
-                Toast.makeText(RXActivity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(BaseActivity.this, message, Toast.LENGTH_LONG).show();
            /// }
        // });
     }
@@ -163,7 +143,7 @@ public abstract class RXActivity extends MosbyActivity {
      *
      * @param fragment the Fragment to queue for attachment
      */
-    public final void queueFragmentForAttachment(final RXFragment fragment, FragmentAttachmentDetails details) {
+    public final void queueFragmentForAttachment(final BaseFragment fragment, FragmentAttachmentDetails details) {
         fragmentAttachmentQueue.put(fragment, details);
     }
 
@@ -173,15 +153,15 @@ public abstract class RXActivity extends MosbyActivity {
      * @param attachmentDetails the details of the fragment to attach
      */
     protected final void attachNewFragment(final FragmentAttachmentDetails attachmentDetails) {
-        RXFragment fragment = null;
+        BaseFragment fragment = null;
 
         try {
-            fragment = RXFragment.create(attachmentDetails.name(), getRXApplication());
+            fragment = BaseFragment.create(attachmentDetails.name(), fragmentFactory);
 
             addFragment(attachmentDetails);
 
             if (fragmentsResumed()) {
-                fragment.attachToActivity(RXActivity.this, attachmentDetails);
+                fragment.attachToActivity(BaseActivity.this, attachmentDetails);
             } else {
                 queueFragmentForAttachment(fragment, attachmentDetails);
             }
@@ -199,7 +179,7 @@ public abstract class RXActivity extends MosbyActivity {
     protected final void attachFragment(final FragmentAttachmentDetails attachmentDetails) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        RXFragment fragment = (RXFragment) fragmentManager.findFragmentByTag(attachmentDetails.name());
+        BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(attachmentDetails.name());
 
         if(fragment == null) {
             attachNewFragment(attachmentDetails);
@@ -247,10 +227,10 @@ public abstract class RXActivity extends MosbyActivity {
      * @param position the position the fragment is attached at
      * @return the found fragment
      */
-    protected RXFragment findFragment(final int position) {
+    protected BaseFragment findFragment(final int position) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        return (RXFragment) fragmentManager.findFragmentById(containerIdFromPosition(position));
+        return (BaseFragment) fragmentManager.findFragmentById(containerIdFromPosition(position));
     }
 
     /**
@@ -259,7 +239,7 @@ public abstract class RXActivity extends MosbyActivity {
      * @param fragmentDetails the attach information associated with the fragment
      * @return the found fragment
      */
-    protected RXFragment findFragment(final AttachDetails fragmentDetails) {
+    protected BaseFragment findFragment(final AttachDetails fragmentDetails) {
         return findFragment(fragmentDetails.position());
     }
 
@@ -271,11 +251,12 @@ public abstract class RXActivity extends MosbyActivity {
         return activityLayout;
     }
 
-    private RXApplication getRXApplication() {
-        return (RXApplication) getApplication();
+    private BaseApplication getRXApplication() {
+        return (BaseApplication) getApplication();
     }
 
     // abstract methods
 
     protected abstract ActivityLayout createActivityLayout();
+
 }
