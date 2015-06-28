@@ -19,5 +19,4 @@ public interface BaseApplicationComponent {
 
     BaseApplication application();
     BaseApplication.EventBus eventBus();
-   // BaseApplication.FragmentFactory fragmentFactory();
 }

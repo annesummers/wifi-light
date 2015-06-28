@@ -29,7 +29,6 @@ public class WifiLightApplication extends BaseApplication {
 
     private NetworkDetails networkDetails;
     private WifiApplicationComponent wifiApplicationComponent;
-    //private NetworkDetailsComponent networkDetailsComponent;
 
     @Override
     public final void onCreate() {

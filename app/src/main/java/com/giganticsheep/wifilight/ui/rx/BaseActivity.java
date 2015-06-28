@@ -35,7 +35,7 @@ public abstract class BaseActivity extends MosbyActivity {
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
     private final Map<BaseFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
-    private Handler mainThreadHandler;
+   // private Handler mainThreadHandler;
 
     @Inject protected BaseApplication.FragmentFactory fragmentFactory;
     @Inject BaseLogger baseLogger;
@@ -48,7 +48,7 @@ public abstract class BaseActivity extends MosbyActivity {
 
         activityLayout = createActivityLayout();
 
-        mainThreadHandler = new Handler(Looper.getMainLooper());
+     //   mainThreadHandler = new Handler(Looper.getMainLooper());
 
         if(savedInstanceState != null) {
             // TODO can we get Icepick to handle this?

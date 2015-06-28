@@ -11,7 +11,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * (*_*)
  */
 
-@Qualifier
 @Scope
 @Retention(RUNTIME)
 public @interface PerActivity {

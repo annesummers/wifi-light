@@ -9,21 +9,4 @@ import dagger.Module;
 @Module
 public class MainActivityModule {
 
-  /*  private final NetworkDetails networkDetails;
-    private final BaseApplication.EventBus eventBus;
-    private final BaseLogger baseLogger;
-
-    public MainActivityModule(NetworkDetails networkDetails,
-                       BaseApplication.EventBus eventBus,
-                       BaseLogger baseLogger) {
-        this.networkDetails = networkDetails;
-        this.eventBus = eventBus;
-        this.baseLogger = baseLogger;
-    }
-
-    @Provides
-    @PerActivity
-    LightNetwork provideLightNetwork() {//NetworkDetails networkDetails, BaseApplication.EventBus eventBus, BaseLogger baseLogger) {
-        return new LightNetwork(networkDetails, eventBus, baseLogger);
-    }*/
 }

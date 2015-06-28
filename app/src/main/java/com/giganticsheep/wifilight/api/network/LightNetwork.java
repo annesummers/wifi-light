@@ -4,18 +4,31 @@ import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.LightDataResponse;
+import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.di.HasComponent;
 import com.giganticsheep.wifilight.di.components.DaggerNetworkComponent;
 import com.giganticsheep.wifilight.di.components.NetworkComponent;
 import com.giganticsheep.wifilight.di.modules.NetworkModule;
 import com.giganticsheep.wifilight.ui.rx.BaseLogger;
+import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import retrofit.Endpoints;
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
+import retrofit.converter.GsonConverter;
 import rx.Observable;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 22/06/15.
@@ -35,6 +48,9 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
 
     private NetworkComponent networkComponent;
 
+    //@Inject LightService service;
+    private LightService lightService;
+
     @Inject
     public LightNetwork(final NetworkDetails networkDetails,
                         final WifiLightApplication.EventBus eventBus,
@@ -49,6 +65,13 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .networkModule(new NetworkModule(networkDetails.getServerURL()))
                 .build();
         networkComponent.inject(this);
+
+        lightService = new RestAdapter.Builder()
+                .setClient(new OkClient(new OkHttpClient()))
+                .setEndpoint(Endpoints.newFixedEndpoint(networkDetails.getServerURL()))
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setConverter(new GsonConverter(new GsonBuilder().create()))
+                .build().create(LightService.class);
 
         fetchLights().subscribe();
     }
@@ -105,7 +128,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
     public final Observable<LightDataResponse> fetchLights() {
         logger.debug("fetchLights()");
 
-        return Observable.empty();/*lightService.listLights(networkDetails.getBaseURL1(),
+        return lightService.listLights(networkDetails.getBaseURL1(),
                 networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation())
@@ -128,7 +151,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                         return Observable.merge(observables);
                     }
                 })
-                .subscribeOn(Schedulers.io());*/
+                .subscribeOn(Schedulers.io());
     }
 
     /**
@@ -144,7 +167,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
         queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
         queryMap.put(NetworkConstants.URL_POWER_ON, "true");
 
-        return Observable.empty();/*lightService.setColour(networkDetails.getBaseURL1(),
+        return lightService.setColour(networkDetails.getBaseURL1(),
                 networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation(),
@@ -173,13 +196,13 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());*/
+                .subscribeOn(Schedulers.io());
     }
 
     private Observable doToggleLights() {
         logger.debug("doToggleLights()");
 
-        return Observable.empty();/*lightService.togglePower(networkDetails.getBaseURL1(),
+        return lightService.togglePower(networkDetails.getBaseURL1(),
                 networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation())
@@ -207,7 +230,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());*/
+                .subscribeOn(Schedulers.io());
     }
 
     private Observable doSetPower(final String powerQuery, final String durationQuery) {
@@ -217,7 +240,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
         queryMap.put(NetworkConstants.URL_STATE, powerQuery);
         queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
 
-        return Observable.empty();/*lightService.setPower(networkDetails.getBaseURL1(),
+        return lightService.setPower(networkDetails.getBaseURL1(),
                 networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation(),
@@ -246,7 +269,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                         fetchLights().subscribe();
                     }
                 })
-                .subscribeOn(Schedulers.io());*/
+                .subscribeOn(Schedulers.io());
     }
 
     private String authorisation() {
