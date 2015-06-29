@@ -38,21 +38,21 @@ public class LightColourPresenter extends LightPresenter {
      * @param saturation the saturation to set the enabled lights
      */
     public void setSaturation(final int saturation, float duration) {
-        setColour(lightNetwork.setHue(saturation, duration));
+        setColour(lightNetwork.setSaturation(saturation, duration));
     }
 
     /**
      * @param brightness the brightness to set the enabled lights
      */
     public void setBrightness(final int brightness, float duration) {
-        setColour(lightNetwork.setHue(brightness, duration));
+        setColour(lightNetwork.setBrightness(brightness, duration));
     }
 
     /**
      * @param kelvin the kelvin (warmth to set the enabled lights
      */
     public void setKelvin(final int kelvin, float duration) {
-        setColour(lightNetwork.setHue(kelvin, duration));
+        setColour(lightNetwork.setKelvin(kelvin, duration));
     }
 
     private void setColour(Observable<StatusResponse> observable) {

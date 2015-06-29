@@ -171,7 +171,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
     }
 
     public Observable<Light> fetchLight(final String id) {
-        if(id != null) {
+        if(id != null || lightsObservable == null) {
             return fetchLights(false).filter(new Func1<Light, Boolean>() {
                 @Override
                 public Boolean call(Light light) {

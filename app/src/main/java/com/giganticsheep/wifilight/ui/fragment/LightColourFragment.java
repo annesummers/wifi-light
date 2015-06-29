@@ -69,8 +69,6 @@ public class LightColourFragment extends LightFragment {
 
     @Override
     protected void initialiseViews(View view) {
-        logger.debug("initialiseViews()");
-
         // TODO sliders thumb drops off the end
         // TODO put toggle above pager
         // TODO colour of tabs
@@ -122,13 +120,11 @@ public class LightColourFragment extends LightFragment {
 
         @Override
         public synchronized void onStartTrackingTouch(SeekBar seekBar) {
-            logger.warn("START");
             tracking = true;
         }
 
         @Override
         public synchronized void onStopTrackingTouch(SeekBar seekBar) {
-            logger.warn("STOP");
             tracking = false;
 
             if(values.containsKey(seekBar)) {
