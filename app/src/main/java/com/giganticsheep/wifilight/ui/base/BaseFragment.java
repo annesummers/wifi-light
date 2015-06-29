@@ -240,21 +240,21 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
 
         if(attachId != 0) {
             final BaseFragment existingFragment = (BaseFragment) fragmentManager.findFragmentById(attachId);
-            if (existingFragment != null && !existingFragment.equals(this)) {
+            if (existingFragment != null) {// && !existingFragment.equals(this)) {
                 fragmentTransaction.detach(existingFragment);
+            }
+
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+            Fragment fragment = fragmentManager.findFragmentByTag(name);
+            if (fragment != null && fragment.equals(this)) {
+                fragmentTransaction.attach(this);
             } else {
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fragmentTransaction.add(attachId, this, name);
+            }
 
-                Fragment fragment = fragmentManager.findFragmentByTag(name);
-                if (fragment != null && fragment.equals(this)) {
-                    fragmentTransaction.attach(this);
-                } else {
-                    fragmentTransaction.add(attachId, this, name);
-                }
-
-                if (addToBackStack) {
-                    fragmentTransaction.addToBackStack(null);
-                }
+            if (addToBackStack) {
+                fragmentTransaction.addToBackStack(null);
             }
         }
 

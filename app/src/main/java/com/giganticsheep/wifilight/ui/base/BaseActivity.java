@@ -1,10 +1,12 @@
 package com.giganticsheep.wifilight.ui.base;
 
+import android.content.res.Configuration;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.di.modules.BaseActivityModule;
 import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
@@ -37,6 +39,7 @@ public abstract class BaseActivity extends MosbyActivity {
 
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
+    private int orientation;
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
@@ -48,9 +51,11 @@ public abstract class BaseActivity extends MosbyActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        logger = new Logger(getClass().getName(), baseLogger);
-
         activityLayout = createActivityLayout();
+
+        setContentView(activityLayout.layoutId());
+
+        logger = new Logger(getClass().getName(), baseLogger);
 
      //   mainThreadHandler = new Handler(Looper.getMainLooper());
 
@@ -66,6 +71,10 @@ public abstract class BaseActivity extends MosbyActivity {
             }
         }
 
+        initialiseViews();
+    }
+
+    protected void initialiseViews() {
         final int containerCount = activityLayout().fragmentContainerCount();
         for (int i = 0; i < containerCount; i++) {
             if (attachedFragments.containsKey(i)) {
@@ -91,6 +100,18 @@ public abstract class BaseActivity extends MosbyActivity {
         outState.putParcelableArray(ATTACHED_FRAGMENTS_EXTRA, fragments);
 
         fragmentsResumed = false;
+    }
+
+    @Override
+    public final void onConfigurationChanged(final Configuration config) {
+        super.onConfigurationChanged(config);
+
+        if(reinitialiseOnRotate() && config.orientation != orientation) {
+            orientation = config.orientation;
+            setContentView(activityLayout().layoutId());
+
+            initialiseViews();
+        }
     }
 
     @Override
@@ -178,7 +199,11 @@ public abstract class BaseActivity extends MosbyActivity {
         if(fragment == null) {
             attachNewFragment(attachmentDetails);
         } else {
-            fragment.attachToActivity(this, attachmentDetails);
+            if (fragmentsResumed()) {
+                fragment.attachToActivity(BaseActivity.this, attachmentDetails);
+            } else {
+                queueFragmentForAttachment(fragment, attachmentDetails);
+            }
         }
     }
 
@@ -256,5 +281,7 @@ public abstract class BaseActivity extends MosbyActivity {
     // abstract methods
 
     protected abstract ActivityLayout createActivityLayout();
+
+    protected abstract boolean reinitialiseOnRotate();
 
 }

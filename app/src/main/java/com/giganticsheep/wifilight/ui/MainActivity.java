@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
 import android.view.Menu;
@@ -47,20 +49,60 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     protected final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new LightFragmentPagerAdapter(getSupportFragmentManager()));
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
         if (savedInstanceState == null) {
             // we are attaching the details fragment at position 0 which is under the view pager
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
 
         eventBus.registerForEvents(this);
+    }
+
+    @Override
+    protected final ActivityLayout createActivityLayout() {
+        return new ActivityLayout() {
+            @Override
+            public int fragmentContainer(final int position) {
+                switch (position) {
+                    case 0:
+                        return R.id.container;
+                    default:
+                        return 0;
+
+                }
+            }
+
+            @Override
+            public int fragmentContainerCount() {
+                return 1;
+            }
+
+            @Override
+            public int layoutId() {
+                return R.layout.activity_main;
+            }
+        };
+    }
+
+    @Override
+    protected void initialiseViews() {
+        super.initialiseViews();
+
+        PagerAdapter pagerAdapter = null;
+
+        if(viewPager != null) {
+            pagerAdapter = viewPager.getAdapter();
+            pagerAdapter.notifyDataSetChanged();
+        }
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter != null ? pagerAdapter : new LightFragmentPagerAdapter(getSupportFragmentManager()));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private static String makeFragmentName(int viewId, long id) {
+        return "android:switcher:" + viewId + ":" + id;
     }
 
     @Override
@@ -103,25 +145,26 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     }
 
     @Override
-    protected final ActivityLayout createActivityLayout() {
-        return new ActivityLayout() {
-            @Override
-            public int fragmentContainer(final int position) {
-                switch (position) {
-                    case 0:
-                        return R.id.container;
-                    default:
-                        return 0;
-
-                }
-            }
-
-            @Override
-            public int fragmentContainerCount() {
-                return 1;
-            }
-        };
+    protected boolean reinitialiseOnRotate() {
+        return true;
     }
+
+    /*protected void destroyViews() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        PagerAdapter pagerAdapter = viewPager.getAdapter();
+        pagerAdapter.destroyItem(R.id.pager, i, );
+
+        for(int i = 0; i < pagerAdapter.getCount(); i++) {
+            Fragment fragment = fragmentManager.findFragmentByTag(makeFragmentName(R.id.pager, i));
+            if(fragment != null) {
+                fragmentTransaction.detach(fragment);
+            }
+        }
+
+        fragmentTransaction.commit();
+    }*/
 
     @Override
     protected void onDestroy() {
@@ -169,6 +212,13 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         @Override
         public int getCount() {
             return PAGE_COUNT;
+        }
+
+        //this is called when notifyDataSetChanged() is called
+        @Override
+        public int getItemPosition(Object object) {
+            // refresh all fragments when data set changed
+            return PagerAdapter.POSITION_NONE;
         }
 
         @Override

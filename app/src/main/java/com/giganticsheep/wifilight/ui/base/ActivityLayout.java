@@ -7,4 +7,6 @@ public interface ActivityLayout {
     int fragmentContainer(int position);
 
     int fragmentContainerCount();
+
+    int layoutId();
 }
