@@ -1,11 +1,11 @@
-package com.giganticsheep.wifilight.ui;
+package com.giganticsheep.wifilight.ui.fragment;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.rx.BaseFragment;
+import com.giganticsheep.wifilight.ui.base.BaseFragment;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.squareup.otto.Subscribe;
 
@@ -31,15 +31,18 @@ public class LightEffectsFragment extends LightFragment {
     }
 
     @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_effects;
+    public LightPresenter createPresenter() {
+        return new LightEffectsPresenter(lightNetwork, eventBus);
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public LightEffectsPresenter getPresenter() {
+        return (LightEffectsPresenter) super.getPresenter();
+    }
 
-        eventBus.registerForEvents(this);
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_effects;
     }
 
     @Override
@@ -55,18 +58,11 @@ public class LightEffectsFragment extends LightFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this);
+        getPresenter().fragmentDestroyed();
     }
 
     @Override
     protected boolean reinitialiseOnRotate() {
         return false;
-    }
-
-    @Subscribe
-    public void lightChange(LightNetwork.LightDetailsEvent event) {
-        logger.debug("lightChange()");
-
-        handleLightChange(event.light());
     }
 }

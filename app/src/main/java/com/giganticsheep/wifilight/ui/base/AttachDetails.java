@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.ui.base;
 
 /**
  * Created by anne on 22/06/15.

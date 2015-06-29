@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.di.modules;
 
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.ui.rx.BaseApplication;
+import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 import javax.inject.Singleton;
 

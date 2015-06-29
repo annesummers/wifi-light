@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public class LightDataResponse extends LightResponse implements Serializable {
+public class Light extends LightResponse implements Serializable {
 
     public String uuid;
     public boolean connected;

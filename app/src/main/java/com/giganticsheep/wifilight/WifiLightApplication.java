@@ -6,11 +6,11 @@ import com.giganticsheep.wifilight.di.components.DaggerWifiApplicationComponent;
 import com.giganticsheep.wifilight.di.components.WifiApplicationComponent;
 import com.giganticsheep.wifilight.di.modules.BaseApplicationModule;
 import com.giganticsheep.wifilight.di.modules.WifiApplicationModule;
-import com.giganticsheep.wifilight.ui.LightColourFragment;
-import com.giganticsheep.wifilight.ui.LightDetailsFragment;
-import com.giganticsheep.wifilight.ui.LightEffectsFragment;
-import com.giganticsheep.wifilight.ui.rx.BaseApplication;
-import com.giganticsheep.wifilight.ui.rx.BaseFragment;
+import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
+import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
+import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
+import com.giganticsheep.wifilight.ui.base.BaseApplication;
+import com.giganticsheep.wifilight.ui.base.BaseFragment;
 
 import org.jetbrains.annotations.NonNls;
 

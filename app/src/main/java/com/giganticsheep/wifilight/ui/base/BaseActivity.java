@@ -1,10 +1,8 @@
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.ui.base;
 
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.Toast;
 
 import com.giganticsheep.wifilight.di.modules.BaseActivityModule;
@@ -18,6 +16,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import icepick.Icicle;
+import rx.Observable;
+import rx.Subscriber;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by anne on 22/06/15.
@@ -32,13 +33,16 @@ public abstract class BaseActivity extends MosbyActivity {
 
     @Icicle
     private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
+    private final Map<BaseFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
+
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
-    private final Map<BaseFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
-   // private Handler mainThreadHandler;
+
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected BaseApplication.FragmentFactory fragmentFactory;
-    @Inject BaseLogger baseLogger;
+    @Inject protected BaseLogger baseLogger;
+    @Inject protected BaseApplication.EventBus eventBus;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -77,18 +81,6 @@ public abstract class BaseActivity extends MosbyActivity {
         getWifiLightApplication().getApplicationComponent().inject(this);
     }
 
-    private WifiLightApplication getWifiLightApplication() {
-        return (WifiLightApplication)getApplication();
-    }
-
-    protected BaseActivityModule getBaseActivityModule() {
-        return new BaseActivityModule(this);
-    }
-
-    BaseApplication getBaseApplication() {
-        return (BaseApplication)getApplication();
-    }
-
     @Override
     public final void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -114,6 +106,13 @@ public abstract class BaseActivity extends MosbyActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        compositeSubscription.unsubscribe();
+    }
+
     /**
      * Pops the backstack.
      */
@@ -129,12 +128,7 @@ public abstract class BaseActivity extends MosbyActivity {
      * @param message the message to show in the toast
      */
     public final void showToast(final String message) {
-        //mainThreadHandler.post(new Runnable() {
-          // @Override
-           // public void run() {
-                Toast.makeText(BaseActivity.this, message, Toast.LENGTH_LONG).show();
-           /// }
-       // });
+        Toast.makeText(BaseActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -243,16 +237,20 @@ public abstract class BaseActivity extends MosbyActivity {
         return findFragment(fragmentDetails.position());
     }
 
- //   protected <T> Observable<? extends T> bind(final Observable<? extends T> observable) {
-  //      return AndroidObservable.bindActivity(this, observable);
-  //  }
+    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
+        compositeSubscription.add(observable.subscribe(subscriber));
+    }
 
     private ActivityLayout activityLayout() {
         return activityLayout;
     }
 
-    private BaseApplication getRXApplication() {
-        return (BaseApplication) getApplication();
+    private WifiLightApplication getWifiLightApplication() {
+        return (WifiLightApplication)getApplication();
+    }
+
+    protected BaseActivityModule getBaseActivityModule() {
+        return new BaseActivityModule(this);
     }
 
     // abstract methods

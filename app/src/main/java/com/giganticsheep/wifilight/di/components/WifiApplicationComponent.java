@@ -3,8 +3,8 @@ package com.giganticsheep.wifilight.di.components;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.di.modules.BaseApplicationModule;
 import com.giganticsheep.wifilight.di.modules.WifiApplicationModule;
-import com.giganticsheep.wifilight.ui.rx.BaseApplication;
-import com.giganticsheep.wifilight.ui.rx.BaseLogger;
+import com.giganticsheep.wifilight.ui.base.BaseApplication;
+import com.giganticsheep.wifilight.ui.base.BaseLogger;
 
 import javax.inject.Singleton;
 
@@ -21,6 +21,5 @@ public interface WifiApplicationComponent extends BaseApplicationComponent {
 
     //Exposed to sub-graphs.
     NetworkDetails networkDetails();
-    BaseLogger baseLogger();
-    BaseApplication.EventBus eventBus();
+   // BaseApplication.EventBus eventBus();
 }

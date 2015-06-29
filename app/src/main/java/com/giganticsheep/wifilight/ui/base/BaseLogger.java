@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.ui.base;
 
 import android.util.Log;
 

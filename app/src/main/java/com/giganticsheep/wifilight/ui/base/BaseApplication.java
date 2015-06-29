@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.ui.base;
 
 import android.app.Application;
 
@@ -37,10 +37,6 @@ public abstract class BaseApplication extends Application {
         return fragmentFactory;
     }
 
-   // public BaseLogger getBaseLogger() {
-   //     return baseLogger;
-   // }
-
     public EventBus getEventBus() {
         return eventBus;
     }
@@ -48,10 +44,6 @@ public abstract class BaseApplication extends Application {
     protected abstract FragmentFactory createFragmentFactory();
 
     protected abstract BaseApplicationComponent createApplicationComponent();
-
-  //  public LoggerComponent getLoggerComponent() {
-   //     return loggerComponent;
-   // }
 
     public class EventBus {
 
@@ -91,7 +83,4 @@ public abstract class BaseApplication extends Application {
         Observable<? extends BaseFragment> createFragmentAsync(String name);
         BaseFragment createFragment(String name) throws Exception;
     }
-
-    //public abstract Observable<? extends RXFragment> createFragmentAsync(String name);
-   // public abstract RXFragment createFragment(String name) throws Exception;
 }

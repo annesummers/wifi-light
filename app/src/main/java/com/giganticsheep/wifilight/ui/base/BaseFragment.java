@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.ui.base;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.Logger;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
-import com.hannesdorfmann.mosby.MosbyFragment;
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
+import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
 
 import javax.inject.Inject;
 
@@ -27,7 +29,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class BaseFragment extends MosbyFragment {
+public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateFragment<V, P> {
 
     private static final int INVALID = -1;
 
@@ -71,7 +73,7 @@ public abstract class BaseFragment extends MosbyFragment {
     protected BaseFragment() { }
 
     @Override
-    public final void onCreate(final Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final Bundle args = getArguments();
@@ -87,8 +89,6 @@ public abstract class BaseFragment extends MosbyFragment {
         mainThreadHandler = new Handler(Looper.getMainLooper());
 
         orientation = getResources().getConfiguration().orientation;
-
-        initialiseData(savedInstanceState);
     }
 
     @Override
@@ -133,6 +133,13 @@ public abstract class BaseFragment extends MosbyFragment {
         viewsInitialised = false;
 
         destroyViews();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        compositeSubscription.unsubscribe();
     }
 
     /**
@@ -212,8 +219,8 @@ public abstract class BaseFragment extends MosbyFragment {
         initialiseViews(rootView);
     }
 
-    protected <T> void subscribe(final Observable<? extends T> observable, Subscriber<? extends T> subscriber) {
-       // compositeSubscription.add(observable.subscribe(subscriber));
+    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
+        compositeSubscription.add(observable.subscribe(subscriber));
         // TODO subscruption management
    }
 
@@ -258,31 +265,27 @@ public abstract class BaseFragment extends MosbyFragment {
         return getActivity() != null;
     }
 
-    // abstract methods
-
-    protected abstract void initialiseData(Bundle savedInstanceState);
-
-    /**
-     * Should this Fragment's views be reinitialised on rotation
-     *
-     */
-    protected abstract boolean reinitialiseOnRotate();
-
     /**
      * Initialises the views associated with this Fragment
-     *
+     * @param view the rootView
      */
-    protected abstract void initialiseViews(View view);
+    protected void initialiseViews(View view) { }
 
     /**
      * Populates the views associated with this Fragment
-     *
      */
-    protected abstract void populateViews();
+    protected void populateViews() { }
 
     /**
      * Destroy the views associated with this Fragment
-     *
      */
-    protected abstract void destroyViews();
+    protected void destroyViews() { }
+
+    // abstract methods
+
+    /**
+     * Should this Fragment's views be reinitialised on rotation
+     * @return boolean
+     */
+    protected abstract boolean reinitialiseOnRotate();
 }

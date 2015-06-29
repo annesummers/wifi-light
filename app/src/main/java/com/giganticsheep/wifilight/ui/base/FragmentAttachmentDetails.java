@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.ui.base;
 
 import android.os.Parcel;
 import android.os.Parcelable;

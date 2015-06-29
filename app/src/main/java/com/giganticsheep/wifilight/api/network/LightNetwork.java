@@ -3,13 +3,14 @@ package com.giganticsheep.wifilight.api.network;
 import com.giganticsheep.wifilight.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.ModelConstants;
-import com.giganticsheep.wifilight.api.model.LightDataResponse;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.di.HasComponent;
+import com.giganticsheep.wifilight.di.PerActivity;
 import com.giganticsheep.wifilight.di.components.DaggerNetworkComponent;
 import com.giganticsheep.wifilight.di.components.NetworkComponent;
 import com.giganticsheep.wifilight.di.modules.NetworkModule;
-import com.giganticsheep.wifilight.ui.rx.BaseLogger;
+import com.giganticsheep.wifilight.ui.base.BaseLogger;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -34,6 +35,8 @@ import rx.schedulers.Schedulers;
  * Created by anne on 22/06/15.
  * (*_*)
  */
+
+@PerActivity
 public class LightNetwork implements HasComponent<NetworkComponent> {
 
     @SuppressWarnings("FieldNotUsedInToString")
@@ -48,8 +51,8 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
 
     private NetworkComponent networkComponent;
 
-    //@Inject LightService service;
     private LightService lightService;
+    private Observable<Light> lightsObservable;
 
     @Inject
     public LightNetwork(final NetworkDetails networkDetails,
@@ -73,7 +76,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .setConverter(new GsonConverter(new GsonBuilder().create()))
                 .build().create(LightService.class);
 
-        fetchLights().subscribe();
+        fetchLights(true).subscribe();
     }
 
     @Override
@@ -84,28 +87,28 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
     /**
      * @param hue the hue to set the enabled lights
      */
-    public final Observable setHue(final int hue, float duration) {
+    public final Observable<StatusResponse> setHue(final int hue, float duration) {
         return doSetColour(makeHueString(hue), makeDurationString(duration));
     }
 
     /**
      * @param saturation the saturation to set the enabled lights
      */
-    public final Observable setSaturation(final int saturation, float duration) {
+    public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
         return doSetColour(makeSaturationString((double)saturation/100), makeDurationString(duration));
     }
 
     /**
      * @param brightness the brightness to set the enabled lights
      */
-    public final Observable setBrightness(final int brightness, float duration) {
+    public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
         return doSetColour(makeBrightnessString((double)brightness/100), makeDurationString(duration));
     }
 
     /**
      * @param kelvin the kelvin (warmth to set the enabled lights
      */
-    public final Observable setKelvin(final int kelvin, float duration) {
+    public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
         return doSetColour(makeKelvinString(kelvin+2500), makeDurationString(duration));
     }
 
@@ -113,7 +116,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
      * toggles the power of the enabled lights
      *
      */
-    public final Observable togglePower() {
+    public final Observable<StatusResponse> togglePower() {
         return doToggleLights();
     }
 
@@ -121,44 +124,70 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
      * @param power ON or OFF
      * @param duration how long to set the power change for
      */
-    public final Observable setPower(final ModelConstants.Power power, final float duration) {
+    public final Observable<StatusResponse> setPower(final ModelConstants.Power power, final float duration) {
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
-    public final Observable<LightDataResponse> fetchLights() {
+    public final Observable<Light> fetchLights(boolean fetchFromServer) {
         logger.debug("fetchLights()");
 
-        return lightService.listLights(networkDetails.getBaseURL1(),
-                networkDetails.getBaseURL2(),
-                NetworkConstants.URL_ALL,
-                authorisation())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(final Throwable throwable) {
-                        logger.error(throwable);
-                    }
-                })
-                .flatMap(new Func1<List<LightDataResponse>, Observable<LightDataResponse>>() {
-                    @Override
-                    public Observable<LightDataResponse> call(List<LightDataResponse> dataResponses) {
-                        List<Observable<LightDataResponse>> observables = new ArrayList<>(dataResponses.size());
-
-                        for (LightDataResponse dataResponse : dataResponses) {
-                            logger.debug(dataResponse.toString());
-                            eventBus.postMessage(new LightDetailsEvent(dataResponse)).subscribe();
+        if(fetchFromServer || lightsObservable == null) {
+            lightsObservable = lightService.listLights(networkDetails.getBaseURL1(),
+                    networkDetails.getBaseURL2(),
+                    NetworkConstants.URL_ALL,
+                    authorisation())
+                    .doOnError(new Action1<Throwable>() {
+                        @Override
+                        public void call(final Throwable throwable) {
+                            logger.error(throwable);
                         }
+                    })
+                    .flatMap(new Func1<List<Light>, Observable<Light>>() {
+                        @Override
+                        public Observable<Light> call(List<Light> dataResponses) {
+                            List<Observable<Light>> observables = new ArrayList<>(dataResponses.size());
 
-                        return Observable.merge(observables);
-                    }
-                })
-                .subscribeOn(Schedulers.io());
+                            for (Light dataResponse : dataResponses) {
+                                logger.debug(dataResponse.toString());
+                                eventBus.postMessage(new LightDetailsEvent(dataResponse)).subscribe();
+
+                                observables.add(Observable.just(dataResponse));
+                            }
+
+                            return Observable.merge(observables);
+                        }
+                    })
+                    .doOnCompleted(new Action0() {
+                        @Override
+                        public void call() {
+                            eventBus.postMessage(new SuccessEvent()).subscribe();
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .cache();
+        }
+
+        return lightsObservable;
+    }
+
+    public Observable<Light> fetchLight(final String id) {
+        if(id != null) {
+            return fetchLights(false).filter(new Func1<Light, Boolean>() {
+                @Override
+                public Boolean call(Light light) {
+                    return light.id().equals(id);
+                }
+            });
+        }
+
+        return Observable.error(new IllegalArgumentException("id cannot be null"));
     }
 
     /**
      * @param colourQuery the colour query
      * @param durationQuery the colour query
      */
-    private Observable doSetColour(final String colourQuery, final String durationQuery) {
+    private Observable<StatusResponse> doSetColour(final String colourQuery, final String durationQuery) {
         logger.debug("doSetColour() " + colourQuery + NetworkConstants.SPACE + durationQuery);
 
         // TODO colour set power on
@@ -193,13 +222,13 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        fetchLights().subscribe();
+                        fetchLights(true).subscribe();
                     }
                 })
                 .subscribeOn(Schedulers.io());
     }
 
-    private Observable doToggleLights() {
+    private Observable<StatusResponse> doToggleLights() {
         logger.debug("doToggleLights()");
 
         return lightService.togglePower(networkDetails.getBaseURL1(),
@@ -227,13 +256,13 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        fetchLights().subscribe();
+                        fetchLights(true).subscribe();
                     }
                 })
                 .subscribeOn(Schedulers.io());
     }
 
-    private Observable doSetPower(final String powerQuery, final String durationQuery) {
+    private Observable<StatusResponse> doSetPower(final String powerQuery, final String durationQuery) {
         logger.debug("doSetPower() " + powerQuery + NetworkConstants.SPACE + durationQuery);
 
         Map<String, String> queryMap = new HashMap<>();
@@ -266,7 +295,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        fetchLights().subscribe();
+                        fetchLights(true).subscribe();
                     }
                 })
                 .subscribeOn(Schedulers.io());
@@ -299,13 +328,13 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
     public class SuccessEvent { }
 
     public class LightDetailsEvent {
-        private final LightDataResponse light;
+        private final Light light;
 
-        private LightDetailsEvent(LightDataResponse light) {
+        private LightDetailsEvent(Light light) {
             this.light = light;
         }
 
-        public final LightDataResponse light() {
+        public final Light light() {
             return light;
         }
     }

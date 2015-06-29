@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.di.modules;
 
-import com.giganticsheep.wifilight.ui.rx.BaseApplication;
-import com.giganticsheep.wifilight.ui.rx.BaseLogger;
+import com.giganticsheep.wifilight.ui.base.BaseApplication;
+import com.giganticsheep.wifilight.ui.base.BaseLogger;
 
 import javax.inject.Singleton;
 

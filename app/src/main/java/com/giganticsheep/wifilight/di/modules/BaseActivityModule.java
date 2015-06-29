@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.di.modules;
 import android.content.Context;
 
 import com.giganticsheep.wifilight.di.PerActivity;
-import com.giganticsheep.wifilight.ui.rx.BaseActivity;
+import com.giganticsheep.wifilight.ui.base.BaseActivity;
 
 import dagger.Module;
 import dagger.Provides;

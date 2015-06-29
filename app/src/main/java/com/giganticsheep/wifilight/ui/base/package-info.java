@@ -4,4 +4,4 @@
  *
  * RX specific base classes.
  */
-package com.giganticsheep.wifilight.ui.rx;
+package com.giganticsheep.wifilight.ui.base;

@@ -18,25 +18,30 @@ import com.giganticsheep.wifilight.di.components.DaggerMainActivityComponent;
 import com.giganticsheep.wifilight.di.components.MainActivityComponent;
 import com.giganticsheep.wifilight.di.components.WifiApplicationComponent;
 import com.giganticsheep.wifilight.di.modules.MainActivityModule;
-import com.giganticsheep.wifilight.ui.rx.ActivityLayout;
-import com.giganticsheep.wifilight.ui.rx.BaseApplication;
-import com.giganticsheep.wifilight.ui.rx.BaseLogger;
-import com.giganticsheep.wifilight.ui.rx.FragmentAttachmentDetails;
-import com.giganticsheep.wifilight.ui.rx.BaseActivity;
+import com.giganticsheep.wifilight.ui.base.ActivityLayout;
+import com.giganticsheep.wifilight.ui.base.BaseApplication;
+import com.giganticsheep.wifilight.ui.base.BaseLogger;
+import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
+import com.giganticsheep.wifilight.ui.base.BaseActivity;
 import com.squareup.otto.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 
 public class MainActivity extends BaseActivity implements HasComponent<MainActivityComponent> {
-    static final float DEFAULT_DURATION = 1.0F;
+    public static final float DEFAULT_DURATION = 1.0F;
 
     private ViewPager viewPager;
     private MainActivityComponent mainActivityComponent;
 
     @Inject NetworkDetails networkDetails;
-    @Inject BaseApplication.EventBus eventBus;
-    @Inject BaseLogger baseLogger;
+
+    private String currentLight;
+    private List<String> lightIds = new ArrayList<>();
+    private ArrayList<String> newLightIds;
 
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
@@ -54,6 +59,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
             // we are attaching the details fragment at position 0 which is under the view pager
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
+
+        eventBus.registerForEvents(this);
     }
 
     @Override
@@ -65,7 +72,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         mainActivityComponent = DaggerMainActivityComponent.builder()
                 .wifiApplicationComponent((WifiApplicationComponent) application.getApplicationComponent())
                 .baseActivityModule(getBaseActivityModule())
-                .mainActivityModule(new MainActivityModule())//networkDetails, eventBus, baseLogger))
+                .mainActivityModule(new MainActivityModule())
                 .build();
     }
 
@@ -116,9 +123,40 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         };
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        eventBus.unregisterForEvents(this);
+    }
+
+    public void showErrorView() {
+
+    }
+
+    public void showLoadingView() {
+
+    }
+
+    public String getCurrentLight() {
+        return currentLight;
+    }
+
     @Subscribe
-    public void lightChangeSuccess(LightNetwork.SuccessEvent event) {
-        showToast("Changed!");
+    public synchronized void fetchedLights(LightNetwork.SuccessEvent event) {
+        lightIds = newLightIds;
+        currentLight = lightIds.get(0);
+
+        newLightIds = null;
+    }
+
+    @Subscribe
+    public synchronized void fetchedLight(LightNetwork.LightDetailsEvent event) {
+        if(newLightIds == null) {
+            newLightIds = new ArrayList<>();
+        }
+
+        newLightIds.add(event.light().id());
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {

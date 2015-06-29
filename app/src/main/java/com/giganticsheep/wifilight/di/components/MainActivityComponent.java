@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.di.components;
 import com.giganticsheep.wifilight.di.PerActivity;
 import com.giganticsheep.wifilight.di.modules.BaseActivityModule;
 import com.giganticsheep.wifilight.di.modules.MainActivityModule;
-import com.giganticsheep.wifilight.ui.LightFragment;
+import com.giganticsheep.wifilight.ui.fragment.LightFragment;
 
 import dagger.Component;
 

@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.api.model.LightDataResponse;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
 
 import java.util.List;
@@ -21,7 +21,7 @@ import rx.Observable;
 public interface LightService {
 
     @GET("/{url1}/{url2}/{selector}")
-    Observable<List<LightDataResponse>> listLights(@Path("url1") String url1,
+    Observable<List<Light>> listLights(@Path("url1") String url1,
                                                    @Path("url2") String url2,
                                                    @Path("selector") String selector,
                                                    @Header("Authorization") String authorisation);

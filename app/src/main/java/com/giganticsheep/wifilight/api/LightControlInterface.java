@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.api;
 
-import com.giganticsheep.wifilight.api.model.LightDataResponse;
+import com.giganticsheep.wifilight.api.model.Light;
 
 import rx.Observable;
 
@@ -17,5 +17,5 @@ public interface LightControlInterface {
     Observable togglePower();
     Observable setPower(ModelConstants.Power power, float duration);
 
-    Observable<LightDataResponse> fetchLights();
+    Observable<Light> fetchLights();
 }
