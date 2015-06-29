@@ -12,6 +12,9 @@ import com.giganticsheep.wifilight.ui.MainActivity;
 import com.giganticsheep.wifilight.ui.base.BaseFragment;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 
@@ -90,32 +93,11 @@ public class LightColourFragment extends LightFragment {
 
     @OnCheckedChanged(R.id.power_toggle) public void onPowerToggle(CompoundButton compoundButton,
                                                                    boolean isChecked) {
-        // Observable observable = null;
-
         if(isChecked && light != null && light.getPower() != ModelConstants.Power.ON) {
             getPresenter().setPower(ModelConstants.Power.ON, MainActivity.DEFAULT_DURATION);
         } else if(!isChecked && light != null && light.getPower() != ModelConstants.Power.OFF){
             getPresenter().setPower(ModelConstants.Power.OFF, MainActivity.DEFAULT_DURATION);
         }
-
-      /* if(observable != null) {
-            observable
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber() {
-                        @Override
-                        public void onCompleted() {
-                        }
-
-                        @Override
-                        public void onError(Throwable throwable) {
-                            showToast(throwable.getMessage());
-                        }
-
-                        @Override
-                        public void onNext(Object o) {
-                        }
-                    });*/
-        //  }
     }
 
     @Override
@@ -124,20 +106,36 @@ public class LightColourFragment extends LightFragment {
 
         getPresenter().fragmentDestroyed();
     }
-    //@Override
-    //protected boolean reinitialiseOnRotate() {
-    //    return false;
-   // }
 
     private class OnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+
+        private boolean tracking = false;
+
+        private final Map<SeekBar, Integer> values = new HashMap<>();
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
             if(fromUser) {
-               // Observable observable = null;
+                values.put(seekBar, value);
+            }
+        }
+
+        @Override
+        public synchronized void onStartTrackingTouch(SeekBar seekBar) {
+            logger.warn("START");
+            tracking = true;
+        }
+
+        @Override
+        public synchronized void onStopTrackingTouch(SeekBar seekBar) {
+            logger.warn("STOP");
+            tracking = false;
+
+            if(values.containsKey(seekBar)) {
+                int value = values.get(seekBar);
 
                 if (seekBar.equals(hueSeekBar)) {
-                    getPresenter().setHue(value, MainActivity.DEFAULT_DURATION);;
+                    getPresenter().setHue(value, MainActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(saturationSeekBar)) {
                     getPresenter().setSaturation(value, MainActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(valueSeekBar)) {
@@ -146,31 +144,8 @@ public class LightColourFragment extends LightFragment {
                     getPresenter().setKelvin(value, MainActivity.DEFAULT_DURATION);
                 }
 
-               /* if(observable != null) {
-                    observable
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Subscriber() {
-                                @Override
-                                public void onCompleted() {
-                                }
-
-                                @Override
-                                public void onError(Throwable throwable) {
-                                    showToast(throwable.getMessage());
-                                }
-
-                                @Override
-                                public void onNext(Object o) {
-                                }
-                            });*/
-                ///}
+                values.remove(seekBar);
             }
         }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) { }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) { }
     }
 }
