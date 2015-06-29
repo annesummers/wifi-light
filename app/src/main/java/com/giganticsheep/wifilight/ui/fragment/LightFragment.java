@@ -56,8 +56,9 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
 
     @Override
     public void onNewViewStateInstance() {
-        showLoading();
+        getViewState().apply(this, false);
     }
+
     @Override
     public void showLoading() {
         LightViewState vs = (LightViewState) viewState;
@@ -71,6 +72,7 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         LightViewState vs = (LightViewState) viewState;
         vs.setShowLightDetails();
 
+        getMainActivity().showLightView();
         populateViews();
     }
 

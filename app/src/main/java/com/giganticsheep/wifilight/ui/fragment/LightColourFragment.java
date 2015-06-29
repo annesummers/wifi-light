@@ -65,13 +65,6 @@ public class LightColourFragment extends LightFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        //eventBus.registerForEvents(this);
-    }
-
-    @Override
     protected void initialiseViews(View view) {
         logger.debug("initialiseViews()");
 
@@ -83,11 +76,6 @@ public class LightColourFragment extends LightFragment {
         saturationSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         valueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         kelvinSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
-    }
-
-    @Override
-    protected void destroyViews() {
-
     }
 
     @Override
@@ -129,9 +117,6 @@ public class LightColourFragment extends LightFragment {
                     });*/
         //  }
     }
-
-    // @Override
-    //protected void destroyViews() { }
 
     @Override
     public void onDestroy() {

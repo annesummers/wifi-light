@@ -5,4 +5,6 @@
     <color name="tab_background">#982198</color>
     <color name="tab_selected">#984398</color>
     <color name="tab_text">#EFEFEF</color>
+    <color name="background">#DEDEDE</color>
+    <color name="half_grey">#88898989</color>
 </resources>

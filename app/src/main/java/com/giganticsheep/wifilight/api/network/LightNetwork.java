@@ -234,7 +234,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
         return lightService.togglePower(networkDetails.getBaseURL1(),
                 networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
-                authorisation())
+                authorisation(), "")
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(final Throwable throwable) {

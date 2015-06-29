@@ -10,6 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
@@ -32,11 +36,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.InjectView;
+
 
 public class MainActivity extends BaseActivity implements HasComponent<MainActivityComponent> {
     public static final float DEFAULT_DURATION = 1.0F;
 
     private ViewPager viewPager;
+    @InjectView(R.id.loading_view) ProgressBar loadingProgressBar;
+    @InjectView(R.id.error_view) ImageView errorImageView;
+    @InjectView(R.id.light_layout) LinearLayout lightLayout;
+
     private MainActivityComponent mainActivityComponent;
 
     @Inject NetworkDetails networkDetails;
@@ -149,23 +159,6 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         return true;
     }
 
-    /*protected void destroyViews() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        PagerAdapter pagerAdapter = viewPager.getAdapter();
-        pagerAdapter.destroyItem(R.id.pager, i, );
-
-        for(int i = 0; i < pagerAdapter.getCount(); i++) {
-            Fragment fragment = fragmentManager.findFragmentByTag(makeFragmentName(R.id.pager, i));
-            if(fragment != null) {
-                fragmentTransaction.detach(fragment);
-            }
-        }
-
-        fragmentTransaction.commit();
-    }*/
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -174,11 +167,21 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     }
 
     public void showErrorView() {
-
+        loadingProgressBar.setVisibility(View.INVISIBLE);
+        lightLayout.setVisibility(View.INVISIBLE);
+        errorImageView.setVisibility(View.VISIBLE);
     }
 
     public void showLoadingView() {
+        errorImageView.setVisibility(View.INVISIBLE);
+        lightLayout.setVisibility(View.INVISIBLE);
+        loadingProgressBar.setVisibility(View.VISIBLE);
+    }
 
+    public void showLightView() {
+        errorImageView.setVisibility(View.INVISIBLE);
+        loadingProgressBar.setVisibility(View.INVISIBLE);
+        lightLayout.setVisibility(View.VISIBLE);
     }
 
     public String getCurrentLight() {
