@@ -6,7 +6,6 @@
     android:columnCount="@integer/light_sliders_column_count"
     android:rowCount="@integer/light_sliders_row_count"
     android:id="@+id/sliders_layout"
-    android:layout_margin="10dp"
     tools:showIn="@layout/fragment_hsv">
 
     <TextView
