@@ -6,6 +6,9 @@ import com.giganticsheep.wifilight.api.model.StatusResponse;
 import java.util.List;
 import java.util.Map;
 
+import retrofit.http.Body;
+import retrofit.http.FieldMap;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
@@ -30,34 +33,38 @@ public interface LightService {
     Observable<List<StatusResponse>> togglePower(@Path("url") String url,
                                                  @Path("url2") String url2,
                                                  @Path("selector") String selector,
-                                                 @Header("Authorization") String authorisation);
-
+                                                 @Header("Authorization") String authorisation,
+                                                 @Body Object empty);
+    @FormUrlEncoded
     @PUT("/{url}/{url2}/{selector}/power")
     Observable<List<StatusResponse>> setPower(@Path("url") String url,
                                               @Path("url2") String url2,
                                               @Path("selector") String selector,
                                               @Header("Authorization") String authorization,
-                                              @QueryMap Map<String, String> options);
+                                              @FieldMap Map<String, String> options);
 
+    @FormUrlEncoded
     @PUT("/{url}/{url2}/{selector}/color")
     Observable<List<StatusResponse>> setColour(@Path("url") String url,
                                                @Path("url2") String url2,
                                                @Path("selector") String selector,
                                                @Header("Authorization") String authorization,
-                                               @QueryMap Map<String, String> options);
+                                               @FieldMap Map<String, String> options);
 
+    @FormUrlEncoded
     @POST("/{url}/{url2}/{selector}/effects/breathe")
     Observable<List<StatusResponse>> breathe(@Path("url") String url,
                                              @Path("url2") String url2,
                                              @Path("selector") String selector,
                                              @Header("Authorization") String authorization,
-                                             @QueryMap Map<String, String> options);
+                                             @FieldMap Map<String, String> options);
 
+    @FormUrlEncoded
     @POST("/{url}/{url2}/{selector}/effects/pulse")
     Observable<List<StatusResponse>> pulse(@Path("url") String url,
                                            @Path("url2") String url2,
                                            @Path("selector") String selector,
                                            @Header("Authorization") String authorization,
-                                           @QueryMap Map<String, String> options);
+                                           @FieldMap Map<String, String> options);
 
 }
