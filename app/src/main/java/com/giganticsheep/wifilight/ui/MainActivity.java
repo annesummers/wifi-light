@@ -191,7 +191,10 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     @Subscribe
     public synchronized void fetchedLights(LightNetwork.SuccessEvent event) {
         lightIds = newLightIds;
-        currentLight = lightIds.get(0);
+
+        if(lightIds.size() > 0) {
+            currentLight = lightIds.get(0);
+        }
 
         newLightIds = null;
     }
