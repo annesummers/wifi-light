@@ -6,9 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.di.modules.BaseActivityModule;
-import com.giganticsheep.wifilight.Logger;
+import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.hannesdorfmann.mosby.MosbyActivity;
 
@@ -45,7 +46,7 @@ public abstract class BaseActivity extends MosbyActivity {
 
     @Inject protected BaseApplication.FragmentFactory fragmentFactory;
     @Inject protected BaseLogger baseLogger;
-    @Inject protected BaseApplication.EventBus eventBus;
+    @Inject protected EventBus eventBus;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

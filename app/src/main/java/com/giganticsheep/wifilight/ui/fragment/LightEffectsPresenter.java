@@ -1,14 +1,14 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 /**
  * Created by anne on 29/06/15.
  * (*_*)
  */
 public class LightEffectsPresenter extends LightPresenter {
-    public LightEffectsPresenter(LightNetwork lightNetwork, BaseApplication.EventBus eventBus) {
+    public LightEffectsPresenter(LightNetwork lightNetwork, EventBus eventBus) {
         super(lightNetwork, eventBus);
 
         eventBus.registerForEvents(this);

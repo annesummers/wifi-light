@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -9,7 +9,7 @@ import com.squareup.otto.Subscribe;
  * (*_*)
  */
 public class LightDetailsPresenter extends LightPresenter {
-    public LightDetailsPresenter(LightNetwork lightNetwork, BaseApplication.EventBus eventBus) {
+    public LightDetailsPresenter(LightNetwork lightNetwork, EventBus eventBus) {
         super(lightNetwork, eventBus);
 
         eventBus.registerForEvents(this);

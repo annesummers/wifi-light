@@ -10,7 +10,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.0"
 
-  /*  compileOptions {
+    /*  compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }*/
@@ -21,6 +21,7 @@ android {
         targetSdkVersion 21
         versionCode manifestVersionNumber()
         versionName manifestVersionName()
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     packagingOptions {
@@ -91,4 +92,6 @@ dependencies {
     compile 'com.intellij:annotations:12.0'
 
     testCompile 'junit:junit:4.12'
+
+    testCompile 'com.squareup.retrofit:retrofit-mock:1.9.0'
 }

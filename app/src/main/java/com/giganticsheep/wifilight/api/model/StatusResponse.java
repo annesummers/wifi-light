@@ -7,6 +7,14 @@ package com.giganticsheep.wifilight.api.model;
 public class StatusResponse extends LightResponse {
     public String status;
 
+    public StatusResponse(String status) {
+        this.status = status;
+    }
+
+    public StatusResponse() {
+        this.status = "";
+    }
+
     /**
      * @return the status
      */

@@ -12,7 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.giganticsheep.wifilight.Logger;
+import com.giganticsheep.wifilight.base.BaseLogger;
+import com.giganticsheep.wifilight.base.Logger;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
@@ -54,7 +55,8 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     private int orientation;
 
     private Handler mainThreadHandler;
-    @Inject BaseLogger baseLogger;
+    @Inject
+    BaseLogger baseLogger;
 
     /**
      * Creates the named Fragment

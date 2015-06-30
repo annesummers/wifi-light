@@ -1,18 +1,19 @@
-package com.giganticsheep.wifilight.ui.base;
+package com.giganticsheep.wifilight;
 
 import android.util.Log;
 
-import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.base.BaseLogger;
+import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 /**
  * Created by anne on 28/06/15.
  * (*_*)
  */
-public class BaseLogger {
+public class ApplicationLogger implements BaseLogger {
 
     private BaseApplication application;
 
-    public BaseLogger(BaseApplication application) {
+    public ApplicationLogger(BaseApplication application) {
         this.application = application;
     }
 

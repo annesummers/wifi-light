@@ -1,23 +1,24 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 29/06/15.
  * (*_*)
  */
 public abstract class LightPresenter extends MvpBasePresenter<LightView> {
-    protected final BaseApplication.EventBus eventBus;
+    protected final EventBus eventBus;
     protected LightNetwork lightNetwork;
 
     public LightPresenter(LightNetwork lightNetwork,
-                          BaseApplication.EventBus eventBus) {
+                          EventBus eventBus) {
         this.lightNetwork = lightNetwork;
         this.eventBus = eventBus;
     }
@@ -28,6 +29,7 @@ public abstract class LightPresenter extends MvpBasePresenter<LightView> {
         }
 
         lightNetwork.fetchLight(id)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Light>() {
                     @Override

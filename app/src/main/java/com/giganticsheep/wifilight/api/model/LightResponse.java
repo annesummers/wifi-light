@@ -15,6 +15,14 @@ public class LightResponse implements Serializable {
     public String id;
     public String label;
 
+    public LightResponse(String id) {
+        this.id = id;
+    }
+
+    public LightResponse() {
+
+    }
+
     public final String id() {
         return id;
     }

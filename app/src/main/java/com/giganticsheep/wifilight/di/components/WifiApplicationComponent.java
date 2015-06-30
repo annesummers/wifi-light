@@ -3,8 +3,6 @@ package com.giganticsheep.wifilight.di.components;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.di.modules.BaseApplicationModule;
 import com.giganticsheep.wifilight.di.modules.WifiApplicationModule;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
-import com.giganticsheep.wifilight.ui.base.BaseLogger;
 
 import javax.inject.Singleton;
 

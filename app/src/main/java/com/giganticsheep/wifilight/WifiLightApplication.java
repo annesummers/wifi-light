@@ -46,7 +46,7 @@ public class WifiLightApplication extends BaseApplication {
     }
 
     @Override
-    protected FragmentFactory createFragmentFactory() {
+    public FragmentFactory createFragmentFactory() {
         return new FragmentFactoryImpl();
     }
 

@@ -1,9 +1,10 @@
 package com.giganticsheep.wifilight.di.components;
 
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.di.modules.BaseApplicationModule;
 import com.giganticsheep.wifilight.ui.base.BaseActivity;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;
-import com.giganticsheep.wifilight.ui.base.BaseLogger;
+import com.giganticsheep.wifilight.base.BaseLogger;
 
 import javax.inject.Singleton;
 
@@ -20,5 +21,5 @@ public interface BaseApplicationComponent {
 
     BaseApplication application();
     BaseLogger baseLogger();
-    BaseApplication.EventBus eventBus();
+    EventBus eventBus();
 }

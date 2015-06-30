@@ -1,7 +1,10 @@
 package com.giganticsheep.wifilight.di.modules;
 
+import com.giganticsheep.wifilight.base.AndroidEventBus;
+import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.ApplicationLogger;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;
-import com.giganticsheep.wifilight.ui.base.BaseLogger;
+import com.giganticsheep.wifilight.base.BaseLogger;
 
 import javax.inject.Singleton;
 
@@ -23,7 +26,7 @@ public class BaseApplicationModule {
     @Singleton
     @Provides
     BaseLogger provideBaseLogger() {
-        return new BaseLogger(application);
+        return new ApplicationLogger(application);
     }
 
     @Provides
@@ -34,13 +37,13 @@ public class BaseApplicationModule {
 
     @Provides
     @Singleton
-    BaseApplication.EventBus provideEventBus() {
-        return application.getEventBus();
+    EventBus provideEventBus() {
+        return new AndroidEventBus();
     }
 
     @Provides
     @Singleton
     BaseApplication.FragmentFactory provideFragmentFactory() {
-        return application.getFragmentFactory();
+        return application.createFragmentFactory();
     }
 }

@@ -1,6 +1,4 @@
-package com.giganticsheep.wifilight;
-
-import com.giganticsheep.wifilight.ui.base.BaseLogger;
+package com.giganticsheep.wifilight.base;
 
 import org.jetbrains.annotations.NonNls;
 

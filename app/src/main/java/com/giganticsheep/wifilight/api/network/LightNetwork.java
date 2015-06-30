@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.Logger;
-import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
@@ -10,7 +10,7 @@ import com.giganticsheep.wifilight.di.PerActivity;
 import com.giganticsheep.wifilight.di.components.DaggerNetworkComponent;
 import com.giganticsheep.wifilight.di.components.NetworkComponent;
 import com.giganticsheep.wifilight.di.modules.NetworkModule;
-import com.giganticsheep.wifilight.ui.base.BaseLogger;
+import com.giganticsheep.wifilight.base.BaseLogger;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -21,11 +21,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import retrofit.Endpoint;
 import retrofit.Endpoints;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -47,16 +49,29 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
     // TODO selectors
 
     private final NetworkDetails networkDetails;
-    private final WifiLightApplication.EventBus eventBus;
+    private final EventBus eventBus;
 
     private NetworkComponent networkComponent;
 
     private LightService lightService;
     private Observable<Light> lightsObservable;
 
+    private Subscriber errorSubscriber = new Subscriber() {
+        @Override
+        public void onCompleted() { }
+
+        @Override
+        public void onError(Throwable e) {
+            logger.error(e.getMessage());
+        }
+
+        @Override
+        public void onNext(Object o) { }
+    };
+
     @Inject
     public LightNetwork(final NetworkDetails networkDetails,
-                        final WifiLightApplication.EventBus eventBus,
+                        final EventBus eventBus,
                         final BaseLogger baseLogger) {
         this.networkDetails = networkDetails;
         this.eventBus = eventBus;
@@ -69,14 +84,28 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .build();
         networkComponent.inject(this);
 
-        lightService = new RestAdapter.Builder()
+        lightService = createLightService();
+
+        fetchLights(true)
+                .subscribeOn(Schedulers.io())
+                .subscribe(errorSubscriber);
+    }
+
+    protected LightService createLightService() {
+        return createRestAdapter().create(LightService.class);
+    }
+
+    protected RestAdapter createRestAdapter() {
+        return new RestAdapter.Builder()
                 .setClient(new OkClient(new OkHttpClient()))
-                .setEndpoint(Endpoints.newFixedEndpoint(networkDetails.getServerURL()))
+                .setEndpoint(createEndpoint())
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new GsonConverter(new GsonBuilder().create()))
-                .build().create(LightService.class);
+                .build();
+    }
 
-        fetchLights(true).subscribe();
+    protected Endpoint createEndpoint() {
+        return Endpoints.newFixedEndpoint(networkDetails.getServerURL());
     }
 
     @Override
@@ -163,7 +192,6 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                             eventBus.postMessage(new SuccessEvent()).subscribe();
                         }
                     })
-                    .subscribeOn(Schedulers.io())
                     .cache();
         }
 
@@ -222,10 +250,11 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        fetchLights(true).subscribe();
+                        fetchLights(true)
+                                //.subscribeOn(Schedulers.io())
+                                .subscribe(errorSubscriber);
                     }
-                })
-                .subscribeOn(Schedulers.io());
+                });
     }
 
     private Observable<StatusResponse> doToggleLights() {
@@ -256,10 +285,11 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        fetchLights(true).subscribe();
+                        fetchLights(true)
+                                //.subscribeOn(Schedulers.io())
+                                .subscribe(errorSubscriber);
                     }
-                })
-                .subscribeOn(Schedulers.io());
+                });
     }
 
     private Observable<StatusResponse> doSetPower(final String powerQuery, final String durationQuery) {
@@ -295,10 +325,11 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                 .doOnCompleted(new Action0() {
                     @Override
                     public void call() {
-                        fetchLights(true).subscribe();
+                        fetchLights(true)
+                                //.subscribeOn(Schedulers.io())
+                                .subscribe(errorSubscriber);
                     }
-                })
-                .subscribeOn(Schedulers.io());
+                });
     }
 
     private String authorisation() {

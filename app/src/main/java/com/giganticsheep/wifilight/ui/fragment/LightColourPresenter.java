@@ -1,14 +1,15 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
 import com.squareup.otto.Subscribe;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 29/06/15.
@@ -16,7 +17,7 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class LightColourPresenter extends LightPresenter {
     public LightColourPresenter(LightNetwork lightNetwork,
-                                BaseApplication.EventBus eventBus) {
+                                EventBus eventBus) {
         super(lightNetwork, eventBus);
 
         eventBus.registerForEvents(this);
@@ -57,6 +58,7 @@ public class LightColourPresenter extends LightPresenter {
 
     private void setColour(Observable<StatusResponse> observable) {
         observable
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
@@ -82,6 +84,7 @@ public class LightColourPresenter extends LightPresenter {
      */
     public void setPower(final ModelConstants.Power power, final float duration) {
         lightNetwork.setPower(power, duration)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<StatusResponse>() {
             @Override

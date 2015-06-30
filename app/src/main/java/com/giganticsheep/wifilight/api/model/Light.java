@@ -26,6 +26,10 @@ public class Light extends LightResponse implements Serializable {
     public GroupData group;
     public CapabilitiesData capabilities;
 
+    public Light(String id) {
+        super(id);
+    }
+
     public class ColorData {
         public double hue;
         public double saturation;
