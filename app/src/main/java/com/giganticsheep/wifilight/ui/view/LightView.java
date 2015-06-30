@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.fragment;
+package com.giganticsheep.wifilight.ui.view;
 
 import com.giganticsheep.wifilight.api.model.Light;
 import com.hannesdorfmann.mosby.mvp.MvpView;

@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     public static final float DEFAULT_DURATION = 1.0F;
 
     private ViewPager viewPager;
+
     @InjectView(R.id.loading_view) ProgressBar loadingProgressBar;
     @InjectView(R.id.error_view) ImageView errorImageView;
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
@@ -108,10 +109,6 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private static String makeFragmentName(int viewId, long id) {
-        return "android:switcher:" + viewId + ":" + id;
-    }
-
     @Override
     protected void injectDependencies() {
         super.injectDependencies();
@@ -171,7 +168,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
 
     public void showLoadingView() {
         errorImageView.setVisibility(View.INVISIBLE);
-        lightLayout.setVisibility(View.INVISIBLE);
+        lightLayout.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -186,7 +183,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     }
 
     @Subscribe
-    public synchronized void fetchedLights(LightNetwork.SuccessEvent event) {
+    public synchronized void handleFetchLightsSuccess(LightNetwork.FetchLightsSuccessEvent event) {
         lightIds = newLightIds;
 
         if(lightIds.size() > 0) {
@@ -197,7 +194,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     }
 
     @Subscribe
-    public synchronized void fetchedLight(LightNetwork.LightDetailsEvent event) {
+    public synchronized void handleLightDetails(LightNetwork.LightDetailsEvent event) {
         if(newLightIds == null) {
             newLightIds = new ArrayList<>();
         }
@@ -220,7 +217,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         //this is called when notifyDataSetChanged() is called
         @Override
         public int getItemPosition(Object object) {
-            // refresh all fragments when data set changed
+            // refresh all fragments when data set changed i.e. recreate them all
             return PagerAdapter.POSITION_NONE;
         }
 

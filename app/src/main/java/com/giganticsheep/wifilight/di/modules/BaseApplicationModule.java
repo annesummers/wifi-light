@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.di.modules;
 
-import com.giganticsheep.wifilight.base.AndroidEventBus;
+import com.giganticsheep.wifilight.AndroidEventBus;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.ApplicationLogger;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;

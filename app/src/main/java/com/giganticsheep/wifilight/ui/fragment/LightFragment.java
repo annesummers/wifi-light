@@ -7,6 +7,9 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.ui.MainActivity;
 import com.giganticsheep.wifilight.ui.base.BaseFragment;
+import com.giganticsheep.wifilight.ui.presenter.LightPresenter;
+import com.giganticsheep.wifilight.ui.view.LightView;
+import com.giganticsheep.wifilight.ui.view.LightViewState;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 

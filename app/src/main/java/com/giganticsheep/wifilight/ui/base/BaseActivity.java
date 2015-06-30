@@ -34,8 +34,8 @@ public abstract class BaseActivity extends MosbyActivity {
     @SuppressWarnings("FieldNotUsedInToString")
     protected Logger logger;
 
-    @Icicle
-    private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
+    @Icicle private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
+
     private final Map<BaseFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
 
     private ActivityLayout activityLayout;

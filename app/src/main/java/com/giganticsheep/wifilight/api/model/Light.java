@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class Light extends LightResponse implements Serializable {
 
+    public static int KELVIN_BASE = 2500;
+
     public String uuid;
     public boolean connected;
     public String power;
@@ -54,11 +56,11 @@ public class Light extends LightResponse implements Serializable {
      * @return the hue of this light
      */
     public int getHue() {
-        return (int)color.hue;
+        return convertHue(color.hue);
     }
 
     public int getSaturation() {
-        return (int)(color.saturation*100);
+        return convertSaturation(color.saturation);
     }
 
     public int getKelvin() {
@@ -66,7 +68,7 @@ public class Light extends LightResponse implements Serializable {
     }
 
     public int getBrightness() {
-        return (int) (brightness*100);
+        return convertBrightness(brightness);
     }
 
     public ModelConstants.Power getPower() {
@@ -98,6 +100,29 @@ public class Light extends LightResponse implements Serializable {
 
     public boolean hasVariableColourTemp() {
         return capabilities.has_variable_color_temp;
+    }
+
+    public static int convertBrightness(double brightness) {
+        return (int) (brightness*100);
+    }
+
+    public static int convertSaturation(double saturation) {
+        return (int)(saturation*100);
+    }
+
+    public static int convertHue(double hue) {
+        return (int) hue;
+    }
+    public static double convertBrightness(int brightness) {
+        return (double)brightness/100;
+    }
+
+    public static double convertSaturation(int saturation) {
+        return (double)saturation/100;
+    }
+
+    public static double convertHue(int hue) {
+        return (double) hue;
     }
 
     @Override

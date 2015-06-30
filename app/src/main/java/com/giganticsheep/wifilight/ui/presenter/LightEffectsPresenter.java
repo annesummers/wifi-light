@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.fragment;
+package com.giganticsheep.wifilight.ui.presenter;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.network.LightNetwork;

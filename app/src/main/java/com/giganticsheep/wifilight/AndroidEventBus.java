@@ -1,5 +1,6 @@
-package com.giganticsheep.wifilight.base;
+package com.giganticsheep.wifilight;
 
+import com.giganticsheep.wifilight.base.EventBus;
 import com.squareup.otto.Bus;
 
 import rx.Observable;

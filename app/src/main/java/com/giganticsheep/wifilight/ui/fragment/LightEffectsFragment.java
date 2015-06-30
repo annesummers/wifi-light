@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.ui.base.BaseFragment;
+import com.giganticsheep.wifilight.ui.presenter.LightEffectsPresenter;
+import com.giganticsheep.wifilight.ui.presenter.LightPresenter;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
-import com.squareup.otto.Subscribe;
 
 /**
  * Created by anne on 25/06/15.

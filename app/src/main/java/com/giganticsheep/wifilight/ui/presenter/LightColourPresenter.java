@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.fragment;
+package com.giganticsheep.wifilight.ui.presenter;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.ModelConstants;
@@ -62,8 +62,7 @@ public class LightColourPresenter extends LightPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
-                    public void onCompleted() {
-                    }
+                    public void onCompleted() { }
 
                     @Override
                     public void onError(Throwable e) {
@@ -103,7 +102,7 @@ public class LightColourPresenter extends LightPresenter {
     }
 
     @Subscribe
-    public void lightLoaded(LightNetwork.LightDetailsEvent event) {
+    public void handleLightDetails(LightNetwork.LightDetailsEvent event) {
         getView().lightChanged(event.light());
     }
 }

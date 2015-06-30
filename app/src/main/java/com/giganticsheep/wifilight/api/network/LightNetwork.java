@@ -117,28 +117,28 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
      * @param hue the hue to set the enabled lights
      */
     public final Observable<StatusResponse> setHue(final int hue, float duration) {
-        return doSetColour(makeHueString(hue), makeDurationString(duration));
+        return doSetColour(makeHueString(Light.convertHue(hue)), makeDurationString(duration));
     }
 
     /**
      * @param saturation the saturation to set the enabled lights
      */
     public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
-        return doSetColour(makeSaturationString((double)saturation/100), makeDurationString(duration));
+        return doSetColour(makeSaturationString(Light.convertSaturation(saturation)), makeDurationString(duration));
     }
 
     /**
      * @param brightness the brightness to set the enabled lights
      */
     public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
-        return doSetColour(makeBrightnessString((double)brightness/100), makeDurationString(duration));
+        return doSetColour(makeBrightnessString(Light.convertBrightness(brightness)), makeDurationString(duration));
     }
 
     /**
      * @param kelvin the kelvin (warmth to set the enabled lights
      */
     public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
-        return doSetColour(makeKelvinString(kelvin+2500), makeDurationString(duration));
+        return doSetColour(makeKelvinString(kelvin + Light.KELVIN_BASE), makeDurationString(duration));
     }
 
     /**
@@ -178,7 +178,8 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
 
                             for (Light dataResponse : dataResponses) {
                                 logger.debug(dataResponse.toString());
-                                eventBus.postMessage(new LightDetailsEvent(dataResponse)).subscribe();
+                                eventBus.postMessage(new LightDetailsEvent(dataResponse))
+                                        .subscribe(errorSubscriber);
 
                                 observables.add(Observable.just(dataResponse));
                             }
@@ -189,7 +190,8 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
                     .doOnCompleted(new Action0() {
                         @Override
                         public void call() {
-                            eventBus.postMessage(new SuccessEvent()).subscribe();
+                            eventBus.postMessage(new FetchLightsSuccessEvent())
+                                    .subscribe(errorSubscriber);
                         }
                     })
                     .cache();
@@ -356,12 +358,12 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
         return Float.toString(duration);
     }
 
-    public class SuccessEvent { }
+    public static class FetchLightsSuccessEvent { }
 
-    public class LightDetailsEvent {
+    public static class LightDetailsEvent {
         private final Light light;
 
-        private LightDetailsEvent(Light light) {
+        public LightDetailsEvent(Light light) {
             this.light = light;
         }
 
