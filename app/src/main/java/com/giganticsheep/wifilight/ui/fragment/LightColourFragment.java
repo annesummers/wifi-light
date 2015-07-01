@@ -74,7 +74,6 @@ public class LightColourFragment extends LightFragment {
     protected void initialiseViews(View view) {
         // TODO sliders thumb drops off the end
         // TODO put toggle above pager
-        // TODO colour of tabs
 
         hueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         saturationSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);

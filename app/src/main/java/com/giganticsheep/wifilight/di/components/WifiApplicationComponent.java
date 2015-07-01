@@ -19,5 +19,4 @@ public interface WifiApplicationComponent extends BaseApplicationComponent {
 
     //Exposed to sub-graphs.
     NetworkDetails networkDetails();
-   // BaseApplication.EventBus eventBus();
 }
