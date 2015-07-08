@@ -10,6 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Inject;
+
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
@@ -26,7 +28,8 @@ public class LightNetworkTest extends WifiLightTest {
     static final String TEST_ID = "12345abcde";
     static final String TEST_ID2 = "absde12345";
 
-    private LightNetwork testNetwork;
+    @Inject
+    LightNetwork testNetwork;
 
     private final Object lightSyncObject = new Object();
 

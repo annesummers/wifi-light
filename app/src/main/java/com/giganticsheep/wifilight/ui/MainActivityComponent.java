@@ -13,7 +13,7 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {WifiLightAppComponent.class},
-        modules = { MainActivityModule.class})
+        modules = { MainActivityModule.class })
 public interface MainActivityComponent extends LightFragment.Injector {
 
     void inject(MainActivity activity);

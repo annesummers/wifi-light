@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight;
 
-import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.giganticsheep.wifilight.api.network.NetworkModule;
+import com.giganticsheep.wifilight.di.ApplicationScope;
 
 import dagger.Component;
 
@@ -13,8 +13,9 @@ import dagger.Component;
 @ApplicationScope
 @Component(modules = { WifiLightAppModule.class,
                         SchedulersModule.class,
+                        NetworkDetailsModule.class,
                         NetworkModule.class} )
-public interface WifiLightAppComponent extends SchedulersGraph {
+public interface WifiLightAppComponent extends NetworkDetailsGraph {
 
     final class Initializer {
         static WifiLightAppComponent init(WifiLightApplication app) {

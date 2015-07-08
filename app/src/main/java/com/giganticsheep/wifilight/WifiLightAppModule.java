@@ -46,17 +46,4 @@ public class WifiLightAppModule {
     BaseApplication.FragmentFactory provideFragmentFactory() {
         return application.createFragmentFactory();
     }
-
-    @Provides
-    @ApplicationScope
-    NetworkDetails provideNetworkDetails(WifiLightApplication application) {
-        return application.getNetworkDetails();
-    }
-
-    @Provides
-    @ApplicationScope
-    @ServerURL
-    String provideServerURL(WifiLightApplication application) {
-        return application.getServerURL();
-    }
 }

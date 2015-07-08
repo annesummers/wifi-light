@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import com.giganticsheep.wifilight.api.network.BaseNetworkModule;
+import com.giganticsheep.wifilight.api.network.LightService;
 import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.giganticsheep.wifilight.di.ServerURL;
 
@@ -16,21 +18,10 @@ import retrofit.RestAdapter;
 
 @Module( includes = BaseNetworkModule.class )
 public class NetworkModule {
-   // private final String serverURL = "https://api.lifx.com";
 
-    /*public NetworkModule(String serverURL) {
-        this.serverURL = serverURL;
-    }
-*/
     @Provides
     @ApplicationScope
     LightService provideService(RestAdapter restAdapter) {
         return restAdapter.create(LightService.class);
-    }
-
-    @Provides
-    @ApplicationScope
-    Endpoint provideEndpoint(@ServerURL String serverURL) {
-        return Endpoints.newFixedEndpoint(serverURL);
     }
 }
