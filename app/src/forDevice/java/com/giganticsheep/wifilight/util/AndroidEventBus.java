@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight;
+package com.giganticsheep.wifilight.util;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.squareup.otto.Bus;

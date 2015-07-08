@@ -9,6 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit.Endpoint;
 import retrofit.Endpoints;
+import retrofit.MockRestAdapter;
 import retrofit.RestAdapter;
 
 /**
@@ -22,6 +23,8 @@ public class NetworkModule {
     @Provides
     @ApplicationScope
     LightService provideService(RestAdapter restAdapter) {
-        return restAdapter.create(LightService.class);
+        MockRestAdapter mockRestAdapter = MockRestAdapter.from(restAdapter);
+        mockRestAdapter.setErrorPercentage(20);
+        return mockRestAdapter.create(LightService.class, new MockLightService());
     }
 }

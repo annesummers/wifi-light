@@ -8,24 +8,25 @@ import com.giganticsheep.wifilight.di.ApplicationScope;
 import dagger.Component;
 
 /**
- * Created by anne on 28/06/15.
+ * Created by anne on 08/07/15.
  * (*_*)
  */
-
 @ApplicationScope
 @Component(modules = { WifiLightModule.class,
-                        SchedulersModule.class,
-                        NetworkDetailsModule.class,
-                        NetworkModule.class} )
-public interface WifiLightAppComponent extends NetworkDetailsGraph {
+                    SchedulersModule.class,
+                    NetworkDetailsModule.class,
+                    NetworkModule.class} )
+public interface WifiLightTestComponent extends NetworkDetailsGraph {
 
-    final class Initializer {
-        static WifiLightAppComponent init(WifiLightApplication app) {
-            return DaggerWifiLightAppComponent.builder()
-                    .wifiLightModule(new WifiLightModule(app))
+    void inject(WifiLightTest wifiLightTest);
+
+   /* final class Initializer {
+        static WifiLightTestComponent init() {
+            return DaggerWifiLightTestComponent.builder()
+                    .wifiLightModule(new WifiLightModule())
                     .build();
         }
 
         private Initializer() {} // No instances.
-    }
+    }*/
 }

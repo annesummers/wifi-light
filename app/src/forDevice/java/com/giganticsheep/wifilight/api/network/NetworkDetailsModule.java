@@ -1,5 +1,7 @@
-package com.giganticsheep.wifilight;
+package com.giganticsheep.wifilight.api.network;
 
+import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.WifiLightModule;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.giganticsheep.wifilight.di.ServerURL;
@@ -12,7 +14,7 @@ import dagger.Provides;
  * (*_*)
  */
 
-@Module(includes = WifiLightAppModule.class)
+@Module(includes = WifiLightModule.class)
 public class NetworkDetailsModule {
 
     @Provides

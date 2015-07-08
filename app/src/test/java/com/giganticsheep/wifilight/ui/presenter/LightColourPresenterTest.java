@@ -1,11 +1,10 @@
 package com.giganticsheep.wifilight.ui.presenter;
 
-import com.giganticsheep.wifilight.TestConstants;
-import com.giganticsheep.wifilight.TestEventBus;
+import com.giganticsheep.wifilight.util.TestConstants;
+import com.giganticsheep.wifilight.util.TestEventBus;
 import com.giganticsheep.wifilight.WifiLightTest;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.model.TestLightNetwork;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.EventBus;
@@ -26,14 +25,14 @@ public class LightColourPresenterTest extends WifiLightTest {
 
     @Before
     public void setUp() throws Exception {
-        NetworkDetails networkDetails = new NetworkDetails(TestLightNetwork.DEFAULT_API_KEY,
+       /* NetworkDetails networkDetails = new NetworkDetails(TestLightNetwork.DEFAULT_API_KEY,
                 TestLightNetwork.DEFAULT_SERVER_STRING,
                 TestLightNetwork.DEFAULT_URL_STRING1,
                 TestLightNetwork.DEFAULT_URL_STRING2);
 
         EventBus eventBus = new TestEventBus();
         LightNetwork lightNetwork = new TestLightNetwork(networkDetails, eventBus, baseLogger, this);
-
+*/
         presenter = new LightColourPresenter(lightNetwork, eventBus);
 
         view = new LightView() {

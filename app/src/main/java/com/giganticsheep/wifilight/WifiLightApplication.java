@@ -41,14 +41,14 @@ public class WifiLightApplication extends BaseApplication implements HasComponen
         return component;
     }
 
-    NetworkDetails getNetworkDetails() {
+    public NetworkDetails getNetworkDetails() {
         return new NetworkDetails(
                 getResources().getString(R.string.DEFAULT_API_KEY),
                 DEFAULT_URL_STRING1,
                 DEFAULT_URL_STRING2);
     }
 
-    String getServerURL() {
+    public String getServerURL() {
         return DEFAULT_SERVER_STRING;
     }
 

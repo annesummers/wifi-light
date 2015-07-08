@@ -1,11 +1,11 @@
 package com.giganticsheep.wifilight;
 
 import com.giganticsheep.wifilight.di.ApplicationScope;
-import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.di.ServerURL;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;
+import com.giganticsheep.wifilight.util.AndroidEventBus;
+import com.giganticsheep.wifilight.util.ApplicationLogger;
 
 import dagger.Module;
 import dagger.Provides;
@@ -16,10 +16,10 @@ import dagger.Provides;
  */
 
 @Module//(includes = BaseAppModule.class)
-public class WifiLightAppModule {
+public class WifiLightModule {
     protected final WifiLightApplication application;
 
-    public WifiLightAppModule(WifiLightApplication application) {
+    public WifiLightModule(WifiLightApplication application) {
         this.application = application;
     }
 

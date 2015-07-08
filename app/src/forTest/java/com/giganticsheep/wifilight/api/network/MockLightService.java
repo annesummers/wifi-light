@@ -1,7 +1,8 @@
-package com.giganticsheep.wifilight.api.model;
+package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.WifiLightTest;
-import com.giganticsheep.wifilight.api.network.LightService;
+import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.model.StatusResponse;
+import com.giganticsheep.wifilight.util.TestConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,6 @@ import rx.Subscriber;
  */
 class MockLightService implements LightService {
 
-    private final WifiLightTest test;
-
-    MockLightService(WifiLightTest test) {
-        this.test = test;
-    }
-
     @Override
     public Observable<List<Light>> listLights(@Path("url1") String url1,
                                               @Path("url2") String url2,
@@ -35,11 +30,9 @@ class MockLightService implements LightService {
             @Override
             public void call(Subscriber<? super List<Light>> subscriber) {
                 List<Light> lights = new ArrayList<>();
-                Light light = new Light(LightNetworkTest.TEST_ID);
+                Light light = new Light(TestConstants.TEST_ID);
                 lights.add(light);
-                lights.add(new Light(LightNetworkTest.TEST_ID2));
-
-                test.signal();
+                lights.add(new Light(TestConstants.TEST_ID2));
 
                 subscriber.onNext(lights);
                 subscriber.onCompleted();

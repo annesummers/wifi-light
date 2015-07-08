@@ -103,6 +103,8 @@ dependencies {
     compile 'com.hannesdorfmann.mosby:viewstate:1.1.0'
     compile 'com.hannesdorfmann.mosby:rx:1.1.0'
 
+    compile 'com.squareup.retrofit:retrofit-mock:1.9.0'
+
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.retrofit:retrofit-mock:1.9.0'
     testCompile('org.robolectric:robolectric:3.0-rc3') {

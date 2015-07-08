@@ -1,5 +1,6 @@
-package com.giganticsheep.wifilight;
+package com.giganticsheep.wifilight.api.network;
 
+import com.giganticsheep.wifilight.SchedulersGraph;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.di.ServerURL;
 

@@ -1,10 +1,9 @@
 package com.giganticsheep.wifilight.api.model;
 
-import com.giganticsheep.wifilight.TestEventBus;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.WifiLightTest;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.api.network.NetworkDetails;
+import com.giganticsheep.wifilight.util.TestConstants;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,37 +22,12 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * (*_*)
  */
 public class LightNetworkTest extends WifiLightTest {
-    private static final float DEFAULT_DURATION = 1.0F;
 
-    static final String TEST_ID = "12345abcde";
-    static final String TEST_ID2 = "absde12345";
-
-    @Inject
-    LightNetwork testNetwork;
-
-    private final Object lightSyncObject = new Object();
+    @Inject LightNetwork testNetwork;
 
     @Before
     public void setUp() throws Exception {
-        NetworkDetails networkDetails = new NetworkDetails(
-                TestLightNetwork.DEFAULT_API_KEY,
-                TestLightNetwork.DEFAULT_URL_STRING1,
-                TestLightNetwork.DEFAULT_URL_STRING2);
 
-        testNetwork = new TestLightNetwork(networkDetails,
-                new TestEventBus(),
-                baseLogger,
-                this);
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
     }
 
     @After
@@ -64,7 +38,6 @@ public class LightNetworkTest extends WifiLightTest {
     @Test
     public void testFetchLights() throws Exception {
         testNetwork.fetchLights(true)
-                .subscribeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<Light>() {
                     @Override
                     public void onCompleted() { }
@@ -76,12 +49,11 @@ public class LightNetworkTest extends WifiLightTest {
                     public void onNext(Light light) {
                     }
                 });
-
     }
 
     @Test
     public void testFetchLight() throws Exception {
-        testNetwork.fetchLight(TEST_ID)
+        testNetwork.fetchLight(TestConstants.TEST_ID)
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<Light>() {
                     @Override
@@ -92,26 +64,14 @@ public class LightNetworkTest extends WifiLightTest {
 
                     @Override
                     public void onNext(Light light) {
-                        assertThat(light.id(), equalTo(TEST_ID));
+                        assertThat(light.id(), equalTo(TestConstants.TEST_ID));
                     }
                 });
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
-
     }
 
     @Test
     public void testSetHue() throws Exception {
-        testNetwork.setHue(300, DEFAULT_DURATION)
-                .subscribeOn(Schedulers.immediate())
+        testNetwork.setHue(300, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -122,22 +82,11 @@ public class LightNetworkTest extends WifiLightTest {
                     @Override
                     public void onNext(StatusResponse statusResponse) { }
                 });
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
     }
 
     @Test
     public void testSetSaturation() throws Exception {
-        testNetwork.setSaturation(100, DEFAULT_DURATION)
-                .subscribeOn(Schedulers.immediate())
+        testNetwork.setSaturation(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -148,22 +97,11 @@ public class LightNetworkTest extends WifiLightTest {
                     @Override
                     public void onNext(StatusResponse statusResponse) { }
                 });
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
     }
 
     @Test
     public void testSetBrightness() throws Exception {
-        testNetwork.setBrightness(100, DEFAULT_DURATION)
-                .subscribeOn(Schedulers.immediate())
+        testNetwork.setBrightness(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -174,22 +112,11 @@ public class LightNetworkTest extends WifiLightTest {
                     @Override
                     public void onNext(StatusResponse statusResponse) { }
                 });
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
     }
 
     @Test
     public void testSetKelvin() throws Exception {
-        testNetwork.setKelvin(3000, DEFAULT_DURATION)
-                .subscribeOn(Schedulers.immediate())
+        testNetwork.setKelvin(3000, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -200,22 +127,11 @@ public class LightNetworkTest extends WifiLightTest {
                     @Override
                     public void onNext(StatusResponse statusResponse) { }
                 });
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
     }
 
     @Test
     public void testToggleLights() throws Exception {
         testNetwork.togglePower()
-                .subscribeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -226,22 +142,11 @@ public class LightNetworkTest extends WifiLightTest {
                     @Override
                     public void onNext(StatusResponse statusResponse) { }
                 });
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
     }
 
     @Test
     public void testSetPower() throws Exception {
-        testNetwork.setPower(ModelConstants.Power.ON, DEFAULT_DURATION)
-                .subscribeOn(Schedulers.immediate())
+        testNetwork.setPower(ModelConstants.Power.ON, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -252,16 +157,5 @@ public class LightNetworkTest extends WifiLightTest {
                     @Override
                     public void onNext(StatusResponse statusResponse) { }
                 });
-
-        do {
-            synchronized (lightSyncObject) {
-                try {
-                    lightSyncObject.wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while(!isSignalled());
     }
-
 }
