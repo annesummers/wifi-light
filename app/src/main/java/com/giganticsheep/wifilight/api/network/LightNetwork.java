@@ -5,12 +5,9 @@ import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
-import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.giganticsheep.wifilight.di.IOScheduler;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.di.UIScheduler;
-import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +16,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import retrofit.Endpoint;
-import retrofit.Endpoints;
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
-import retrofit.converter.GsonConverter;
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
@@ -36,7 +28,7 @@ import rx.functions.Func1;
  * (*_*)
  */
 
-public class LightNetwork {// implements HasComponent<NetworkComponent> {
+public class LightNetwork {
 
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger;
@@ -84,7 +76,6 @@ public class LightNetwork {// implements HasComponent<NetworkComponent> {
         logger = new Logger("LightNetwork", baseLogger);
 
         fetchLights(true)
-                .subscribeOn(ioScheduler)
                 .subscribe(errorSubscriber);
     }
 
@@ -186,6 +177,8 @@ public class LightNetwork {// implements HasComponent<NetworkComponent> {
                                     .subscribe(errorSubscriber);
                         }
                     })
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler)
                     .cache();
         }
 
@@ -245,10 +238,11 @@ public class LightNetwork {// implements HasComponent<NetworkComponent> {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                //.subscribeOn(Schedulers.io())
                                 .subscribe(errorSubscriber);
                     }
-                });
+                })
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     private Observable<StatusResponse> doToggleLights() {
@@ -280,10 +274,11 @@ public class LightNetwork {// implements HasComponent<NetworkComponent> {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                //.subscribeOn(Schedulers.io())
                                 .subscribe(errorSubscriber);
                     }
-                });
+                })
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     private Observable<StatusResponse> doSetPower(final String powerQuery, final String durationQuery) {
@@ -320,10 +315,11 @@ public class LightNetwork {// implements HasComponent<NetworkComponent> {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                //.subscribeOn(Schedulers.io())
                                 .subscribe(errorSubscriber);
                     }
-                });
+                })
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     private String authorisation() {

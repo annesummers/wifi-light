@@ -58,8 +58,6 @@ public class LightColourPresenter extends LightPresenter {
 
     private void setColour(Observable<StatusResponse> observable) {
         observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -83,8 +81,6 @@ public class LightColourPresenter extends LightPresenter {
      */
     public void setPower(final ModelConstants.Power power, final float duration) {
         lightNetwork.setPower(power, duration)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<StatusResponse>() {
             @Override
             public void onCompleted() { }

@@ -30,8 +30,6 @@ public abstract class LightPresenter extends MvpBasePresenter<LightView> {
         }
 
         lightNetwork.fetchLight(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Light>() {
                     @Override
                     public void onCompleted() {
