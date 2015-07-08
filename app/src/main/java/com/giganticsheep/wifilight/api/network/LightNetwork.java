@@ -5,9 +5,11 @@ import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
+import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.giganticsheep.wifilight.di.IOScheduler;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.di.UIScheduler;
+import com.giganticsheep.wifilight.ui.ActivityScope;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ import rx.functions.Func1;
  * (*_*)
  */
 
+@ActivityScope
 public class LightNetwork {
 
     @SuppressWarnings("FieldNotUsedInToString")
