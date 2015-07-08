@@ -57,8 +57,6 @@ public abstract class BaseActivity extends MosbyActivity {
 
         logger = new Logger(getClass().getName(), baseLogger);
 
-     //   mainThreadHandler = new Handler(Looper.getMainLooper());
-
         if(savedInstanceState != null) {
             // TODO can we get Icepick to handle this?
             Parcelable[] fragments = savedInstanceState.getParcelableArray(ATTACHED_FRAGMENTS_EXTRA);
@@ -84,11 +82,6 @@ public abstract class BaseActivity extends MosbyActivity {
             }
         }
     }
-
-   /* @Override
-    protected void injectDependencies() {
-        getWifiLightApplication().getComponent().inject(this);
-    }*/
 
     @Override
     public final void onSaveInstanceState(final Bundle outState) {
@@ -274,21 +267,9 @@ public abstract class BaseActivity extends MosbyActivity {
         return (WifiLightApplication)getApplication();
     }
 
-    //protected BaseActivityModule getBaseActivityModule() {
-     //   return new BaseActivityModule(this);
-    //}
-
     // abstract methods
 
     protected abstract ActivityLayout createActivityLayout();
 
     protected abstract boolean reinitialiseOnRotate();
-
-    /**
-     * Must be implemented by derived activities. Injection must be performed here.
-     * Otherwise IllegalStateException will be thrown. Derived activity is
-     * responsible to create and store it's component.
-     * @param appComponent application level component
-     */
-    //protected abstract void onCreateComponent(WifiLightAppComponent appComponent);
 }

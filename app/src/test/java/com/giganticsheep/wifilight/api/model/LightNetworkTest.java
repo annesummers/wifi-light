@@ -32,8 +32,8 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Before
     public void setUp() throws Exception {
-        NetworkDetails networkDetails = new NetworkDetails(TestLightNetwork.DEFAULT_API_KEY,
-                TestLightNetwork.DEFAULT_SERVER_STRING,
+        NetworkDetails networkDetails = new NetworkDetails(
+                TestLightNetwork.DEFAULT_API_KEY,
                 TestLightNetwork.DEFAULT_URL_STRING1,
                 TestLightNetwork.DEFAULT_URL_STRING2);
 

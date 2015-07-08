@@ -4,6 +4,7 @@ import com.giganticsheep.wifilight.api.network.LightService;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.di.ServerURL;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 import rx.Scheduler;
@@ -23,4 +24,7 @@ public interface WifiLightGraph {
     LightService lightService();
 
     NetworkDetails networkDetails();
+
+    @ServerURL
+    String serverURL();
 }

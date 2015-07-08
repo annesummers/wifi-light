@@ -4,6 +4,7 @@ import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.di.ServerURL;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 import dagger.Module;
@@ -50,5 +51,12 @@ public class WifiLightAppModule {
     @ApplicationScope
     NetworkDetails provideNetworkDetails(WifiLightApplication application) {
         return application.getNetworkDetails();
+    }
+
+    @Provides
+    @ApplicationScope
+    @ServerURL
+    String provideServerURL(WifiLightApplication application) {
+        return application.getServerURL();
     }
 }

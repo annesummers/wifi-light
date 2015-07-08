@@ -22,24 +22,13 @@ public class WifiLightApplication extends BaseApplication implements HasComponen
     @NonNls private static final String DEFAULT_URL_STRING1 = "v1beta1";
     @NonNls private static final String DEFAULT_URL_STRING2 = "lights";
 
-    private NetworkDetails networkDetails;
-    private WifiLightAppComponent wifiLightAppComponent;
+    private WifiLightAppComponent component;
 
     @Override
     public final void onCreate() {
         super.onCreate();
 
-        networkDetails = new NetworkDetails(
-                getResources().getString(R.string.DEFAULT_API_KEY),
-                DEFAULT_SERVER_STRING,
-                DEFAULT_URL_STRING1,
-                DEFAULT_URL_STRING2);
-
         buildComponentAndInject();
-    }
-
-    public NetworkDetails getNetworkDetails() {
-        return networkDetails;
     }
 
     @Override
@@ -47,13 +36,25 @@ public class WifiLightApplication extends BaseApplication implements HasComponen
         return new FragmentFactoryImpl();
     }
 
-    public void buildComponentAndInject() {
-        wifiLightAppComponent = WifiLightAppComponent.Initializer.init(this);
-        wifiLightAppComponent.inject(this);
+    @Override
+    public WifiLightAppComponent getComponent() {
+        return component;
     }
 
-    public WifiLightAppComponent getComponent() {
-        return wifiLightAppComponent;
+    NetworkDetails getNetworkDetails() {
+        return new NetworkDetails(
+                getResources().getString(R.string.DEFAULT_API_KEY),
+                DEFAULT_URL_STRING1,
+                DEFAULT_URL_STRING2);
+    }
+
+    String getServerURL() {
+        return DEFAULT_SERVER_STRING;
+    }
+
+    private void buildComponentAndInject() {
+        component = WifiLightAppComponent.Initializer.init(this);
+        component.inject(this);
     }
 
     private class FragmentFactoryImpl implements FragmentFactory {
