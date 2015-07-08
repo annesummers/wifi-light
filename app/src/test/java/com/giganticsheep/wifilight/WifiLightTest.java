@@ -19,14 +19,19 @@ public class WifiLightTest {
     }
 
     public synchronized void signal() {
+        logger.info(Thread.currentThread().getId() + " signal");
         signal = true;
     }
 
     public synchronized boolean isSignalled() {
+        if(signal) {
+            logger.info(Thread.currentThread().getId() + " signal == " + (signal ? "true" : "false"));
+        }
         return signal;
     }
 
     public synchronized void reset() {
+        logger.info(Thread.currentThread().getId() + " reset");
         signal = false;
     }
 }

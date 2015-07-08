@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight.ui.presenter;
 
-import com.giganticsheep.wifilight.AndroidEventBus;
 import com.giganticsheep.wifilight.TestConstants;
 import com.giganticsheep.wifilight.TestEventBus;
 import com.giganticsheep.wifilight.WifiLightTest;
@@ -15,8 +14,6 @@ import com.giganticsheep.wifilight.ui.view.LightView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by anne on 30/06/15.

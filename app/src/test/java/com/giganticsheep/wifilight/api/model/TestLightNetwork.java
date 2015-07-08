@@ -1,8 +1,5 @@
 package com.giganticsheep.wifilight.api.model;
 
-import com.giganticsheep.wifilight.AndroidEventBus;
-import com.giganticsheep.wifilight.BaseTest;
-import com.giganticsheep.wifilight.TestEventBus;
 import com.giganticsheep.wifilight.WifiLightTest;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.api.network.LightService;
@@ -16,6 +13,7 @@ import retrofit.ErrorHandler;
 import retrofit.MockRestAdapter;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 30/06/15.
@@ -41,24 +39,20 @@ public class TestLightNetwork extends LightNetwork {
                             EventBus eventBus,
                             BaseLogger baseLogger,
                             WifiLightTest test) {
-        super(networkDetails, eventBus, baseLogger);
+        super(networkDetails, new MockLightService(test), eventBus, baseLogger, Schedulers.immediate());
 
         this.test = test;
     }
 
-    /**
-     * @return
-     */
-    @Override
+    // TODO mockrestadapter stuff
+
+ /*   @Override
     protected LightService createLightService() {
         mockRestAdapter = MockRestAdapter.from(createRestAdapter());
         mockRestAdapter.setErrorPercentage(20);
         return mockRestAdapter.create(LightService.class, new MockLightService(test));
     }
 
-    /**
-     * @return
-     */
     @Override
     protected RestAdapter createRestAdapter() {
         return new RestAdapter.Builder()
@@ -73,5 +67,5 @@ public class TestLightNetwork extends LightNetwork {
                     }
                 })
                 .build();
-    }
+    }*/
 }

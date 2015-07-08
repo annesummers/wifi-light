@@ -19,10 +19,6 @@ import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.di.HasComponent;
-import com.giganticsheep.wifilight.di.components.DaggerMainActivityComponent;
-import com.giganticsheep.wifilight.di.components.MainActivityComponent;
-import com.giganticsheep.wifilight.di.components.WifiApplicationComponent;
-import com.giganticsheep.wifilight.di.modules.MainActivityModule;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.BaseActivity;
@@ -45,9 +41,9 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     @InjectView(R.id.error_view) ImageView errorImageView;
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
 
-    private MainActivityComponent mainActivityComponent;
+    private MainActivityComponent component;
 
-    @Inject NetworkDetails networkDetails;
+   // @Inject NetworkDetails networkDetails;
 
     private String currentLight;
     private List<String> lightIds = new ArrayList<>();
@@ -115,16 +111,18 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
 
         WifiLightApplication application = ((WifiLightApplication)getApplication());
 
-        mainActivityComponent = DaggerMainActivityComponent.builder()
-                .wifiApplicationComponent((WifiApplicationComponent) application.getApplicationComponent())
-                .baseActivityModule(getBaseActivityModule())
+        component = DaggerMainActivityComponent.builder()
+                .wifiLightAppComponent(application.getComponent())
+                //.baseActivityModule(getBaseActivityModule())
                 .mainActivityModule(new MainActivityModule())
                 .build();
+
+        component.inject(this);
     }
 
     @Override
     public MainActivityComponent getComponent() {
-        return mainActivityComponent;
+        return component;
     }
 
     @Override

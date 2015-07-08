@@ -14,7 +14,6 @@ import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
-import retrofit.http.QueryMap;
 import rx.Observable;
 
 /**

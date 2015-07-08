@@ -1,11 +1,7 @@
 package com.giganticsheep.wifilight;
 
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.di.components.BaseApplicationComponent;
-import com.giganticsheep.wifilight.di.components.DaggerWifiApplicationComponent;
-import com.giganticsheep.wifilight.di.components.WifiApplicationComponent;
-import com.giganticsheep.wifilight.di.modules.BaseApplicationModule;
-import com.giganticsheep.wifilight.di.modules.WifiApplicationModule;
+import com.giganticsheep.wifilight.di.HasComponent;
 import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
@@ -20,7 +16,7 @@ import rx.Observable;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class WifiLightApplication extends BaseApplication {
+public class WifiLightApplication extends BaseApplication implements HasComponent<WifiLightAppComponent> {
 
     @NonNls private static final String DEFAULT_API_KEY = "c5e3c4b06448baa75d3a849b7cdb70930e4b95e9e7160a4415c49bf03ffa45f8";
     @NonNls private static final String DEFAULT_SERVER_STRING = "https://api.lifx.com";
@@ -28,7 +24,7 @@ public class WifiLightApplication extends BaseApplication {
     @NonNls private static final String DEFAULT_URL_STRING2 = "lights";
 
     private NetworkDetails networkDetails;
-    private WifiApplicationComponent wifiApplicationComponent;
+    private WifiLightAppComponent wifiLightAppComponent;
 
     @Override
     public final void onCreate() {
@@ -39,6 +35,8 @@ public class WifiLightApplication extends BaseApplication {
         DEFAULT_SERVER_STRING,
                 DEFAULT_URL_STRING1,
                 DEFAULT_URL_STRING2);
+
+        buildComponentAndInject();
     }
 
     public NetworkDetails getNetworkDetails() {
@@ -50,14 +48,27 @@ public class WifiLightApplication extends BaseApplication {
         return new FragmentFactoryImpl();
     }
 
-    @Override
-    protected BaseApplicationComponent createApplicationComponent() {
-        return DaggerWifiApplicationComponent
-                .builder()
-                .baseApplicationModule(new BaseApplicationModule(this))
-                .wifiApplicationModule(new WifiApplicationModule())
-                .build();
+    public void buildComponentAndInject() {
+        wifiLightAppComponent = WifiLightAppComponent.Initializer.init(this);
+        wifiLightAppComponent.inject(this);
     }
+
+    public WifiLightAppComponent getComponent() {
+        return wifiLightAppComponent;
+    }
+
+    /*public static WifiLightAppComponent get(Context context) {
+        return (WifiLightAppComponent) context.getApplicationContext();
+    }*/
+
+   /* @Override
+    protected BaseApplicationComponent createApplicationComponent() {
+        return DaggerWifiLightAppComponent
+                .builder()
+                .baseApplicationModule(new BaseAppModule(this))
+                .wifiApplicationModule(new WifiLightAppModule())
+                .build();
+    }*/
 
     private class FragmentFactoryImpl implements FragmentFactory {
         /**

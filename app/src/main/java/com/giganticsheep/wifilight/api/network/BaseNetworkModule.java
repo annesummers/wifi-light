@@ -1,6 +1,6 @@
-package com.giganticsheep.wifilight.di.modules;
+package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.di.Network;
+import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -20,7 +20,7 @@ import retrofit.converter.GsonConverter;
 public class BaseNetworkModule {
 
     @Provides
-    @Network
+    @ApplicationScope
     RestAdapter provideRestAdapter(Endpoint endpoint,
                                    OkHttpClient client,
                                    Gson gson) {
@@ -33,13 +33,13 @@ public class BaseNetworkModule {
     }
 
     @Provides
-    @Network
+    @ApplicationScope
     OkHttpClient provideOkHttpClient() {
         return new OkHttpClient();
     }
 
     @Provides
-    @Network
+    @ApplicationScope
     Gson provideGson() {
         return new GsonBuilder()
                 .create();

@@ -39,10 +39,10 @@ class MockLightService implements LightService {
                 lights.add(light);
                 lights.add(new Light(LightNetworkTest.TEST_ID2));
 
+                test.signal();
+
                 subscriber.onNext(lights);
                 subscriber.onCompleted();
-
-                test.signal();
             }
         });
     }

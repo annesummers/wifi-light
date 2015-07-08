@@ -3,18 +3,15 @@ package com.giganticsheep.wifilight.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,8 +20,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
-
-import java_cup.Main;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;

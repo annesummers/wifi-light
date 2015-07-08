@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.BaseLogger;
-import com.giganticsheep.wifilight.di.modules.BaseActivityModule;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.hannesdorfmann.mosby.MosbyActivity;
@@ -86,10 +85,10 @@ public abstract class BaseActivity extends MosbyActivity {
         }
     }
 
-    @Override
+   /* @Override
     protected void injectDependencies() {
-        getWifiLightApplication().getApplicationComponent().inject(this);
-    }
+        getWifiLightApplication().getComponent().inject(this);
+    }*/
 
     @Override
     public final void onSaveInstanceState(final Bundle outState) {
@@ -275,9 +274,9 @@ public abstract class BaseActivity extends MosbyActivity {
         return (WifiLightApplication)getApplication();
     }
 
-    protected BaseActivityModule getBaseActivityModule() {
-        return new BaseActivityModule(this);
-    }
+    //protected BaseActivityModule getBaseActivityModule() {
+     //   return new BaseActivityModule(this);
+    //}
 
     // abstract methods
 
@@ -285,4 +284,11 @@ public abstract class BaseActivity extends MosbyActivity {
 
     protected abstract boolean reinitialiseOnRotate();
 
+    /**
+     * Must be implemented by derived activities. Injection must be performed here.
+     * Otherwise IllegalStateException will be thrown. Derived activity is
+     * responsible to create and store it's component.
+     * @param appComponent application level component
+     */
+    //protected abstract void onCreateComponent(WifiLightAppComponent appComponent);
 }

@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.di;
 
 import java.lang.annotation.Retention;
 
-import javax.inject.Scope;
+import javax.inject.Qualifier;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -11,7 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * (*_*)
  */
 
-@Scope
+@Qualifier
 @Retention(RUNTIME)
 public @interface UIScheduler {
 }

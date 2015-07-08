@@ -1,28 +1,15 @@
 package com.giganticsheep.wifilight.api.model;
 
-import com.giganticsheep.wifilight.AndroidEventBus;
 import com.giganticsheep.wifilight.TestEventBus;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.WifiLightTest;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.api.network.LightService;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 
-import org.jetbrains.annotations.NonNls;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import retrofit.MockRestAdapter;
-import retrofit.http.Body;
-import retrofit.http.FieldMap;
-import retrofit.http.Header;
-import retrofit.http.Path;
-import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 

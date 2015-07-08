@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight;
 
-import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.squareup.otto.Bus;
 

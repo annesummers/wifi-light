@@ -2,30 +2,28 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.app.Application;
 
-import com.giganticsheep.wifilight.di.components.BaseApplicationComponent;
-
 import rx.Observable;
 
 /**
  * Created by anne on 22/06/15.
  */
 public abstract class BaseApplication extends Application {
-    private BaseApplicationComponent baseApplicationComponent;
+   // private BaseApplicationComponent baseApplicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        baseApplicationComponent = createApplicationComponent();
+       //baseApplicationComponent = createApplicationComponent();
     }
 
-    public BaseApplicationComponent getApplicationComponent() {
-        return baseApplicationComponent;
-    }
+    //public BaseApplicationComponent getApplicationComponent() {
+   //     return baseApplicationComponent;
+   // }
 
     public abstract FragmentFactory createFragmentFactory();
 
-    protected abstract BaseApplicationComponent createApplicationComponent();
+    //protected abstract BaseApplicationComponent createApplicationComponent();
 
     public interface FragmentFactory {
         Observable<? extends BaseFragment> createFragmentAsync(String name);

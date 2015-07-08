@@ -5,12 +5,10 @@ import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
-import com.giganticsheep.wifilight.di.HasComponent;
-import com.giganticsheep.wifilight.di.PerActivity;
-import com.giganticsheep.wifilight.di.components.DaggerNetworkComponent;
-import com.giganticsheep.wifilight.di.components.NetworkComponent;
-import com.giganticsheep.wifilight.di.modules.NetworkModule;
+import com.giganticsheep.wifilight.di.ApplicationScope;
+import com.giganticsheep.wifilight.di.IOScheduler;
 import com.giganticsheep.wifilight.base.BaseLogger;
+import com.giganticsheep.wifilight.di.UIScheduler;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -27,19 +25,18 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import rx.Observable;
+import rx.Scheduler;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 22/06/15.
  * (*_*)
  */
 
-@PerActivity
-public class LightNetwork implements HasComponent<NetworkComponent> {
+public class LightNetwork {// implements HasComponent<NetworkComponent> {
 
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger;
@@ -51,9 +48,11 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
     private final NetworkDetails networkDetails;
     private final EventBus eventBus;
 
-    private NetworkComponent networkComponent;
+    private final LightService lightService;
 
-    private LightService lightService;
+    private final Scheduler ioScheduler;
+   // private final Scheduler uiScheduler;
+
     private Observable<Light> lightsObservable;
 
     private Subscriber errorSubscriber = new Subscriber() {
@@ -71,27 +70,25 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
 
     @Inject
     public LightNetwork(final NetworkDetails networkDetails,
+                        final LightService lightService,
                         final EventBus eventBus,
-                        final BaseLogger baseLogger) {
+                        final BaseLogger baseLogger,
+                        final Scheduler scheduler) {//},
+                       // @UIScheduler final Scheduler uiScheduler) {
+        this.lightService = lightService;
         this.networkDetails = networkDetails;
         this.eventBus = eventBus;
+        this.ioScheduler = scheduler;
+       // this.uiScheduler = uiScheduler;
 
         logger = new Logger("LightNetwork", baseLogger);
 
-        networkComponent = DaggerNetworkComponent
-                .builder()
-                .networkModule(new NetworkModule(networkDetails.getServerURL()))
-                .build();
-        networkComponent.inject(this);
-
-        lightService = createLightService();
-
         fetchLights(true)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(ioScheduler)
                 .subscribe(errorSubscriber);
     }
 
-    protected LightService createLightService() {
+    /*protected LightService createLightService() {
         return createRestAdapter().create(LightService.class);
     }
 
@@ -106,12 +103,7 @@ public class LightNetwork implements HasComponent<NetworkComponent> {
 
     protected Endpoint createEndpoint() {
         return Endpoints.newFixedEndpoint(networkDetails.getServerURL());
-    }
-
-    @Override
-    public NetworkComponent getComponent() {
-        return networkComponent;
-    }
+    }*/
 
     /**
      * @param hue the hue to set the enabled lights
