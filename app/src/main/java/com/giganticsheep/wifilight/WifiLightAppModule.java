@@ -4,14 +4,10 @@ import com.giganticsheep.wifilight.di.ApplicationScope;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.di.IOScheduler;
-import com.giganticsheep.wifilight.di.UIScheduler;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 import dagger.Module;
 import dagger.Provides;
-import rx.Scheduler;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 28/06/15.
@@ -54,21 +50,5 @@ public class WifiLightAppModule {
     @ApplicationScope
     NetworkDetails provideNetworkDetails(WifiLightApplication application) {
         return application.getNetworkDetails();
-    }
-
-    /*@Provides
-    @UIScheduler
-    @ApplicationScope
-    Scheduler provideUiScheduler() {
-        //return AndroidSchedulers.mainThread();
-        return Schedulers.immediate();
-    }
-*/
-    @Provides
-    //@IOScheduler
-    @ApplicationScope
-    Scheduler provideIoScheduler() {
-        //return Schedulers.immediate();
-        return Schedulers.io();
     }
 }

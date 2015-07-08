@@ -13,6 +13,7 @@ import retrofit.ErrorHandler;
 import retrofit.MockRestAdapter;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -39,7 +40,7 @@ public class TestLightNetwork extends LightNetwork {
                             EventBus eventBus,
                             BaseLogger baseLogger,
                             WifiLightTest test) {
-        super(networkDetails, new MockLightService(test), eventBus, baseLogger, Schedulers.immediate());
+        super(networkDetails, new MockLightService(test), eventBus, baseLogger, Schedulers.immediate(), AndroidSchedulers.mainThread());
 
         this.test = test;
     }

@@ -10,7 +10,6 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     testBuildType "debug"
-
     /*  compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -20,8 +19,8 @@ android {
         applicationId "com.giganticsheep.wifilight"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode manifestVersionNumber()
-        versionName manifestVersionName()
+        versionCode 1
+        versionName "0.0.1"
     }
 
     packagingOptions {
@@ -31,16 +30,29 @@ android {
 
     buildTypes {
         release {
-            resValue("String", "DEFAULT_API_KEY", DUNCAN_API_KEY)
+            resValue("string", "DEFAULT_API_KEY", DUNCAN_API_KEY)
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            resValue("string", "DEFAULT_API_KEY", DUNCAN_API_KEY)
+
+            debuggable true
+        }
+    }
+
+    productFlavors {
+        debugTestConfig {
+            applicationId 'com.giganticsheep.wifilight.test'
+            minSdkVersion 16
+            targetSdkVersion 21
         }
     }
 }
 
 //apply plugin: 'groovy'
-
+/*
 def parseManifest() {
     def manifestFile = file(project.projectDir.absolutePath + '/src/main/AndroidManifest.xml')
     return new XmlParser().parse(manifestFile)
@@ -56,7 +68,7 @@ def manifestVersionName() {
 
 def manifestVersionNumber() {
     return parseManifest().attributes()[getNamespace().versionNumber]
-}
+}*/
 
 /*retrolambda {
     jdk System.getenv("JAVA8_HOME")

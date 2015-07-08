@@ -51,7 +51,7 @@ public class LightNetwork {// implements HasComponent<NetworkComponent> {
     private final LightService lightService;
 
     private final Scheduler ioScheduler;
-   // private final Scheduler uiScheduler;
+    private final Scheduler uiScheduler;
 
     private Observable<Light> lightsObservable;
 
@@ -73,13 +73,13 @@ public class LightNetwork {// implements HasComponent<NetworkComponent> {
                         final LightService lightService,
                         final EventBus eventBus,
                         final BaseLogger baseLogger,
-                        final Scheduler scheduler) {//},
-                       // @UIScheduler final Scheduler uiScheduler) {
+                        @IOScheduler Scheduler scheduler,
+                        @UIScheduler final Scheduler uiScheduler) {
         this.lightService = lightService;
         this.networkDetails = networkDetails;
         this.eventBus = eventBus;
         this.ioScheduler = scheduler;
-       // this.uiScheduler = uiScheduler;
+        this.uiScheduler = uiScheduler;
 
         logger = new Logger("LightNetwork", baseLogger);
 

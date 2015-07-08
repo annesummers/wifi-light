@@ -12,8 +12,9 @@ import dagger.Component;
 
 @ApplicationScope
 @Component(modules = { WifiLightAppModule.class,
+                        SchedulersModule.class,
                         NetworkModule.class} )
-public interface WifiLightAppComponent extends WifiLightGraph {
+public interface WifiLightAppComponent extends SchedulersGraph {
 
     final class Initializer {
         static WifiLightAppComponent init(WifiLightApplication app) {

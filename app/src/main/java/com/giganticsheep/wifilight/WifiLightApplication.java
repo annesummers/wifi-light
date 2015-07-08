@@ -18,7 +18,6 @@ import rx.Observable;
  */
 public class WifiLightApplication extends BaseApplication implements HasComponent<WifiLightAppComponent> {
 
-    @NonNls private static final String DEFAULT_API_KEY = "c5e3c4b06448baa75d3a849b7cdb70930e4b95e9e7160a4415c49bf03ffa45f8";
     @NonNls private static final String DEFAULT_SERVER_STRING = "https://api.lifx.com";
     @NonNls private static final String DEFAULT_URL_STRING1 = "v1beta1";
     @NonNls private static final String DEFAULT_URL_STRING2 = "lights";
@@ -30,9 +29,9 @@ public class WifiLightApplication extends BaseApplication implements HasComponen
     public final void onCreate() {
         super.onCreate();
 
-        // TODO private api key
-        networkDetails = new NetworkDetails(DEFAULT_API_KEY,
-        DEFAULT_SERVER_STRING,
+        networkDetails = new NetworkDetails(
+                getResources().getString(R.string.DEFAULT_API_KEY),
+                DEFAULT_SERVER_STRING,
                 DEFAULT_URL_STRING1,
                 DEFAULT_URL_STRING2);
 
@@ -56,19 +55,6 @@ public class WifiLightApplication extends BaseApplication implements HasComponen
     public WifiLightAppComponent getComponent() {
         return wifiLightAppComponent;
     }
-
-    /*public static WifiLightAppComponent get(Context context) {
-        return (WifiLightAppComponent) context.getApplicationContext();
-    }*/
-
-   /* @Override
-    protected BaseApplicationComponent createApplicationComponent() {
-        return DaggerWifiLightAppComponent
-                .builder()
-                .baseApplicationModule(new BaseAppModule(this))
-                .wifiApplicationModule(new WifiLightAppModule())
-                .build();
-    }*/
 
     private class FragmentFactoryImpl implements FragmentFactory {
         /**

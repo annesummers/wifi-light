@@ -15,14 +15,12 @@ import rx.Scheduler;
 public interface WifiLightGraph {
     void inject(WifiLightApplication application);
 
-    LightService lightService();
-
-    NetworkDetails networkDetails();
-
     WifiLightApplication application();
     BaseLogger baseLogger();
     EventBus eventBus();
     BaseApplication.FragmentFactory fragmentFactory();
 
-    Scheduler iOScheduler();
+    LightService lightService();
+
+    NetworkDetails networkDetails();
 }
