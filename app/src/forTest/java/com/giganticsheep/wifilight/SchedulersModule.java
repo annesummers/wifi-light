@@ -7,7 +7,6 @@ import com.giganticsheep.wifilight.di.UIScheduler;
 import dagger.Module;
 import dagger.Provides;
 import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -22,15 +21,13 @@ public class SchedulersModule {
     @UIScheduler
     @ApplicationScope
     Scheduler provideUIScheduler() {
-        return AndroidSchedulers.mainThread();
-        //return Schedulers.immediate();
+        return Schedulers.immediate();
     }
 
     @Provides
     @IOScheduler
     @ApplicationScope
     Scheduler provideIOScheduler() {
-        //return Schedulers.immediate();
-        return Schedulers.io();
+        return Schedulers.immediate();
     }
 }

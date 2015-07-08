@@ -57,6 +57,7 @@ public class WifiLightApplication extends BaseApplication implements HasComponen
     }
 
     private class FragmentFactoryImpl implements FragmentFactory {
+
         /**
          * @param name the name of the fragment to create
          * @return the Observable to subscribe to
@@ -96,6 +97,5 @@ public class WifiLightApplication extends BaseApplication implements HasComponen
 
             throw new Exception("Fragment does not exist");
         }
-
     }
 }
