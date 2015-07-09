@@ -21,12 +21,12 @@ public abstract class BaseApplication extends Application {
    //     return baseApplicationComponent;
    // }
 
-    public abstract FragmentFactory createFragmentFactory();
+  //  public abstract FragmentFactory createFragmentFactory();
 
     //protected abstract BaseApplicationComponent createApplicationComponent();
 
-    public interface FragmentFactory {
-        Observable<? extends BaseFragment> createFragmentAsync(String name);
-        BaseFragment createFragment(String name) throws Exception;
-    }
+    //public interface FragmentFactory {
+    //    Observable<? extends BaseFragment> createFragmentAsync(String name);
+     //   BaseFragment createFragment(String name) throws Exception;
+    //}
 }

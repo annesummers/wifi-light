@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.base.BaseLogger;
+import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.Logger;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
@@ -65,7 +66,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
      * @return the created Fragment
      * @throws Exception if the name of the fragment doesn't match any in the application
      */
-    public static BaseFragment create(final String name, final BaseApplication.FragmentFactory fragmentFactory) throws Exception {
+    public static BaseFragment create(final String name, final FragmentFactory fragmentFactory) throws Exception {
         return fragmentFactory.createFragment(name);
     }
 

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.BaseLogger;
+import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.hannesdorfmann.mosby.MosbyActivity;
@@ -43,7 +44,7 @@ public abstract class BaseActivity extends MosbyActivity {
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
-    @Inject protected BaseApplication.FragmentFactory fragmentFactory;
+    @Inject protected FragmentFactory fragmentFactory;
     @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
 

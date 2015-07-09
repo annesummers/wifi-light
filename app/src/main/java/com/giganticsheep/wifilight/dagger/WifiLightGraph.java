@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.dagger;
 
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 /**
@@ -12,5 +13,5 @@ public interface WifiLightGraph extends SchedulersGraph {
 
     BaseLogger baseLogger();
     EventBus eventBus();
-    BaseApplication.FragmentFactory fragmentFactory();
+    FragmentFactory fragmentFactory();
 }

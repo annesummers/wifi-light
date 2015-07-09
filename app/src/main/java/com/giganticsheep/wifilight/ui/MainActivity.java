@@ -23,7 +23,6 @@ import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.BaseActivity;
 import com.giganticsheep.wifilight.ui.dagger.DaggerMainActivityComponent;
 import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
-import com.giganticsheep.wifilight.ui.dagger.MainActivityModule;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

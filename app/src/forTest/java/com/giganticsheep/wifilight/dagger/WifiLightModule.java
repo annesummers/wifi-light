@@ -3,9 +3,10 @@ package com.giganticsheep.wifilight.dagger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
+import com.giganticsheep.wifilight.base.FragmentFactory;
+import com.giganticsheep.wifilight.util.AndroidEventBus;
+import com.giganticsheep.wifilight.util.ApplicationLogger;
 import com.giganticsheep.wifilight.util.TestEventBus;
-import com.giganticsheep.wifilight.util.TestFragmentFactory;
 import com.giganticsheep.wifilight.util.TestLogger;
 
 import dagger.Module;
@@ -19,27 +20,45 @@ import dagger.Provides;
 @Module
 public class WifiLightModule {
 
+    private final WifiLightApplication application;
+
     // for the app component
-    public WifiLightModule(WifiLightApplication app) { }
+    public WifiLightModule(WifiLightApplication application) {
+        this.application = application;
+    }
 
     // for the test component
-    public WifiLightModule() { }
+    public WifiLightModule() {
+        application = null;
+    }
 
     @Provides
     @ApplicationScope
     BaseLogger provideBaseLogger() {
-        return new TestLogger("Test");
+        if(application != null) {
+            return new ApplicationLogger(application);
+        } else {
+            return new TestLogger("WifiLight Tests");
+        }
     }
 
     @Provides
     @ApplicationScope
     EventBus provideEventBus() {
-        return new TestEventBus();
+        if(application != null) {
+            return new AndroidEventBus();
+        } else {
+            return new TestEventBus();
+        }
     }
 
     @Provides
     @ApplicationScope
-    BaseApplication.FragmentFactory provideFragmentFactory() {
-        return new TestFragmentFactory();
+    FragmentFactory provideFragmentFactory() {
+        if(application != null) {
+            return new FragmentFactory(application);
+        } else {
+            return null;
+        }
     }
 }

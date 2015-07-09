@@ -22,6 +22,7 @@ public interface WifiLightAppComponent extends WifiLightAppGraph {
     final class Initializer {
         public static WifiLightAppComponent init(WifiLightApplication app) {
             return DaggerWifiLightAppComponent.builder()
+                    .wifiLightModule(new WifiLightModule(app))
                     .wifiLightAppModule(new WifiLightAppModule(app))
                     .build();
         }
