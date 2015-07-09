@@ -11,8 +11,8 @@ import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.ui.MainActivity;
 import com.giganticsheep.wifilight.ui.base.BaseFragment;
-import com.giganticsheep.wifilight.ui.presenter.LightColourPresenter;
-import com.giganticsheep.wifilight.ui.presenter.LightPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.LightColourPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.LightPresenter;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import java.util.HashMap;

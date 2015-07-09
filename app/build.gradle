@@ -41,12 +41,12 @@ android {
     }
 
     productFlavors {
-        forTest {
+        mockNetwork {
             applicationId 'com.giganticsheep.wifilight.test'
             minSdkVersion 16
             targetSdkVersion 21
         }
-        forDevice {
+        production {
             applicationId 'com.giganticsheep.wifilight'
             minSdkVersion 16
             targetSdkVersion 21

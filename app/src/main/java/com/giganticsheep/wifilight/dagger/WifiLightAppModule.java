@@ -14,6 +14,10 @@ import dagger.Provides;
 public class WifiLightAppModule {
     protected final WifiLightApplication application;
 
+    public WifiLightAppModule() {
+        this.application = null;
+    }
+
     public WifiLightAppModule(WifiLightApplication application) {
         this.application = application;
     }

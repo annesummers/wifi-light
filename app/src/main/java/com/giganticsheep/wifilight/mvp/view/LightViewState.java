@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.view;
+package com.giganticsheep.wifilight.mvp.view;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 

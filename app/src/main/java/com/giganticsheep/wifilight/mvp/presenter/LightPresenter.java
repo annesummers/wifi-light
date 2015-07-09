@@ -1,9 +1,9 @@
-package com.giganticsheep.wifilight.ui.presenter;
+package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.view.LightView;
+import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import rx.Subscriber;

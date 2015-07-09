@@ -18,9 +18,10 @@ import dagger.Provides;
 
 @Module(includes = WifiLightAppModule.class)
 public class WifiLightModule {
-  /*  protected final WifiLightApplication application;
-*/
+  
     public WifiLightModule(WifiLightApplication application) { }
+
+    public WifiLightModule() { }
 
     @Provides
     @ApplicationScope

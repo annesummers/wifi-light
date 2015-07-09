@@ -17,7 +17,7 @@ public class Light extends LightResponse implements Serializable {
 
     public String uuid;
     public boolean connected;
-    public String power;
+    public String power = "on";
     public double brightness;
     public String product_name;
     public String last_seen;
@@ -30,6 +30,11 @@ public class Light extends LightResponse implements Serializable {
 
     public Light(String id) {
         super(id);
+
+        color = new ColorData();
+        location = new GroupData();
+        group = new GroupData();
+        capabilities = new CapabilitiesData();
     }
 
     public class ColorData {

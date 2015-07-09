@@ -6,8 +6,8 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.ui.base.BaseFragment;
-import com.giganticsheep.wifilight.ui.presenter.LightDetailsPresenter;
-import com.giganticsheep.wifilight.ui.presenter.LightPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.LightDetailsPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.LightPresenter;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import butterknife.InjectView;

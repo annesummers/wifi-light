@@ -1,10 +1,10 @@
-package com.giganticsheep.wifilight.ui.presenter;
+package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTest;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.view.LightView;
+import com.giganticsheep.wifilight.mvp.view.LightView;
 
 import org.junit.After;
 import org.junit.Before;
