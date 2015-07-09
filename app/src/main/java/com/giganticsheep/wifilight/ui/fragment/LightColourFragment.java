@@ -47,13 +47,10 @@ public class LightColourFragment extends LightFragment {
     @InjectView(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
     @InjectView(R.id.power_toggle) ToggleButton powerToggle;
 
+    private final SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
+
     public LightColourFragment() {
         super();
-    }
-
-    @Override
-    protected boolean reinitialiseOnRotate() {
-        return false;
     }
 
     @Override
@@ -65,8 +62,6 @@ public class LightColourFragment extends LightFragment {
     public LightColourPresenter getPresenter() {
         return (LightColourPresenter) super.getPresenter();
     }
-
-    private final SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
 
     @Override
     protected int getLayoutRes() {
@@ -104,7 +99,12 @@ public class LightColourFragment extends LightFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        getPresenter().fragmentDestroyed();
+        getPresenter().onDestroy();
+    }
+
+    @Override
+    protected boolean reinitialiseOnRotate() {
+        return false;
     }
 
     private class OnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {

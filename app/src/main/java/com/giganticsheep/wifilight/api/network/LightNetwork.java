@@ -175,7 +175,7 @@ public class LightNetwork {
             });
         }
 
-        return Observable.error(new IllegalArgumentException("id cannot be null"));
+        return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
     }
 
     /**

@@ -22,7 +22,7 @@ public class LightColourPresenter extends LightPresenter {
     }
 
     @Override
-    public void fragmentDestroyed() {
+    public void onDestroy() {
         eventBus.unregisterForEvents(this);
     }
 

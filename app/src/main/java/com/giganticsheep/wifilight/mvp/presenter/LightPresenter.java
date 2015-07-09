@@ -12,9 +12,11 @@ import rx.Subscriber;
  * Created by anne on 29/06/15.
  * (*_*)
  */
-public abstract class LightPresenter extends MvpBasePresenter<LightView> {
+public class LightPresenter extends MvpBasePresenter<LightView> {
     protected final EventBus eventBus;
     protected LightNetwork lightNetwork;
+
+    protected LightSubscriber lightSubscriber = new LightSubscriber();
 
     public LightPresenter(LightNetwork lightNetwork,
                           EventBus eventBus) {
@@ -28,33 +30,30 @@ public abstract class LightPresenter extends MvpBasePresenter<LightView> {
         }
 
         lightNetwork.fetchLight(id)
-                .subscribe(new Subscriber<Light>() {
-                    @Override
-                    public void onCompleted() {
-                        if (isViewAttached()) {
-                            getView().showLightDetails();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if(!(e instanceof IllegalArgumentException)) {
-                            if (isViewAttached()) {
-                                getView().showError(e);
-                            }
-                        }
-
-                        // if it is an IllegalArgumentException then it is because
-                        // the id is null which happens when the initial set of lights data
-                        // has not yet been fully received
-                    }
-
-                    @Override
-                    public void onNext(Light light) {
-                        getView().lightChanged(light);
-                    }
-                });
+                .subscribe(lightSubscriber);
     }
 
-    public abstract void fragmentDestroyed();
+    public void onDestroy() { }
+
+    private class LightSubscriber extends Subscriber<Light>  {
+
+        @Override
+        public void onCompleted() {
+            if (isViewAttached()) {
+                getView().showLightDetails();
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (isViewAttached()) {
+                getView().showError(e);
+            }
+        }
+
+        @Override
+        public void onNext(Light light) {
+            getView().lightChanged(light);
+        }
+    }
 }

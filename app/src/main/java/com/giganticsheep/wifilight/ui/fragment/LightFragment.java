@@ -48,7 +48,10 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         if(light != null) {
             setLightDetails();
         } else {
-            getPresenter().fetchLight(getMainActivity().getCurrentLight());
+            String id = getMainActivity().getCurrentLight();
+            if(id != null) {
+                getPresenter().fetchLight(id);
+            }
         }
     }
 
@@ -67,7 +70,7 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         LightViewState vs = (LightViewState) viewState;
         vs.setShowLoading();
 
-        getMainActivity().showLoadingView();
+        getMainActivity().showLoading();
     }
 
     @Override
@@ -75,7 +78,7 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         LightViewState vs = (LightViewState) viewState;
         vs.setShowLightDetails();
 
-        getMainActivity().showLightView();
+        getMainActivity().showLightDetails();
         populateViews();
     }
 
@@ -91,7 +94,7 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         LightViewState vs = (LightViewState) viewState;
         vs.setShowError();
 
-        getMainActivity().showErrorView();
+        getMainActivity().showError();
     }
 
     @Override

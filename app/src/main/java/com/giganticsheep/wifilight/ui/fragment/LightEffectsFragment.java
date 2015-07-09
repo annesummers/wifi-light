@@ -58,7 +58,7 @@ public class LightEffectsFragment extends LightFragment {
     public void onDestroy() {
         super.onDestroy();
 
-        getPresenter().fragmentDestroyed();
+        getPresenter().onDestroy();
     }
 
     @Override

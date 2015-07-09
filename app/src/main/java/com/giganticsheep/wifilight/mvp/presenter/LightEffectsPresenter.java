@@ -15,7 +15,7 @@ public class LightEffectsPresenter extends LightPresenter {
     }
 
     @Override
-    public void fragmentDestroyed() {
+    public void onDestroy() {
         eventBus.unregisterForEvents(this);
     }
 }

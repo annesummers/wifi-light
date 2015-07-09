@@ -16,8 +16,11 @@ import android.widget.ProgressBar;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.dagger.HasComponent;
+import com.giganticsheep.wifilight.mvp.presenter.MainActivityPresenter;
+import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.BaseActivity;
@@ -28,10 +31,14 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.InjectView;
 
 
-public class MainActivity extends BaseActivity implements HasComponent<MainActivityComponent> {
+public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
+                            implements LightView,
+                            HasComponent<MainActivityComponent> {
     // TODO let's have a theme!
 
     public static final float DEFAULT_DURATION = 1.0F;
@@ -41,6 +48,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     @InjectView(R.id.loading_view) ProgressBar loadingProgressBar;
     @InjectView(R.id.error_view) ImageView errorImageView;
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
+
+    @Inject LightNetwork lightNetwork;
 
     private MainActivityComponent component;
 
@@ -104,6 +113,47 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     }
 
     @Override
+    public final boolean onCreateOptionsMenu(final Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public final boolean onOptionsItemSelected(final MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        final int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+
+            case R.id.action_refresh:
+                presenter.fetchLights();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        eventBus.unregisterForEvents(this);
+    }
+
+    @Override
+    protected boolean reinitialiseOnRotate() {
+        return true;
+    }
+
+    // Dagger
+
+    @Override
     protected void injectDependencies() {
         super.injectDependencies();
 
@@ -121,37 +171,27 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         return component;
     }
 
+    // MVP
+
     @Override
-    public final boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public MainActivityPresenter createPresenter() {
+        return new MainActivityPresenter(lightNetwork, eventBus);
     }
 
     @Override
-    public final boolean onOptionsItemSelected(final MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        final int id = item.getItemId();
-
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
-
+    public void showLoading() {
+        errorImageView.setVisibility(View.INVISIBLE);
+        lightLayout.setVisibility(View.VISIBLE);
+        loadingProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected boolean reinitialiseOnRotate() {
-        return true;
+    public void showError() {
+        showError(new Exception("Unknown error"));
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        eventBus.unregisterForEvents(this);
-    }
-
-    public void showErrorView() {
+    public void showError(Throwable throwable) {
         loadingProgressBar.setVisibility(View.INVISIBLE);
         lightLayout.setVisibility(View.INVISIBLE);
         errorImageView.setVisibility(View.VISIBLE);
@@ -159,17 +199,15 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         // TODO maybe show an alert dialog instead?
     }
 
-    public void showLoadingView() {
-        errorImageView.setVisibility(View.INVISIBLE);
-        lightLayout.setVisibility(View.VISIBLE);
-        loadingProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void showLightView() {
+    @Override
+    public void showLightDetails() {
         errorImageView.setVisibility(View.INVISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
         lightLayout.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public void lightChanged(Light light) { }
 
     public String getCurrentLight() {
         return currentLight;
@@ -177,6 +215,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
 
     @Subscribe
     public synchronized void handleFetchLightsSuccess(LightNetwork.FetchLightsSuccessEvent event) {
+        logger.debug("handleFetchLightsSuccess()");
+
         List<String> lightIds = newLightIds;
 
         if(lightIds.size() > 0) {
@@ -188,6 +228,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
 
     @Subscribe
     public synchronized void handleLightDetails(LightNetwork.LightDetailsEvent event) {
+        logger.debug("handleLightDetails() " + event.light().toString());
+
         if(newLightIds == null) {
             newLightIds = new ArrayList<>();
         }

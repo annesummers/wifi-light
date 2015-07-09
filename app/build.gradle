@@ -54,33 +54,6 @@ android {
     }
 }
 
-/*
-def parseManifest() {
-    def manifestFile = file(project.projectDir.absolutePath + '/src/main/AndroidManifest.xml')
-    return new XmlParser().parse(manifestFile)
-}
-
-def getNamespace() {
-    return new groovy.xml.Namespace("http://schemas.android.com/apk/res/android", "android")
-}
-
-def manifestVersionName() {
-    return parseManifest().attributes()[getNamespace().versionName].toString()
-}
-
-def manifestVersionNumber() {
-    return parseManifest().attributes()[getNamespace().versionNumber]
-}*/
-
-/*retrolambda {
-    jdk System.getenv("JAVA8_HOME")
-    oldJdk System.getenv("JAVA6_HOME")
-    javaVersion JavaVersion.VERSION_1_6
-    jvmArgs '-arg1', '-arg2'
-    defaultMethods false
-    incremental true
-}*/
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'

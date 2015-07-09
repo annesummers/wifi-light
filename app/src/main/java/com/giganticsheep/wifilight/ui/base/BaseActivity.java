@@ -4,14 +4,20 @@ import android.content.res.Configuration;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.hannesdorfmann.mosby.MosbyActivity;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
+import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +33,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class BaseActivity extends MosbyActivity {
+public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>> extends MvpActivity<V, P> {
 
     // TODO subscription management
     // TODO refresh
