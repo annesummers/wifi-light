@@ -2,9 +2,17 @@
 <resources>
     <color name="details_text">#EFEFEF</color>
     <color name="details_background">#767676</color>
-    <color name="tab_background">#982198</color>
-    <color name="tab_selected">#984398</color>
+
+    <color name="tab_background">@color/primary_dark</color>
+    <color name="tab_selected">@color/primary</color>
     <color name="tab_text">#EFEFEF</color>
+
     <color name="background">#DEDEDE</color>
     <color name="half_grey">#88898989</color>
+
+    <color name="primary_text">#767676</color>
+
+    <color name="primary">#34ADBF</color>
+    <color name="primary_dark">#438791</color>
+    <color name="primary_accent">#05DBFA</color>
 </resources>

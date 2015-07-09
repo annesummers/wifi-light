@@ -1,7 +1,8 @@
 <resources>
 
-    <style name="Theme.WifiLight" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:background">@color/background</item>
+    <style name="Theme.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
     </style>
 
 </resources>

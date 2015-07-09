@@ -16,4 +16,5 @@
     <string name="fragment_name_light_colour">Colour</string>
     <string name="fragment_name_light_effects">Effects</string>
     <string name="fragment_name_light_details">Details</string>
+    <string name="action_refresh">Reload</string>
 </resources>

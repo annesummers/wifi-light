@@ -80,6 +80,9 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
         }
 
         initialiseViews();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.action_toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
