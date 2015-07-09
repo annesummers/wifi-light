@@ -2,10 +2,9 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.app.Application;
 
-import rx.Observable;
-
 /**
  * Created by anne on 22/06/15.
+ * (*_*)
  */
 public abstract class BaseApplication extends Application {
    // private BaseApplicationComponent baseApplicationComponent;

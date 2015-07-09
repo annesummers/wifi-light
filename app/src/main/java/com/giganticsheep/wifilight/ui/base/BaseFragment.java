@@ -33,9 +33,13 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateFragment<V, P> {
 
+    // TODO subscription management
+    // TODO argument stuff
+    // TODO javadocs
+
     private static final int INVALID = -1;
 
-    public static final String FRAGMENT_ARGS_NAME = "name";
+    protected static final String FRAGMENT_ARGS_NAME = "name";
     private static final String FRAGMENT_ARGS_ATTACH_TO_ROOT = "attach_to_root";
 
     @SuppressWarnings("FieldNotUsedInToString")
@@ -55,7 +59,6 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     @Arg boolean attachToRoot;
     private int orientation;
 
-    private Handler mainThreadHandler;
     @Inject
     BaseLogger baseLogger;
 
@@ -89,7 +92,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
             attachToRoot = args.getBoolean(FRAGMENT_ARGS_ATTACH_TO_ROOT, false);
         }
 
-        mainThreadHandler = new Handler(Looper.getMainLooper());
+        Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
         orientation = getResources().getConfiguration().orientation;
     }
@@ -156,7 +159,6 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
      * Attaches this Fragment to the specified Activity
      *
      * @param activity the Activity to attach to
-     * @return the Observable to subscribe to
      */
     public final void attachToActivity(final BaseActivity activity,
                                        final FragmentAttachmentDetails attachmentDetails) {
@@ -170,7 +172,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
      *
      * @param message the message
      */
-    public final void showToast(final String message) {
+    protected final void showToast(final String message) {
         getBaseActivity().showToast(message);
     }
 
@@ -224,7 +226,6 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
 
     protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
-        // TODO subscruption management
    }
 
     private void doAttachToActivity(final BaseActivity activity) {
@@ -249,7 +250,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
 
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-            Fragment fragment = fragmentManager.findFragmentByTag(name);
+            BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(name);
             if (fragment != null && fragment.equals(this)) {
                 fragmentTransaction.attach(this);
             } else {

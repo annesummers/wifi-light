@@ -184,7 +184,6 @@ public class MainActivityTest {
     }
 
     public void testRefreshShown() {
-        // TODO refresh
     }
 
     public void testRefreshRefreshesData() {

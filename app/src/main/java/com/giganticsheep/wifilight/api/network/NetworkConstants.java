@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NonNls;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public class NetworkConstants {
+class NetworkConstants {
 
     @NonNls static final String URL_ALL = "all";
     @NonNls static final String URL_DURATION = "duration";

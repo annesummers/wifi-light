@@ -6,9 +6,9 @@ package com.giganticsheep.wifilight.api.network;
  */
 public class NetworkDetails {
 
-    private String apiKey;
-    private String baseURL1;
-    private String baseURL2;
+    private final String apiKey;
+    private final String baseURL1;
+    private final String baseURL2;
 
     public NetworkDetails(String apiKey,
                           String baseURL1,
@@ -28,5 +28,14 @@ public class NetworkDetails {
 
     public String getBaseURL2() {
         return baseURL2;
+    }
+
+    @Override
+    public String toString() {
+        return "NetworkDetails{" +
+                "apiKey='" + apiKey + '\'' +
+                ", baseURL1='" + baseURL1 + '\'' +
+                ", baseURL2='" + baseURL2 + '\'' +
+                '}';
     }
 }

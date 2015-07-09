@@ -3,9 +3,10 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/error_view"
-    android:background="@color/half_grey"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
     tools:showIn="@layout/activity_main"
-    android:src="@drawable/sad_mac" />
+    android:src="@drawable/ic_alert_error"
+    android:contentDescription="error_image" />

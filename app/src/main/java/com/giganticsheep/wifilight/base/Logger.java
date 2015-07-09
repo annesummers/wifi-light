@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NonNls;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
-
 /**
  * Created by anne on 22/06/15.
  * (*_*)
@@ -16,7 +14,7 @@ public class Logger implements Serializable {
     @NonNls private static final String ERROR_LABEL = "ERROR :";
 
     private final String className;
-    private BaseLogger baseLogger;
+    private final BaseLogger baseLogger;
 
     public Logger(String className, BaseLogger baseLogger) {
         this.className = className;

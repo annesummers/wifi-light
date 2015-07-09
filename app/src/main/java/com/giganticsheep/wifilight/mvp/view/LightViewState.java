@@ -40,6 +40,15 @@ public class LightViewState implements ViewState<LightView> {
             case STATE_SHOW_LIGHT_DETAILS:
                 lightView.showLightDetails();
                 break;
+            default:
+                break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "LightViewState{" +
+                "state=" + state +
+                '}';
     }
 }

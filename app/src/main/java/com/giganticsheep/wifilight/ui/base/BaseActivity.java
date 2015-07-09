@@ -29,6 +29,9 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseActivity extends MosbyActivity {
 
+    // TODO subscription management
+    // TODO refresh
+
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
     @SuppressWarnings("FieldNotUsedInToString")
@@ -73,17 +76,6 @@ public abstract class BaseActivity extends MosbyActivity {
         initialiseViews();
     }
 
-    protected void initialiseViews() {
-        final int containerCount = activityLayout().fragmentContainerCount();
-        for (int i = 0; i < containerCount; i++) {
-            if (attachedFragments.containsKey(i)) {
-                final FragmentAttachmentDetails fragmentAttachmentDetails = attachedFragments.get(i);
-
-                attachFragment(fragmentAttachmentDetails);
-            }
-        }
-    }
-
     @Override
     public final void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -116,9 +108,9 @@ public abstract class BaseActivity extends MosbyActivity {
 
         for(final BaseFragment fragment : fragmentAttachmentQueue.keySet()) {
             fragment.attachToActivity(this, fragmentAttachmentQueue.get(fragment));
-            fragmentAttachmentQueue.remove(fragment);
-            break;
         }
+
+        fragmentAttachmentQueue.clear();
     }
 
     @Override
@@ -126,17 +118,6 @@ public abstract class BaseActivity extends MosbyActivity {
         super.onDestroy();
 
         compositeSubscription.unsubscribe();
-    }
-
-    /**
-     * Pops the backstack.
-     */
-    public final void popBackStack() {
-        if (fragmentsResumed()) {
-            getSupportFragmentManager().popBackStackImmediate();
-        }
-
-        // TODO what if the fragments haven't been resumed?
     }
 
     /**
@@ -156,13 +137,24 @@ public abstract class BaseActivity extends MosbyActivity {
         fragmentAttachmentQueue.put(fragment, details);
     }
 
+    protected void initialiseViews() {
+        final int containerCount = activityLayout().fragmentContainerCount();
+        for (int i = 0; i < containerCount; i++) {
+            if (attachedFragments.containsKey(i)) {
+                final FragmentAttachmentDetails fragmentAttachmentDetails = attachedFragments.get(i);
+
+                attachFragment(fragmentAttachmentDetails);
+            }
+        }
+    }
+
     /**
-     * Creates a new fragment and attached it to this Activity.
+     * Creates a new fragment and attaches it to this Activity.
      *
      * @param attachmentDetails the details of the fragment to attach
      */
     protected final void attachNewFragment(final FragmentAttachmentDetails attachmentDetails) {
-        BaseFragment fragment = null;
+        BaseFragment fragment;
 
         try {
             fragment = BaseFragment.create(attachmentDetails.name(), fragmentFactory);

@@ -32,6 +32,8 @@ import butterknife.InjectView;
 
 
 public class MainActivity extends BaseActivity implements HasComponent<MainActivityComponent> {
+    // TODO let's have a theme!
+
     public static final float DEFAULT_DURATION = 1.0F;
 
     private ViewPager viewPager;
@@ -43,7 +45,6 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     private MainActivityComponent component;
 
     private String currentLight;
-    private List<String> lightIds = new ArrayList<>();
     private ArrayList<String> newLightIds;
 
     @Override
@@ -134,11 +135,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         // as you specify a parent activity in AndroidManifest.xml.
         final int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -157,6 +155,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
         loadingProgressBar.setVisibility(View.INVISIBLE);
         lightLayout.setVisibility(View.INVISIBLE);
         errorImageView.setVisibility(View.VISIBLE);
+
+        // TODO maybe show an alert dialog instead?
     }
 
     public void showLoadingView() {
@@ -177,7 +177,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
 
     @Subscribe
     public synchronized void handleFetchLightsSuccess(LightNetwork.FetchLightsSuccessEvent event) {
-        lightIds = newLightIds;
+        List<String> lightIds = newLightIds;
 
         if(lightIds.size() > 0) {
             currentLight = lightIds.get(0);

@@ -44,7 +44,7 @@ public abstract class LightPresenter extends MvpBasePresenter<LightView> {
                             }
                         }
 
-                        // if it is an IllegalArgumentException then it is beacuse
+                        // if it is an IllegalArgumentException then it is because
                         // the id is null which happens when the initial set of lights data
                         // has not yet been fully received
                     }

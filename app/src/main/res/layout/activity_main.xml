@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame"
-    android:background="@color/background">
+    tools:ignore="MergeRootFrame">
 
     <LinearLayout
         android:id="@+id/light_layout"

@@ -4,7 +4,6 @@ import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
 import com.giganticsheep.wifilight.util.AndroidEventBus;
 import com.giganticsheep.wifilight.util.ApplicationLogger;
 

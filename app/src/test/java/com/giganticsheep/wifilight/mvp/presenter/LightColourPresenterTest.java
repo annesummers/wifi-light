@@ -16,8 +16,9 @@ import org.junit.Test;
  */
 public class LightColourPresenterTest extends WifiLightTest {
 
+    // TODO test the event stuff
+
     private LightColourPresenter presenter;
-    private LightView view;
 
     @Override
     protected void injectDependencies() {
@@ -26,17 +27,9 @@ public class LightColourPresenterTest extends WifiLightTest {
 
     @Before
     public void setUp() throws Exception {
-       /* NetworkDetails networkDetails = new NetworkDetails(TestLightNetwork.DEFAULT_API_KEY,
-                TestLightNetwork.DEFAULT_SERVER_STRING,
-                TestLightNetwork.DEFAULT_URL_STRING1,
-                TestLightNetwork.DEFAULT_URL_STRING2);
-
-        EventBus eventBus = new TestEventBus();
-        LightNetwork lightNetwork = new TestLightNetwork(networkDetails, eventBus, baseLogger, this);
-*/
         presenter = new LightColourPresenter(lightNetwork, eventBus);
 
-        view = new LightView() {
+        LightView view = new LightView() {
             private Light light;
 
             @Override
@@ -57,19 +50,20 @@ public class LightColourPresenterTest extends WifiLightTest {
             @Override
             public void showLightDetails() {
                 logger.warn("showLightDetails()");
+                logger.warn(light.toString());
             }
 
             @Override
             public void lightChanged(Light light) {
                 this.light = light;
+
+                showLightDetails();
             }
         };
     }
 
     @After
-    public void tearDown() throws Exception {
-
-    }
+    public void tearDown() throws Exception { }
 
     @Test
     public void testSetHue() throws Exception {

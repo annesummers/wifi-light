@@ -13,11 +13,11 @@ class AttachDetails {
     AttachDetails(final BaseFragment fragment,
                   final String name,
                   final int position,
-                  final boolean addtoBackStack) {
+                  final boolean addToBackStack) {
         this.fragment = fragment;
         this.name = name;
         this.position = position;
-        this.addToBackStack = addtoBackStack;
+        this.addToBackStack = addToBackStack;
     }
 
     public final BaseFragment fragment() {
@@ -34,5 +34,15 @@ class AttachDetails {
 
     public final String name() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "AttachDetails{" +
+                "fragment=" + fragment +
+                ", position=" + position +
+                ", addToBackStack=" + addToBackStack +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

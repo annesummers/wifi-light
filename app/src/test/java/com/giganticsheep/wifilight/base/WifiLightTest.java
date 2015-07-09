@@ -20,7 +20,7 @@ public abstract class WifiLightTest {
 
     private boolean signal = false;
 
-    public WifiLightTest() {
+    protected WifiLightTest() {
         component = DaggerTestComponent.builder()
                 .wifiLightTestsComponent(WifiLightTestsComponent.Initializer.init())
                 .build();
@@ -42,7 +42,7 @@ public abstract class WifiLightTest {
         return signal;
     }
 
-    public synchronized void reset() {
+    protected synchronized void reset() {
         logger.info(Thread.currentThread().getId() + " reset");
         signal = false;
     }

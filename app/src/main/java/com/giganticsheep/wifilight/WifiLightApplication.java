@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight;
 
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.dagger.HasComponent;
 import com.giganticsheep.wifilight.dagger.WifiLightAppComponent;
 import com.giganticsheep.wifilight.ui.base.BaseApplication;

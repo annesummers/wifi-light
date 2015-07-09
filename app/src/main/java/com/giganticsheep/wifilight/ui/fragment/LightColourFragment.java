@@ -28,6 +28,9 @@ import butterknife.OnCheckedChanged;
 @FragmentArgsInherited
 public class LightColourFragment extends LightFragment {
 
+    // TODO sliders thumb drops off the end
+    // TODO put toggle above pager maybe in its own fragment?
+
     public static LightColourFragment newInstance(String name) {
         LightColourFragment fragment = new LightColourFragment();
 
@@ -63,7 +66,7 @@ public class LightColourFragment extends LightFragment {
         return (LightColourPresenter) super.getPresenter();
     }
 
-    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
+    private final SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
 
     @Override
     protected int getLayoutRes() {
@@ -72,9 +75,6 @@ public class LightColourFragment extends LightFragment {
 
     @Override
     protected void initialiseViews(View view) {
-        // TODO sliders thumb drops off the end
-        // TODO put toggle above pager
-
         hueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         saturationSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         valueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);

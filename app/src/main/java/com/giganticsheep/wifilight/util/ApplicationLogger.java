@@ -12,7 +12,7 @@ import com.giganticsheep.wifilight.ui.base.BaseApplication;
  */
 public class ApplicationLogger implements BaseLogger {
 
-    private BaseApplication application;
+    private final BaseApplication application;
 
     public ApplicationLogger(BaseApplication application) {
         this.application = application;

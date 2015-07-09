@@ -35,9 +35,17 @@ public class LightNetwork {
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger;
 
+    @SuppressWarnings("FieldNotUsedInToString")
+    private Observable<Light> lightsObservable;
+
+    @SuppressWarnings("FieldNotUsedInToString")
+    private final Subscriber errorSubscriber;
+
     // TODO groups
     // TODO locations
     // TODO selectors
+    // TODO effects
+    // TODO javadoc
 
     private final NetworkDetails networkDetails;
     private final EventBus eventBus;
@@ -46,21 +54,6 @@ public class LightNetwork {
 
     private final Scheduler ioScheduler;
     private final Scheduler uiScheduler;
-
-    private Observable<Light> lightsObservable;
-
-    private Subscriber errorSubscriber = new Subscriber() {
-        @Override
-        public void onCompleted() { }
-
-        @Override
-        public void onError(Throwable e) {
-            logger.error(e.getMessage());
-        }
-
-        @Override
-        public void onNext(Object o) { }
-    };
 
     @Inject
     public LightNetwork(final NetworkDetails networkDetails,
@@ -75,28 +68,13 @@ public class LightNetwork {
         this.ioScheduler = scheduler;
         this.uiScheduler = uiScheduler;
 
+        errorSubscriber = new ErrorSubscriber();
+
         logger = new Logger("LightNetwork", baseLogger);
 
         fetchLights(true)
                 .subscribe(errorSubscriber);
     }
-
-    /*protected LightService createLightService() {
-        return createRestAdapter().create(LightService.class);
-    }
-
-    protected RestAdapter createRestAdapter() {
-        return new RestAdapter.Builder()
-                .setClient(new OkClient(new OkHttpClient()))
-                .setEndpoint(createEndpoint())
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setConverter(new GsonConverter(new GsonBuilder().create()))
-                .build();
-    }
-
-    protected Endpoint createEndpoint() {
-        return Endpoints.newFixedEndpoint(networkDetails.getServerURL());
-    }*/
 
     /**
      * @param hue the hue to set the enabled lights
@@ -362,4 +340,28 @@ public class LightNetwork {
         }
     }
 
+    @Override
+    public String toString() {
+        return "LightNetwork{" +
+                "uiScheduler=" + uiScheduler +
+                ", ioScheduler=" + ioScheduler +
+                ", lightService=" + lightService +
+                ", eventBus=" + eventBus +
+                ", networkDetails=" + networkDetails +
+                '}';
+    }
+
+    private class ErrorSubscriber extends Subscriber {
+
+        @Override
+        public void onCompleted() { }
+
+        @Override
+        public void onError(Throwable e) {
+            logger.error(e.getMessage());
+        }
+
+        @Override
+        public void onNext(Object o) { }
+    }
 }

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by anne on 26/06/15.
@@ -41,14 +42,31 @@ public class Light extends LightResponse implements Serializable {
         public double hue;
         public double saturation;
         public int kelvin;
+
+        @Override
+        public String toString() {
+            return "ColorData{" +
+                    "hue=" + hue +
+                    ", saturation=" + saturation +
+                    ", kelvin=" + kelvin +
+                    '}';
+        }
     }
 
     public class CapabilitiesData {
         public boolean has_color;
         public boolean has_variable_color_temp;
+
+        @Override
+        public String toString() {
+            return "CapabilitiesData{" +
+                    "has_color=" + has_color +
+                    ", has_variable_color_temp=" + has_variable_color_temp +
+                    '}';
+        }
     }
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ", Locale.US);
 
     /**
      * @return if this light is connected or not
