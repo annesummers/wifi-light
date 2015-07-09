@@ -16,8 +16,7 @@ public class Logger implements Serializable {
     @NonNls private static final String ERROR_LABEL = "ERROR :";
 
     private final String className;
-
-    @Inject BaseLogger baseLogger;
+    private BaseLogger baseLogger;
 
     public Logger(String className, BaseLogger baseLogger) {
         this.className = className;

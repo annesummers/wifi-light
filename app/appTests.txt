@@ -1,0 +1,652 @@
+objc[35623]: Class JavaLaunchHelper is implemented in both /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/bin/java and /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/libinstrument.dylib. One of the two will be used. Which one is undefined.
+LightNetwork doSetColour() brightness:1.0 1.0
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+LightNetwork fetchLights()
+LightNetwork fetchLights()
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+LightNetwork fetchLights()
+LightNetwork fetchLights()
+
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+duration=1.0&color=brightness%3A1.0&power_on=true
+Content-Length: 46
+
+duration=1.0&color=kelvin%3A5500&power_on=true
+---> END MOCK (49-byte body)
+---> END MOCK (no body)
+---> END MOCK (46-byte body)
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 44
+
+duration=1.0&color=hue%3A300.0&power_on=true
+---> END MOCK (44-byte body)
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+---> MOCK PUT mock:///v1beta1/lights/all/power
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 21
+
+duration=1.0&state=on
+---> END MOCK (21-byte body)
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 49
+
+duration=1.0&color=saturation%3A1.0&power_on=true
+---> END MOCK (49-byte body)
+---> MOCK POST mock:///v1beta1/lights/all/toggle
+Authorization: Bearer 123456789abcdef
+Content-Type: application/json; charset=UTF-8
+Content-Length: 2
+
+""
+---> END MOCK (2-byte body)
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+LightNetwork fetchLights()
+LightNetwork doSetColour() kelvin:5500 1.0
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+LightNetwork fetchLights()
+LightNetwork doSetColour() hue:300.0 1.0
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+LightNetwork fetchLights()
+LightNetwork doToggleLights()
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+LightNetwork fetchLights()
+LightNetwork doSetPower() on 1.0
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+LightNetwork fetchLights()
+LightNetwork doSetColour() saturation:1.0 1.0
+com.giganticsheep.wifilight.api.model.LightNetworkTest 1 reset
+<--- MOCK 200 mock:///v1beta1/lights/all (1281ms)
+rx.Observable@4af969a2
+<--- END MOCK
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+<--- MOCK 200 mock:///v1beta1/lights/all/toggle (1308ms)
+rx.Observable@6bdebb1
+LightNetwork StatusResponse{status=''}
+LightNetwork fetchLights()
+<--- END MOCK
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+<--- MOCK 200 mock:///v1beta1/lights/all (1377ms)
+rx.Observable@2af58fad
+<--- END MOCK
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+<--- MOCK 200 mock:///v1beta1/lights/all (1524ms)
+rx.Observable@2df850a4
+<--- END MOCK
+java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:78)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:212)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+java.lang.RuntimeException: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:238)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+Caused by: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	... 21 more
+
+java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:78)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:212)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+java.lang.RuntimeException: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:238)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+Caused by: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	... 21 more
+
+java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:78)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:212)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+java.lang.RuntimeException: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:238)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+Caused by: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	... 21 more
+
+java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:78)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:212)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+java.lang.RuntimeException: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:238)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+Caused by: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	... 21 more
+
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:78)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:212)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+java.lang.RuntimeException: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:238)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+Caused by: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	... 21 more
+
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:78)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:212)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+java.lang.RuntimeException: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:238)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+Caused by: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	... 21 more
+
+java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:78)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:212)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+java.lang.RuntimeException: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:238)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+Caused by: java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	... 21 more
+
+
+java.util.ServiceConfigurationError: org.robolectric.internal.ShadowProvider: Provider org.robolectric.Shadows not a subtype
+	at java.util.ServiceLoader.fail(ServiceLoader.java:239)
+	at java.util.ServiceLoader.access$300(ServiceLoader.java:185)
+	at java.util.ServiceLoader$LazyIterator.nextService(ServiceLoader.java:376)
+	at java.util.ServiceLoader$LazyIterator.next(ServiceLoader.java:404)
+	at java.util.ServiceLoader$1.next(ServiceLoader.java:480)
+	at org.robolectric.internal.bytecode.InstrumentationConfiguration$Builder.build(InstrumentationConfiguration.java:122)
+	at org.robolectric.RobolectricTestRunner.createClassLoaderConfig(RobolectricTestRunner.java:129)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:182)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.robolectric.RobolectricTestRunner$1.evaluate(RobolectricTestRunner.java:149)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:68)
+
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+LightNetwork fetchLights()
+---> MOCK GET mock:///v1beta1/lights/all
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+---> MOCK GET mock:///v1beta1/lights/all
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Authorization: Bearer 123456789abcdef
+Content-Length: 49
+---> END MOCK (no body)
+---> END MOCK (no body)
+---> END MOCK (no body)
+
+---> END MOCK (no body)
+---> MOCK GET mock:///v1beta1/lights/alljava.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+	at org.robolectric.manifest.AndroidManifest.getIncludedResourcePaths(AndroidManifest.java:475)
+	at org.robolectric.RobolectricTestRunner.createAppResourceLoader(RobolectricTestRunner.java:479)
+	at org.robolectric.RobolectricTestRunner.getAppResourceLoader(RobolectricTestRunner.java:471)
+	at org.robolectric.internal.ParallelUniverse.setUpApplicationState(ParallelUniverse.java:73)
+	at org.robolectric.RobolectricTestRunner.setUpApplicationState(RobolectricTestRunner.java:421)
+	at org.robolectric.RobolectricTestRunner$2.evaluate(RobolectricTestRunner.java:234)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:185)
+	at org.robolectric.RobolectricTestRunner.runChild(RobolectricTestRunner.java:54)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+java.lang.RuntimeException: build/intermediates/bundles/forTest/debug/AndroidManifest.xml not found or not a file; it should point to your project's AndroidManifest.xml
+	at org.robolectric.manifest.AndroidManifest.validate(AndroidManifest.java:120)
+	at org.robolectric.manifest.AndroidManifest.getResourcePath(AndroidManifest.java:469)
+LightNetwork fetchLights()
+LightNetwork doSetColour() brightness:1.0 1.0
+LightNetwork fetchLights()
+LightNetwork doSetColour() kelvin:5500 1.0
+LightNetwork fetchLights()
+LightNetwork doSetColour() hue:200.0 1.0
+LightNetwork fetchLights()
+LightNetwork doSetPower() off 1.0
+LightNetwor---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+---> MOCK GET mock:///v1beta1/lights/all
+Content-Length: 49
+
+k fetchLights()
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+LightNetwork LightDataResponse{uuid='null', connected=false, power='null', brightness=0.0, product_name='null', last_seen='null', seconds_since_last_seen=0.0, color=null, location=null, group=null, capabilities=null}
+LightNetwork doSetColour() saturation:0.5 1.0
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+duration=1.0&color=brightness%3A1.0&power_on=true
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 46
+
+---> END MOCK (49-byte body)
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+duration=1.0&color=kelvin%3A5500&power_on=true
+---> END MOCK (no body)
+---> END MOCK (46-byte body)
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+<--- MOCK 200 mock:///v1beta1/lights/all (1633ms)
+Content-Length: 44
+
+rx.Observable@3f32b1f5
+<--- END MOCK
+---> END MOCK (no body)
+duration=1.0&color=hue%3A200.0&power_on=true
+---> END MOCK (44-byte body)
+---> MOCK PUT mock:///v1beta1/lights/all/power
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 22
+
+duration=1.0&state=off
+---> END MOCK (22-byte body)
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 49
+
+duration=1.0&color=saturation%3A0.5&power_on=true
+---> END MOCK (49-byte body)

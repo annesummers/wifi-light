@@ -17,17 +17,17 @@ import android.widget.ProgressBar;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.di.HasComponent;
+import com.giganticsheep.wifilight.dagger.HasComponent;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.BaseActivity;
+import com.giganticsheep.wifilight.ui.dagger.DaggerMainActivityComponent;
+import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
+import com.giganticsheep.wifilight.ui.dagger.MainActivityModule;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.InjectView;
 
@@ -42,8 +42,6 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
 
     private MainActivityComponent component;
-
-   // @Inject NetworkDetails networkDetails;
 
     private String currentLight;
     private List<String> lightIds = new ArrayList<>();
@@ -113,8 +111,6 @@ public class MainActivity extends BaseActivity implements HasComponent<MainActiv
 
         component = DaggerMainActivityComponent.builder()
                 .wifiLightAppComponent(application.getComponent())
-                //.baseActivityModule(getBaseActivityModule())
-                .mainActivityModule(new MainActivityModule())
                 .build();
 
         component.inject(this);

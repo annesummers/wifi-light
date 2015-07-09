@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.api.ModelConstants;
-import com.giganticsheep.wifilight.WifiLightTest;
+import com.giganticsheep.wifilight.base.WifiLightTest;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.util.TestConstants;
 
@@ -23,7 +23,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
  */
 public class LightNetworkTest extends WifiLightTest {
 
-    @Inject LightNetwork testNetwork;
+    @Override
+    protected void injectDependencies() {
+        component.inject(this);
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -37,7 +40,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testFetchLights() throws Exception {
-        testNetwork.fetchLights(true)
+        lightNetwork.fetchLights(true)
                 .subscribe(new Subscriber<Light>() {
                     @Override
                     public void onCompleted() { }
@@ -53,7 +56,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testFetchLight() throws Exception {
-        testNetwork.fetchLight(TestConstants.TEST_ID)
+        lightNetwork.fetchLight(TestConstants.TEST_ID)
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<Light>() {
                     @Override
@@ -71,7 +74,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testSetHue() throws Exception {
-        testNetwork.setHue(300, TestConstants.TEST_DURATION)
+        lightNetwork.setHue(300, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -86,7 +89,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testSetSaturation() throws Exception {
-        testNetwork.setSaturation(100, TestConstants.TEST_DURATION)
+        lightNetwork.setSaturation(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -101,7 +104,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testSetBrightness() throws Exception {
-        testNetwork.setBrightness(100, TestConstants.TEST_DURATION)
+        lightNetwork.setBrightness(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -116,7 +119,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testSetKelvin() throws Exception {
-        testNetwork.setKelvin(3000, TestConstants.TEST_DURATION)
+        lightNetwork.setKelvin(3000, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -131,7 +134,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testToggleLights() throws Exception {
-        testNetwork.togglePower()
+        lightNetwork.togglePower()
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }
@@ -146,7 +149,7 @@ public class LightNetworkTest extends WifiLightTest {
 
     @Test
     public void testSetPower() throws Exception {
-        testNetwork.setPower(ModelConstants.Power.ON, TestConstants.TEST_DURATION)
+        lightNetwork.setPower(ModelConstants.Power.ON, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }

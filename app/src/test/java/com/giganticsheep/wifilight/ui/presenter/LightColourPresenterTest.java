@@ -1,13 +1,9 @@
 package com.giganticsheep.wifilight.ui.presenter;
 
 import com.giganticsheep.wifilight.util.TestConstants;
-import com.giganticsheep.wifilight.util.TestEventBus;
-import com.giganticsheep.wifilight.WifiLightTest;
+import com.giganticsheep.wifilight.base.WifiLightTest;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.ui.view.LightView;
 
 import org.junit.After;
@@ -22,6 +18,11 @@ public class LightColourPresenterTest extends WifiLightTest {
 
     private LightColourPresenter presenter;
     private LightView view;
+
+    @Override
+    protected void injectDependencies() {
+        component.inject(this);
+    }
 
     @Before
     public void setUp() throws Exception {

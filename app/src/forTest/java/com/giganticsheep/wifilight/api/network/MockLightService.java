@@ -19,7 +19,7 @@ import rx.Subscriber;
  * Created by anne on 30/06/15.
  * (*_*)
  */
-class MockLightService implements LightService {
+public class MockLightService implements LightService {
 
     @Override
     public Observable<List<Light>> listLights(@Path("url1") String url1,

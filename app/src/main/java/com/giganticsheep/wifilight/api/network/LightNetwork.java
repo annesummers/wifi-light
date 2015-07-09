@@ -5,10 +5,10 @@ import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
-import com.giganticsheep.wifilight.di.IOScheduler;
+import com.giganticsheep.wifilight.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.BaseLogger;
-import com.giganticsheep.wifilight.di.UIScheduler;
-import com.giganticsheep.wifilight.ui.ActivityScope;
+import com.giganticsheep.wifilight.dagger.UIScheduler;
+import com.giganticsheep.wifilight.ui.dagger.ActivityScope;
 
 import java.util.ArrayList;
 import java.util.HashMap;

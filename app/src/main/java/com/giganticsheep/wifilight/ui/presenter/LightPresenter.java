@@ -7,8 +7,6 @@ import com.giganticsheep.wifilight.ui.view.LightView;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by anne on 29/06/15.
