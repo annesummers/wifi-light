@@ -16,7 +16,7 @@ public class TestEventBus implements EventBus {
 
     List<Object> listeners = new ArrayList();
 
-    private Bus eventBus = new Bus();
+    private final Bus eventBus = new Bus();
 
     @Override
     public Observable postMessage(Object messageObject) {

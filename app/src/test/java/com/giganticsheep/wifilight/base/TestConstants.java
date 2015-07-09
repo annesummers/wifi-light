@@ -14,8 +14,8 @@ public class TestConstants {
     @NonNls public static final String DEFAULT_URL_STRING1 = "v1beta1";
     @NonNls public static final String DEFAULT_URL_STRING2 = "lights";
 
-    public static final String TEST_ID = "12345abcde";
-    public static final String TEST_ID2 = "abcde12345";
+    public static final String TEST_ID = "12345abcdef";
+    public static final String TEST_ID2 = "abcdef12345";
     public static final double TEST_BRIGHTNESS_DOUBLE = 1.0F;
     public static final double TEST_HUE_DOUBLE = 200.0F;
     public static final int TEST_KELVIN = 3000;

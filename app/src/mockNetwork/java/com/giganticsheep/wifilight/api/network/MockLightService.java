@@ -21,8 +21,8 @@ import rx.Subscriber;
 public class MockLightService implements LightService {
 
     // TODO how to share these?
-    public static final String TEST_ID = "12345abcde";
-    public static final String TEST_ID2 = "absde12345";
+    public static final String TEST_ID = "12345abcdef";
+    public static final String TEST_ID2 = "abcdef12345";
 
     @Override
     public Observable<List<Light>> listLights(@Path("url1") String url1,
