@@ -4,8 +4,8 @@ import android.widget.SeekBar;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.util.TestConstants;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.MainActivity;
 
 import org.junit.After;

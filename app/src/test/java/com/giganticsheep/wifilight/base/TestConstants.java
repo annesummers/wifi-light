@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.util;
+package com.giganticsheep.wifilight.base;
 
 import org.jetbrains.annotations.NonNls;
 

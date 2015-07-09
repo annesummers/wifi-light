@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
-import com.giganticsheep.wifilight.util.TestConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,10 @@ import rx.Subscriber;
  */
 public class MockLightService implements LightService {
 
+    // TODO how to share these?
+    public static final String TEST_ID = "12345abcde";
+    public static final String TEST_ID2 = "absde12345";
+
     @Override
     public Observable<List<Light>> listLights(@Path("url1") String url1,
                                               @Path("url2") String url2,
@@ -30,9 +33,9 @@ public class MockLightService implements LightService {
             @Override
             public void call(Subscriber<? super List<Light>> subscriber) {
                 List<Light> lights = new ArrayList<>();
-                Light light = new Light(TestConstants.TEST_ID);
+                Light light = new Light(TEST_ID);
                 lights.add(light);
-                lights.add(new Light(TestConstants.TEST_ID2));
+                lights.add(new Light(TEST_ID2));
 
                 subscriber.onNext(lights);
                 subscriber.onCompleted();

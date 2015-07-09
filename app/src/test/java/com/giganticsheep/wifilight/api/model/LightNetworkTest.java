@@ -1,9 +1,8 @@
 package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.api.ModelConstants;
+import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTest;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.util.TestConstants;
 
 import org.junit.After;
 import org.junit.Before;

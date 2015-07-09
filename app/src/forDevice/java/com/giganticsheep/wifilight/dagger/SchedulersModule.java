@@ -1,8 +1,4 @@
-package com.giganticsheep.wifilight;
-
-import com.giganticsheep.wifilight.dagger.ApplicationScope;
-import com.giganticsheep.wifilight.dagger.IOScheduler;
-import com.giganticsheep.wifilight.dagger.UIScheduler;
+package com.giganticsheep.wifilight.dagger;
 
 import dagger.Module;
 import dagger.Provides;

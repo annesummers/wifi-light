@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.ui.presenter;
 
-import com.giganticsheep.wifilight.util.TestConstants;
+import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTest;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
