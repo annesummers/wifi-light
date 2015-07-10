@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.WifiLight" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/background</item>
-        <item name="actionBarStyle">@style/Theme.ActionBar</item>
+        <item name="actionBarStyle">@style/Theme.WifiLight.ActionBar</item>
 
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>

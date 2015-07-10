@@ -10,7 +10,7 @@
         android:id="@+id/action_toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        app:theme="@style/Theme.ActionBar"/>
+        app:theme="@style/Theme.WifiLight.ActionBar"/>
 
     <LinearLayout
         android:id="@+id/light_layout"

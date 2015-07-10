@@ -36,7 +36,6 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>> extends MvpActivity<V, P> {
 
     // TODO subscription management
-    // TODO refresh
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 

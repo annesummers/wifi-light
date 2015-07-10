@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+    <style name="Theme.WifiLight.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:background">?attr/colorPrimary</item>
     </style>

@@ -6,7 +6,7 @@
     android:columnCount="@integer/light_sliders_column_count"
     android:rowCount="@integer/light_sliders_row_count"
     android:id="@+id/sliders_layout"
-    tools:showIn="@layout/fragment_hsv">
+    tools:showIn="@layout/fragment_colour">
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,6 +29,9 @@
         android:layout_rowSpan="1"
         android:layout_column="1"
         android:layout_columnSpan="1"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
         android:max="@integer/light_slider_hue_max" />
 
     <TextView
@@ -53,6 +56,8 @@
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_gravity="center_vertical"
+        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
         android:max="@integer/light_slider_saturation_max" />
 
     <TextView
@@ -76,6 +81,8 @@
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_gravity="center_vertical"
+        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
         android:id="@+id/brightness_seekbar"
         android:max="@integer/light_slider_brightness_max" />
 
@@ -100,6 +107,8 @@
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_gravity="center_vertical"
+        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
         android:id="@+id/kelvin_seekbar"
         android:max="@integer/light_slider_kelvin_max" />
 </GridLayout>
