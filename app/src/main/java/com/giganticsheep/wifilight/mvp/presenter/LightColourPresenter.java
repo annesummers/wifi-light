@@ -1,9 +1,9 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
 import com.squareup.otto.Subscribe;
 
 import rx.Observable;
@@ -14,9 +14,9 @@ import rx.Subscriber;
  * (*_*)
  */
 public class LightColourPresenter extends LightPresenter {
-    public LightColourPresenter(LightNetwork lightNetwork,
-                                EventBus eventBus) {
-        super(lightNetwork, eventBus);
+
+    public LightColourPresenter(MainActivityComponent component) {
+        super(component);
 
         eventBus.registerForEvents(this);
     }

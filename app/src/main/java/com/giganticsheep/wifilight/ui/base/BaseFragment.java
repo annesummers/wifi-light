@@ -34,7 +34,6 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
 
     // TODO subscription management
     // TODO argument stuff
-    // TODO javadocs
 
     private static final int INVALID = -1;
 
@@ -44,22 +43,19 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     @SuppressWarnings("FieldNotUsedInToString")
     protected Logger logger;
 
-    //@Inject protected WifiLightApplication app;
-
     protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Arg String name;
-
-    private LayoutInflater layoutInflater;
-    FragmentAttachmentDetails attachmentDetails;
 
     protected boolean viewsInitialised;
 
     @Arg boolean attachToRoot;
     private int orientation;
 
-    @Inject
-    BaseLogger baseLogger;
+    private LayoutInflater layoutInflater;
+    private FragmentAttachmentDetails attachmentDetails;
+
+    @Inject BaseLogger baseLogger;
 
     /**
      * Creates the named Fragment
@@ -73,7 +69,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     }
 
     /**
-     * Constructs a new RXFragment.
+     * Constructs a new BaseFragment.
      */
     protected BaseFragment() { }
 
@@ -167,7 +163,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     }
 
     /**
-     * Show toast.
+     * Show a toast.
      *
      * @param message the message
      */
@@ -176,7 +172,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     }
 
     /**
-     * Show toast.
+     * Show a toast.
      *
      * @param message the message
      */
@@ -208,7 +204,8 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     }
 
     /**
-     * Reinitialise views.
+     * Destroys the views, detaches them, inflates the layout and
+     * initialises the views
      */
     protected final void reinitialiseViews() {
         destroyViews();
@@ -223,9 +220,13 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
         initialiseViews(rootView);
     }
 
-    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
+    /**
+     * Subscribes to the given Observable, retaining the resulting Subscription so when the Fragment
+     * is destroyed the Observable can be unsubscribed from
+     */
+    protected <T> void subscribe(final Observable<T> observable, final Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
-   }
+    }
 
     private void doAttachToActivity(final BaseActivity activity) {
         final String name = attachmentDetails.name();
@@ -243,7 +244,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
 
         if(attachId != 0) {
             final BaseFragment existingFragment = (BaseFragment) fragmentManager.findFragmentById(attachId);
-            if (existingFragment != null) {// && !existingFragment.equals(this)) {
+            if (existingFragment != null) {
                 fragmentTransaction.detach(existingFragment);
             }
 
@@ -280,7 +281,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     protected void populateViews() { }
 
     /**
-     * Destroy the views associated with this Fragment
+     * Destroys the views associated with this Fragment
      */
     protected void destroyViews() { }
 

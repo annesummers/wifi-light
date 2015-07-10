@@ -55,7 +55,7 @@ public class LightColourFragment extends LightFragment {
 
     @Override
     public LightPresenter createPresenter() {
-        return new LightColourPresenter(lightNetwork, eventBus);
+        return new LightColourPresenter(getMainActivity().getComponent());
     }
 
     @Override

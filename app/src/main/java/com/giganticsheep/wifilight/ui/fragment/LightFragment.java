@@ -30,8 +30,8 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
 
     @Icicle protected Light light;
 
-    @Inject LightNetwork lightNetwork;
-    @Inject EventBus eventBus;
+   // @Inject LightNetwork lightNetwork;
+   // @Inject EventBus eventBus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
 
     protected abstract void setLightDetails();
 
-    public interface Injector {
+    public interface Injector extends LightPresenter.Injector {
         void inject(LightFragment lightFragment);
     }
 }

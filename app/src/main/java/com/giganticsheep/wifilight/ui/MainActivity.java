@@ -37,7 +37,6 @@ import butterknife.InjectView;
 public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
                             implements LightView,
                             HasComponent<MainActivityComponent> {
-    // TODO let's have a theme!
 
     public static final float DEFAULT_DURATION = 1.0F;
 
@@ -46,8 +45,6 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
-
-    @Inject LightNetwork lightNetwork;
 
     private MainActivityComponent component;
 
@@ -168,7 +165,7 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
 
     @Override
     public MainActivityPresenter createPresenter() {
-        return new MainActivityPresenter(lightNetwork, eventBus);
+        return new MainActivityPresenter(getComponent());
     }
 
     @Override

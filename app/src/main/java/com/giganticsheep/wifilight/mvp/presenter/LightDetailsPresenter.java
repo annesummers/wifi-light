@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -9,8 +9,9 @@ import com.squareup.otto.Subscribe;
  * (*_*)
  */
 public class LightDetailsPresenter extends LightPresenter {
-    public LightDetailsPresenter(LightNetwork lightNetwork, EventBus eventBus) {
-        super(lightNetwork, eventBus);
+
+    public LightDetailsPresenter(MainActivityComponent component) {
+        super(component);
 
         eventBus.registerForEvents(this);
     }

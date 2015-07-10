@@ -1,10 +1,15 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.view.LightView;
+import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
+import javax.inject.Inject;
 
 import rx.Subscriber;
 
@@ -13,15 +18,19 @@ import rx.Subscriber;
  * (*_*)
  */
 public class LightPresenter extends MvpBasePresenter<LightView> {
-    protected final EventBus eventBus;
-    protected LightNetwork lightNetwork;
+
+    protected Logger logger;
+
+    @Inject protected BaseLogger baseLogger;
+    @Inject protected EventBus eventBus;
+    @Inject protected LightNetwork lightNetwork;
 
     protected LightSubscriber lightSubscriber = new LightSubscriber();
 
-    public LightPresenter(LightNetwork lightNetwork,
-                          EventBus eventBus) {
-        this.lightNetwork = lightNetwork;
-        this.eventBus = eventBus;
+    public LightPresenter(Injector injector) {
+        injector.inject(this);
+
+        logger = new Logger(getClass().getName(), baseLogger);
     }
 
     public void fetchLight(String id) {
@@ -34,6 +43,10 @@ public class LightPresenter extends MvpBasePresenter<LightView> {
     }
 
     public void onDestroy() { }
+
+    public interface Injector {
+        void inject(LightPresenter lightPresenter);
+    }
 
     private class LightSubscriber extends Subscriber<Light>  {
 

@@ -2,10 +2,13 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import dagger.Component;
 
 /**
  * Created by anne on 09/07/15.
@@ -16,8 +19,8 @@ public class MainActivityPresenter extends LightPresenter {
     private String currentLight;
     private ArrayList<String> newLightIds;
 
-    public MainActivityPresenter(LightNetwork lightNetwork, EventBus eventBus) {
-        super(lightNetwork, eventBus);
+    public MainActivityPresenter(MainActivityComponent component) {
+        super(component);
 
         eventBus.registerForEvents(this);
     }
@@ -42,7 +45,7 @@ public class MainActivityPresenter extends LightPresenter {
 
     @Subscribe
     public synchronized void handleFetchLightsSuccess(LightNetwork.FetchLightsSuccessEvent event) {
-        //logger.debug("handleFetchLightsSuccess()");
+        logger.debug("handleFetchLightsSuccess()");
 
         List<String> lightIds = newLightIds;
 
@@ -57,7 +60,7 @@ public class MainActivityPresenter extends LightPresenter {
 
     @Subscribe
     public synchronized void handleLightDetails(LightNetwork.LightDetailsEvent event) {
-        //logger.debug("handleLightDetails() " + event.light().toString());
+        logger.debug("handleLightDetails() " + event.light().toString());
 
         if(newLightIds == null) {
             newLightIds = new ArrayList<>();
@@ -66,5 +69,13 @@ public class MainActivityPresenter extends LightPresenter {
         newLightIds.add(event.light().id());
 
         getView().lightChanged(event.light());
+    }
+
+    @Override
+    public String toString() {
+        return "MainActivityPresenter{" +
+                "currentLight='" + currentLight + '\'' +
+                ", newLightIds=" + newLightIds +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.dagger;
 
 import com.giganticsheep.wifilight.dagger.WifiLightAppComponent;
+import com.giganticsheep.wifilight.mvp.presenter.MainActivityPresenter;
 import com.giganticsheep.wifilight.ui.MainActivity;
 import com.giganticsheep.wifilight.ui.fragment.LightFragment;
 

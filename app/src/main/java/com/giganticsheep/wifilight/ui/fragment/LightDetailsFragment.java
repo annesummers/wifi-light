@@ -48,7 +48,7 @@ public class LightDetailsFragment extends LightFragment {
 
     @Override
     public LightPresenter createPresenter() {
-        return new LightDetailsPresenter(lightNetwork, eventBus);
+        return new LightDetailsPresenter(getMainActivity().getComponent());
     }
 
     @Override

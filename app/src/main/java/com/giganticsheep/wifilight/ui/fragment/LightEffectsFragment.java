@@ -32,7 +32,7 @@ public class LightEffectsFragment extends LightFragment {
 
     @Override
     public LightPresenter createPresenter() {
-        return new LightEffectsPresenter(lightNetwork, eventBus);
+        return new LightEffectsPresenter(getMainActivity().getComponent());
     }
 
     @Override
