@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
@@ -21,15 +21,13 @@ import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.dagger.HasComponent;
 import com.giganticsheep.wifilight.mvp.presenter.MainActivityPresenter;
 import com.giganticsheep.wifilight.mvp.view.LightView;
+import com.giganticsheep.wifilight.mvp.view.LightViewState;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.BaseActivity;
 import com.giganticsheep.wifilight.ui.dagger.DaggerMainActivityComponent;
 import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
 import javax.inject.Inject;
 
@@ -45,16 +43,13 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
 
     private ViewPager viewPager;
 
-    @InjectView(R.id.loading_view) ProgressBar loadingProgressBar;
-    @InjectView(R.id.error_view) ImageView errorImageView;
+    @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
+    @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
 
     @Inject LightNetwork lightNetwork;
 
     private MainActivityComponent component;
-
-    private String currentLight;
-    private ArrayList<String> newLightIds;
 
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
@@ -64,8 +59,6 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
             // we are attaching the details fragment at position 0 which is under the view pager
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
-
-        eventBus.registerForEvents(this);
     }
 
     @Override
@@ -179,10 +172,31 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
     }
 
     @Override
+    public RestoreableViewState createViewState() {
+        return new LightViewState();
+    }
+
+    @Override
+    public void onNewViewStateInstance() {
+        getViewState().apply(this, false);
+    }
+
+    @Override
     public void showLoading() {
-        errorImageView.setVisibility(View.INVISIBLE);
+        getViewState().setShowLoading();
+
+        errorLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
-        loadingProgressBar.setVisibility(View.VISIBLE);
+        loadingLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLightDetails() {
+        getViewState().setShowLightDetails();
+
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+        lightLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -192,49 +206,27 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
 
     @Override
     public void showError(Throwable throwable) {
-        loadingProgressBar.setVisibility(View.INVISIBLE);
-        lightLayout.setVisibility(View.INVISIBLE);
-        errorImageView.setVisibility(View.VISIBLE);
+        getViewState().setShowError();
 
-        // TODO maybe show an alert dialog instead?
-    }
-
-    @Override
-    public void showLightDetails() {
-        errorImageView.setVisibility(View.INVISIBLE);
-        loadingProgressBar.setVisibility(View.INVISIBLE);
+        loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
+        errorLayout.setVisibility(View.VISIBLE);
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_alert_error)
+                .setMessage(throwable.getMessage())
+                .show();
     }
 
     @Override
     public void lightChanged(Light light) { }
 
+    public LightViewState getViewState() {
+        return (LightViewState) super.getViewState();
+    }
+
     public String getCurrentLight() {
-        return currentLight;
-    }
-
-    @Subscribe
-    public synchronized void handleFetchLightsSuccess(LightNetwork.FetchLightsSuccessEvent event) {
-        logger.debug("handleFetchLightsSuccess()");
-
-        List<String> lightIds = newLightIds;
-
-        if(lightIds.size() > 0) {
-            currentLight = lightIds.get(0);
-        }
-
-        newLightIds = null;
-    }
-
-    @Subscribe
-    public synchronized void handleLightDetails(LightNetwork.LightDetailsEvent event) {
-        logger.debug("handleLightDetails() " + event.light().toString());
-
-        if(newLightIds == null) {
-            newLightIds = new ArrayList<>();
-        }
-
-        newLightIds.add(event.light().id());
+        return presenter.getCurrentLight();
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {

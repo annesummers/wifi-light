@@ -11,6 +11,7 @@ import com.giganticsheep.wifilight.mvp.presenter.LightPresenter;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.mvp.view.LightViewState;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
+import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ import icepick.Icicle;
 @FragmentArgsInherited
 public abstract class LightFragment extends BaseFragment<LightView, LightPresenter>
                                     implements LightView {
+    // TODO inject stuff into the presenter instead
 
     @Icicle protected Light light;
 
@@ -55,6 +57,8 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         }
     }
 
+    // MVP
+
     @Override
     public ViewState createViewState() {
         return new LightViewState();
@@ -62,24 +66,29 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
 
     @Override
     public void onNewViewStateInstance() {
-        getViewState().apply(this, false);
+        getViewState().apply(this, true);
     }
 
     @Override
     public void showLoading() {
-        LightViewState vs = (LightViewState) viewState;
-        vs.setShowLoading();
-
-        getMainActivity().showLoading();
+        getViewState().setShowLoading();
     }
 
     @Override
     public void showLightDetails() {
-        LightViewState vs = (LightViewState) viewState;
-        vs.setShowLightDetails();
+        getViewState().setShowLightDetails();
 
-        getMainActivity().showLightDetails();
         populateViews();
+    }
+
+    @Override
+    public void showError() {
+        getViewState().setShowError();
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+        showError();
     }
 
     @Override
@@ -89,17 +98,8 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         showLightDetails();
     }
 
-    @Override
-    public void showError() {
-        LightViewState vs = (LightViewState) viewState;
-        vs.setShowError();
-
-        getMainActivity().showError();
-    }
-
-    @Override
-    public void showError(Throwable throwable) {
-        showToast(throwable.getMessage());
+    public LightViewState getViewState() {
+        return (LightViewState) super.getViewState();
     }
 
     protected MainActivity getMainActivity() {

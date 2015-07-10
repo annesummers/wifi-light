@@ -166,16 +166,16 @@ public class LightNetwork {
     }
 
     public Observable<Light> fetchLight(final String id) {
-        if(id != null || lightsObservable == null) {
-            return fetchLights(false).filter(new Func1<Light, Boolean>() {
-                @Override
-                public Boolean call(Light light) {
-                    return light.id().equals(id);
-                }
-            });
+        if(id == null) {
+            return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
         }
 
-        return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
+        return fetchLights(false).filter(new Func1<Light, Boolean>() {
+            @Override
+            public Boolean call(Light light) {
+                return light.id().equals(id);
+            }
+        });
     }
 
     /**

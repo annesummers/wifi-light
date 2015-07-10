@@ -13,11 +13,14 @@ import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.mvp.view.LightViewState;
 import com.hannesdorfmann.mosby.MosbyActivity;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
+import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +36,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>> extends MvpActivity<V, P> {
+public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateActivity<V, P> {
 
     // TODO subscription management
 
