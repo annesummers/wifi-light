@@ -8,7 +8,7 @@ import rx.Scheduler;
  * Created by anne on 08/07/15.
  * (*_*)
  */
-interface SchedulersGraph extends NetworkDetailsGraph {
+public interface SchedulersGraph {
 
     @IOScheduler Scheduler iOScheduler();
     @UIScheduler Scheduler uIScheduler();

@@ -19,8 +19,8 @@ public class MainActivityPresenter extends LightPresenter {
     private String currentLight;
     private ArrayList<String> newLightIds;
 
-    public MainActivityPresenter(MainActivityComponent component) {
-        super(component);
+    public MainActivityPresenter(Injector injector) {
+        super(injector);
 
         eventBus.registerForEvents(this);
     }
@@ -49,13 +49,15 @@ public class MainActivityPresenter extends LightPresenter {
 
         List<String> lightIds = newLightIds;
 
-        if(lightIds.size() > 0) {
+        if(lightIds != null && lightIds.size() > 0) {
             currentLight = lightIds.get(0);
         }
 
         newLightIds = null;
 
-        getView().showLightDetails();
+        if (isViewAttached()) {
+            getView().showLightDetails();
+        }
     }
 
     @Subscribe
@@ -68,7 +70,9 @@ public class MainActivityPresenter extends LightPresenter {
 
         newLightIds.add(event.light().id());
 
-        getView().lightChanged(event.light());
+        if (isViewAttached()) {
+            getView().lightChanged(event.light());
+        }
     }
 
     @Override

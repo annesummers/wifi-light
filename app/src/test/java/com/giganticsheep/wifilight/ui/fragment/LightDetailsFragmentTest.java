@@ -40,7 +40,7 @@ public class LightDetailsFragmentTest extends LightFragmentTest {
 
         assertThat((String)(brightnessTextView.getText()), equalTo(Integer.toString(Light.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE))));
         assertThat((String)(hueTextView.getText()), equalTo(Integer.toString(Light.convertHue(TestConstants.TEST_HUE_DOUBLE))));
-        assertThat((String)(kelvinTextView.getText()), equalTo(Integer.toString(TestConstants.TEST_KELVIN - Light.KELVIN_BASE)));
+        assertThat((String)(kelvinTextView.getText()), equalTo(Integer.toString(TestConstants.TEST_KELVIN)));
         assertThat((String)(saturationTextView.getText()), equalTo(Integer.toString(Light.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE))));
     }
 }

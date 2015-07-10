@@ -1,7 +1,7 @@
-package com.giganticsheep.wifilight.base;
+package com.giganticsheep.wifilight.api.model;
 
-import com.giganticsheep.wifilight.WifiLightTestModule;
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
+import com.giganticsheep.wifilight.base.TestModule;
 import com.giganticsheep.wifilight.ui.dagger.ActivityScope;
 
 import dagger.Component;
@@ -14,8 +14,8 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {WifiLightTestsComponent.class},
-        modules = { WifiLightTestModule.class } )
-public interface TestComponent {
+        modules = { TestModule.class } )
+public interface TestModelComponent {
 
-    void inject(WifiLightTest wifiLightTest);
+    void inject(ModelTest wifiLightTest);
 }

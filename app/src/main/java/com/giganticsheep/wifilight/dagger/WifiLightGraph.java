@@ -8,7 +8,7 @@ import com.giganticsheep.wifilight.base.FragmentFactory;
  * Created by anne on 08/07/15.
  * (*_*)
  */
-public interface WifiLightGraph extends SchedulersGraph {
+public interface WifiLightGraph {
 
     BaseLogger baseLogger();
     EventBus eventBus();

@@ -21,6 +21,10 @@ public class FragmentFactory {
         this.application = application;
     }
 
+    public FragmentFactory() {
+        this.application = null;
+    }
+
     /**
      * @param name the name of the fragment to create
      * @return the Observable to subscribe to
@@ -39,16 +43,18 @@ public class FragmentFactory {
      * @return the Observable to subscribe to
      */
     public final BaseFragment createFragment(final String name) throws Exception {
-        if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
-            return LightColourFragment.newInstance(name);
-        }
+        if(application != null) {
+            if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
+                return LightColourFragment.newInstance(name);
+            }
 
-        if (name.equals(application.getString(R.string.fragment_name_light_effects))) {
-            return LightEffectsFragment.newInstance(name);
-        }
+            if (name.equals(application.getString(R.string.fragment_name_light_effects))) {
+                return LightEffectsFragment.newInstance(name);
+            }
 
-        if (name.equals(application.getString(R.string.fragment_name_light_details))) {
-            return LightDetailsFragment.newInstance(name);
+            if (name.equals(application.getString(R.string.fragment_name_light_details))) {
+                return LightDetailsFragment.newInstance(name);
+            }
         }
 
         throw new Exception("Fragment does not exist");

@@ -58,7 +58,7 @@ public class WifiLightModule {
         if(application != null) {
             return new FragmentFactory(application);
         } else {
-            return null;
+            return new FragmentFactory();
         }
     }
 }

@@ -10,8 +10,8 @@ import com.squareup.otto.Subscribe;
  */
 public class LightDetailsPresenter extends LightPresenter {
 
-    public LightDetailsPresenter(MainActivityComponent component) {
-        super(component);
+    public LightDetailsPresenter(Injector injector) {
+        super(injector);
 
         eventBus.registerForEvents(this);
     }
@@ -22,7 +22,7 @@ public class LightDetailsPresenter extends LightPresenter {
     }
 
     @Subscribe
-    public void lightLoaded(LightNetwork.LightDetailsEvent event) {
+    public void handleLightDetails(LightNetwork.LightDetailsEvent event) {
         getView().lightChanged(event.light());
     }
 }

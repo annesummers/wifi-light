@@ -8,6 +8,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,6 @@ import android.widget.LinearLayout;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.dagger.HasComponent;
 import com.giganticsheep.wifilight.mvp.presenter.MainActivityPresenter;
 import com.giganticsheep.wifilight.mvp.view.LightView;
@@ -56,6 +56,9 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
             // we are attaching the details fragment at position 0 which is under the view pager
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.action_toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -104,9 +107,9 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
 
     @Override
     public final boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

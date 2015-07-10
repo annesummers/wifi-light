@@ -2,10 +2,7 @@ package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.base.TestConstants;
-import com.giganticsheep.wifilight.base.WifiLightTest;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import rx.Subscriber;
@@ -18,22 +15,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class LightNetworkTest extends WifiLightTest {
-
-    @Override
-    protected void injectDependencies() {
-        component.inject(this);
-    }
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        reset();
-    }
+public class LightNetworkTest extends ModelTest {
 
     @Test
     public void testFetchLights() throws Exception {

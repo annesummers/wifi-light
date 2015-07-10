@@ -3,8 +3,8 @@ package com.giganticsheep.wifilight.ui.fragment;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.MainActivity;
+import com.giganticsheep.wifilight.ui.UITest;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.util.SupportFragmentTestUtil;
@@ -17,19 +17,16 @@ import static org.junit.Assert.assertThat;
  * Created by anne on 09/07/15.
  * (*_*)
  */
-public abstract class LightFragmentTest {
+public abstract class LightFragmentTest extends UITest {
 
     protected LightFragment fragment;
 
     @Before
     public void setUp() throws Exception {
-        fragment = LightColourFragment.newInstance(getFragmentName());
+        fragment = (LightFragment) fragmentFactory.createFragment(getFragmentName());
 
         SupportFragmentTestUtil.startFragment(fragment, MainActivity.class);
     }
-
-    @After
-    public void tearDown() throws Exception { }
 
     @Test
     public void testSetLightDetails() throws Exception {

@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight.base;
 
-import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 
 import javax.inject.Inject;
@@ -9,23 +8,18 @@ import javax.inject.Inject;
  * Created by anne on 30/06/15.
  * (*_*)
  */
-public abstract class WifiLightTest {
-    protected TestComponent component;
-
+public abstract class WifiLightTestBase {
     protected final Logger logger;
 
     @Inject protected LightNetwork lightNetwork;
     @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
+    @Inject protected FragmentFactory fragmentFactory;
 
     private boolean signal = false;
 
-    protected WifiLightTest() {
-        component = DaggerTestComponent.builder()
-                .wifiLightTestsComponent(WifiLightTestsComponent.Initializer.init())
-                .build();
-
-        injectDependencies();
+    protected WifiLightTestBase() {
+        createComponentAndInjectDependencies();
 
         logger = new Logger(getClass().getName(), baseLogger);
     }
@@ -47,5 +41,5 @@ public abstract class WifiLightTest {
         signal = false;
     }
 
-    protected abstract void injectDependencies();
+    protected abstract void createComponentAndInjectDependencies();
 }

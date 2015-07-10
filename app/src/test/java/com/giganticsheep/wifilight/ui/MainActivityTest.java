@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.internal.app.ToolbarActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,7 +19,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.Shadows;
+import org.robolectric.ShadowsAdapter;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -50,6 +54,7 @@ public class MainActivityTest {
     public void test_create_notNull() {
         MainActivity activity = activityController
                 .create()
+                .postCreate(null)
                 .start()
                 .resume()
                 .visible()
@@ -62,10 +67,9 @@ public class MainActivityTest {
         Bundle savedState = new Bundle();
         activityController
                 .create()
+                .postCreate(savedState)
                 .start()
-                .resume();
-
-        activityController
+                .resume()
                 .pause()
                 .stop()
                 .saveInstanceState(savedState)
@@ -74,6 +78,7 @@ public class MainActivityTest {
         activityController = Robolectric.buildActivity(MainActivity.class);
         MainActivity activity = activityController
                 .create(savedState)
+                .postCreate(savedState)
                 .start()
                 .resume()
                 .visible()
@@ -84,13 +89,11 @@ public class MainActivityTest {
 
     @Test
     public void testLoadsViewPager() {
-        // TODO how to test the viewpager; at the moment find view by id just returns the last
-        // view attached to the pager
-        activityController
-                .create()
-                .visible();
+        // TODO how to test the viewpager; at the moment find view by id just returns the last view attached to the pager
 
-        FragmentManager fragmentManager  = activityController.get().getSupportFragmentManager();
+        MainActivity activity = createAndGetActivity();
+
+        FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
         Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 0);
         assertThat(fragment, instanceOf(LightColourFragment.class));
@@ -117,76 +120,89 @@ public class MainActivityTest {
 
     @Test
     public void testLoadsLightDetails() {
-        activityController
-            .create()
-            .visible();
+        MainActivity activity = createAndGetActivity();
 
-        FragmentManager fragmentManager  = activityController.get().getSupportFragmentManager();
+        FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
         assertThat(fragmentManager.findFragmentById(R.id.container), instanceOf(LightDetailsFragment.class));
     }
 
     @Test
     public void testShowsLoadingView() {
-        activityController
-                .create()
-                .visible();
+        MainActivity activity = createAndGetActivity();
 
-        MainActivity activity = activityController.get();
+        activity.showLoading();
 
-        activity.showLoadingView();
-
-        View loadingView = activity.findViewById(R.id.loading_view);
-        View errorView = activity.findViewById(R.id.error_view);
+        View loadingView = activity.findViewById(R.id.loading_layout);
+        View errorView = activity.findViewById(R.id.error_layout);
         View mainView = activity.findViewById(R.id.light_layout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.VISIBLE));
-        assertThat(errorView.getVisibility(), equalTo(View.INVISIBLE));
+        assertThat(errorView.getVisibility(), equalTo(View.GONE));
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
     }
 
     @Test
     public void testShowsErrorView() {
-        activityController
-                .create()
-                .visible();
+        MainActivity activity = createAndGetActivity();
 
-        MainActivity activity = activityController.get();
+        activity.showError();
 
-        activity.showErrorView();
-
-        View loadingView = activity.findViewById(R.id.loading_view);
-        View errorView = activity.findViewById(R.id.error_view);
+        View loadingView = activity.findViewById(R.id.loading_layout);
+        View errorView = activity.findViewById(R.id.error_layout);
         View mainView = activity.findViewById(R.id.light_layout);
 
         assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));
-        assertThat(loadingView.getVisibility(), equalTo(View.INVISIBLE));
-        assertThat(mainView.getVisibility(), equalTo(View.INVISIBLE));
+        assertThat(loadingView.getVisibility(), equalTo(View.GONE));
+        assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
     }
 
     @Test
     public void testShowsLightView() {
-        activityController
-                .create()
-                .visible();
+        MainActivity activity = createAndGetActivity();
 
-        MainActivity activity = activityController.get();
+        activity.showLightDetails();
 
-        activity.showLightView();
-
-        View loadingView = activity.findViewById(R.id.loading_view);
-        View errorView = activity.findViewById(R.id.error_view);
+        View loadingView = activity.findViewById(R.id.loading_layout);
+        View errorView = activity.findViewById(R.id.error_layout);
         View mainView = activity.findViewById(R.id.light_layout);
 
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
-        assertThat(errorView.getVisibility(), equalTo(View.INVISIBLE));
-        assertThat(loadingView.getVisibility(), equalTo(View.INVISIBLE));
+        assertThat(errorView.getVisibility(), equalTo(View.GONE));
+        assertThat(loadingView.getVisibility(), equalTo(View.GONE));
     }
 
+    @Test
     public void testRefreshShown() {
+        MainActivity activity = createAndGetActivity();
+
+        //ToolbarActionBar actionBar = activity.getSupportActionBar();
+        //actionBar.
     }
 
+    @Test
     public void testRefreshRefreshesData() {
+        MainActivity activity = createAndGetActivity();
 
+        ShadowActivity shadowActivity = Shadows.shadowOf(activity);
+
+        shadowActivity.clickMenuItem(R.id.action_refresh);
+
+        View loadingView = activity.findViewById(R.id.loading_layout);
+        View errorView = activity.findViewById(R.id.error_layout);
+        View mainView = activity.findViewById(R.id.light_layout);
+
+        assertThat(loadingView.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(errorView.getVisibility(), equalTo(View.GONE));
+        assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
+    }
+
+    private MainActivity createAndGetActivity() {
+        activityController
+                .create()
+                .postCreate(null)
+                .visible();
+
+        return activityController.get();
     }
 }

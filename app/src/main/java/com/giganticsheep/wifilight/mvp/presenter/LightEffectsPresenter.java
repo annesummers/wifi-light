@@ -8,8 +8,8 @@ import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
  */
 public class LightEffectsPresenter extends LightPresenter {
 
-    public LightEffectsPresenter(MainActivityComponent component) {
-        super(component);
+    public LightEffectsPresenter(Injector injector) {
+        super(injector);
 
         eventBus.registerForEvents(this);
     }

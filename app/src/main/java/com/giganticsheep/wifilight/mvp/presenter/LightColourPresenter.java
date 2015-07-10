@@ -15,8 +15,8 @@ import rx.Subscriber;
  */
 public class LightColourPresenter extends LightPresenter {
 
-    public LightColourPresenter(MainActivityComponent component) {
-        super(component);
+    public LightColourPresenter(Injector injector) {
+        super(injector);
 
         eventBus.registerForEvents(this);
     }

@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight;
+package com.giganticsheep.wifilight.base;
 
 import dagger.Module;
 
@@ -8,5 +8,5 @@ import dagger.Module;
  */
 
 @Module
-public class WifiLightTestModule {
+public class TestModule {
 }
