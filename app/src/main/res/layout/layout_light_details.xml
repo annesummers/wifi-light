@@ -4,170 +4,148 @@
     tools:showIn="@layout/fragment_details">
 
     <TextView
+        android:id="@+id/light_details_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_light_details"
-        android:id="@+id/light_details_label"
-        android:textColor="@color/details_text"
-        android:background="@color/details_background"
         android:layout_marginBottom="5dp"
-        android:padding="10dp" />
+        android:background="@color/background_secondary"
+        android:text="@string/label_light_details"
+        style="@style/Theme.WifiLight.TextView.Label2" />
 
     <GridLayout
+        android:id="@+id/light_details_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/light_details_layout"
-        android:columnCount="@integer/light_details_column_count"
-        android:rowCount="@integer/light_details_row_count"
         android:layout_below="@+id/light_details_label"
         android:padding="10dp"
-        android:background="@color/details_background">
+        android:background="@color/background_secondary"
+        android:columnCount="@integer/light_details_column_count"
+        android:rowCount="@integer/light_details_row_count">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/label_light_name"
             android:id="@+id/name_label"
-            android:textColor="@color/details_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_rowSpan="1"
             android:layout_column="0"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            android:text="@string/label_light_name"
+            style="@style/Theme.WifiLight.TextView.Label2"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/name_textview"
-            android:textColor="@color/details_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_rowSpan="1"
             android:layout_column="1"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2" />
 
         <TextView
+            android:id="@+id/id_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/label_light_id"
-            android:id="@+id/id_label"
-            android:textColor="@color/details_text"
             android:layout_row="1"
             android:layout_rowSpan="1"
             android:layout_column="0"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2"
+            android:text="@string/label_light_id" />
 
         <TextView
+            android:id="@+id/id_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/id_textview"
-            android:textColor="@color/details_text"
             android:layout_row="1"
             android:layout_rowSpan="1"
             android:layout_column="1"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/label_light_hue"
-            android:textColor="@color/details_text"
             android:layout_row="2"
             android:layout_rowSpan="1"
             android:layout_column="2"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2"
+            android:text="@string/label_light_hue" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/hue_textview"
-            android:textColor="@color/details_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_row="2"
             android:layout_rowSpan="1"
             android:layout_column="3"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/label_light_saturation"
-            android:textColor="@color/details_text"
             android:layout_row="0"
             android:layout_rowSpan="1"
             android:layout_column="2"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_secondary"
+            android:text="@string/label_light_saturation" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/saturation_textview"
-            android:textColor="@color/details_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_rowSpan="1"
             android:layout_column="3"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_secondary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/label_light_brightness"
-            android:textColor="@color/details_text"
             android:layout_row="1"
             android:layout_rowSpan="1"
             android:layout_column="2"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2"
+            android:text="@string/label_light_brightness"/>
 
         <TextView
+            android:id="@+id/brightness_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/brightness_textview"
-            android:textColor="@color/details_text"
             android:layout_row="1"
             android:layout_rowSpan="1"
             android:layout_column="3"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/label_light_kelvin"
-            android:textColor="@color/details_text"
             android:layout_row="3"
             android:layout_rowSpan="1"
             android:layout_column="2"
             android:layout_columnSpan="3"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2"
+            android:text="@string/label_light_kelvin"/>
 
         <TextView
+            android:id="@+id/kelvin_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/kelvin_textview"
-            android:textColor="@color/details_text"
             android:layout_row="3"
             android:layout_rowSpan="1"
             android:layout_column="3"
             android:layout_columnSpan="1"
-            android:padding="5dp" />
+            style="@style/Theme.WifiLight.TextView.Label2"/>
     </GridLayout>
 </merge>

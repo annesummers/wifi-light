@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="details_text">#EFEFEF</color>
-    <color name="details_background">#767676</color>
 
     <color name="tab_background">@color/primary_dark</color>
     <color name="tab_selected">@color/primary</color>
     <color name="tab_text">#EFEFEF</color>
 
-    <color name="background">#DEDEDE</color>
+    <color name="background_primary">#DEDEDE</color>
+    <color name="background_secondary">#767676</color>
     <color name="half_grey">#88898989</color>
 
-    <color name="primary_text">#767676</color>
+    <color name="text_primary">#767676</color>
+    <color name="text_secondary">#EFEFEF</color>
+
+    <color name="text_hint">@color/text_primary</color>
+    <color name="text_hint_inverse">@color/text_secondary</color>
+    <color name="text_highlight">@color/primary_accent</color>
+    <color name="text_highlight_inverse">@color/primary_dark</color>
 
     <color name="primary">#34ADBF</color>
     <color name="primary_dark">#438791</color>

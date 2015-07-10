@@ -5,4 +5,13 @@
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
+    <style name="Theme.WifiLight.TextView.Label1" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="Theme.WifiLight.TextView.Label2" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:padding">@dimen/label_padding</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
 </resources>

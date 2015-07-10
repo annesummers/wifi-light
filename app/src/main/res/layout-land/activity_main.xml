@@ -27,35 +27,41 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginRight="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
             android:layout_weight="1">
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/sliding_tabs"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="@dimen/tab_height"
                 android:background="@color/tab_background"
-                app:tabIndicatorHeight="48dp"
+                app:tabIndicatorHeight="@dimen/tab_height"
                 app:tabIndicatorColor="@color/tab_selected"
                 android:textColor="@color/tab_text"/>
 
             <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/pager"
+                android:layout_marginTop="@dimen/default_margin"
                 android:layout_below="@+id/sliding_tabs" />
         </RelativeLayout>
 
         <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/container"
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <include layout="@layout/layout_error" />
+    <include layout="@layout/layout_error"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/action_toolbar" />
 
-    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_loading"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/action_toolbar"/>
 </RelativeLayout>

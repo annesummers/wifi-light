@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:text="@string/label_light_power"
         android:id="@+id/power_toggle"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/default_margin"
         android:layout_below="@+id/colour_seekbars_layout" />
 </RelativeLayout>

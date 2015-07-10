@@ -1,114 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliders_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:columnCount="@integer/light_sliders_column_count"
     android:rowCount="@integer/light_sliders_row_count"
-    android:id="@+id/sliders_layout"
     tools:showIn="@layout/fragment_colour">
 
     <TextView
+        android:id="@+id/hue_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_light_hue"
-        android:textColor="@color/primary_text"
-        android:id="@+id/hue_label"
         android:layout_row="0"
         android:layout_rowSpan="1"
         android:layout_column="0"
         android:layout_columnSpan="1"
-        android:layout_gravity="center_vertical" />
+        android:text="@string/label_light_hue"
+        style="@style/Theme.WifiLight.TextView.Label1" />
 
     <SeekBar
+        android:id="@+id/hue_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/hue_seekbar"
+        android:layout_marginRight="@dimen/seekbar_corrective_margin"
+        android:layout_marginEnd="@dimen/seekbar_corrective_margin"
         android:layout_row="0"
         android:layout_rowSpan="1"
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="50dp"
-        android:layout_marginEnd="50dp"
         android:max="@integer/light_slider_hue_max" />
 
     <TextView
+        android:id="@+id/saturation_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_light_saturation"
-        android:textColor="@color/primary_text"
         android:layout_row="1"
         android:layout_rowSpan="1"
         android:layout_column="0"
         android:layout_columnSpan="1"
-        android:id="@+id/saturation_label"
-        android:layout_gravity="center_vertical" />
+        android:text="@string/label_light_saturation"
+        style="@style/Theme.WifiLight.TextView.Label1"/>
 
     <SeekBar
+        android:id="@+id/saturation_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/saturation_seekbar"
+        android:layout_marginRight="@dimen/seekbar_corrective_margin"
+        android:layout_marginEnd="@dimen/seekbar_corrective_margin"
         android:layout_row="1"
         android:layout_rowSpan="1"
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="50dp"
-        android:layout_marginEnd="50dp"
         android:max="@integer/light_slider_saturation_max" />
 
     <TextView
+        android:id="@+id/brightness_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_light_brightness"
-        android:textColor="@color/primary_text"
         android:layout_row="2"
         android:layout_rowSpan="1"
         android:layout_column="0"
         android:layout_columnSpan="1"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/brightness_label" />
+        android:text="@string/label_light_brightness"
+        style="@style/Theme.WifiLight.TextView.Label1" />
 
     <SeekBar
+        android:id="@+id/brightness_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/seekbar_corrective_margin"
+        android:layout_marginEnd="@dimen/seekbar_corrective_margin"
         android:layout_row="2"
         android:layout_rowSpan="1"
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="50dp"
-        android:layout_marginEnd="50dp"
-        android:id="@+id/brightness_seekbar"
         android:max="@integer/light_slider_brightness_max" />
 
     <TextView
+        android:id="@+id/kelvin_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_light_kelvin"
-        android:textColor="@color/primary_text"
         android:layout_row="3"
         android:layout_rowSpan="1"
         android:layout_column="0"
         android:layout_columnSpan="1"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/kelvin_label" />
+        android:text="@string/label_light_kelvin"
+        style="@style/Theme.WifiLight.TextView.Label1" />
 
     <SeekBar
+        android:id="@+id/kelvin_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/seekbar_corrective_margin"
+        android:layout_marginEnd="@dimen/seekbar_corrective_margin"
         android:layout_row="3"
         android:layout_rowSpan="1"
         android:layout_column="1"
         android:layout_columnSpan="1"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="50dp"
-        android:layout_marginEnd="50dp"
-        android:id="@+id/kelvin_seekbar"
         android:max="@integer/light_slider_kelvin_max" />
 </GridLayout>
