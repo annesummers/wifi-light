@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui;
+package com.giganticsheep.wifilight.ui.dagger;
 
 import dagger.Module;
 

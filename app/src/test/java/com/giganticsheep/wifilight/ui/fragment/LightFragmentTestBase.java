@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.ui.fragment;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
-import com.giganticsheep.wifilight.ui.UITest;
+import com.giganticsheep.wifilight.ui.UITestBase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
  * Created by anne on 09/07/15.
  * (*_*)
  */
-public abstract class LightFragmentTest extends UITest {
+public abstract class LightFragmentTestBase extends UITestBase {
 
     protected LightFragmentBase fragment;
 

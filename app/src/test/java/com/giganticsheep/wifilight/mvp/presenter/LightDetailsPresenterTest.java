@@ -13,7 +13,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public class LightDetailsPresenterTest extends LightPresenterTest {
+public class LightDetailsPresenterTest extends LightPresenterTestBase {
 
     @Override
     protected LightPresenterBase createPresenter(LightPresenterBase.Injector injector) {

@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 19)
-public class LightColourFragmentTest extends LightFragmentTest {
+public class LightColourFragmentTest extends LightFragmentTestBase {
 
     @Override
     protected String getFragmentName() {

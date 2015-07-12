@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
+import com.giganticsheep.wifilight.api.model.dagger.TestModelComponent;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
 
 /**

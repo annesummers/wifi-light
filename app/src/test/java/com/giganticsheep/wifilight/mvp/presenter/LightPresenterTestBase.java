@@ -4,6 +4,7 @@ import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
+import com.giganticsheep.wifilight.mvp.presenter.dagger.TestPresenterComponent;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 
 import org.junit.After;
@@ -17,7 +18,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public abstract class LightPresenterTest extends WifiLightTestBase {
+public abstract class LightPresenterTestBase extends WifiLightTestBase {
     protected TestPresenterComponent component;
 
     @Override

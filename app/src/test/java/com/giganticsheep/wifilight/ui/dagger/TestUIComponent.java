@@ -1,7 +1,7 @@
-package com.giganticsheep.wifilight.ui;
+package com.giganticsheep.wifilight.ui.dagger;
 
 import com.giganticsheep.wifilight.dagger.WifiLightAppComponent;
-import com.giganticsheep.wifilight.ui.dagger.ActivityScope;
+import com.giganticsheep.wifilight.ui.UITestBase;
 
 import dagger.Component;
 
@@ -16,5 +16,5 @@ import dagger.Component;
         modules = { TestUIModule.class } )
 public interface TestUIComponent {
 
-    void inject(UITest UITest);
+    void inject(UITestBase UITest);
 }
