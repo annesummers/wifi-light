@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.TestConstants;
-import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 
 import org.junit.Test;
@@ -43,15 +42,15 @@ public class LightColourPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testSetPowerOff() throws Exception {
-        testSetPower(ModelConstants.Power.OFF);
+        testSetPower(LightControlInterface.Power.OFF);
     }
 
     @Test
     public void testSetPowerOn() throws Exception {
-        testSetPower(ModelConstants.Power.ON);
+        testSetPower(LightControlInterface.Power.ON);
     }
 
-    private void testSetPower(ModelConstants.Power power) {
+    private void testSetPower(LightControlInterface.Power power) {
         getPresenter().setPower(power, TestConstants.TEST_DURATION);
     }
 

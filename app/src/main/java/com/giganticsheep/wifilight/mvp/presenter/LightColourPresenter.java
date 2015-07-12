@@ -1,12 +1,11 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.api.ModelConstants;
+import com.giganticsheep.wifilight.api.LightControlInterface;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.squareup.otto.Subscribe;
 
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by anne on 29/06/15.
@@ -75,7 +74,7 @@ public class LightColourPresenter extends LightPresenterBase {
      * @param power ON or OFF.
      * @param duration how long to set the power change for.
      */
-    public void setPower(final ModelConstants.Power power, final float duration) {
+    public void setPower(final LightControlInterface.Power power, final float duration) {
         compositeSubscription.add(lightNetwork.setPower(power, duration)
                 .subscribe(setLightSubscriber));
     }

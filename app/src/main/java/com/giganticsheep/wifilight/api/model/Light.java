@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.api.model;
 
-import com.giganticsheep.wifilight.api.ModelConstants;
+import com.giganticsheep.wifilight.api.LightControlInterface;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -94,8 +94,8 @@ public class Light extends Response implements Serializable {
         return convertBrightness(brightness);
     }
 
-    public ModelConstants.Power getPower() {
-        return power.equals("on") ? ModelConstants.Power.ON : ModelConstants.Power.OFF;
+    public LightControlInterface.Power getPower() {
+        return power.equals("on") ? LightControlInterface.Power.ON : LightControlInterface.Power.OFF;
     }
 
     public String getProductName() {

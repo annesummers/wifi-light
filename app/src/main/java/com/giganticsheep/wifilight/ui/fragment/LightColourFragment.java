@@ -7,7 +7,7 @@ import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.ModelConstants;
+import com.giganticsheep.wifilight.api.LightControlInterface;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
@@ -83,15 +83,15 @@ public class LightColourFragment extends LightFragmentBase {
         valueSeekBar.setProgress(light.getBrightness());
         kelvinSeekBar.setProgress(light.getKelvin() - Light.KELVIN_BASE);
 
-        powerToggle.setChecked(light.getPower() == ModelConstants.Power.ON);
+        powerToggle.setChecked(light.getPower() == LightControlInterface.Power.ON);
     }
 
     @OnCheckedChanged(R.id.power_toggle) public void onPowerToggle(CompoundButton compoundButton,
                                                                    boolean isChecked) {
-        if(isChecked && light != null && light.getPower() != ModelConstants.Power.ON) {
-            getPresenter().setPower(ModelConstants.Power.ON, LightControlActivity.DEFAULT_DURATION);
-        } else if(!isChecked && light != null && light.getPower() != ModelConstants.Power.OFF){
-            getPresenter().setPower(ModelConstants.Power.OFF, LightControlActivity.DEFAULT_DURATION);
+        if(isChecked && light != null && light.getPower() != LightControlInterface.Power.ON) {
+            getPresenter().setPower(LightControlInterface.Power.ON, LightControlActivity.DEFAULT_DURATION);
+        } else if(!isChecked && light != null && light.getPower() != LightControlInterface.Power.OFF){
+            getPresenter().setPower(LightControlInterface.Power.OFF, LightControlActivity.DEFAULT_DURATION);
         }
     }
 

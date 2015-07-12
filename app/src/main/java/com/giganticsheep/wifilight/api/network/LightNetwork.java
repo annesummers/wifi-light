@@ -1,8 +1,8 @@
 package com.giganticsheep.wifilight.api.network;
 
+import com.giganticsheep.wifilight.api.LightControlInterface;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
-import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.dagger.IOScheduler;
@@ -30,7 +30,7 @@ import rx.functions.Func1;
  */
 
 @ActivityScope
-public class LightNetwork {
+public class LightNetwork implements LightControlInterface {
 
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger;
@@ -61,12 +61,12 @@ public class LightNetwork {
                         final LightService lightService,
                         final EventBus eventBus,
                         final BaseLogger baseLogger,
-                        @IOScheduler Scheduler scheduler,
+                        @IOScheduler final Scheduler ioScheduler,
                         @UIScheduler final Scheduler uiScheduler) {
         this.lightService = lightService;
         this.networkDetails = networkDetails;
         this.eventBus = eventBus;
-        this.ioScheduler = scheduler;
+        this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
 
         errorSubscriber = new ErrorSubscriber();
@@ -77,50 +77,37 @@ public class LightNetwork {
                 .subscribe(errorSubscriber);
     }
 
-    /**
-     * @param hue the hue to set the selected lights
-     */
+    @Override
     public final Observable<StatusResponse> setHue(final int hue, float duration) {
         return doSetColour(makeHueString(Light.convertHue(hue)), makeDurationString(duration));
     }
 
-    /**
-     * @param saturation the saturation to set the selected lights
-     */
+    @Override
     public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
         return doSetColour(makeSaturationString(Light.convertSaturation(saturation)), makeDurationString(duration));
     }
 
-    /**
-     * @param brightness the brightness to set the selected lights
-     */
+    @Override
     public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
         return doSetColour(makeBrightnessString(Light.convertBrightness(brightness)), makeDurationString(duration));
     }
 
-    /**
-     * @param kelvin the kelvin (warmth to set the selected lights
-     */
+    @Override
     public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
         return doSetColour(makeKelvinString(kelvin + Light.KELVIN_BASE), makeDurationString(duration));
     }
 
-    /**
-     * Toggles the power of the selected lights
-     *
-     */
+    @Override
     public final Observable<StatusResponse> togglePower() {
         return doToggleLights();
     }
 
-    /**
-     * @param power ON or OFF
-     * @param duration how long to set the power change for
-     */
-    public final Observable<StatusResponse> setPower(final ModelConstants.Power power, final float duration) {
+    @Override
+    public final Observable<StatusResponse> setPower(final Power power, final float duration) {
         return doSetPower(power.powerString(), makeDurationString(duration));
     }
 
+    @Override
     public final Observable<Light> fetchLights(boolean fetchFromServer) {
         logger.debug("fetchLights()");
 
@@ -166,7 +153,8 @@ public class LightNetwork {
         return lightsObservable;
     }
 
-    public Observable<Light> fetchLight(final String id) {
+    @Override
+    public final Observable<Light> fetchLight(final String id) {
         if(id == null) {
             return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
         }
@@ -179,10 +167,6 @@ public class LightNetwork {
         });
     }
 
-    /**
-     * @param colourQuery the colour query
-     * @param durationQuery the colour query
-     */
     private Observable<StatusResponse> doSetColour(final String colourQuery, final String durationQuery) {
         logger.debug("doSetColour() " + colourQuery + NetworkConstants.SPACE + durationQuery);
 
@@ -325,20 +309,6 @@ public class LightNetwork {
 
     private String makeDurationString(final float duration) {
         return Float.toString(duration);
-    }
-
-    public static class FetchLightsSuccessEvent { }
-
-    public static class LightDetailsEvent {
-        private final Light light;
-
-        public LightDetailsEvent(Light light) {
-            this.light = light;
-        }
-
-        public final Light light() {
-            return light;
-        }
     }
 
     @Override
