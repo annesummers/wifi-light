@@ -99,7 +99,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         @Override
         public void onCompleted() {
             if (isViewAttached()) {
-                getView().showLightDetails();
+                getView().showMainView();
             }
         }
 

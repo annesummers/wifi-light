@@ -90,10 +90,10 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         }
 
         @Override
-        public void showLightDetails() {
+        public void showMainView() {
             state = STATE_SHOW_LIGHT_DETAILS;
 
-            logger.warn("showLightDetails()");
+            logger.warn("showMainView()");
             logger.warn(light.toString());
         }
 
@@ -101,7 +101,7 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         public void lightChanged(Light light) {
             this.light = light;
 
-            showLightDetails();
+            showMainView();
         }
 
         public Light getLight() {

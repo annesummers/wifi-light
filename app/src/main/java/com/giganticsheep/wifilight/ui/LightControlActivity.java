@@ -189,7 +189,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
-    public void showLightDetails() {
+    public void showMainView() {
         getViewState().setShowLightDetails();
 
         errorLayout.setVisibility(View.GONE);

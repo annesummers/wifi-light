@@ -70,7 +70,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @Override
-    public void showLightDetails() {
+    public void showMainView() {
         getViewState().setShowLightDetails();
 
         populateViews();
@@ -90,7 +90,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     public void lightChanged(Light light) {
         this.light = light;
 
-        showLightDetails();
+        showMainView();
     }
 
     public LightViewState getViewState() {

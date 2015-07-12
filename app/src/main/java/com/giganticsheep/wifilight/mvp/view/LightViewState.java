@@ -7,6 +7,8 @@ import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 /**
  * Created by anne on 29/06/15.
  * (*_*)
+ *
+ * Handles the different states the LightView can be in.
  */
 public class LightViewState implements RestoreableViewState<LightView> {
 
@@ -18,14 +20,23 @@ public class LightViewState implements RestoreableViewState<LightView> {
 
     private int state = STATE_SHOW_LOADING;
 
+    /**
+     * Sets the state to STATE_SHOW_LOADING.
+     */
     public void setShowLoading() {
         state = STATE_SHOW_LOADING;
     }
 
+    /**
+     * Sets the state to STATE_SHOW_ERROR.
+     */
     public void setShowError() {
         state = STATE_SHOW_ERROR;
     }
 
+    /**
+     * Sets the state to STATE_SHOW_LIGHT_DETAILS.
+     */
     public void setShowLightDetails() {
         state = STATE_SHOW_LIGHT_DETAILS;
     }
@@ -42,7 +53,7 @@ public class LightViewState implements RestoreableViewState<LightView> {
                 break;
 
             case STATE_SHOW_LIGHT_DETAILS:
-                lightView.showLightDetails();
+                lightView.showMainView();
                 break;
 
             default:

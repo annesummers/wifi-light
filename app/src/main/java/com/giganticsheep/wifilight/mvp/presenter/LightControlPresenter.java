@@ -68,7 +68,7 @@ public class LightControlPresenter extends LightPresenterBase {
         newLightIds = null;
 
         if (isViewAttached()) {
-            getView().showLightDetails();
+            getView().showMainView();
         }
     }
 
