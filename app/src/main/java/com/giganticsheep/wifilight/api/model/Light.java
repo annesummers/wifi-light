@@ -12,7 +12,7 @@ import java.util.Locale;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public class Light extends LightResponse implements Serializable {
+public class Light extends Response implements Serializable {
 
     public static int KELVIN_BASE = 2500;
 

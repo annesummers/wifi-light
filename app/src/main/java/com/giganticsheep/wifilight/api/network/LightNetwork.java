@@ -46,6 +46,7 @@ public class LightNetwork {
     // TODO selectors
     // TODO effects
     // TODO javadoc
+    // TODO connected can we find the light?
 
     private final NetworkDetails networkDetails;
     private final EventBus eventBus;
@@ -77,35 +78,35 @@ public class LightNetwork {
     }
 
     /**
-     * @param hue the hue to set the enabled lights
+     * @param hue the hue to set the selected lights
      */
     public final Observable<StatusResponse> setHue(final int hue, float duration) {
         return doSetColour(makeHueString(Light.convertHue(hue)), makeDurationString(duration));
     }
 
     /**
-     * @param saturation the saturation to set the enabled lights
+     * @param saturation the saturation to set the selected lights
      */
     public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
         return doSetColour(makeSaturationString(Light.convertSaturation(saturation)), makeDurationString(duration));
     }
 
     /**
-     * @param brightness the brightness to set the enabled lights
+     * @param brightness the brightness to set the selected lights
      */
     public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
         return doSetColour(makeBrightnessString(Light.convertBrightness(brightness)), makeDurationString(duration));
     }
 
     /**
-     * @param kelvin the kelvin (warmth to set the enabled lights
+     * @param kelvin the kelvin (warmth to set the selected lights
      */
     public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
         return doSetColour(makeKelvinString(kelvin + Light.KELVIN_BASE), makeDurationString(duration));
     }
 
     /**
-     * toggles the power of the enabled lights
+     * Toggles the power of the selected lights
      *
      */
     public final Observable<StatusResponse> togglePower() {

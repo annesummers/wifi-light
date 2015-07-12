@@ -17,7 +17,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class LightColourPresenterTest extends LightPresenterTest {
 
     @Override
-    protected LightPresenter createPresenter(LightPresenter.Injector injector) {
+    protected LightPresenterBase createPresenter(LightPresenterBase.Injector injector) {
         return new LightColourPresenter(injector);
     }
 

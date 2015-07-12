@@ -1,12 +1,10 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
-
 /**
  * Created by anne on 29/06/15.
  * (*_*)
  */
-public class LightEffectsPresenter extends LightPresenter {
+public class LightEffectsPresenter extends LightPresenterBase {
 
     public LightEffectsPresenter(Injector injector) {
         super(injector);

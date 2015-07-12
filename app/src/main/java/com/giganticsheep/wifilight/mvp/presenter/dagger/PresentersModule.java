@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.mvp.presenter;
+package com.giganticsheep.wifilight.mvp.presenter.dagger;
 
 import dagger.Module;
 

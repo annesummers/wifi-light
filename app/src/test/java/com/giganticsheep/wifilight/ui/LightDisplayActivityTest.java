@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.internal.app.ToolbarActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.Shadows;
-import org.robolectric.ShadowsAdapter;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
@@ -38,13 +36,13 @@ import static org.hamcrest.core.IsNull.nullValue;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 19)
-public class MainActivityTest {
+public class LightControlActivityTest {
 
-    private ActivityController<MainActivity> activityController;
+    private ActivityController<LightControlActivity> activityController;
 
     @Before
     public void setUp() throws Exception {
-        activityController = Robolectric.buildActivity(MainActivity.class);
+        activityController = Robolectric.buildActivity(LightControlActivity.class);
     }
 
     @After
@@ -52,7 +50,7 @@ public class MainActivityTest {
 
     @Test
     public void test_create_notNull() {
-        MainActivity activity = activityController
+        LightControlActivity activity = activityController
                 .create()
                 .postCreate(null)
                 .start()
@@ -75,8 +73,8 @@ public class MainActivityTest {
                 .saveInstanceState(savedState)
                 .destroy();
 
-        activityController = Robolectric.buildActivity(MainActivity.class);
-        MainActivity activity = activityController
+        activityController = Robolectric.buildActivity(LightControlActivity.class);
+        LightControlActivity activity = activityController
                 .create(savedState)
                 .postCreate(savedState)
                 .start()
@@ -91,7 +89,7 @@ public class MainActivityTest {
     public void testLoadsViewPager() {
         // TODO how to test the viewpager; at the moment find view by id just returns the last view attached to the pager
 
-        MainActivity activity = createAndGetActivity();
+        LightControlActivity activity = createAndGetActivity();
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
@@ -120,7 +118,7 @@ public class MainActivityTest {
 
     @Test
     public void testLoadsLightDetails() {
-        MainActivity activity = createAndGetActivity();
+        LightControlActivity activity = createAndGetActivity();
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
@@ -129,7 +127,7 @@ public class MainActivityTest {
 
     @Test
     public void testShowsLoadingView() {
-        MainActivity activity = createAndGetActivity();
+        LightControlActivity activity = createAndGetActivity();
 
         activity.showLoading();
 
@@ -144,9 +142,18 @@ public class MainActivityTest {
 
     @Test
     public void testShowsErrorView() {
-        MainActivity activity = createAndGetActivity();
+        LightControlActivity activity = createAndGetActivity();
 
-        activity.showError();
+        Exception errorException = null;
+
+        try {
+            activity.showError();
+        } catch (Exception e) {
+            // exception is thrown when we try to show an AlertDialog
+            errorException = e;
+        }
+
+        assertThat(errorException, not(nullValue()));
 
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);
@@ -159,7 +166,7 @@ public class MainActivityTest {
 
     @Test
     public void testShowsLightView() {
-        MainActivity activity = createAndGetActivity();
+        LightControlActivity activity = createAndGetActivity();
 
         activity.showLightDetails();
 
@@ -174,7 +181,7 @@ public class MainActivityTest {
 
     @Test
     public void testRefreshShown() {
-        MainActivity activity = createAndGetActivity();
+        LightControlActivity activity = createAndGetActivity();
 
         //ToolbarActionBar actionBar = activity.getSupportActionBar();
         //actionBar.
@@ -182,7 +189,7 @@ public class MainActivityTest {
 
     @Test
     public void testRefreshRefreshesData() {
-        MainActivity activity = createAndGetActivity();
+        LightControlActivity activity = createAndGetActivity();
 
         ShadowActivity shadowActivity = Shadows.shadowOf(activity);
 
@@ -197,7 +204,7 @@ public class MainActivityTest {
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
     }
 
-    private MainActivity createAndGetActivity() {
+    private LightControlActivity createAndGetActivity() {
         activityController
                 .create()
                 .postCreate(null)

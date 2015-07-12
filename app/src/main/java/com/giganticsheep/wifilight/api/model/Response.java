@@ -8,18 +8,18 @@ import java.io.Serializable;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public class LightResponse implements Serializable {
+public class Response implements Serializable {
     @SerializedName("cod")
     public int httpCode;
 
     public String id;
     public String label;
 
-    public LightResponse(String id) {
+    public Response(String id) {
         this.id = id;
     }
 
-    public LightResponse() {
+    public Response() {
 
     }
 

@@ -14,11 +14,11 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public class MainActivityPresenterTest extends LightPresenterTest {
+public class LightControlPresenterTest extends LightPresenterTest {
 
     @Override
-    protected LightPresenter createPresenter(LightPresenter.Injector injector) {
-        return new MainActivityPresenter(injector);
+    protected LightPresenterBase createPresenter(LightPresenterBase.Injector injector) {
+        return new LightControlPresenter(injector);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class MainActivityPresenterTest extends LightPresenterTest {
         assertThat(view.getLight(), equalTo(light));
     }
 
-    private MainActivityPresenter getPresenter() {
-        return (MainActivityPresenter) presenter;
+    private LightControlPresenter getPresenter() {
+        return (LightControlPresenter) presenter;
     }
 }

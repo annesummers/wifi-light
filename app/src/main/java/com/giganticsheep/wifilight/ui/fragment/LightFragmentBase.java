@@ -2,19 +2,14 @@ package com.giganticsheep.wifilight.ui.fragment;
 
 import android.os.Bundle;
 
-import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.MainActivity;
-import com.giganticsheep.wifilight.ui.base.BaseFragment;
-import com.giganticsheep.wifilight.mvp.presenter.LightPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
+import com.giganticsheep.wifilight.ui.LightControlActivity;
+import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.mvp.view.LightViewState;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
-import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
-
-import javax.inject.Inject;
 
 import icepick.Icicle;
 
@@ -24,7 +19,7 @@ import icepick.Icicle;
  */
 
 @FragmentArgsInherited
-public abstract class LightFragment extends BaseFragment<LightView, LightPresenter>
+public abstract class LightFragmentBase extends FragmentBase<LightView, LightPresenterBase>
                                     implements LightView {
     // TODO inject stuff into the presenter instead
 
@@ -102,13 +97,13 @@ public abstract class LightFragment extends BaseFragment<LightView, LightPresent
         return (LightViewState) super.getViewState();
     }
 
-    protected MainActivity getMainActivity() {
-        return (MainActivity) getActivity();
+    protected LightControlActivity getMainActivity() {
+        return (LightControlActivity) getActivity();
     }
 
     protected abstract void setLightDetails();
 
-    public interface Injector extends LightPresenter.Injector {
-        void inject(LightFragment lightFragment);
+    public interface Injector extends LightPresenterBase.Injector {
+        void inject(LightFragmentBase lightFragment);
     }
 }

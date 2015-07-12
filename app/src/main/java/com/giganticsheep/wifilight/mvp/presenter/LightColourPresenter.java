@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
 import com.squareup.otto.Subscribe;
 
 import rx.Observable;
@@ -13,7 +12,7 @@ import rx.Subscriber;
  * Created by anne on 29/06/15.
  * (*_*)
  */
-public class LightColourPresenter extends LightPresenter {
+public class LightColourPresenter extends LightPresenterBase {
 
     public LightColourPresenter(Injector injector) {
         super(injector);

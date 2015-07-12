@@ -1,9 +1,10 @@
 package com.giganticsheep.wifilight;
 
+import android.app.Application;
+
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.dagger.HasComponent;
 import com.giganticsheep.wifilight.dagger.WifiLightAppComponent;
-import com.giganticsheep.wifilight.ui.base.BaseApplication;
 
 import org.jetbrains.annotations.NonNls;
 
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NonNls;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public class WifiLightApplication extends BaseApplication implements HasComponent<WifiLightAppComponent> {
+public class WifiLightApplication extends Application implements HasComponent<WifiLightAppComponent> {
 
     @NonNls private static final String DEFAULT_SERVER_STRING = "https://api.lifx.com";
     @NonNls private static final String DEFAULT_URL_STRING1 = "v1beta1";

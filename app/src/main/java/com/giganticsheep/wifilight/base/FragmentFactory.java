@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.base;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.ui.base.BaseFragment;
+import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
@@ -29,7 +29,7 @@ public class FragmentFactory {
      * @param name the name of the fragment to create
      * @return the Observable to subscribe to
      */
-    public final Observable<? extends BaseFragment> createFragmentAsync(final String name) {
+    public final Observable<? extends FragmentBase> createFragmentAsync(final String name) {
         try {
             return Observable.just(createFragment(name));
         } catch (Exception e) {
@@ -42,7 +42,7 @@ public class FragmentFactory {
      * @param name the name of the fragment to create
      * @return the Observable to subscribe to
      */
-    public final BaseFragment createFragment(final String name) throws Exception {
+    public final FragmentBase createFragment(final String name) throws Exception {
         if(application != null) {
             if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
                 return LightColourFragment.newInstance(name);

@@ -15,7 +15,7 @@ import dagger.Component;
 @Component(
         dependencies = {WifiLightTestsComponent.class},
         modules = { TestModule.class } )
-public interface TestPresenterComponent extends LightPresenter.Injector {
+public interface TestPresenterComponent extends LightPresenterBase.Injector {
 
     void inject(LightPresenterTest presenterTest);
 }

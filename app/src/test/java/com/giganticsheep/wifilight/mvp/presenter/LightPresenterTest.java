@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.model.TestModelComponent;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
 import com.giganticsheep.wifilight.mvp.view.LightView;
@@ -30,7 +29,7 @@ public abstract class LightPresenterTest extends WifiLightTestBase {
         component.inject(this);
     }
 
-    protected LightPresenter presenter;
+    protected LightPresenterBase presenter;
     protected TestLightView view;
 
     @Before
@@ -58,7 +57,7 @@ public abstract class LightPresenterTest extends WifiLightTestBase {
         assertThat(view.getState(), equalTo(view.STATE_SHOW_ERROR));
     }
 
-    protected abstract LightPresenter createPresenter(LightPresenter.Injector injector);
+    protected abstract LightPresenterBase createPresenter(LightPresenterBase.Injector injector);
 
     protected class TestLightView implements LightView {
         protected final int STATE_SHOW_LOADING = 0;

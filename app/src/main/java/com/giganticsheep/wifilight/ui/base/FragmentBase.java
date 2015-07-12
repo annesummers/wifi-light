@@ -30,7 +30,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateFragment<V, P> {
+public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateFragment<V, P> {
 
     // TODO subscription management
     // TODO argument stuff
@@ -64,14 +64,14 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
      * @return the created Fragment
      * @throws Exception if the name of the fragment doesn't match any in the application
      */
-    public static BaseFragment create(final String name, final FragmentFactory fragmentFactory) throws Exception {
+    public static FragmentBase create(final String name, final FragmentFactory fragmentFactory) throws Exception {
         return fragmentFactory.createFragment(name);
     }
 
     /**
      * Constructs a new BaseFragment.
      */
-    protected BaseFragment() { }
+    protected FragmentBase() { }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -155,7 +155,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
      *
      * @param activity the Activity to attach to
      */
-    public final void attachToActivity(final BaseActivity activity,
+    public final void attachToActivity(final ActivityBase activity,
                                        final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;
 
@@ -199,8 +199,8 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
     /**
      * @return the Activity associated with this Fragment
      */
-    protected final BaseActivity getBaseActivity() {
-        return (BaseActivity) getActivity();
+    protected final ActivityBase getBaseActivity() {
+        return (ActivityBase) getActivity();
     }
 
     /**
@@ -228,7 +228,7 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
-    private void doAttachToActivity(final BaseActivity activity) {
+    private void doAttachToActivity(final ActivityBase activity) {
         final String name = attachmentDetails.name();
         final int position = attachmentDetails.position();
         final boolean addToBackStack = attachmentDetails.addToBackStack();
@@ -243,14 +243,14 @@ public abstract class BaseFragment <V extends MvpView, P extends MvpPresenter<V>
         }
 
         if(attachId != 0) {
-            final BaseFragment existingFragment = (BaseFragment) fragmentManager.findFragmentById(attachId);
+            final FragmentBase existingFragment = (FragmentBase) fragmentManager.findFragmentById(attachId);
             if (existingFragment != null) {
                 fragmentTransaction.detach(existingFragment);
             }
 
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-            BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(name);
+            FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(name);
             if (fragment != null && fragment.equals(this)) {
                 fragmentTransaction.attach(this);
             } else {

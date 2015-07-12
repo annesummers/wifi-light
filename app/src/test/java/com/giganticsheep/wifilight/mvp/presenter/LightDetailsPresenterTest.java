@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.*;
 
 /**
  * Created by anne on 10/07/15.
@@ -17,7 +16,7 @@ import static org.junit.Assert.*;
 public class LightDetailsPresenterTest extends LightPresenterTest {
 
     @Override
-    protected LightPresenter createPresenter(LightPresenter.Injector injector) {
+    protected LightPresenterBase createPresenter(LightPresenterBase.Injector injector) {
         return new LightDetailsPresenter(injector);
     }
 

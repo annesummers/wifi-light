@@ -9,10 +9,10 @@ import android.widget.ToggleButton;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.ModelConstants;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.MainActivity;
-import com.giganticsheep.wifilight.ui.base.BaseFragment;
+import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
+import com.giganticsheep.wifilight.ui.LightControlActivity;
+import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.mvp.presenter.LightColourPresenter;
-import com.giganticsheep.wifilight.mvp.presenter.LightPresenter;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ import butterknife.OnCheckedChanged;
  * (*_*)
  */
 @FragmentArgsInherited
-public class LightColourFragment extends LightFragment {
+public class LightColourFragment extends LightFragmentBase {
 
     // TODO sliders thumb drops off the end
     // TODO put toggle above pager maybe in its own fragment?
@@ -35,7 +35,7 @@ public class LightColourFragment extends LightFragment {
         LightColourFragment fragment = new LightColourFragment();
 
         Bundle args = new Bundle();
-        args.putString(BaseFragment.FRAGMENT_ARGS_NAME, name);
+        args.putString(FragmentBase.FRAGMENT_ARGS_NAME, name);
         fragment.setArguments(args);
 
         return fragment;
@@ -54,7 +54,7 @@ public class LightColourFragment extends LightFragment {
     }
 
     @Override
-    public LightPresenter createPresenter() {
+    public LightPresenterBase createPresenter() {
         return new LightColourPresenter(getMainActivity().getComponent());
     }
 
@@ -89,9 +89,9 @@ public class LightColourFragment extends LightFragment {
     @OnCheckedChanged(R.id.power_toggle) public void onPowerToggle(CompoundButton compoundButton,
                                                                    boolean isChecked) {
         if(isChecked && light != null && light.getPower() != ModelConstants.Power.ON) {
-            getPresenter().setPower(ModelConstants.Power.ON, MainActivity.DEFAULT_DURATION);
+            getPresenter().setPower(ModelConstants.Power.ON, LightControlActivity.DEFAULT_DURATION);
         } else if(!isChecked && light != null && light.getPower() != ModelConstants.Power.OFF){
-            getPresenter().setPower(ModelConstants.Power.OFF, MainActivity.DEFAULT_DURATION);
+            getPresenter().setPower(ModelConstants.Power.OFF, LightControlActivity.DEFAULT_DURATION);
         }
     }
 
@@ -133,13 +133,13 @@ public class LightColourFragment extends LightFragment {
                 int value = values.get(seekBar);
 
                 if (seekBar.equals(hueSeekBar)) {
-                    getPresenter().setHue(value, MainActivity.DEFAULT_DURATION);
+                    getPresenter().setHue(value, LightControlActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(saturationSeekBar)) {
-                    getPresenter().setSaturation(value, MainActivity.DEFAULT_DURATION);
+                    getPresenter().setSaturation(value, LightControlActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(valueSeekBar)) {
-                    getPresenter().setBrightness(value, MainActivity.DEFAULT_DURATION);
+                    getPresenter().setBrightness(value, LightControlActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(kelvinSeekBar)) {
-                    getPresenter().setKelvin(value, MainActivity.DEFAULT_DURATION);
+                    getPresenter().setKelvin(value, LightControlActivity.DEFAULT_DURATION);
                 }
 
                 values.remove(seekBar);

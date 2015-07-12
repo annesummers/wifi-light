@@ -4,23 +4,16 @@ import android.content.res.Configuration;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.mvp.view.LightViewState;
-import com.hannesdorfmann.mosby.MosbyActivity;
-import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
-import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
-import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +29,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateActivity<V, P> {
+public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateActivity<V, P> {
 
     // TODO subscription management
 
@@ -47,7 +40,7 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
 
     @Icicle private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
 
-    private final Map<BaseFragment, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
+    private final Map<FragmentBase, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
 
     private ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
@@ -114,7 +107,7 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
 
         fragmentsResumed = true;
 
-        for(final BaseFragment fragment : fragmentAttachmentQueue.keySet()) {
+        for(final FragmentBase fragment : fragmentAttachmentQueue.keySet()) {
             fragment.attachToActivity(this, fragmentAttachmentQueue.get(fragment));
         }
 
@@ -132,7 +125,7 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
      * @param message the message to show in the toast
      */
     public final void showToast(final String message) {
-        Toast.makeText(BaseActivity.this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(ActivityBase.this, message, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -141,7 +134,7 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param fragment the Fragment to queue for attachment
      */
-    public final void queueFragmentForAttachment(final BaseFragment fragment, FragmentAttachmentDetails details) {
+    public final void queueFragmentForAttachment(final FragmentBase fragment, FragmentAttachmentDetails details) {
         fragmentAttachmentQueue.put(fragment, details);
     }
 
@@ -162,15 +155,15 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
      * @param attachmentDetails the details of the fragment to attach
      */
     protected final void attachNewFragment(final FragmentAttachmentDetails attachmentDetails) {
-        BaseFragment fragment;
+        FragmentBase fragment;
 
         try {
-            fragment = BaseFragment.create(attachmentDetails.name(), fragmentFactory);
+            fragment = FragmentBase.create(attachmentDetails.name(), fragmentFactory);
 
             addFragment(attachmentDetails);
 
             if (fragmentsResumed()) {
-                fragment.attachToActivity(BaseActivity.this, attachmentDetails);
+                fragment.attachToActivity(ActivityBase.this, attachmentDetails);
             } else {
                 queueFragmentForAttachment(fragment, attachmentDetails);
             }
@@ -188,13 +181,13 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
     protected final void attachFragment(final FragmentAttachmentDetails attachmentDetails) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(attachmentDetails.name());
+        FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(attachmentDetails.name());
 
         if(fragment == null) {
             attachNewFragment(attachmentDetails);
         } else {
             if (fragmentsResumed()) {
-                fragment.attachToActivity(BaseActivity.this, attachmentDetails);
+                fragment.attachToActivity(ActivityBase.this, attachmentDetails);
             } else {
                 queueFragmentForAttachment(fragment, attachmentDetails);
             }
@@ -240,10 +233,10 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
      * @param position the position the fragment is attached at
      * @return the found fragment
      */
-    protected BaseFragment findFragment(final int position) {
+    protected FragmentBase findFragment(final int position) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        return (BaseFragment) fragmentManager.findFragmentById(containerIdFromPosition(position));
+        return (FragmentBase) fragmentManager.findFragmentById(containerIdFromPosition(position));
     }
 
     /**
@@ -252,7 +245,7 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpPresenter<V>>
      * @param fragmentDetails the attach information associated with the fragment
      * @return the found fragment
      */
-    protected BaseFragment findFragment(final AttachDetails fragmentDetails) {
+    protected FragmentBase findFragment(final FragmentAttachmentDetails fragmentDetails) {
         return findFragment(fragmentDetails.position());
     }
 

@@ -1,25 +1,21 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dagger.Component;
-
 /**
  * Created by anne on 09/07/15.
  * (*_*)
  */
-public class MainActivityPresenter extends LightPresenter {
+public class LightControlPresenter extends LightPresenterBase {
 
     private String currentLight;
     private ArrayList<String> newLightIds;
 
-    public MainActivityPresenter(Injector injector) {
+    public LightControlPresenter(Injector injector) {
         super(injector);
 
         eventBus.registerForEvents(this);

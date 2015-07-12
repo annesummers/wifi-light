@@ -19,24 +19,22 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.dagger.HasComponent;
-import com.giganticsheep.wifilight.mvp.presenter.MainActivityPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.LightControlPresenter;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.mvp.view.LightViewState;
+import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
-import com.giganticsheep.wifilight.ui.base.BaseActivity;
-import com.giganticsheep.wifilight.ui.dagger.DaggerMainActivityComponent;
-import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
+import com.giganticsheep.wifilight.ui.dagger.DaggerLightControlActivityComponent;
+import com.giganticsheep.wifilight.ui.dagger.LightControlActivityComponent;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
-
-import javax.inject.Inject;
 
 import butterknife.InjectView;
 
 
-public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
+public class LightControlActivity extends ActivityBase<LightView, LightControlPresenter>
                             implements LightView,
-                            HasComponent<MainActivityComponent> {
+                            HasComponent<LightControlActivityComponent> {
 
     public static final float DEFAULT_DURATION = 1.0F;
 
@@ -46,7 +44,7 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
 
-    private MainActivityComponent component;
+    private LightControlActivityComponent component;
 
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
@@ -152,7 +150,7 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
 
         WifiLightApplication application = ((WifiLightApplication)getApplication());
 
-        component = DaggerMainActivityComponent.builder()
+        component = DaggerLightControlActivityComponent.builder()
                 .wifiLightAppComponent(application.getComponent())
                 .build();
 
@@ -160,15 +158,15 @@ public class MainActivity extends BaseActivity<LightView, MainActivityPresenter>
     }
 
     @Override
-    public MainActivityComponent getComponent() {
+    public LightControlActivityComponent getComponent() {
         return component;
     }
 
     // MVP
 
     @Override
-    public MainActivityPresenter createPresenter() {
-        return new MainActivityPresenter(getComponent());
+    public LightControlPresenter createPresenter() {
+        return new LightControlPresenter(getComponent());
     }
 
     @Override

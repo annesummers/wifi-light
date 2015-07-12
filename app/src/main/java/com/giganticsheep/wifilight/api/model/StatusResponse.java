@@ -4,7 +4,7 @@ package com.giganticsheep.wifilight.api.model;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public class StatusResponse extends LightResponse {
+public class StatusResponse extends Response {
     public String status;
 
     public StatusResponse(String status) {

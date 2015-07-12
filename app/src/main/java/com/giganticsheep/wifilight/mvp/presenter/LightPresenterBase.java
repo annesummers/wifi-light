@@ -6,7 +6,6 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.view.LightView;
-import com.giganticsheep.wifilight.ui.dagger.MainActivityComponent;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import javax.inject.Inject;
@@ -17,7 +16,7 @@ import rx.Subscriber;
  * Created by anne on 29/06/15.
  * (*_*)
  */
-public class LightPresenter extends MvpBasePresenter<LightView> {
+public class LightPresenterBase extends MvpBasePresenter<LightView> {
 
     protected Logger logger;
 
@@ -27,7 +26,7 @@ public class LightPresenter extends MvpBasePresenter<LightView> {
 
     protected LightSubscriber lightSubscriber = new LightSubscriber();
 
-    public LightPresenter(Injector injector) {
+    public LightPresenterBase(Injector injector) {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
@@ -45,7 +44,7 @@ public class LightPresenter extends MvpBasePresenter<LightView> {
     public void onDestroy() { }
 
     public interface Injector {
-        void inject(LightPresenter lightPresenter);
+        void inject(LightPresenterBase lightPresenter);
     }
 
     private class LightSubscriber extends Subscriber<Light>  {

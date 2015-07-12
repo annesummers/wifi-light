@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.ui.fragment;
 
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
-import com.giganticsheep.wifilight.ui.MainActivity;
+import com.giganticsheep.wifilight.ui.LightControlActivity;
 import com.giganticsheep.wifilight.ui.UITest;
 
 import org.junit.Before;
@@ -19,13 +19,13 @@ import static org.junit.Assert.assertThat;
  */
 public abstract class LightFragmentTest extends UITest {
 
-    protected LightFragment fragment;
+    protected LightFragmentBase fragment;
 
     @Before
     public void setUp() throws Exception {
-        fragment = (LightFragment) fragmentFactory.createFragment(getFragmentName());
+        fragment = (LightFragmentBase) fragmentFactory.createFragment(getFragmentName());
 
-        SupportFragmentTestUtil.startFragment(fragment, MainActivity.class);
+        SupportFragmentTestUtil.startFragment(fragment, LightControlActivity.class);
     }
 
     @Test
