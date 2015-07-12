@@ -1,8 +1,10 @@
 package com.giganticsheep.wifilight.util;
 
+import android.app.Application;
 import android.util.Log;
 
 import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.BaseLogger;
 
 /**
@@ -11,9 +13,9 @@ import com.giganticsheep.wifilight.base.BaseLogger;
  */
 public class ApplicationLogger implements BaseLogger {
 
-    private final BaseApplication application;
+    private final Application application;
 
-    public ApplicationLogger(BaseApplication application) {
+    public ApplicationLogger(Application application) {
         this.application = application;
     }
 
