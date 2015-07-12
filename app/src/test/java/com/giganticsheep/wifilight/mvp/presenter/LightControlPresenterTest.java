@@ -30,7 +30,7 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testGetCurrentLight() throws Exception {
-        String lightId = getPresenter().getCurrentLight();
+        String lightId = getPresenter().getCurrentLightId();
 
         assertThat(lightId, equalTo(null));
     }
@@ -43,7 +43,7 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
         getPresenter().handleFetchLightsSuccess(new LightNetwork.FetchLightsSuccessEvent());
 
         assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DETAILS));
-        assertThat(getPresenter().getCurrentLight(), equalTo(light.id()));
+        assertThat(getPresenter().getCurrentLightId(), equalTo(light.id()));
     }
 
     @Test

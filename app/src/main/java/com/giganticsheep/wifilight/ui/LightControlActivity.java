@@ -224,7 +224,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     public String getCurrentLight() {
-        return presenter.getCurrentLight();
+        return presenter.getCurrentLightId();
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {

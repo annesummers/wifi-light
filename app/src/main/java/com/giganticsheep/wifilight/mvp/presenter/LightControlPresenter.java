@@ -9,8 +9,12 @@ import java.util.List;
 /**
  * Created by anne on 09/07/15.
  * (*_*)
+ *
+ * Used by the LightControlActivity.
  */
 public class LightControlPresenter extends LightPresenterBase {
+
+    // TODO current Light stuff may not be the right way to handle this
 
     private String currentLight;
     private ArrayList<String> newLightIds;
@@ -23,22 +27,34 @@ public class LightControlPresenter extends LightPresenterBase {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+
         eventBus.unregisterForEvents(this);
     }
 
+    /**
+     * Fetches all the available Lights.
+     */
     public void fetchLights() {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
-        lightNetwork.fetchLights(true)
-                .subscribe(lightSubscriber);
+        compositeSubscription.add(lightNetwork.fetchLights(true).subscribe(fetchLightSubscriber));
     }
 
-    public String getCurrentLight() {
+    /**
+     * @return the id of the current displayed Light.
+     */
+    public String getCurrentLightId() {
         return currentLight;
     }
 
+    /**
+     * Called when all the available Lights have been fetched from the network.
+     *
+     * @param event a FetchLightsSuccessEvent
+     */
     @Subscribe
     public synchronized void handleFetchLightsSuccess(LightNetwork.FetchLightsSuccessEvent event) {
         logger.debug("handleFetchLightsSuccess()");
@@ -56,6 +72,11 @@ public class LightControlPresenter extends LightPresenterBase {
         }
     }
 
+    /**
+     * Called every time a Light has been fetched from the network.
+     *
+     * @param event a LightDetailsEvent; contains a Light
+     */
     @Subscribe
     public synchronized void handleLightDetails(LightNetwork.LightDetailsEvent event) {
         logger.debug("handleLightDetails() " + event.light().toString());

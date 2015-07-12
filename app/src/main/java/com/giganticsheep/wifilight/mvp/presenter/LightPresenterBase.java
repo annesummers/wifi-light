@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.api.model.Light;
@@ -11,43 +12,89 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import javax.inject.Inject;
 
 import rx.Subscriber;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by anne on 29/06/15.
  * (*_*)
+ *
+ * Base class for all the Presenters that show information about a Light.
  */
-public class LightPresenterBase extends MvpBasePresenter<LightView> {
+public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
+
+    // TODO use an interface unstead of a LightNetwork object to abstract the Presenters
+    // from the model.
 
     protected Logger logger;
+
+    protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
     @Inject protected LightNetwork lightNetwork;
 
-    protected LightSubscriber lightSubscriber = new LightSubscriber();
+    protected FetchLightSubscriber fetchLightSubscriber = new FetchLightSubscriber();
+    protected SetLightSubscriber setLightSubscriber = new SetLightSubscriber();
 
-    public LightPresenterBase(Injector injector) {
+    /**
+     * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
+     *
+     * @param injector an Injector used to inject this object into a Component that will
+     *                 provide the injected class members.
+     */
+    protected LightPresenterBase(Injector injector) {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
     }
 
+    /**
+     * Fetches the Light with the given id.
+     *
+     * @param id the id of the Light to fetch.
+     */
     public void fetchLight(String id) {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
-        lightNetwork.fetchLight(id)
-                .subscribe(lightSubscriber);
+        compositeSubscription.add(lightNetwork.fetchLight(id).subscribe(fetchLightSubscriber));
     }
 
-    public void onDestroy() { }
+    /**
+     * Called when the Presenter is destroyed, overriden to cleanup members and
+     * to unsubscribe from any services or events the Presenter may be subscribed to
+     */
+    public void onDestroy() {
+        compositeSubscription.unsubscribe();
+    }
 
+    /**
+     * The Injector interface is implemented by a Component that provides the injected
+     * class members, enabling a LightPresenterBase or derived class to inject itself
+     * into the Component.
+     */
     public interface Injector {
         void inject(LightPresenterBase lightPresenter);
     }
 
-    private class LightSubscriber extends Subscriber<Light>  {
+    private class SetLightSubscriber extends Subscriber<StatusResponse>  {
+
+        @Override
+        public void onCompleted() { }
+
+        @Override
+        public void onError(Throwable e) {
+            if (isViewAttached()) {
+                getView().showError(e);
+            }
+        }
+
+        @Override
+        public void onNext(StatusResponse light) { }
+    }
+
+    private class FetchLightSubscriber extends Subscriber<Light>  {
 
         @Override
         public void onCompleted() {

@@ -17,9 +17,16 @@ public class LightDetailsPresenter extends LightPresenterBase {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+
         eventBus.unregisterForEvents(this);
     }
 
+    /**
+     * Called every time a Light is fetched from the network.
+     *
+     * @param event a LightDetailsEvent; contains a Light
+     */
     @Subscribe
     public void handleLightDetails(LightNetwork.LightDetailsEvent event) {
         getView().lightChanged(event.light());
