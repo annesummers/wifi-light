@@ -1,8 +1,8 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import com.giganticsheep.wifilight.TestLightResponse;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.LightResponse;
 import com.giganticsheep.wifilight.base.TestConstants;
 
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testHandleFetchLightsSuccess() throws Exception {
-        Light light = new LightResponse(TestConstants.TEST_ID);
+        Light light = new TestLightResponse(TestConstants.TEST_ID);
 
         getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
         getPresenter().handleFetchLightsSuccess(new LightControl.FetchLightsSuccessEvent());
@@ -49,7 +49,7 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testHandleLightDetails() throws Exception {
-        Light light = new LightResponse(TestConstants.TEST_ID);
+        Light light = new TestLightResponse(TestConstants.TEST_ID);
 
         getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
 

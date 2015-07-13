@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
-import com.giganticsheep.wifilight.api.network.LightResponse;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
 import com.giganticsheep.wifilight.mvp.presenter.dagger.TestPresenterComponent;
@@ -10,6 +10,8 @@ import com.giganticsheep.wifilight.mvp.view.LightView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -66,7 +68,7 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         protected final int STATE_SHOW_ERROR = 2;
 
         private int state = STATE_SHOW_LOADING;
-        private LightResponse light;
+        private Light light;
 
         @Override
         public void showLoading() {
@@ -98,13 +100,13 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         }
 
         @Override
-        public void lightChanged(LightResponse light) {
+        public void lightChanged(Light light) {
             this.light = light;
 
             showMainView();
         }
 
-        public LightResponse getLight() {
+        public Light getLight() {
             return light;
         }
 
@@ -112,4 +114,5 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
             return state;
         }
     }
+
 }

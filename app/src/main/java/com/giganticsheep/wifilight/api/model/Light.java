@@ -10,8 +10,6 @@ import java.util.Date;
  */
 public interface Light extends LightDataBase {
 
-    int KELVIN_BASE = 2500;
-
     /**
      * @return if this light is connected or not.
      */
@@ -67,5 +65,5 @@ public interface Light extends LightDataBase {
     /**
      * @return whether this light has colour temperature or not
      */
-    boolean hasVariableColourTemp();
+    boolean hasVariableColourTemp(); // conversion methods
 }

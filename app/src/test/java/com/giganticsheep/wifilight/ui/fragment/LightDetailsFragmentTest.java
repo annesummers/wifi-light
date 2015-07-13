@@ -4,7 +4,7 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.network.LightResponse;
+import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.base.TestConstants;
 
 import org.junit.Test;
@@ -38,9 +38,9 @@ public class LightDetailsFragmentTest extends LightFragmentTestBase {
         TextView kelvinTextView = (TextView) fragment.getView().findViewById(R.id.kelvin_textview);
         TextView saturationTextView = (TextView) fragment.getView().findViewById(R.id.saturation_textview);
 
-        assertThat((String)(brightnessTextView.getText()), equalTo(Integer.toString(LightResponse.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE))));
-        assertThat((String)(hueTextView.getText()), equalTo(Integer.toString(LightResponse.convertHue(TestConstants.TEST_HUE_DOUBLE))));
+        assertThat((String)(brightnessTextView.getText()), equalTo(Integer.toString(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE))));
+        assertThat((String)(hueTextView.getText()), equalTo(Integer.toString(LightConstants.convertHue(TestConstants.TEST_HUE_DOUBLE))));
         assertThat((String)(kelvinTextView.getText()), equalTo(Integer.toString(TestConstants.TEST_KELVIN)));
-        assertThat((String)(saturationTextView.getText()), equalTo(Integer.toString(LightResponse.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE))));
+        assertThat((String)(saturationTextView.getText()), equalTo(Integer.toString(LightConstants.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE))));
     }
 }

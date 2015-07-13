@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.dagger.IOScheduler;
@@ -78,22 +79,22 @@ public class LightNetwork implements LightControl {
 
     @Override
     public final Observable<StatusResponse> setHue(final int hue, float duration) {
-        return doSetColour(makeHueString(LightResponse.convertHue(hue)), makeDurationString(duration));
+        return doSetColour(makeHueString(LightConstants.convertHue(hue)), makeDurationString(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
-        return doSetColour(makeSaturationString(LightResponse.convertSaturation(saturation)), makeDurationString(duration));
+        return doSetColour(makeSaturationString(LightConstants.convertSaturation(saturation)), makeDurationString(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
-        return doSetColour(makeBrightnessString(LightResponse.convertBrightness(brightness)), makeDurationString(duration));
+        return doSetColour(makeBrightnessString(LightConstants.convertBrightness(brightness)), makeDurationString(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
-        return doSetColour(makeKelvinString(kelvin + LightResponse.KELVIN_BASE), makeDurationString(duration));
+        return doSetColour(makeKelvinString(kelvin + LightConstants.KELVIN_BASE), makeDurationString(duration));
     }
 
     @Override

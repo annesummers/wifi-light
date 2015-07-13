@@ -1,7 +1,5 @@
 package com.giganticsheep.wifilight.dagger;
 
-import com.giganticsheep.wifilight.api.network.dagger.NetworkDetailsGraph;
-
 import rx.Scheduler;
 
 /**

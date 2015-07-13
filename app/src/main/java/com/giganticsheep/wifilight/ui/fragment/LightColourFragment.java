@@ -9,6 +9,7 @@ import android.widget.ToggleButton;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
@@ -80,7 +81,7 @@ public class LightColourFragment extends LightFragmentBase {
         hueSeekBar.setProgress(light.getHue());
         saturationSeekBar.setProgress(light.getSaturation());
         valueSeekBar.setProgress(light.getBrightness());
-        kelvinSeekBar.setProgress(light.getKelvin() - Light.KELVIN_BASE);
+        kelvinSeekBar.setProgress(light.getKelvin() - LightConstants.KELVIN_BASE);
 
         powerToggle.setChecked(light.getPower() == LightControl.Power.ON);
     }

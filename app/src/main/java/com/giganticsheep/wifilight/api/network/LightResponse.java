@@ -1,8 +1,10 @@
 package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.ColourData;
 import com.giganticsheep.wifilight.api.model.GroupData;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.model.LightConstants;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -17,9 +19,6 @@ import java.util.Locale;
 class LightResponse extends Response
                             implements Light,
                             Serializable {
-
-    private static final int BRIGHTNESS_MAX = 100;
-    private static final int SATURATION_MAX = 100;
 
     public String uuid;
     public boolean connected;
@@ -45,34 +44,42 @@ class LightResponse extends Response
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ", Locale.US);
 
+    @Override
     public boolean isConnected() {
         return connected;
     }
 
+    @Override
     public int getHue() {
-        return convertHue(color.hue);
+        return LightConstants.convertHue(color.hue);
     }
 
+    @Override
     public int getSaturation() {
-        return convertSaturation(color.saturation);
+        return LightConstants.convertSaturation(color.saturation);
     }
 
+    @Override
     public int getKelvin() {
         return color.kelvin;
     }
 
+    @Override
     public int getBrightness() {
-        return convertBrightness(brightness);
+        return LightConstants.convertBrightness(brightness);
     }
 
+    @Override
     public LightControl.Power getPower() {
         return power.equals("on") ? LightControl.Power.ON : LightControl.Power.OFF;
     }
 
+    @Override
     public String getProductName() {
         return product_name;
     }
 
+    @Override
     public Date getLastSeen() {
         Date date = new Date();
         try {
@@ -84,57 +91,19 @@ class LightResponse extends Response
         return date;
     }
 
+    @Override
     public double getSecondsSinceLastSeen() {
         return seconds_since_last_seen;
     }
 
+    @Override
     public boolean hasColour() {
         return capabilities.has_color;
     }
 
+    @Override
     public boolean hasVariableColourTemp() {
         return capabilities.has_variable_color_temp;
-    }
-
-    // conversion methods
-
-    public static int convertBrightness(double brightness) {
-        return (int) (brightness*BRIGHTNESS_MAX);
-    }
-
-    public static int convertSaturation(double saturation) {
-        return (int)(saturation*SATURATION_MAX);
-    }
-
-    public static int convertHue(double hue) {
-        return (int) hue;
-    }
-
-    public static double convertBrightness(int brightness) {
-        return (double)brightness/BRIGHTNESS_MAX;
-    }
-
-    public static double convertSaturation(int saturation) {
-        return (double)saturation/SATURATION_MAX;
-    }
-
-    public static double convertHue(int hue) {
-        return (double) hue;
-    }
-
-    public class ColourData {
-        public double hue;
-        public double saturation;
-        public int kelvin;
-
-        @Override
-        public String toString() {
-            return "ColorData{" +
-                    "hue=" + hue +
-                    ", saturation=" + saturation +
-                    ", kelvin=" + kelvin +
-                    '}';
-        }
     }
 
     public class CapabilitiesData {

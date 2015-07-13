@@ -2,9 +2,8 @@ package com.giganticsheep.wifilight.api.network.dagger;
 
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.api.network.dagger.ServerURL;
-import com.giganticsheep.wifilight.dagger.WifiLightModule;
 import com.giganticsheep.wifilight.dagger.ApplicationScope;
+import com.giganticsheep.wifilight.dagger.WifiLightModule;
 
 import dagger.Module;
 import dagger.Provides;
