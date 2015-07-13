@@ -1,8 +1,7 @@
-package com.giganticsheep.wifilight.api.model.dagger;
+package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
-import com.giganticsheep.wifilight.api.model.ModelTest;
-import com.giganticsheep.wifilight.base.dagger.TestModule;
+import com.giganticsheep.wifilight.base.TestModule;
 import com.giganticsheep.wifilight.ui.dagger.ActivityScope;
 
 import dagger.Component;

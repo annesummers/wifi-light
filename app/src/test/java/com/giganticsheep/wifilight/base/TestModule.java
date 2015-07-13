@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.base.dagger;
+package com.giganticsheep.wifilight.base;
 
 import dagger.Module;
 

@@ -4,7 +4,6 @@ import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
-import com.giganticsheep.wifilight.mvp.presenter.dagger.TestPresenterComponent;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 
 import org.junit.After;
