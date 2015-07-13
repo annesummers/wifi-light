@@ -1,6 +1,5 @@
-package com.giganticsheep.wifilight.api.network.dagger;
+package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.api.network.LightService;
 import com.giganticsheep.wifilight.dagger.ApplicationScope;
 
 import dagger.Module;

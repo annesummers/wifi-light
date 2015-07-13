@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.network.dagger;
+package com.giganticsheep.wifilight.api.network;
 
 import java.lang.annotation.Retention;
 

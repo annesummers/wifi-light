@@ -30,7 +30,7 @@ import rx.functions.Func1;
  */
 
 @ApplicationScope
-public class LightNetwork implements LightControl {
+class LightControlImpl implements LightControl {
 
     @SuppressWarnings("FieldNotUsedInToString")
     private final Logger logger;
@@ -55,23 +55,12 @@ public class LightNetwork implements LightControl {
     private final Scheduler ioScheduler;
     private final Scheduler uiScheduler;
 
-  /*  @Inject BaseLogger baseLogger;
-
-    @Inject NetworkDetails networkDetails;
-    @Inject EventBus eventBus;
-
-    @Inject LightService lightService;
-
-    @Inject Scheduler ioScheduler;
-    @Inject Scheduler uiScheduler;*/
-
-    //@Inject
-    public LightNetwork(final NetworkDetails networkDetails,
-                        final LightService lightService,
-                        final EventBus eventBus,
-                        final BaseLogger baseLogger,
-                        @IOScheduler final Scheduler ioScheduler,
-                        @UIScheduler final Scheduler uiScheduler) {
+    public LightControlImpl(final NetworkDetails networkDetails,
+                            final LightService lightService,
+                            final EventBus eventBus,
+                            final BaseLogger baseLogger,
+                            @IOScheduler final Scheduler ioScheduler,
+                            @UIScheduler final Scheduler uiScheduler) {
         this.lightService = lightService;
         this.networkDetails = networkDetails;
         this.eventBus = eventBus;
@@ -347,6 +336,6 @@ public class LightNetwork implements LightControl {
     }
 
     public interface Injector {
-        void inject(LightNetwork lightNetwork);
+        void inject(LightControlImpl lightNetwork);
     }
 }

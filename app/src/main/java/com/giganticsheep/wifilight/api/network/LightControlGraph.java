@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.dagger;
+package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.LightControl;
 

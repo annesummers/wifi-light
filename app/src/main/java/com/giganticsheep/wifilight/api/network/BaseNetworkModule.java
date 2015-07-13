@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.network.dagger;
+package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.dagger.ApplicationScope;
 import com.google.gson.Gson;

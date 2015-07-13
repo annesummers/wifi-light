@@ -17,7 +17,7 @@ import rx.Observable;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public interface LightService {
+interface LightService {
 
     @GET("/{url1}/{url2}/{selector}")
     Observable<List<LightResponse>> listLights(@Path("url1") String url1,

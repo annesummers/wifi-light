@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.api.network.dagger;
 
+import com.giganticsheep.wifilight.api.network.BaseNetworkModule;
 import com.giganticsheep.wifilight.api.network.LightService;
 import com.giganticsheep.wifilight.api.network.MockLightService;
 import com.giganticsheep.wifilight.dagger.ApplicationScope;

@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight;
 
-import com.giganticsheep.wifilight.api.dagger.LightControlGraph;
-import com.giganticsheep.wifilight.api.dagger.LightControlModule;
+import com.giganticsheep.wifilight.api.network.LightControlGraph;
+import com.giganticsheep.wifilight.api.network.LightControlModule;
 import com.giganticsheep.wifilight.dagger.ApplicationScope;
 import com.giganticsheep.wifilight.dagger.SchedulersGraph;
 import com.giganticsheep.wifilight.dagger.SchedulersModule;
