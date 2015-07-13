@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.api.LightControl;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class LightControlPresenter extends LightPresenterBase {
      * @param event a FetchLightsSuccessEvent
      */
     @Subscribe
-    public synchronized void handleFetchLightsSuccess(LightNetwork.FetchLightsSuccessEvent event) {
+    public synchronized void handleFetchLightsSuccess(LightControl.FetchLightsSuccessEvent event) {
         logger.debug("handleFetchLightsSuccess()");
 
         List<String> lightIds = newLightIds;
@@ -78,7 +78,7 @@ public class LightControlPresenter extends LightPresenterBase {
      * @param event a LightDetailsEvent; contains a Light
      */
     @Subscribe
-    public synchronized void handleLightDetails(LightNetwork.LightDetailsEvent event) {
+    public synchronized void handleLightDetails(LightControl.LightDetailsEvent event) {
         logger.debug("handleLightDetails() " + event.light().toString());
 
         if(newLightIds == null) {

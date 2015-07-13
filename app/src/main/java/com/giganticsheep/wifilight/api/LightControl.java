@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.api;
 
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.model.StatusResponse;
+import com.giganticsheep.wifilight.api.network.StatusResponse;
 
 import rx.Observable;
 
@@ -9,7 +9,7 @@ import rx.Observable;
  * Created by anne on 12/07/15.
  * (*_*)
  */
-public interface LightControlInterface {
+public interface LightControl {
 
     enum Power {
         ON ("on"),
@@ -27,34 +27,47 @@ public interface LightControlInterface {
     }
 
     /**
-     * @param hue the hue to set the selected lights
+     * Sets the hue of the selected lights.
+     *
+     * @param hue the hue to set; an int between 0 and 360.
+     * @param duration the duration to set the hue for.
      */
     Observable<StatusResponse> setHue(final int hue, float duration);
 
     /**
-     * @param saturation the saturation to set the selected lights
+     * Sets the saturation of the selected lights.
+     *
+     * @param saturation the saturation to set; an int between 0 and 100.
+     * @param duration the duration to set the saturation for.
      */
     Observable<StatusResponse> setSaturation(final int saturation, float duration);
 
     /**
-     * @param brightness the brightness to set the selected lights
+     * Sets the brightness of the selected lights.
+     *
+     * @param brightness the brightness to set; an int between 0 and 100.
+     * @param duration the duration to set the brightness for.
      */
     Observable<StatusResponse> setBrightness(final int brightness, float duration);
 
     /**
-     * @param kelvin the kelvin (warmth to set the selected lights
+     * Sets the kelvin (warmth) of the selected lights.
+     *
+     * @param kelvin the kelvin to set; an int between 2500 and 9000.
+     * @param duration the duration to set the kelvin for.
      */
     Observable<StatusResponse> setKelvin(final int kelvin, float duration);
 
     /**
      * Toggles the power of the selected lights
-     *
      */
     Observable<StatusResponse> togglePower();
 
     /**
-     * @param power ON or OFF
-     * @param duration how long to set the power change for
+     * Sets the power of the selected lights.
+     *
+     * @param power ON or OFF.
+     * @param duration how long to set the power change for.
      */
     Observable<StatusResponse> setPower(final Power power, final float duration);
 

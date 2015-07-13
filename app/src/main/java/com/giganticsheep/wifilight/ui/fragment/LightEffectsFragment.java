@@ -49,7 +49,7 @@ public class LightEffectsFragment extends LightFragmentBase {
     protected void initialiseViews(View view) {  }
 
     @Override
-    protected void setLightDetails() { }
+    protected void showLight() { }
 
     @Override
     protected void destroyViews() { }

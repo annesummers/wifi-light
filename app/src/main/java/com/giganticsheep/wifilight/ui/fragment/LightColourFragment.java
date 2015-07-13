@@ -7,7 +7,7 @@ import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.LightControlInterface;
+import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
@@ -28,7 +28,6 @@ import butterknife.OnCheckedChanged;
 @FragmentArgsInherited
 public class LightColourFragment extends LightFragmentBase {
 
-    // TODO sliders thumb drops off the end
     // TODO put toggle above pager maybe in its own fragment?
 
     public static LightColourFragment newInstance(String name) {
@@ -77,21 +76,21 @@ public class LightColourFragment extends LightFragmentBase {
     }
 
     @Override
-    public void setLightDetails() {
+    public void showLight() {
         hueSeekBar.setProgress(light.getHue());
         saturationSeekBar.setProgress(light.getSaturation());
         valueSeekBar.setProgress(light.getBrightness());
         kelvinSeekBar.setProgress(light.getKelvin() - Light.KELVIN_BASE);
 
-        powerToggle.setChecked(light.getPower() == LightControlInterface.Power.ON);
+        powerToggle.setChecked(light.getPower() == LightControl.Power.ON);
     }
 
-    @OnCheckedChanged(R.id.power_toggle) public void onPowerToggle(CompoundButton compoundButton,
-                                                                   boolean isChecked) {
-        if(isChecked && light != null && light.getPower() != LightControlInterface.Power.ON) {
-            getPresenter().setPower(LightControlInterface.Power.ON, LightControlActivity.DEFAULT_DURATION);
-        } else if(!isChecked && light != null && light.getPower() != LightControlInterface.Power.OFF){
-            getPresenter().setPower(LightControlInterface.Power.OFF, LightControlActivity.DEFAULT_DURATION);
+    @OnCheckedChanged(R.id.power_toggle)
+    public void onPowerToggle(CompoundButton compoundButton, boolean isChecked) {
+        if(isChecked && light != null && light.getPower() != LightControl.Power.ON) {
+            getPresenter().setPower(LightControl.Power.ON, LightControlActivity.DEFAULT_DURATION);
+        } else if(!isChecked && light != null && light.getPower() != LightControl.Power.OFF){
+            getPresenter().setPower(LightControl.Power.OFF, LightControlActivity.DEFAULT_DURATION);
         }
     }
 

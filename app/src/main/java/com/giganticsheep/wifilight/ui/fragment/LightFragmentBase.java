@@ -25,9 +25,6 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     @Icicle protected Light light;
 
-   // @Inject LightNetwork lightNetwork;
-   // @Inject EventBus eventBus;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +40,9 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     @Override
     protected void populateViews() {
         if(light != null) {
-            setLightDetails();
+            showLight();
         } else {
-            String id = getMainActivity().getCurrentLight();
+            String id = getMainActivity().getCurrentLightId();
             if(id != null) {
                 getPresenter().fetchLight(id);
             }
@@ -93,6 +90,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         showMainView();
     }
 
+    @Override
     public LightViewState getViewState() {
         return (LightViewState) super.getViewState();
     }
@@ -101,8 +99,16 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         return (LightControlActivity) getActivity();
     }
 
-    protected abstract void setLightDetails();
+    /**
+     * Shows the relevant information from the fetched Light.
+     */
+    protected abstract void showLight();
 
+    /**
+     * The Injector interface is implemented by a Component that provides the injected
+     * class members, enabling a LightFragmentBase derived class to inject itself
+     * into the Component.
+     */
     public interface Injector extends LightPresenterBase.Injector {
         void inject(LightFragmentBase lightFragment);
     }

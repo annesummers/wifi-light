@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
-import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.network.LightResponse;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
 import com.giganticsheep.wifilight.mvp.presenter.dagger.TestPresenterComponent;
@@ -66,7 +66,7 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         protected final int STATE_SHOW_ERROR = 2;
 
         private int state = STATE_SHOW_LOADING;
-        private Light light;
+        private LightResponse light;
 
         @Override
         public void showLoading() {
@@ -98,13 +98,13 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         }
 
         @Override
-        public void lightChanged(Light light) {
+        public void lightChanged(LightResponse light) {
             this.light = light;
 
             showMainView();
         }
 
-        public Light getLight() {
+        public LightResponse getLight() {
             return light;
         }
 

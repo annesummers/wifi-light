@@ -1,10 +1,10 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.api.model.StatusResponse;
+import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.network.StatusResponse;
+import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -71,7 +71,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
     /**
      * The Injector interface is implemented by a Component that provides the injected
-     * class members, enabling a LightPresenterBase or derived class to inject itself
+     * class members, enabling a LightPresenterBase derived class to inject itself
      * into the Component.
      */
     public interface Injector {

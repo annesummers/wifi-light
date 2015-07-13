@@ -4,7 +4,7 @@ import android.widget.SeekBar;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.network.LightResponse;
 import com.giganticsheep.wifilight.base.TestConstants;
 
 import org.junit.Test;
@@ -38,9 +38,9 @@ public class LightColourFragmentTest extends LightFragmentTestBase {
         SeekBar kelvinSeekbar = (SeekBar) fragment.getView().findViewById(R.id.kelvin_seekbar);
         SeekBar saturationSeekbar = (SeekBar) fragment.getView().findViewById(R.id.saturation_seekbar);
 
-        assertThat(brightnessSeekbar.getProgress(), equalTo(Light.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE)));
-        assertThat(hueSeekbar.getProgress(), equalTo(Light.convertHue(TestConstants.TEST_HUE_DOUBLE)));
-        assertThat(kelvinSeekbar.getProgress(), equalTo(TestConstants.TEST_KELVIN - Light.KELVIN_BASE));
-        assertThat(saturationSeekbar.getProgress(), equalTo(Light.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE)));
+        assertThat(brightnessSeekbar.getProgress(), equalTo(LightResponse.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE)));
+        assertThat(hueSeekbar.getProgress(), equalTo(LightResponse.convertHue(TestConstants.TEST_HUE_DOUBLE)));
+        assertThat(kelvinSeekbar.getProgress(), equalTo(TestConstants.TEST_KELVIN - LightResponse.KELVIN_BASE));
+        assertThat(saturationSeekbar.getProgress(), equalTo(LightResponse.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE)));
     }
 }

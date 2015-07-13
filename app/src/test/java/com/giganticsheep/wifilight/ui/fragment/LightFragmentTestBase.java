@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
-import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.network.LightResponse;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
 import com.giganticsheep.wifilight.ui.UITestBase;
@@ -32,14 +32,14 @@ public abstract class LightFragmentTestBase extends UITestBase {
     public void testSetLightDetails() throws Exception {
         assertThat(fragment.getView(), not(nullValue()));
 
-        Light testLight = new Light(TestConstants.TEST_ID);
+        LightResponse testLight = new LightResponse(TestConstants.TEST_ID);
         testLight.brightness = TestConstants.TEST_BRIGHTNESS_DOUBLE;
         testLight.color.hue = TestConstants.TEST_HUE_DOUBLE;
         testLight.color.kelvin = TestConstants.TEST_KELVIN;
         testLight.color.saturation = TestConstants.TEST_SATURATION_DOUBLE;
 
         fragment.lightChanged(testLight);
-        fragment.setLightDetails();
+        fragment.showLight();
     }
 
     protected abstract String getFragmentName();

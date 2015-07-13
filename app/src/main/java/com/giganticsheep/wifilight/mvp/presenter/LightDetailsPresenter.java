@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.api.LightControl;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -28,7 +28,7 @@ public class LightDetailsPresenter extends LightPresenterBase {
      * @param event a LightDetailsEvent; contains a Light
      */
     @Subscribe
-    public void handleLightDetails(LightNetwork.LightDetailsEvent event) {
+    public void handleLightDetails(LightControl.LightDetailsEvent event) {
         getView().lightChanged(event.light());
     }
 }

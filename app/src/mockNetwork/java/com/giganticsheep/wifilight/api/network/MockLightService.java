@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.model.StatusResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +24,17 @@ public class MockLightService implements LightService {
     public static final String TEST_ID2 = "abcdef12345";
 
     @Override
-    public Observable<List<Light>> listLights(@Path("url1") String url1,
+    public Observable<List<LightResponse>> listLights(@Path("url1") String url1,
                                               @Path("url2") String url2,
                                               @Path("selector") String selector,
                                               @Header("Authorization") String authorisation) {
-        return Observable.create(new Observable.OnSubscribe<List<Light>>() {
+        return Observable.create(new Observable.OnSubscribe<List<LightResponse>>() {
             @Override
-            public void call(Subscriber<? super List<Light>> subscriber) {
-                List<Light> lights = new ArrayList<>();
-                Light light = new Light(TEST_ID);
+            public void call(Subscriber<? super List<LightResponse>> subscriber) {
+                List<LightResponse> lights = new ArrayList<>();
+                LightResponse light = new LightResponse(TEST_ID);
                 lights.add(light);
-                lights.add(new Light(TEST_ID2));
+                lights.add(new LightResponse(TEST_ID2));
 
                 subscriber.onNext(lights);
                 subscriber.onCompleted();

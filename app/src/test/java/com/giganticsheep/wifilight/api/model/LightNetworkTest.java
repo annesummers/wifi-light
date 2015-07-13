@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.model;
 
+import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.network.StatusResponse;
 import com.giganticsheep.wifilight.base.TestConstants;
 
 import org.junit.Test;
@@ -127,7 +129,7 @@ public class LightNetworkTest extends ModelTest {
 
     @Test
     public void testSetPower() throws Exception {
-        lightNetwork.setPower(LightControlInterface.Power.ON, TestConstants.TEST_DURATION)
+        lightNetwork.setPower(LightControl.Power.ON, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<StatusResponse>() {
                     @Override
                     public void onCompleted() { }

@@ -1,10 +1,9 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.api.LightControlInterface;
+import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.model.StatusResponse;
 import com.giganticsheep.wifilight.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.dagger.UIScheduler;
@@ -30,7 +29,7 @@ import rx.functions.Func1;
  */
 
 @ActivityScope
-public class LightNetwork implements LightControlInterface {
+public class LightNetwork implements LightControl {
 
     @SuppressWarnings("FieldNotUsedInToString")
     protected final Logger logger;
@@ -79,22 +78,22 @@ public class LightNetwork implements LightControlInterface {
 
     @Override
     public final Observable<StatusResponse> setHue(final int hue, float duration) {
-        return doSetColour(makeHueString(Light.convertHue(hue)), makeDurationString(duration));
+        return doSetColour(makeHueString(LightResponse.convertHue(hue)), makeDurationString(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
-        return doSetColour(makeSaturationString(Light.convertSaturation(saturation)), makeDurationString(duration));
+        return doSetColour(makeSaturationString(LightResponse.convertSaturation(saturation)), makeDurationString(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
-        return doSetColour(makeBrightnessString(Light.convertBrightness(brightness)), makeDurationString(duration));
+        return doSetColour(makeBrightnessString(LightResponse.convertBrightness(brightness)), makeDurationString(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
-        return doSetColour(makeKelvinString(kelvin + Light.KELVIN_BASE), makeDurationString(duration));
+        return doSetColour(makeKelvinString(kelvin + LightResponse.KELVIN_BASE), makeDurationString(duration));
     }
 
     @Override
@@ -122,17 +121,18 @@ public class LightNetwork implements LightControlInterface {
                             logger.error(throwable);
                         }
                     })
-                    .flatMap(new Func1<List<Light>, Observable<Light>>() {
+                    .flatMap(new Func1<List<LightResponse>, Observable<Light>>() {
                         @Override
-                        public Observable<Light> call(List<Light> dataResponses) {
-                            List<Observable<Light>> observables = new ArrayList<>(dataResponses.size());
+                        public Observable<Light> call(List<LightResponse> lightResponses) {
+                            List<Observable<Light>> observables = new ArrayList(lightResponses.size());
 
-                            for (Light dataResponse : dataResponses) {
-                                logger.debug(dataResponse.toString());
-                                eventBus.postMessage(new LightDetailsEvent(dataResponse))
+                            for (Light lightResponse : lightResponses) {
+                                logger.debug(lightResponse.toString());
+
+                                eventBus.postMessage(new LightDetailsEvent(lightResponse))
                                         .subscribe(errorSubscriber);
 
-                                observables.add(Observable.just(dataResponse));
+                                observables.add(Observable.just(lightResponse));
                             }
 
                             return Observable.merge(observables);
@@ -311,17 +311,6 @@ public class LightNetwork implements LightControlInterface {
         return Float.toString(duration);
     }
 
-    @Override
-    public String toString() {
-        return "LightNetwork{" +
-                "uiScheduler=" + uiScheduler +
-                ", ioScheduler=" + ioScheduler +
-                ", lightService=" + lightService +
-                ", eventBus=" + eventBus +
-                ", networkDetails=" + networkDetails +
-                '}';
-    }
-
     private class ErrorSubscriber extends Subscriber {
 
         @Override
@@ -334,5 +323,16 @@ public class LightNetwork implements LightControlInterface {
 
         @Override
         public void onNext(Object o) { }
+    }
+
+    @Override
+    public String toString() {
+        return "LightNetwork{" +
+                "uiScheduler=" + uiScheduler +
+                ", ioScheduler=" + ioScheduler +
+                ", lightService=" + lightService +
+                ", eventBus=" + eventBus +
+                ", networkDetails=" + networkDetails +
+                '}';
     }
 }

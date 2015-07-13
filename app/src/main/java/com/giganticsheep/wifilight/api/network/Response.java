@@ -1,5 +1,6 @@
-package com.giganticsheep.wifilight.api.model;
+package com.giganticsheep.wifilight.api.network;
 
+import com.giganticsheep.wifilight.api.model.LightDataBase;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.io.Serializable;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public class Response implements Serializable {
+class Response implements Serializable, LightDataBase {
     @SerializedName("cod")
     public int httpCode;
 
@@ -19,19 +20,15 @@ public class Response implements Serializable {
         this.id = id;
     }
 
-    public Response() {
+    public Response() { }
 
-    }
-
+    @Override
     public final String id() {
         return id;
     }
 
-    /**
-     *
-     * @return the name of this light
-     */
-    public String getName() {
+    @Override
+    public final String getName() {
         return label;
     }
 

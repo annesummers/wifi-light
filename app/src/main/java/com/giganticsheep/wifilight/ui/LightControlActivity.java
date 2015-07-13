@@ -219,11 +219,15 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     @Override
     public void lightChanged(Light light) { }
 
+    @Override
     public LightViewState getViewState() {
         return (LightViewState) super.getViewState();
     }
 
-    public String getCurrentLight() {
+    /**
+     * @return the id of the current displayed Light.
+     */
+    public String getCurrentLightId() {
         return presenter.getCurrentLightId();
     }
 

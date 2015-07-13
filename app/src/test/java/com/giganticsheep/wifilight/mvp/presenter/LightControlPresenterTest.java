@@ -1,7 +1,8 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.api.network.LightResponse;
 import com.giganticsheep.wifilight.base.TestConstants;
 
 import org.junit.Test;
@@ -37,10 +38,10 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testHandleFetchLightsSuccess() throws Exception {
-        Light light = new Light(TestConstants.TEST_ID);
+        Light light = new LightResponse(TestConstants.TEST_ID);
 
-        getPresenter().handleLightDetails(new LightNetwork.LightDetailsEvent(light));
-        getPresenter().handleFetchLightsSuccess(new LightNetwork.FetchLightsSuccessEvent());
+        getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
+        getPresenter().handleFetchLightsSuccess(new LightControl.FetchLightsSuccessEvent());
 
         assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DETAILS));
         assertThat(getPresenter().getCurrentLightId(), equalTo(light.id()));
@@ -48,9 +49,9 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testHandleLightDetails() throws Exception {
-        Light light = new Light(TestConstants.TEST_ID);
+        Light light = new LightResponse(TestConstants.TEST_ID);
 
-        getPresenter().handleLightDetails(new LightNetwork.LightDetailsEvent(light));
+        getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
 
         assertThat(view.getLight(), equalTo(light));
     }

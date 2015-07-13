@@ -1,8 +1,9 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.api.network.LightNetwork;
-import com.giganticsheep.wifilight.base.TestConstants;
+import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.network.LightResponse;
+import com.giganticsheep.wifilight.base.TestConstants;
 
 import org.junit.Test;
 
@@ -42,23 +43,23 @@ public class LightColourPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testSetPowerOff() throws Exception {
-        testSetPower(LightControlInterface.Power.OFF);
+        testSetPower(LightControl.Power.OFF);
     }
 
     @Test
     public void testSetPowerOn() throws Exception {
-        testSetPower(LightControlInterface.Power.ON);
+        testSetPower(LightControl.Power.ON);
     }
 
-    private void testSetPower(LightControlInterface.Power power) {
+    private void testSetPower(LightControl.Power power) {
         getPresenter().setPower(power, TestConstants.TEST_DURATION);
     }
 
     @Test
     public void testHandleLightDetails() throws Exception {
-        Light light = new Light(TestConstants.TEST_ID);
+        Light light = new LightResponse(TestConstants.TEST_ID);
 
-        getPresenter().handleLightDetails(new LightNetwork.LightDetailsEvent(light));
+        getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
 
         assertThat(view.getLight(), equalTo(light));
         assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DETAILS));
