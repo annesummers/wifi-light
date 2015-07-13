@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.ui;
 
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
-import com.giganticsheep.wifilight.dagger.WifiLightAppComponent;
+import com.giganticsheep.wifilight.WifiLightAppComponent;
 
 import org.robolectric.RuntimeEnvironment;
 

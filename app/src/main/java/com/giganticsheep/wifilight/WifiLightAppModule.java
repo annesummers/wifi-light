@@ -1,6 +1,4 @@
-package com.giganticsheep.wifilight.dagger;
-
-import com.giganticsheep.wifilight.WifiLightApplication;
+package com.giganticsheep.wifilight;
 
 import dagger.Module;
 import dagger.Provides;

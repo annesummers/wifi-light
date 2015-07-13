@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.dagger.HasComponent;
+import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.mvp.presenter.LightControlPresenter;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.mvp.view.LightViewState;
@@ -26,7 +26,6 @@ import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.dagger.DaggerLightControlActivityComponent;
-import com.giganticsheep.wifilight.ui.dagger.LightControlActivityComponent;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
 import butterknife.InjectView;

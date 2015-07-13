@@ -31,8 +31,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateActivity<V, P> {
 
-    // TODO subscription management
-
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
     @SuppressWarnings("FieldNotUsedInToString")

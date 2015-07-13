@@ -3,8 +3,7 @@ package com.giganticsheep.wifilight;
 import android.app.Application;
 
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.dagger.HasComponent;
-import com.giganticsheep.wifilight.dagger.WifiLightAppComponent;
+import com.giganticsheep.wifilight.base.dagger.HasComponent;
 
 import org.jetbrains.annotations.NonNls;
 

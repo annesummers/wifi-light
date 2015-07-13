@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.ui;
 
-import com.giganticsheep.wifilight.dagger.WifiLightAppComponent;
-import com.giganticsheep.wifilight.ui.dagger.ActivityScope;
+import com.giganticsheep.wifilight.WifiLightAppComponent;
 
 import dagger.Component;
 

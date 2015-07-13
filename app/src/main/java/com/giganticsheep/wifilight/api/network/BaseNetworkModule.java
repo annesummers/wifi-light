@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.dagger.ApplicationScope;
+import com.giganticsheep.wifilight.ApplicationScope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;

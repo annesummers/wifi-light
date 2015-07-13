@@ -1,8 +1,6 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.api.network.NetworkDetails;
-import com.giganticsheep.wifilight.api.network.ServerURL;
-import com.giganticsheep.wifilight.dagger.ApplicationScope;
+import com.giganticsheep.wifilight.ApplicationScope;
 
 import org.jetbrains.annotations.NonNls;
 

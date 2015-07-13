@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.dagger;
+package com.giganticsheep.wifilight.base.dagger;
 
 /**
  * Created by anne on 26/06/15.

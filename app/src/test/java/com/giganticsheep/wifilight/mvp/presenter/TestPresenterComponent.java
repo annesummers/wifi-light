@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.base.TestModule;
-import com.giganticsheep.wifilight.ui.dagger.ActivityScope;
+import com.giganticsheep.wifilight.ui.ActivityScope;
 
 import dagger.Component;
 

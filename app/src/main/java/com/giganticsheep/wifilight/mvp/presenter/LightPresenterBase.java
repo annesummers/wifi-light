@@ -23,9 +23,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
-    // TODO use an interface unstead of a LightNetwork object to abstract the Presenters
-    // from the model.
-
     protected final Logger logger;
 
     protected final CompositeSubscription compositeSubscription = new CompositeSubscription();

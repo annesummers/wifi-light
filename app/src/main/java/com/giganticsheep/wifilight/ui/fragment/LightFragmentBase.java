@@ -21,7 +21,6 @@ import icepick.Icicle;
 @FragmentArgsInherited
 public abstract class LightFragmentBase extends FragmentBase<LightView, LightPresenterBase>
                                     implements LightView {
-    // TODO inject stuff into the presenter instead
 
     @Icicle protected Light light;
 

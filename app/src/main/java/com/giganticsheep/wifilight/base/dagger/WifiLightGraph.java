@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.dagger;
+package com.giganticsheep.wifilight.base.dagger;
 
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;

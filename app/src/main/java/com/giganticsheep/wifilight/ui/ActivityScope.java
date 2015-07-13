@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.dagger;
+package com.giganticsheep.wifilight.ui;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

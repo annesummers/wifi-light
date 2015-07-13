@@ -32,7 +32,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateFragment<V, P> {
 
-    // TODO subscription management
     // TODO argument stuff
 
     private static final int INVALID = -1;

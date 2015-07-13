@@ -2,4 +2,4 @@
  * Created by anne on 09/07/15.
  * (*_*)
  */
-package com.giganticsheep.wifilight.ui.dagger;
+package com.giganticsheep.wifilight.base.dagger;
