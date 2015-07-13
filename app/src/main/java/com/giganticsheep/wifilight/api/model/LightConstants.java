@@ -8,8 +8,8 @@ public class LightConstants {
 
     public static final int KELVIN_BASE = 2500;
 
-    static final int BRIGHTNESS_MAX = 100;
-    static final int SATURATION_MAX = 100;
+    private static final int BRIGHTNESS_MAX = 100;
+    private static final int SATURATION_MAX = 100;
 
     public static int convertBrightness(double brightness) {
         return (int) (brightness*BRIGHTNESS_MAX);

@@ -9,7 +9,7 @@ import com.giganticsheep.wifilight.base.WifiLightTestBase;
  * (*_*)
  */
 public class ModelTest extends WifiLightTestBase {
-    protected TestModelComponent component;
+    private TestModelComponent component;
 
     @Override
     protected void createComponentAndInjectDependencies() {

@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
@@ -35,7 +33,7 @@ import rx.functions.Func1;
 public class LightNetwork implements LightControl {
 
     @SuppressWarnings("FieldNotUsedInToString")
-    protected final Logger logger;
+    private final Logger logger;
 
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<Light> lightsObservable;

@@ -12,7 +12,7 @@ import org.robolectric.RuntimeEnvironment;
  * (*_*)
  */
 public abstract class UITestBase extends WifiLightTestBase {
-    protected TestUIComponent component;
+    private TestUIComponent component;
 
     @Override
     protected void createComponentAndInjectDependencies() {

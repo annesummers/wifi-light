@@ -4,7 +4,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.BaseLogger;
 
 /**

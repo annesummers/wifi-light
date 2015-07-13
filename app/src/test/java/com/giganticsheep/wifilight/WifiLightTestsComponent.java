@@ -1,9 +1,7 @@
 package com.giganticsheep.wifilight;
 
-import com.giganticsheep.wifilight.api.network.dagger.NetworkDetailsGraph;
-import com.giganticsheep.wifilight.api.network.dagger.NetworkDetailsModule;
-import com.giganticsheep.wifilight.api.network.dagger.NetworkGraph;
-import com.giganticsheep.wifilight.api.network.dagger.NetworkModule;
+import com.giganticsheep.wifilight.api.dagger.LightControlGraph;
+import com.giganticsheep.wifilight.api.dagger.LightControlModule;
 import com.giganticsheep.wifilight.dagger.ApplicationScope;
 import com.giganticsheep.wifilight.dagger.SchedulersGraph;
 import com.giganticsheep.wifilight.dagger.SchedulersModule;
@@ -20,12 +18,10 @@ import dagger.Component;
 @ApplicationScope
 @Component(modules = { WifiLightModule.class,
                         SchedulersModule.class,
-                        NetworkDetailsModule.class,
-                        NetworkModule.class} )
+                        LightControlModule.class} )
 public interface WifiLightTestsComponent extends WifiLightGraph,
                                                 SchedulersGraph,
-                                                NetworkDetailsGraph,
-                                                NetworkGraph {
+                                                LightControlGraph {
 
     final class Initializer {
         public static WifiLightTestsComponent init() {

@@ -42,7 +42,7 @@ android {
 
     productFlavors {
         mockNetwork {
-            applicationId 'com.giganticsheep.wifilight.test'
+            applicationId 'com.giganticsheep.wifilight.mocknetwork'
             minSdkVersion 16
             targetSdkVersion 21
         }
@@ -84,4 +84,5 @@ dependencies {
 
     //testApt 'com.google.dagger:dagger-compiler:2.0'
     testCompile 'com.google.dagger:dagger-compiler:2.0'
+    testCompile 'com.google.dagger:dagger:2.0'
 }

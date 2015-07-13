@@ -43,11 +43,11 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     @SuppressWarnings("FieldNotUsedInToString")
     protected Logger logger;
 
-    protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Arg String name;
 
-    protected boolean viewsInitialised;
+    private boolean viewsInitialised;
 
     @Arg boolean attachToRoot;
     private int orientation;
@@ -207,7 +207,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * Destroys the views, detaches them, inflates the layout and
      * initialises the views
      */
-    protected final void reinitialiseViews() {
+    private void reinitialiseViews() {
         destroyViews();
 
         final ViewGroup rootView = (ViewGroup) getView();

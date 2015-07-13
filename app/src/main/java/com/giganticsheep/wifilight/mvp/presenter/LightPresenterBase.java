@@ -26,7 +26,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     // TODO use an interface unstead of a LightNetwork object to abstract the Presenters
     // from the model.
 
-    protected Logger logger;
+    protected final Logger logger;
 
     protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
@@ -34,8 +34,8 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     @Inject protected EventBus eventBus;
     @Inject protected LightControl lightNetwork;
 
-    protected FetchLightSubscriber fetchLightSubscriber = new FetchLightSubscriber();
-    protected SetLightSubscriber setLightSubscriber = new SetLightSubscriber();
+    protected final FetchLightSubscriber fetchLightSubscriber = new FetchLightSubscriber();
+    protected final SetLightSubscriber setLightSubscriber = new SetLightSubscriber();
 
     /**
      * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
