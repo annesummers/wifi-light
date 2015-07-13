@@ -1,8 +1,9 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.StatusResponse;
-import com.giganticsheep.wifilight.api.network.LightNetwork;
+//import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
@@ -31,7 +32,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
     @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
-    @Inject protected LightNetwork lightNetwork;
+    @Inject protected LightControl lightNetwork;
 
     protected FetchLightSubscriber fetchLightSubscriber = new FetchLightSubscriber();
     protected SetLightSubscriber setLightSubscriber = new SetLightSubscriber();

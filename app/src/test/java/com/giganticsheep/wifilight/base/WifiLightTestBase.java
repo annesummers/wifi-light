@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.base;
 
-import com.giganticsheep.wifilight.api.network.LightNetwork;
+import com.giganticsheep.wifilight.api.LightControl;
 
 import javax.inject.Inject;
 
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 public abstract class WifiLightTestBase {
     protected final Logger logger;
 
-    @Inject protected LightNetwork lightNetwork;
+    @Inject protected LightControl lightNetwork;
     @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
     @Inject protected FragmentFactory fragmentFactory;

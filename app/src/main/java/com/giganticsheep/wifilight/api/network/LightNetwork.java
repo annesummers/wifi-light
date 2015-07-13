@@ -5,10 +5,10 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
+import com.giganticsheep.wifilight.dagger.ApplicationScope;
 import com.giganticsheep.wifilight.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.dagger.UIScheduler;
-import com.giganticsheep.wifilight.ui.dagger.ActivityScope;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +27,11 @@ import rx.functions.Func1;
 /**
  * Created by anne on 22/06/15.
  * (*_*)
+ *
+ * An implementation of LightControl to handle the communication with the server.
  */
 
-@ActivityScope
+@ApplicationScope
 public class LightNetwork implements LightControl {
 
     @SuppressWarnings("FieldNotUsedInToString")
@@ -45,7 +47,6 @@ public class LightNetwork implements LightControl {
     // TODO locations
     // TODO selectors
     // TODO effects
-    // TODO javadoc
     // TODO connected can we find the light?
 
     private final NetworkDetails networkDetails;
@@ -56,7 +57,17 @@ public class LightNetwork implements LightControl {
     private final Scheduler ioScheduler;
     private final Scheduler uiScheduler;
 
-    @Inject
+  /*  @Inject BaseLogger baseLogger;
+
+    @Inject NetworkDetails networkDetails;
+    @Inject EventBus eventBus;
+
+    @Inject LightService lightService;
+
+    @Inject Scheduler ioScheduler;
+    @Inject Scheduler uiScheduler;*/
+
+    //@Inject
     public LightNetwork(final NetworkDetails networkDetails,
                         final LightService lightService,
                         final EventBus eventBus,
@@ -335,5 +346,9 @@ public class LightNetwork implements LightControl {
                 ", eventBus=" + eventBus +
                 ", networkDetails=" + networkDetails +
                 '}';
+    }
+
+    public interface Injector {
+        void inject(LightNetwork lightNetwork);
     }
 }
