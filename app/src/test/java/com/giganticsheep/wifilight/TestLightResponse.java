@@ -18,6 +18,8 @@ public class TestLightResponse implements Light {
 
     public TestLightResponse(String testId) {
         this.id = testId;
+
+        this.color = new ColourData();
     }
 
     @Override

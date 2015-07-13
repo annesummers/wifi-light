@@ -1,7 +1,5 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.api.model.Light;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +15,7 @@ import rx.Subscriber;
  * Created by anne on 30/06/15.
  * (*_*)
  */
-public class MockLightService implements LightService {
+class MockLightService implements LightService {
 
     // TODO how to share these?
     public static final String TEST_ID = "12345abcdef";

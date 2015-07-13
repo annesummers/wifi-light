@@ -5,8 +5,8 @@ import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.dagger.ApplicationScope;
 import com.giganticsheep.wifilight.dagger.IOScheduler;
-import com.giganticsheep.wifilight.dagger.SchedulersModule;
 import com.giganticsheep.wifilight.dagger.UIScheduler;
+import com.giganticsheep.wifilight.dagger.SchedulersModule;
 import com.giganticsheep.wifilight.dagger.WifiLightModule;
 
 import dagger.Module;

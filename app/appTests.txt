@@ -1,5 +1,9 @@
-objc[56161]: Class JavaLaunchHelper is implemented in both /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/bin/java and /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/libinstrument.dylib. One of the two will be used. Which one is undefined.
-LightNetwork doSetColour() brightness:1.0 1.0
+objc[19786]: Class JavaLaunchHelper is implemented in both /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/bin/java and /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/libinstrument.dylib. One of the two will be used. Which one is undefined.
+LightNetwork doSetColour() brightness:10000.0 1.0
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+LightNetwork fetchLights()
 LightNetwork fetchLights()
 ---> MOCK GET mock:///v1beta1/lights/all
 Authorization: Bearer 123456789abcdef
@@ -13,58 +17,33 @@ Authorization: Bearer 123456789abcdef
 ---> MOCK GET mock:///v1beta1/lights/all
 Authorization: Bearer 123456789abcdef
 ---> END MOCK (no body)
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 ---> MOCK GET mock:///v1beta1/lights/all
-Authorization: Bearer 123456789abcdef
----> END MOCK (no body)
 ---> MOCK PUT mock:///v1beta1/lights/all/color
----> MOCK PUT mock:///v1beta1/lights/all/color
-Authorization: Bearer 123456789abcdef
----> MOCK PUT mock:///v1beta1/lights/all/color
-Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 Authorization: Bearer 123456789abcdef
 Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-Content-Length: 49
+Content-Length: 53
 Content-Length: 46
 
+---> MOCK PUT mock:///v1beta1/lights/all/color
 Authorization: Bearer 123456789abcdef
-
----> MOCK GET mock:///v1beta1/lights/all
 Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 Authorization: Bearer 123456789abcdef
 Content-Length: 44
 
 ---> END MOCK (no body)
-LightNetwork fetchLights()
 ---> MOCK GET mock:///v1beta1/lights/all
+
 Authorization: Bearer 123456789abcdef
 ---> END MOCK (no body)
----> MOCK GET mock:///v1beta1/lights/all
-Authorization: Bearer 123456789abcdef
----> END MOCK (no body)
-duration=1.0&color=hue%3A300.0&power_on=true
-duration=1.0&color=brightness%3A1.0&power_on=true
+duration=1.0&color=brightness%3A10000.0&power_on=true
 duration=1.0&color=kelvin%3A5500&power_on=true
+duration=1.0&color=hue%3A300.0&power_on=true
 ---> END MOCK (46-byte body)
----> END MOCK (49-byte body)
 ---> END MOCK (44-byte body)
----> MOCK PUT mock:///v1beta1/lights/all/power
-Authorization: Bearer 123456789abcdef
-Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-Content-Length: 21
-
----> MOCK GET mock:///v1beta1/lights/all
-duration=1.0&state=on
-Authorization: Bearer 123456789abcdef
----> END MOCK (no body)
----> END MOCK (21-byte body)
----> MOCK PUT mock:///v1beta1/lights/all/color
-Authorization: Bearer 123456789abcdef
-Content-Type: application/-www-form-urlencoded; charset=UTF-8
-Content-Length: 49
-
-duration=1.0&color=saturation%3A1.0&power_on=true
----> END MOCK (49-byte body)
-LightNetwork fetchLights()
+---> END MOCK (53-byte body)
 LightNetwork fetchLights()
 LightNetwork fetchLights()
 LightNetwork fetchLights()
@@ -75,5 +54,33 @@ LightNetwork fetchLights()
 LightNetwork doToggleLights()
 LightNetwork fetchLights()
 LightNetwork doSetPower() on 1.0
+---> MOCK GET mock:///v1beta1/lights/all
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
 LightNetwork fetchLights()
-LightNetwork doSetColour() saturation:1.0 1.0
+LightNetwork fetchLights()
+LightNetwork doSetColour() saturation:10000.0 1.0
+---> MOCK POST mock:///v1beta1/lights/all/toggle
+Authorization: Bearer 123456789abcdef
+Content-Type: application/json; charset=UTF-8
+Content-Length: 2
+
+""
+---> END MOCK (2-byte body)
+---> MOCK PUT mock:///v1beta1/lights/all/power
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 21
+
+duration=1.0&state=on
+---> MOCK GET mock:///v1beta1/lights/all
+---> END MOCK (21-byte body)
+Authorization: Bearer 123456789abcdef
+---> END MOCK (no body)
+---> MOCK PUT mock:///v1beta1/lights/all/color
+Authorization: Bearer 123456789abcdef
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Content-Length: 53
+
+duration=1.0&color=saturation%3A10000.0&power_on=true
+---> END MOCK (53-byte body)

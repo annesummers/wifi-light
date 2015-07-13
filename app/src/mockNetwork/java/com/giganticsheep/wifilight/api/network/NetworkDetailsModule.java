@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.network.dagger;
+package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.api.network.ServerURL;
