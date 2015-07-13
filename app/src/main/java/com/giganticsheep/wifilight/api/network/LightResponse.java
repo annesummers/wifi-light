@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.ColourData;
-import com.giganticsheep.wifilight.api.model.GroupData;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 

@@ -4,7 +4,7 @@ package com.giganticsheep.wifilight.api.model;
  * Created by anne on 13/07/15.
  * (*_*)
  */
-public interface LightDataBase {
+public interface WifiLightData {
     /**
      *
      * @return the id of this data object
