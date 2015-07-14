@@ -80,7 +80,12 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     protected void handleLightChanged(Light light) {
         if (isViewAttached()) {
             getView().setLight(light);
-            getView().showConnected();
+
+            if(light.isConnected()) {
+                getView().showConnected();
+            } else {
+                getView().showDisconnected();
+            }
         }
     }
 

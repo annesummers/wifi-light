@@ -315,8 +315,4 @@ class LightControlImpl implements LightControl {
                 ", networkDetails=" + networkDetails +
                 '}';
     }
-
-    public interface Injector {
-        void inject(LightControlImpl lightNetwork);
-    }
 }

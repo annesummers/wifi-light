@@ -25,22 +25,22 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     @Icicle protected Light light;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
     }
 
     @Override
-    protected void injectDependencies() {
-        getMainActivity().getComponent().inject(this);
+    protected final void injectDependencies() {
+        getLightControlActivity().getComponent().inject(this);
     }
 
     @Override
-    protected void populateViews() {
+    protected final void populateViews() {
         logger.debug("populateViews()");
         if(light == null) {
-            String currentLightId = getMainActivity().getCurrentLightId();
+            String currentLightId = getLightControlActivity().getCurrentLightId();
 
             if(currentLightId != null) {
                 getPresenter().fetchLight(currentLightId);
@@ -57,65 +57,67 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     // MVP
 
     @Override
-    public ViewState createViewState() {
+    public final ViewState createViewState() {
         return new LightViewState();
     }
 
     @Override
-    public void onNewViewStateInstance() {
+    public final void onNewViewStateInstance() {
         getViewState().apply(this, true);
     }
 
     @Override
-    public void showLoading() {
+    public final LightViewState getViewState() {
+        return (LightViewState) super.getViewState();
+    }
+
+    @Override
+    public final void showLoading() {
         logger.debug("showLoading()");
 
         getViewState().setShowLoading();
     }
 
     @Override
-    public void showConnected() {
+    public final void showConnected() {
         logger.debug("showConnected()");
 
         getViewState().setShowConnected();
 
         populateViews();
+        enableViews(true);
     }
 
     @Override
-    public void showDisconnected() {
+    public final void showDisconnected() {
         logger.debug("showDisconnected()");
 
         getViewState().setShowDisconnected();
+
+        populateViews();
+        enableViews(false);
     }
 
     @Override
-    public void showError() {
+    public final void showError() {
         logger.debug("showError()");
 
         getViewState().setShowError();
     }
 
     @Override
-    public void showError(Throwable throwable) {
+    public final void showError(Throwable throwable) {
         showError();
     }
 
     @Override
-    public void setLight(Light light) {
+    public final void setLight(Light light) {
         logger.debug("setLight() " + light.id());
 
         this.light = light;
-
-        //showConnected();
     }
 
-    @Override
-    public LightViewState getViewState() {
-        return (LightViewState) super.getViewState();
-    }
-
-    protected LightControlActivity getMainActivity() {
+    protected LightControlActivity getLightControlActivity() {
         return (LightControlActivity) getActivity();
     }
 
@@ -123,6 +125,11 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
      * Shows the relevant information from the fetched Light.
      */
     protected abstract void showLight();
+
+    /**
+     * Disables all the views in this Fragment
+     */
+    protected abstract void enableViews(boolean enable);
 
     /**
      * The Injector interface is implemented by a Component that provides the injected

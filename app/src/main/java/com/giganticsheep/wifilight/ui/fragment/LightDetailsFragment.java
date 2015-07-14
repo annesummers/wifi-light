@@ -48,7 +48,7 @@ public class LightDetailsFragment extends LightFragmentBase {
 
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightDetailsPresenter(getMainActivity().getComponent());
+        return new LightDetailsPresenter(getLightControlActivity().getComponent());
     }
 
     @Override
@@ -68,6 +68,9 @@ public class LightDetailsFragment extends LightFragmentBase {
         brightnessTextView.setText(Integer.toString(light.getBrightness()));
         kelvinTextView.setText(Integer.toString(light.getKelvin()));
     }
+
+    @Override
+    protected void enableViews(boolean enable) { }
 
     @Override
     protected void destroyViews() { }

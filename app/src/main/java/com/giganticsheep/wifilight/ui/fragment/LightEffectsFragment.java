@@ -32,7 +32,7 @@ public class LightEffectsFragment extends LightFragmentBase {
 
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightEffectsPresenter(getMainActivity().getComponent());
+        return new LightEffectsPresenter(getLightControlActivity().getComponent());
     }
 
     @Override
@@ -50,6 +50,9 @@ public class LightEffectsFragment extends LightFragmentBase {
 
     @Override
     protected void showLight() { }
+
+    @Override
+    protected void enableViews(boolean enable) { }
 
     @Override
     protected void destroyViews() { }

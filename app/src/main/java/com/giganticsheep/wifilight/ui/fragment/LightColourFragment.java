@@ -54,7 +54,7 @@ public class LightColourFragment extends LightFragmentBase {
 
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightColourPresenter(getMainActivity().getComponent());
+        return new LightColourPresenter(getLightControlActivity().getComponent());
     }
 
     @Override
@@ -85,6 +85,18 @@ public class LightColourFragment extends LightFragmentBase {
         kelvinSeekBar.setProgress(light.getKelvin() - LightConstants.KELVIN_BASE);
 
         powerToggle.setChecked(light.getPower() == LightControl.Power.ON);
+    }
+
+    @Override
+    protected void enableViews(boolean enable) {
+        logger.debug("enableViews()");
+
+        hueSeekBar.setEnabled(enable);
+        saturationSeekBar.setEnabled(enable);
+        valueSeekBar.setEnabled(enable);
+        kelvinSeekBar.setEnabled(enable);
+
+        powerToggle.setEnabled(enable);
     }
 
     @OnCheckedChanged(R.id.power_toggle)

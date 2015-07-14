@@ -15,6 +15,7 @@ public class TestLightResponse implements Light {
     private final String id;
     public double brightness;
     public ColourData color;
+    public boolean connected;
 
     public TestLightResponse(String testId) {
         this.id = testId;
@@ -34,7 +35,7 @@ public class TestLightResponse implements Light {
 
     @Override
     public boolean isConnected() {
-        return false;
+        return connected;
     }
 
     @Override

@@ -21,13 +21,25 @@ public class LightDetailsPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testHandleLightChanged() throws Exception {
-        Light light = new TestLightResponse(TestConstants.TEST_ID);
+    public void testHandleLightChangedConnected() throws Exception {
+        TestLightResponse light = new TestLightResponse(TestConstants.TEST_ID);
+        light.connected = true;
 
         getPresenter().handleLightChanged(new LightChangedEvent(light));
 
-        assertThat(view.getLight(), equalTo(light));
+        assertThat(view.getLight(), equalTo((Light)light));
         assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_CONNECTED));
+    }
+
+    @Test
+    public void testHandleLightChangedDisconnected() throws Exception {
+        TestLightResponse light = new TestLightResponse(TestConstants.TEST_ID);
+        light.connected = false;
+
+        getPresenter().handleLightChanged(new LightChangedEvent(light));
+
+        assertThat(view.getLight(), equalTo((Light)light));
+        assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DISCONNECTED));
     }
 
     private LightDetailsPresenter getPresenter() {
