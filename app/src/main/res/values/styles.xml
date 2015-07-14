@@ -16,7 +16,7 @@
     </style>
 
     <style name="Theme.WifiLight.TextView.DrawerLabel" parent="TextAppearance.AppCompat.Large">
-        <item name="android:textColor">@color/text_primary</item>
         <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@drawable/color_selector</item>
     </style>
 </resources>

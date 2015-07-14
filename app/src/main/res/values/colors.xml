@@ -10,6 +10,7 @@
     <color name="half_grey">#88898989</color>
 
     <color name="text_primary">#454545</color>
+    <color name="text_primary_selected">@color/text_secondary</color>
     <color name="text_secondary">#EFEFEF</color>
 
     <color name="text_hint">@color/text_primary</color>
@@ -20,5 +21,6 @@
     <color name="primary">#34ADBF</color>
     <color name="primary_dark">#438791</color>
     <color name="primary_accent">#05DBFA</color>
+
     <color name="clear">#00FFFFFF</color>
 </resources>

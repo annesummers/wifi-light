@@ -83,7 +83,6 @@ class DrawerAdapter extends BaseAdapter {
         }
 
         holder.setViewData(data);
-        holder.showSelection(selectedItem == position);
 
         return convertView;
     }
@@ -123,10 +122,23 @@ class DrawerAdapter extends BaseAdapter {
         dataList.add(data);
     }
 
+    /**
+     * The Injector interface is implemented by a Component that provides the injected
+     * class members, enabling the DrawerAdapter to inject itself
+     * into the Component.
+     */
     public interface Injector {
         void inject(DrawerAdapter adapter);
     }
 
+    /**
+     * Holds the views for an entry in the list.  Once an instance of this class has been created
+     * for an entry and the views inflated it is stored in the tag for the View for that list position.
+     * This enables the views to be recycled quickly when the elements change or the list is scrolled
+     * off the screen. <p>
+     *
+     * The data for the entry is set via setViewData(ViewData viewData).
+     */
     public class ViewHolder {
         private ViewData viewData;
 
@@ -143,12 +155,10 @@ class DrawerAdapter extends BaseAdapter {
 
             if(viewData.getLight() != null) {
                 lightNameTextView.setText(viewData.getLight().getName());
-                lightStatusImageView.setImageResource(viewData.getLight().isConnected() ? R.drawable.ic_alert_error : R.drawable.ic_action_reload);
+                lightStatusImageView.setImageResource(viewData.getLight().isConnected() ?
+                        R.drawable.ic_action_tick :
+                        R.drawable.ic_action_warning);
             }
-        }
-
-        public void showSelection(boolean show) {
-
         }
     }
 
