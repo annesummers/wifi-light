@@ -9,17 +9,6 @@
     tools:context=".MainActivity"
     tools:ignore="MergeRootFrame">
 
-    <ListView
-        android:id="@+id/left_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="@color/background_primary"
-        android:descendantFocusability="blocksDescendants"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -88,4 +77,6 @@
             android:layout_width="match_parent"
             android:layout_below="@+id/action_toolbar"/>
     </RelativeLayout>
+
+    <include layout="@layout/layout_drawer_listview" />
 </android.support.v4.widget.DrawerLayout>

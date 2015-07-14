@@ -100,7 +100,7 @@ class DrawerAdapter extends BaseAdapter {
 
         notifyDataSetChanged();
 
-        ((LightControlActivity)activity).drawerListView.setSelection(0);
+        ((LightControlActivity)activity).drawerListView.performItemClick(null, 0, 0L);
     }
 
     /**
