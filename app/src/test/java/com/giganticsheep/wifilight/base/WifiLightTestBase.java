@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.base;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.LightControl;
 
 import javax.inject.Inject;
@@ -9,6 +11,7 @@ import javax.inject.Inject;
  * (*_*)
  */
 public abstract class WifiLightTestBase {
+    @NonNull
     protected final Logger logger;
 
     @Inject protected LightControl lightNetwork;

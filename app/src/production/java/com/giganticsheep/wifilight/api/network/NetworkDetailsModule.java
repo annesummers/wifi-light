@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.base.dagger.WifiLightModule;
@@ -15,16 +17,18 @@ import dagger.Provides;
 @Module(includes = WifiLightModule.class)
 public class NetworkDetailsModule {
 
+    @NonNull
     @Provides
     @ApplicationScope
-    NetworkDetails provideNetworkDetails(WifiLightApplication application) {
+    NetworkDetails provideNetworkDetails(@NonNull WifiLightApplication application) {
         return application.getNetworkDetails();
     }
 
+    @NonNull
     @Provides
     @ApplicationScope
     @ServerURL
-    String provideServerURL(WifiLightApplication application) {
+    String provideServerURL(@NonNull WifiLightApplication application) {
         return application.getServerURL();
     }
 }

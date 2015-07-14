@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -43,6 +44,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
+    @Nullable
     @Arg String name;
 
     private boolean viewsInitialised;
@@ -62,7 +64,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @return the created Fragment
      * @throws Exception if the name of the fragment doesn't match any in the application
      */
-    public static FragmentBase create(final String name, final FragmentFactory fragmentFactory) throws Exception {
+    public static FragmentBase create(final String name, @NonNull final FragmentFactory fragmentFactory) throws Exception {
         return fragmentFactory.createFragment(name);
     }
 
@@ -91,7 +93,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     @Override
-    public final View onCreateView(final LayoutInflater inflater,
+    public final View onCreateView(@NonNull final LayoutInflater inflater,
                                    @Nullable final ViewGroup container,
                                    @Nullable final Bundle savedInstanceState) {
         final View view = super.onCreateView(inflater, container, savedInstanceState);
@@ -116,7 +118,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     @Override
-    public final void onConfigurationChanged(final Configuration config) {
+    public final void onConfigurationChanged(@NonNull final Configuration config) {
         super.onConfigurationChanged(config);
 
         if(reinitialiseOnRotate() && config.orientation != orientation) {
@@ -144,6 +146,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     /**
      * @return the name of this Fragment
      */
+    @Nullable
     public final String name() {
         return name;
     }
@@ -153,7 +156,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param activity the Activity to attach to
      */
-    public final void attachToActivity(final ActivityBase activity,
+    public final void attachToActivity(@NonNull final ActivityBase activity,
                                        final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;
 
@@ -197,6 +200,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     /**
      * @return the Activity associated with this Fragment
      */
+    @NonNull
     protected final ActivityBase getBaseActivity() {
         return (ActivityBase) getActivity();
     }
@@ -226,7 +230,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param subscriber the Subscriber to subscribe with
      * @param <T>
      */
-    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable, @NonNull Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
@@ -237,11 +241,11 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param observable the Observable to subscribe to
      * @param <T>
      */
-    protected <T> void subscribe(final Observable<T> observable) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>(logger));
     }
 
-    private void doAttachToActivity(final ActivityBase activity) {
+    private void doAttachToActivity(@NonNull final ActivityBase activity) {
         final String name = attachmentDetails.name();
         final int position = attachmentDetails.position();
         final boolean addToBackStack = attachmentDetails.addToBackStack();

@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.StatusResponse;
 
@@ -32,6 +34,7 @@ public interface LightControl {
      * @param hue the hue to set; an int between 0 and 360.
      * @param duration the duration to set the hue for.
      */
+    @NonNull
     Observable<StatusResponse> setHue(final int hue, float duration);
 
     /**
@@ -40,6 +43,7 @@ public interface LightControl {
      * @param saturation the saturation to set; an int between 0 and 100.
      * @param duration the duration to set the saturation for.
      */
+    @NonNull
     Observable<StatusResponse> setSaturation(final int saturation, float duration);
 
     /**
@@ -48,6 +52,7 @@ public interface LightControl {
      * @param brightness the brightness to set; an int between 0 and 100.
      * @param duration the duration to set the brightness for.
      */
+    @NonNull
     Observable<StatusResponse> setBrightness(final int brightness, float duration);
 
     /**
@@ -56,11 +61,13 @@ public interface LightControl {
      * @param kelvin the kelvin to set; an int between 2500 and 9000.
      * @param duration the duration to set the kelvin for.
      */
+    @NonNull
     Observable<StatusResponse> setKelvin(final int kelvin, float duration);
 
     /**
      * Toggles the power of the selected lights
      */
+    @NonNull
     Observable<StatusResponse> togglePower();
 
     /**
@@ -69,10 +76,13 @@ public interface LightControl {
      * @param power ON or OFF.
      * @param duration how long to set the power change for.
      */
+    @NonNull
     Observable<StatusResponse> setPower(final Power power, final float duration);
 
+    @NonNull
     Observable<Light> fetchLights(boolean fetchFromServer);
 
+    @NonNull
     Observable<Light> fetchLight(final String id);
 
     class FetchLightsSuccessEvent { }

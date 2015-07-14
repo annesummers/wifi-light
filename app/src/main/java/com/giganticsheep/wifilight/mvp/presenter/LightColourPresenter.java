@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.LightControl;
 import com.squareup.otto.Subscribe;
 
@@ -80,7 +82,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * @param event a LightChangedEvent; contains a Light
      */
     @Subscribe
-    public void handleLightChanged(LightChangedEvent event) {
+    public void handleLightChanged(@NonNull LightChangedEvent event) {
         handleLightChanged(event.getLight());
     }
 }

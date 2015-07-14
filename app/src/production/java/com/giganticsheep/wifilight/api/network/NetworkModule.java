@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.ApplicationScope;
 
 import dagger.Module;
@@ -16,7 +18,7 @@ public class NetworkModule {
 
     @Provides
     @ApplicationScope
-    LightService provideService(RestAdapter restAdapter) {
+    LightService provideService(@NonNull RestAdapter restAdapter) {
         return restAdapter.create(LightService.class);
     }
 }

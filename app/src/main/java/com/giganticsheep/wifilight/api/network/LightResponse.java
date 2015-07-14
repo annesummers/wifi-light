@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.ColourData;
 import com.giganticsheep.wifilight.api.model.Light;
@@ -21,6 +23,7 @@ class LightResponse extends Response
 
     public String uuid;
     public boolean connected;
+    @NonNull
     public String power = "on";
     public double brightness;
     public String product_name;
@@ -68,6 +71,7 @@ class LightResponse extends Response
         return LightConstants.convertBrightness(brightness);
     }
 
+    @NonNull
     @Override
     public LightControl.Power getPower() {
         return power.equals("on") ? LightControl.Power.ON : LightControl.Power.OFF;
@@ -109,6 +113,7 @@ class LightResponse extends Response
         public boolean has_color;
         public boolean has_variable_color_temp;
 
+        @NonNull
         @Override
         public String toString() {
             return "CapabilitiesData{" +
@@ -118,6 +123,7 @@ class LightResponse extends Response
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "LightDataResponse{" +

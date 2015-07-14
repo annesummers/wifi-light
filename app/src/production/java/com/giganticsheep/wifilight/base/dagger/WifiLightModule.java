@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.base.dagger;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.WifiLightAppModule;
 import com.giganticsheep.wifilight.WifiLightApplication;
@@ -24,18 +26,21 @@ public class WifiLightModule {
 
     public WifiLightModule() { }
 
+    @NonNull
     @Provides
     @ApplicationScope
     BaseLogger provideBaseLogger(WifiLightApplication application) {
         return new ApplicationLogger(application);
     }
 
+    @NonNull
     @Provides
     @ApplicationScope
     EventBus provideEventBus() {
         return new AndroidEventBus();
     }
 
+    @NonNull
     @Provides
     @ApplicationScope
     FragmentFactory provideFragmentFactory(WifiLightApplication application) {

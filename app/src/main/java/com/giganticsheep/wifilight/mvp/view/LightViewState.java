@@ -1,6 +1,8 @@
 package com.giganticsheep.wifilight.mvp.view;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
@@ -58,7 +60,7 @@ public class LightViewState implements RestoreableViewState<LightView> {
     }
 
     @Override
-    public void apply(LightView lightView, boolean retained) {
+    public void apply(@NonNull LightView lightView, boolean retained) {
         switch (state) {
             case STATE_SHOW_LOADING:
                 lightView.showLoading();
@@ -86,12 +88,13 @@ public class LightViewState implements RestoreableViewState<LightView> {
     }
 
     @Override
-    public void saveInstanceState(Bundle bundle) {
+    public void saveInstanceState(@NonNull Bundle bundle) {
         bundle.putInt(KEY_STATE, state);
     }
 
+    @Nullable
     @Override
-    public RestoreableViewState<LightView> restoreInstanceState(Bundle bundle) {
+    public RestoreableViewState<LightView> restoreInstanceState(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }
@@ -101,6 +104,7 @@ public class LightViewState implements RestoreableViewState<LightView> {
         return this;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "LightViewState{" +

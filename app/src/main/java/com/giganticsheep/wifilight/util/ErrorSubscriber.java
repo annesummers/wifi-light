@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.util;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.base.Logger;
 
 import rx.Subscriber;
@@ -20,7 +22,7 @@ public class ErrorSubscriber<T> extends Subscriber<T> {
     public void onCompleted() { }
 
     @Override
-    public void onError(Throwable e) {
+    public void onError(@NonNull Throwable e) {
         logger.error(e.getMessage());
     }
 

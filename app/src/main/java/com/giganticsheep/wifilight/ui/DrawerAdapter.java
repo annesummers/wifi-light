@@ -1,6 +1,8 @@
 package com.giganticsheep.wifilight.ui;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +37,11 @@ class DrawerAdapter extends BaseAdapter {
 
     private boolean allLightsFetched = true;
     private int selectedItem;
+    @Nullable
     private List<ViewData> dataList = null;
     private int position;
 
-    DrawerAdapter(Injector injector) {
+    DrawerAdapter(@NonNull Injector injector) {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
@@ -51,6 +54,7 @@ class DrawerAdapter extends BaseAdapter {
         return dataList == null ? 0 : dataList.size();
     }
 
+    @Nullable
     @Override
     public String getItem(int position) {
         return dataList == null ? null : dataList.get(position).getLight().id();
@@ -61,8 +65,9 @@ class DrawerAdapter extends BaseAdapter {
         return position;
     }
 
+    @Nullable
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, ViewGroup parent) {
         ViewHolder holder = null;
 
         if (convertView == null) {
@@ -109,7 +114,7 @@ class DrawerAdapter extends BaseAdapter {
      * @param event a LightDetailsEvent; contains a Light
      */
     @Subscribe
-    public synchronized void handleLightDetails(LightControl.LightDetailsEvent event) {
+    public synchronized void handleLightDetails(@NonNull LightControl.LightDetailsEvent event) {
         logger.debug("handleLightDetails() " + event.light().id());
 
         if(allLightsFetched) {
@@ -148,12 +153,12 @@ class DrawerAdapter extends BaseAdapter {
         private TextView lightNameTextView;
         private ImageView lightStatusImageView;
 
-        public ViewHolder(View view) {
+        public ViewHolder(@NonNull View view) {
             lightNameTextView = (TextView) view.findViewById(R.id.light_name);
             lightStatusImageView = (ImageView) view.findViewById(R.id.light_status);
         }
 
-        public void setViewData(ViewData viewData) {
+        public void setViewData(@NonNull ViewData viewData) {
             this.viewData = viewData;
 
             if(viewData.getLight() != null) {

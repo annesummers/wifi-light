@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,18 +21,21 @@ import rx.Observable;
  */
 public interface LightService {
 
+    @NonNull
     @GET("/{url1}/{url2}/{selector}")
     Observable<List<LightResponse>> listLights(@Path("url1") String url1,
                                                    @Path("url2") String url2,
                                                    @Path("selector") String selector,
                                                    @Header("Authorization") String authorisation);
 
+    @NonNull
     @POST("/{url}/{url2}/{selector}/toggle")
     Observable<List<StatusResponse>> togglePower(@Path("url") String url,
                                                  @Path("url2") String url2,
                                                  @Path("selector") String selector,
                                                  @Header("Authorization") String authorisation,
                                                  @Body Object empty);
+    @NonNull
     @FormUrlEncoded
     @PUT("/{url}/{url2}/{selector}/power")
     Observable<List<StatusResponse>> setPower(@Path("url") String url,
@@ -39,6 +44,7 @@ public interface LightService {
                                               @Header("Authorization") String authorization,
                                               @FieldMap Map<String, String> options);
 
+    @NonNull
     @FormUrlEncoded
     @PUT("/{url}/{url2}/{selector}/color")
     Observable<List<StatusResponse>> setColour(@Path("url") String url,
@@ -47,6 +53,7 @@ public interface LightService {
                                                @Header("Authorization") String authorization,
                                                @FieldMap Map<String, String> options);
 
+    @NonNull
     @FormUrlEncoded
     @POST("/{url}/{url2}/{selector}/effects/breathe")
     Observable<List<StatusResponse>> breathe(@Path("url") String url,
@@ -55,6 +62,7 @@ public interface LightService {
                                              @Header("Authorization") String authorization,
                                              @FieldMap Map<String, String> options);
 
+    @NonNull
     @FormUrlEncoded
     @POST("/{url}/{url2}/{selector}/effects/pulse")
     Observable<List<StatusResponse>> pulse(@Path("url") String url,

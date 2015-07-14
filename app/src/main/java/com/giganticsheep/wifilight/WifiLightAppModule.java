@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight;
 
+import android.support.annotation.Nullable;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -10,6 +12,7 @@ import dagger.Provides;
 
 @Module
 public class WifiLightAppModule {
+    @Nullable
     protected final WifiLightApplication application;
 
     public WifiLightAppModule() {
@@ -20,6 +23,7 @@ public class WifiLightAppModule {
         this.application = application;
     }
 
+    @Nullable
     @Provides
     @ApplicationScope
     WifiLightApplication provideApplication() {

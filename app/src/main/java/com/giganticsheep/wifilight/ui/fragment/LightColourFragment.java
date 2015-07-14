@@ -1,6 +1,8 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
@@ -30,6 +32,7 @@ public class LightColourFragment extends LightFragmentBase {
 
     // TODO put toggle above pager maybe in its own fragment?
 
+    @NonNull
     public static LightColourFragment newInstance(String name) {
         LightColourFragment fragment = new LightColourFragment();
 
@@ -40,10 +43,15 @@ public class LightColourFragment extends LightFragmentBase {
         return fragment;
     }
 
+    @Nullable
     @InjectView(R.id.hue_seekbar) SeekBar hueSeekBar;
+    @Nullable
     @InjectView(R.id.saturation_seekbar) SeekBar saturationSeekBar;
+    @Nullable
     @InjectView(R.id.brightness_seekbar) SeekBar valueSeekBar;
+    @Nullable
     @InjectView(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
+    @Nullable
     @InjectView(R.id.power_toggle) ToggleButton powerToggle;
 
     private final SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
@@ -52,11 +60,13 @@ public class LightColourFragment extends LightFragmentBase {
         super();
     }
 
+    @NonNull
     @Override
     public LightPresenterBase createPresenter() {
         return new LightColourPresenter(getLightControlActivity().getComponent());
     }
 
+    @NonNull
     @Override
     public LightColourPresenter getPresenter() {
         return (LightColourPresenter) super.getPresenter();
@@ -139,7 +149,7 @@ public class LightColourFragment extends LightFragmentBase {
         }
 
         @Override
-        public synchronized void onStopTrackingTouch(SeekBar seekBar) {
+        public synchronized void onStopTrackingTouch(@NonNull SeekBar seekBar) {
             tracking = false;
 
             if(values.containsKey(seekBar)) {

@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.util;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.base.EventBus;
 import com.squareup.otto.Bus;
 
@@ -21,10 +23,11 @@ public class AndroidEventBus implements EventBus {
      *
      * @param messageObject the object to post to the bus
      */
-    public Observable postMessage(final Object messageObject) {
+    @NonNull
+    public Observable postMessage(@NonNull final Object messageObject) {
         return Observable.create(new Observable.OnSubscribe<Object>() {
             @Override
-            public void call(Subscriber<? super Object> subscriber) {
+            public void call(@NonNull Subscriber<? super Object> subscriber) {
                 try {
                     bus.post(messageObject);
                 } catch (Exception e) {
@@ -37,11 +40,11 @@ public class AndroidEventBus implements EventBus {
         }).subscribeOn(AndroidSchedulers.mainThread());
     }
 
-    public void registerForEvents(Object myClass) {
+    public void registerForEvents(@NonNull Object myClass) {
         bus.register(myClass);
     }
 
-    public void unregisterForEvents(Object myClass) {
+    public void unregisterForEvents(@NonNull Object myClass) {
         bus.unregister(myClass);
     }
 }

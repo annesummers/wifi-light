@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.giganticsheep.wifilight.R;
@@ -16,6 +17,7 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 @FragmentArgsInherited
 public class LightEffectsFragment extends LightFragmentBase {
 
+    @NonNull
     public static LightEffectsFragment newInstance(String name) {
         LightEffectsFragment fragment = new LightEffectsFragment();
 
@@ -30,11 +32,13 @@ public class LightEffectsFragment extends LightFragmentBase {
         super();
     }
 
+    @NonNull
     @Override
     public LightPresenterBase createPresenter() {
         return new LightEffectsPresenter(getLightControlActivity().getComponent());
     }
 
+    @NonNull
     @Override
     public LightEffectsPresenter getPresenter() {
         return (LightEffectsPresenter) super.getPresenter();

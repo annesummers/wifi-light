@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
@@ -56,6 +57,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     // MVP
 
+    @NonNull
     @Override
     public final ViewState createViewState() {
         return new LightViewState();
@@ -66,6 +68,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         getViewState().apply(this, true);
     }
 
+    @NonNull
     @Override
     public final LightViewState getViewState() {
         return (LightViewState) super.getViewState();
@@ -121,12 +124,13 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @Override
-    public final void setLight(Light light) {
+    public final void setLight(@NonNull Light light) {
         logger.debug("setLight() " + light.id());
 
         this.light = light;
     }
 
+    @NonNull
     protected final LightControlActivity getLightControlActivity() {
         return (LightControlActivity) getActivity();
     }

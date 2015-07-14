@@ -1,5 +1,8 @@
 package com.giganticsheep.wifilight;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.ColourData;
 import com.giganticsheep.wifilight.api.model.Light;
@@ -28,6 +31,7 @@ public class TestLightResponse implements Light {
         return id;
     }
 
+    @NonNull
     @Override
     public String getName() {
         return "test";
@@ -58,11 +62,13 @@ public class TestLightResponse implements Light {
         return LightConstants.convertBrightness(brightness);
     }
 
+    @NonNull
     @Override
     public LightControl.Power getPower() {
         return LightControl.Power.OFF;
     }
 
+    @Nullable
     @Override
     public Date getLastSeen() {
         return null;
@@ -73,6 +79,7 @@ public class TestLightResponse implements Light {
         return 0;
     }
 
+    @Nullable
     @Override
     public String getProductName() {
         return null;

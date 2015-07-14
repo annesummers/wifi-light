@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.base;
 
+import android.support.annotation.NonNull;
+
 import org.jetbrains.annotations.NonNls;
 
 import java.io.Serializable;
@@ -25,7 +27,7 @@ public class Logger implements Serializable {
         baseLogger.logWarn(className + SPACE + message);
     }
 
-    public final void error(final Throwable throwable) {
+    public final void error(@NonNull final Throwable throwable) {
         baseLogger.logError(toString() + SPACE + ERROR_LABEL + SPACE + throwable.getMessage());
     }
 

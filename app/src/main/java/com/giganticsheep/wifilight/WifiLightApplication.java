@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
@@ -31,6 +32,7 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
         return component;
     }
 
+    @NonNull
     public NetworkDetails getNetworkDetails() {
         return new NetworkDetails(
                 getResources().getString(R.string.DEFAULT_API_KEY),
@@ -38,6 +40,7 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
                 DEFAULT_URL_STRING2);
     }
 
+    @NonNull
     public String getServerURL() {
         return DEFAULT_SERVER_STRING;
     }

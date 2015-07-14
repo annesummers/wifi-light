@@ -1,5 +1,8 @@
 package com.giganticsheep.wifilight.base;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
@@ -15,6 +18,7 @@ import rx.Observable;
  */
 public class FragmentFactory {
 
+    @Nullable
     private final WifiLightApplication application;
 
     public FragmentFactory(WifiLightApplication application) {
@@ -29,7 +33,8 @@ public class FragmentFactory {
      * @param name the name of the fragment to create
      * @return the Observable to subscribe to
      */
-    public final Observable<? extends FragmentBase> createFragmentAsync(final String name) {
+    @NonNull
+    public final Observable<? extends FragmentBase> createFragmentAsync(@NonNull final String name) {
         try {
             return Observable.just(createFragment(name));
         } catch (Exception e) {
@@ -42,7 +47,8 @@ public class FragmentFactory {
      * @param name the name of the fragment to create
      * @return the Observable to subscribe to
      */
-    public final FragmentBase createFragment(final String name) throws Exception {
+    @NonNull
+    public final FragmentBase createFragment(@NonNull final String name) throws Exception {
         if(application != null) {
             if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
                 return LightColourFragment.newInstance(name);

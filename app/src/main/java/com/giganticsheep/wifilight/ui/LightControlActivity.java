@@ -2,6 +2,8 @@ package com.giganticsheep.wifilight.ui;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -43,12 +45,18 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     private ViewPager viewPager;
 
+    @Nullable
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
+    @Nullable
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
+    @Nullable
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
+    @Nullable
     @InjectView(R.id.disconnected_layout) FrameLayout disconnectedLayout;
 
+    @Nullable
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @Nullable
     @InjectView(R.id.left_drawer) ListView drawerListView;
 
     private LightControlActivityComponent component;
@@ -58,7 +66,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     // Views
 
     @Override
-    protected final void onCreate(final Bundle savedInstanceState) {
+    protected final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
@@ -75,6 +83,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         drawerListView.setOnItemClickListener(new DrawerItemClickListener());
     }
 
+    @NonNull
     @Override
     protected final ActivityLayout createActivityLayout() {
         return new ActivityLayout() {
@@ -134,7 +143,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
-    public final boolean onOptionsItemSelected(final MenuItem item) {
+    public final boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -188,11 +197,13 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     // MVP
 
+    @NonNull
     @Override
     public LightControlPresenter createPresenter() {
         return new LightControlPresenter(getComponent());
     }
 
+    @NonNull
     @Override
     public RestoreableViewState createViewState() {
         return new LightViewState();
@@ -203,6 +214,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         getViewState().apply(this, false);
     }
 
+    @NonNull
     @Override
     public LightViewState getViewState() {
         return (LightViewState) super.getViewState();
@@ -273,7 +285,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
-    public void showError(Throwable throwable) {
+    public void showError(@NonNull Throwable throwable) {
         logger.debug("showError()");
 
         getViewState().setShowError();
@@ -290,7 +302,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
-    public void setLight(Light light) {
+    public void setLight(@NonNull Light light) {
         logger.debug("setLight() " + light.id());
     }
 
@@ -320,6 +332,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             return PagerAdapter.POSITION_NONE;
         }
 
+        @Nullable
         @Override
         public Fragment getItem(int position) {
             try {
@@ -338,6 +351,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             }
         }
 
+        @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
             switch(position) {

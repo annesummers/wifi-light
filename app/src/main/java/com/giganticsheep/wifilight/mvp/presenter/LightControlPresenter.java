@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
@@ -16,7 +18,7 @@ public class LightControlPresenter extends LightPresenterBase {
 
     private String currentLightId;
 
-    public LightControlPresenter(Injector injector) {
+    public LightControlPresenter(@NonNull Injector injector) {
         super(injector);
 
         eventBus.registerForEvents(this);
@@ -77,12 +79,13 @@ public class LightControlPresenter extends LightPresenterBase {
     }
 
     @Subscribe
-    public void handleLightChanged(LightChangedEvent event) {
+    public void handleLightChanged(@NonNull LightChangedEvent event) {
         currentLightId = event.getLight().id();
 
         handleLightChanged(event.getLight());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "MainActivityPresenter{" +

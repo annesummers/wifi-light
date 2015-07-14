@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,8 +24,8 @@ public class BaseNetworkModule {
 
     @Provides
     @ApplicationScope
-    RestAdapter provideRestAdapter(Endpoint endpoint,
-                                   OkHttpClient client,
+    RestAdapter provideRestAdapter(@NonNull Endpoint endpoint,
+                                   @NonNull OkHttpClient client,
                                    Gson gson) {
         return new RestAdapter.Builder()
                 .setClient(new OkClient(client))
@@ -33,12 +35,14 @@ public class BaseNetworkModule {
                 .build();
     }
 
+    @NonNull
     @Provides
     @ApplicationScope
     OkHttpClient provideOkHttpClient() {
         return new OkHttpClient();
     }
 
+    @NonNull
     @Provides
     @ApplicationScope
     Gson provideGson() {
@@ -46,6 +50,7 @@ public class BaseNetworkModule {
                 .create();
     }
 
+    @NonNull
     @Provides
     @ApplicationScope
     Endpoint provideEndpoint(@ServerURL String serverURL) {

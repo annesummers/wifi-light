@@ -3,6 +3,8 @@ package com.giganticsheep.wifilight.ui.base;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
@@ -52,7 +54,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     @Inject protected EventBus eventBus;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activityLayout = createActivityLayout();
@@ -77,7 +79,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     @Override
-    public final void onSaveInstanceState(final Bundle outState) {
+    public final void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
 
         final FragmentAttachmentDetails[] fragments = attachedFragments.values().toArray(
@@ -89,7 +91,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     @Override
-    public final void onConfigurationChanged(final Configuration config) {
+    public final void onConfigurationChanged(@NonNull final Configuration config) {
         super.onConfigurationChanged(config);
 
         if(reinitialiseOnRotate() && config.orientation != orientation) {
@@ -153,7 +155,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param attachmentDetails the details of the fragment to attach
      */
-    protected final void attachNewFragment(final FragmentAttachmentDetails attachmentDetails) {
+    protected final void attachNewFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
         FragmentBase fragment;
 
         try {
@@ -177,7 +179,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param attachmentDetails the details of the fragment to attach
      */
-    protected final void attachFragment(final FragmentAttachmentDetails attachmentDetails) {
+    protected final void attachFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(attachmentDetails.name());
@@ -198,7 +200,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param details the attachment details of the fragment
      */
-    void addFragment(FragmentAttachmentDetails details) {
+    void addFragment(@NonNull FragmentAttachmentDetails details) {
         if(attachedFragments.containsKey(details.position())) {
             final String oldName = attachedFragments.get(details.position()).name();
             if(oldName.equals(details.name())) {
@@ -232,6 +234,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param position the position the fragment is attached at
      * @return the found fragment
      */
+    @NonNull
     protected FragmentBase findFragment(final int position) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -244,7 +247,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param fragmentDetails the attach information associated with the fragment
      * @return the found fragment
      */
-    protected FragmentBase findFragment(final FragmentAttachmentDetails fragmentDetails) {
+    @NonNull
+    protected FragmentBase findFragment(@NonNull final FragmentAttachmentDetails fragmentDetails) {
         return findFragment(fragmentDetails.position());
     }
 
@@ -256,7 +260,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param subscriber the Subscriber to subscribe with
      * @param <T>
      */
-    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable, @NonNull Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
@@ -267,7 +271,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param observable the Observable to subscribe to
      * @param <T>
      */
-    protected <T> void subscribe(final Observable<T> observable) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>(logger));
     }
 
@@ -275,6 +279,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         return activityLayout;
     }
 
+    @NonNull
     private WifiLightApplication getWifiLightApplication() {
         return (WifiLightApplication)getApplication();
     }

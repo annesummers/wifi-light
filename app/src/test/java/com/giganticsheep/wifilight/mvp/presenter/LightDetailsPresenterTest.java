@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.TestLightResponse;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
@@ -15,6 +17,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  */
 public class LightDetailsPresenterTest extends LightPresenterTestBase {
 
+    @NonNull
     @Override
     protected LightPresenterBase createPresenter(LightPresenterBase.Injector injector) {
         return new LightDetailsPresenter(injector);
@@ -42,6 +45,7 @@ public class LightDetailsPresenterTest extends LightPresenterTestBase {
         assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DISCONNECTED));
     }
 
+    @NonNull
     private LightDetailsPresenter getPresenter() {
         return (LightDetailsPresenter) presenter;
     }

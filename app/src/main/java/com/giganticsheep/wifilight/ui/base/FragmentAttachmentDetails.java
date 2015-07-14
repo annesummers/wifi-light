@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * Created by anne on 25/06/15.
@@ -18,18 +19,20 @@ public class FragmentAttachmentDetails implements Parcelable {
         this.addToBackStack = addToBackStack;
     }
 
-    protected FragmentAttachmentDetails(final Parcel in) {
+    protected FragmentAttachmentDetails(@NonNull final Parcel in) {
         name = in.readString();
         position = in.readInt();
         addToBackStack = in.readByte() != 0;
     }
 
     public static final Creator<FragmentAttachmentDetails> CREATOR = new Creator<FragmentAttachmentDetails>() {
+        @NonNull
         @Override
-        public FragmentAttachmentDetails createFromParcel(final Parcel source) {
+        public FragmentAttachmentDetails createFromParcel(@NonNull final Parcel source) {
             return new FragmentAttachmentDetails(source);
         }
 
+        @NonNull
         @Override
         public FragmentAttachmentDetails[] newArray(final int size) {
             return new FragmentAttachmentDetails[size];
@@ -50,7 +53,7 @@ public class FragmentAttachmentDetails implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(final Parcel parcel, final int flags) {
+    public void writeToParcel(@NonNull final Parcel parcel, final int flags) {
         parcel.writeString(name);
         parcel.writeInt(position);
         parcel.writeByte((byte) (addToBackStack ? 1 : 0));
@@ -60,6 +63,7 @@ public class FragmentAttachmentDetails implements Parcelable {
         return addToBackStack;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "FragmentAttachmentDetails{" +

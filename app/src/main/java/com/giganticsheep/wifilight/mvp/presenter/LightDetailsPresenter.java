@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.squareup.otto.Subscribe;
 
 /**
@@ -22,7 +24,7 @@ public class LightDetailsPresenter extends LightFragmentPresenter {
     }
 
     @Subscribe
-    public void handleLightChanged(LightChangedEvent event) {
+    public void handleLightChanged(@NonNull LightChangedEvent event) {
         handleLightChanged(event.getLight());
     }
 }

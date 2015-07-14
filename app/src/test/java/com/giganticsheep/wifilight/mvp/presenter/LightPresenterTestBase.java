@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
@@ -82,7 +84,7 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         }
 
         @Override
-        public void showError(Throwable throwable) {
+        public void showError(@NonNull Throwable throwable) {
             state = STATE_SHOW_ERROR;
 
             logger.warn("showError() " + throwable.getMessage());

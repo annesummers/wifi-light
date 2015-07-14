@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.model;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.StatusResponse;
 import com.giganticsheep.wifilight.base.TestConstants;
@@ -46,7 +48,7 @@ public class LightNetworkTest extends ModelTest {
                     public void onError(Throwable e) { }
 
                     @Override
-                    public void onNext(Light light) {
+                    public void onNext(@NonNull Light light) {
                         assertThat(light.id(), equalTo(TestConstants.TEST_ID));
                     }
                 });

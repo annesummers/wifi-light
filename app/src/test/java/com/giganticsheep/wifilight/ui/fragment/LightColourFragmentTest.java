@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
+import android.support.annotation.NonNull;
 import android.widget.SeekBar;
 
 import com.giganticsheep.wifilight.BuildConfig;
@@ -24,6 +25,7 @@ import static org.junit.Assert.*;
 @Config(constants = BuildConfig.class, sdk = 19)
 public class LightColourFragmentTest extends LightFragmentTestBase {
 
+    @NonNull
     @Override
     protected String getFragmentName() {
         return RuntimeEnvironment.application.getString(R.string.fragment_name_light_colour);

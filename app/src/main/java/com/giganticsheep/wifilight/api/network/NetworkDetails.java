@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by anne on 28/06/15.
  * (*_*)
@@ -30,6 +32,7 @@ public class NetworkDetails {
         return baseURL2;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "NetworkDetails{" +

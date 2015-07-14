@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by anne on 26/06/15.
  * (*_*)
@@ -22,6 +24,7 @@ public class StatusResponse extends Response {
         return status;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "StatusResponse{" +

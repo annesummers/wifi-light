@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
@@ -24,6 +26,7 @@ import rx.Scheduler;
                         SchedulersModule.class }  )
 public class LightControlModule {
 
+    @NonNull
     @Provides
     @ApplicationScope
     LightControl provideLightControl(NetworkDetails networkDetails,

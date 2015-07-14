@@ -1,5 +1,8 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
@@ -32,9 +35,11 @@ import rx.functions.Func1;
 @ApplicationScope
 class LightControlImpl implements LightControl {
 
+    @NonNull
     @SuppressWarnings("FieldNotUsedInToString")
     private final Logger logger;
 
+    @Nullable
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<Light> lightsObservable = null;
 
@@ -104,8 +109,9 @@ class LightControlImpl implements LightControl {
                     }
                 })
                 .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                    @NonNull
                     @Override
-                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                    public Observable<StatusResponse> call(@NonNull List<StatusResponse> statusResponses) {
                         List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
 
                         for (StatusResponse statusResponse : statusResponses) {
@@ -127,7 +133,7 @@ class LightControlImpl implements LightControl {
     }
 
     @Override
-    public final Observable<StatusResponse> setPower(final Power power, final float duration) {
+    public final Observable<StatusResponse> setPower(@NonNull final Power power, final float duration) {
         String powerQuery = power.powerString();
         String durationQuery =  makeDurationQuery(duration);
 
@@ -149,8 +155,9 @@ class LightControlImpl implements LightControl {
                     }
                 })
                 .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                    @NonNull
                     @Override
-                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                    public Observable<StatusResponse> call(@NonNull List<StatusResponse> statusResponses) {
                         List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
 
                         for (StatusResponse statusResponse : statusResponses) {
@@ -171,6 +178,7 @@ class LightControlImpl implements LightControl {
                 .observeOn(uiScheduler);
     }
 
+    @Nullable
     @Override
     public final Observable<Light> fetchLights(boolean fetchFromServer) {
         logger.debug("fetchLights()");
@@ -187,8 +195,9 @@ class LightControlImpl implements LightControl {
                         }
                     })
                     .flatMap(new Func1<List<LightResponse>, Observable<Light>>() {
+                        @NonNull
                         @Override
-                        public Observable<Light> call(List<LightResponse> lightResponses) {
+                        public Observable<Light> call(@NonNull List<LightResponse> lightResponses) {
                             List<Observable<Light>> observables = new ArrayList(lightResponses.size());
 
                             for (Light lightResponse : lightResponses) {
@@ -218,15 +227,16 @@ class LightControlImpl implements LightControl {
         return lightsObservable;
     }
 
+    @NonNull
     @Override
-    public final Observable<Light> fetchLight(final String id) {
+    public final Observable<Light> fetchLight(@Nullable final String id) {
         if(id == null) {
             return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
         }
 
         return fetchLights(false).filter(new Func1<Light, Boolean>() {
             @Override
-            public Boolean call(Light light) {
+            public Boolean call(@NonNull Light light) {
                 return light.id().equals(id);
             }
         })
@@ -255,8 +265,9 @@ class LightControlImpl implements LightControl {
                     }
                 })
                 .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                    @NonNull
                     @Override
-                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                    public Observable<StatusResponse> call(@NonNull List<StatusResponse> statusResponses) {
                         List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
 
                         for (StatusResponse statusResponse : statusResponses) {
@@ -277,22 +288,27 @@ class LightControlImpl implements LightControl {
                 .observeOn(uiScheduler);
     }
 
+    @NonNull
     private String authorisation() {
         return NetworkConstants.LABEL_BEARER + NetworkConstants.SPACE + networkDetails.getApiKey();
     }
 
+    @NonNull
     private String makeHueQuery(final double hue) {
         return NetworkConstants.LABEL_HUE + Double.toString(hue);
     }
 
+    @NonNull
     private String makeSaturationQuery(final double saturation) {
         return NetworkConstants.LABEL_SATURATION + Double.toString(saturation);
     }
 
+    @NonNull
     private String makeKelvinQuery(final long kelvin) {
         return NetworkConstants.LABEL_KELVIN + Long.toString(kelvin);
     }
 
+    @NonNull
     private String makeBrightnessQuery(final double brightness) {
         return NetworkConstants.LABEL_BRIGHTNESS + Double.toString(brightness);
     }
@@ -301,6 +317,7 @@ class LightControlImpl implements LightControl {
         return Float.toString(duration);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "LightNetwork{" +

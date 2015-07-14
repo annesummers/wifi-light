@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.StatusResponse;
@@ -25,6 +27,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
+    @NonNull
     protected final Logger logger;
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -41,17 +44,17 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * @param injector an Injector used to inject this object into a Component that will
      *                 provide the injected class members.
      */
-    protected LightPresenterBase(Injector injector) {
+    protected LightPresenterBase(@NonNull Injector injector) {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
     }
 
-    protected void fetchLight(String id, Subscriber<Light> subscriber) {
+    protected void fetchLight(String id, @NonNull Subscriber<Light> subscriber) {
         subscribe(lightControl.fetchLight(id), subscriber);
     }
 
-    protected void handleLightChanged(Light light) {
+    protected void handleLightChanged(@NonNull Light light) {
         if (isViewAttached()) {
             getView().setLight(light);
 
@@ -83,7 +86,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * @param subscriber the Subscriber to subscribe with
      * @param <T>
      */
-    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable, @NonNull Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
@@ -94,7 +97,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * @param observable the Observable to subscribe to
      * @param <T>
      */
-    protected <T> void subscribe(final Observable<T> observable) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>(logger));
     }
 
