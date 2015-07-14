@@ -46,7 +46,6 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     private int orientation;
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-    private Subscriber errorSubscriber;
 
     @Inject protected FragmentFactory fragmentFactory;
     @Inject protected BaseLogger baseLogger;
@@ -61,7 +60,6 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         setContentView(activityLayout.layoutId());
 
         logger = new Logger(getClass().getName(), baseLogger);
-        errorSubscriber = new ErrorSubscriber(logger);
 
         if(savedInstanceState != null) {
             // TODO can we get Icepick to handle this?
@@ -259,7 +257,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param <T>
      */
     protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
-        subscribe(observable, errorSubscriber);
+        compositeSubscription.add(observable.subscribe(subscriber));
     }
 
     /**
@@ -270,7 +268,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param <T>
      */
     protected <T> void subscribe(final Observable<T> observable) {
-        compositeSubscription.add(observable.subscribe(errorSubscriber));
+        subscribe(observable, new ErrorSubscriber<T>(logger));
     }
 
     private ActivityLayout activityLayout() {

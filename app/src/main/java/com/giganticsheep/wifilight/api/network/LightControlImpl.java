@@ -18,7 +18,6 @@ import java.util.Map;
 
 import rx.Observable;
 import rx.Scheduler;
-import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -35,9 +34,6 @@ class LightControlImpl implements LightControl {
 
     @SuppressWarnings("FieldNotUsedInToString")
     private final Logger logger;
-
-    @SuppressWarnings("FieldNotUsedInToString")
-    private final Subscriber errorSubscriber;
 
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<Light> lightsObservable = null;
@@ -71,7 +67,6 @@ class LightControlImpl implements LightControl {
         this.uiScheduler = uiScheduler;
 
         logger = new Logger(getClass().getName(), baseLogger);
-        errorSubscriber = new ErrorSubscriber(logger);
     }
 
     @Override
@@ -124,7 +119,7 @@ class LightControlImpl implements LightControl {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                .subscribe(errorSubscriber);
+                                .subscribe(new ErrorSubscriber<Light>(logger));
                     }
                 })
                 .subscribeOn(ioScheduler)
@@ -169,7 +164,7 @@ class LightControlImpl implements LightControl {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                .subscribe(errorSubscriber);
+                                .subscribe(new ErrorSubscriber<Light>(logger));
                     }
                 })
                 .subscribeOn(ioScheduler)
@@ -200,7 +195,7 @@ class LightControlImpl implements LightControl {
                                 logger.debug(lightResponse.toString());
 
                                 eventBus.postMessage(new LightDetailsEvent(lightResponse))
-                                        .subscribe(errorSubscriber);
+                                        .subscribe(new ErrorSubscriber<Light>(logger));
 
                                 observables.add(Observable.just(lightResponse));
                             }
@@ -212,7 +207,7 @@ class LightControlImpl implements LightControl {
                         @Override
                         public void call() {
                             eventBus.postMessage(new FetchLightsSuccessEvent())
-                                    .subscribe(errorSubscriber);
+                                    .subscribe(new ErrorSubscriber<Light>(logger));
                         }
                     })
                     .subscribeOn(ioScheduler)
@@ -275,7 +270,7 @@ class LightControlImpl implements LightControl {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                .subscribe(errorSubscriber);
+                                .subscribe(new ErrorSubscriber<Light>(logger));
                     }
                 })
                 .subscribeOn(ioScheduler)

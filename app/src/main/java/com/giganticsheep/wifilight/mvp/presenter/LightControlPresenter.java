@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
 
 import rx.Subscriber;
@@ -36,7 +37,7 @@ public class LightControlPresenter extends LightPresenterBase {
             getView().showLoading();
         }
 
-        subscribe(lightControl.fetchLights(fetchFromServer), new FetchLightsSubscriber());
+        subscribe(lightControl.fetchLights(fetchFromServer), new ErrorSubscriber<Light>(logger));
     }
 
     /**
@@ -49,7 +50,23 @@ public class LightControlPresenter extends LightPresenterBase {
             getView().showLoading();
         }
 
-        fetchLight(id, new FetchLightsSubscriber());
+        fetchLight(id, new Subscriber<Light>() {
+
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(Throwable e) {
+                if (isViewAttached()) {
+                    getView().showError(e);
+                }
+            }
+
+            @Override
+            public void onNext(Light light) {
+                subscribe(eventBus.postMessage(new LightChangedEvent(light)));
+            }
+        });
     }
 
     /**
@@ -71,23 +88,5 @@ public class LightControlPresenter extends LightPresenterBase {
         return "MainActivityPresenter{" +
                 "currentLightId='" + currentLightId +
                 '}';
-    }
-
-    private class FetchLightsSubscriber extends Subscriber<Light> {
-
-        @Override
-        public void onCompleted() { }
-
-        @Override
-        public void onError(Throwable e) {
-            if (isViewAttached()) {
-                getView().showError(e);
-            }
-        }
-
-        @Override
-        public void onNext(Light light) {
-            subscribe(eventBus.postMessage(new LightChangedEvent(light)));
-        }
     }
 }

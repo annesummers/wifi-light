@@ -42,7 +42,6 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     protected Logger logger;
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-    private Subscriber errorSubscriber;
 
     @Arg String name;
 
@@ -87,7 +86,6 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
         }
 
         logger = new Logger(getClass().getName(), baseLogger);
-        errorSubscriber = new ErrorSubscriber(logger);
 
         orientation = getResources().getConfiguration().orientation;
     }
@@ -240,7 +238,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param <T>
      */
     protected <T> void subscribe(final Observable<T> observable) {
-        subscribe(observable, errorSubscriber);
+        subscribe(observable, new ErrorSubscriber<T>(logger));
     }
 
     private void doAttachToActivity(final ActivityBase activity) {

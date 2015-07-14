@@ -28,7 +28,6 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     protected final Logger logger;
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-    private final ErrorSubscriber errorSubscriber;
 
     @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
@@ -46,7 +45,6 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
-        errorSubscriber = new ErrorSubscriber(logger);
     }
 
     protected void fetchLight(String id, Subscriber<Light> subscriber) {
@@ -97,7 +95,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * @param <T>
      */
     protected <T> void subscribe(final Observable<T> observable) {
-        subscribe(observable, errorSubscriber);
+        subscribe(observable, new ErrorSubscriber<T>(logger));
     }
 
     public abstract void fetchLight(String id);

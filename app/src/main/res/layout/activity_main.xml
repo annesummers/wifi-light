@@ -17,7 +17,8 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="@color/background_primary"/>
+        android:background="@color/background_primary"
+        android:descendantFocusability="blocksDescendants"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

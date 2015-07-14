@@ -355,11 +355,11 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            logger.debug("onItemClick() drawer list");
+
             selectedPosition = position;
 
-            Light light = drawerAdapter.getItem(position);
-
-            setLight(light);
+            getPresenter().fetchLight(drawerAdapter.getItem(position));
 
             drawerListView.setItemChecked(position, true);
             drawerLayout.closeDrawer(drawerListView);

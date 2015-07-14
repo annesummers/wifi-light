@@ -52,8 +52,8 @@ class DrawerAdapter extends BaseAdapter {
     }
 
     @Override
-    public Light getItem(int position) {
-        return dataList == null ? null : dataList.get(position).getLight();
+    public String getItem(int position) {
+        return dataList == null ? null : dataList.get(position).getLight().id();
     }
 
     @Override
@@ -97,7 +97,10 @@ class DrawerAdapter extends BaseAdapter {
         logger.debug("handleFetchLightsSuccess()");
 
         allLightsFetched = true;
+
         notifyDataSetChanged();
+
+        ((LightControlActivity)activity).drawerListView.setSelection(0);
     }
 
     /**
