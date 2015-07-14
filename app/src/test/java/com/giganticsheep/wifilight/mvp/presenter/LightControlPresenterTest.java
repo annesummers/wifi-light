@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.TestLightResponse;
-import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 
@@ -22,8 +21,24 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testFetchLights() throws Exception {
-        getPresenter().fetchLights();
+    public void testFetchLightsFromNetwork() throws Exception {
+        getPresenter().fetchLights(true);
+
+        assertThat(view.getState(), equalTo(view.STATE_SHOW_LOADING));
+    }
+
+    @Test
+    public void testFetchLightsFromCacheCached() throws Exception {
+        getPresenter().fetchLights(true);
+
+        assertThat(view.getState(), equalTo(view.STATE_SHOW_LOADING));
+
+        getPresenter().fetchLights(false);
+    }
+
+    @Test
+    public void testFetchLightsFromCacheNotCached() throws Exception {
+        getPresenter().fetchLights(false);
 
         assertThat(view.getState(), equalTo(view.STATE_SHOW_LOADING));
     }
@@ -36,23 +51,13 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testHandleFetchLightsSuccess() throws Exception {
+    public void testHandleLightChanged() throws Exception {
         Light light = new TestLightResponse(TestConstants.TEST_ID);
 
-        getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
-        getPresenter().handleFetchLightsSuccess(new LightControl.FetchLightsSuccessEvent());
-
-        assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DETAILS));
-        assertThat(getPresenter().getCurrentLightId(), equalTo(light.id()));
-    }
-
-    @Test
-    public void testHandleLightDetails() throws Exception {
-        Light light = new TestLightResponse(TestConstants.TEST_ID);
-
-        getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
+        getPresenter().handleLightChanged(new LightChangedEvent(light));
 
         assertThat(view.getLight(), equalTo(light));
+        assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_CONNECTED));
     }
 
     private LightControlPresenter getPresenter() {

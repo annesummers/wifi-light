@@ -59,10 +59,10 @@ public class LightColourPresenterTest extends LightPresenterTestBase {
     public void testHandleLightDetails() throws Exception {
         Light light = new TestLightResponse(TestConstants.TEST_ID);
 
-        getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
+        getPresenter().handleLightChanged(new LightChangedEvent(light));
 
         assertThat(view.getLight(), equalTo(light));
-        assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DETAILS));
+        assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_CONNECTED));
     }
 
     private LightColourPresenter getPresenter() {

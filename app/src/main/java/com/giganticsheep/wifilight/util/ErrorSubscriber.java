@@ -8,7 +8,7 @@ import rx.Subscriber;
  * Created by anne on 14/07/15.
  * (*_*)
  */
-public class ErrorSubscriber extends Subscriber {
+public class ErrorSubscriber<T> extends Subscriber<T> {
 
     private final Logger logger;
 
@@ -17,8 +17,7 @@ public class ErrorSubscriber extends Subscriber {
     }
 
     @Override
-    public void onCompleted() {
-    }
+    public void onCompleted() { }
 
     @Override
     public void onError(Throwable e) {
@@ -26,6 +25,5 @@ public class ErrorSubscriber extends Subscriber {
     }
 
     @Override
-    public void onNext(Object o) {
-    }
+    public void onNext(T object) { }
 }

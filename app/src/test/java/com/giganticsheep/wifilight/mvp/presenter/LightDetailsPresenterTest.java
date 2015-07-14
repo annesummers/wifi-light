@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.TestLightResponse;
-import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 
@@ -22,13 +21,13 @@ public class LightDetailsPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testHandleLightDetails() throws Exception {
+    public void testHandleLightChanged() throws Exception {
         Light light = new TestLightResponse(TestConstants.TEST_ID);
 
-        getPresenter().handleLightDetails(new LightControl.LightDetailsEvent(light));
+        getPresenter().handleLightChanged(new LightChangedEvent(light));
 
         assertThat(view.getLight(), equalTo(light));
-        assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_DETAILS));
+        assertThat(view.getState(), equalTo(view.STATE_SHOW_LIGHT_CONNECTED));
     }
 
     private LightDetailsPresenter getPresenter() {

@@ -42,10 +42,7 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         presenter.attachView(view);
     }
 
-    @After
-    public void tearDown() throws Exception { }
-
-   /* @Test
+    @Test
     public void testFetchLight() {
         presenter.fetchLight(TestConstants.TEST_ID);
 
@@ -57,14 +54,15 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         presenter.fetchLight(null);
 
         assertThat(view.getState(), equalTo(view.STATE_SHOW_ERROR));
-    }*/
+    }
 
     protected abstract LightPresenterBase createPresenter(LightPresenterBase.Injector injector);
 
     protected class TestLightView implements LightView {
         protected final int STATE_SHOW_LOADING = 0;
-        protected final int STATE_SHOW_LIGHT_DETAILS = 1;
-        protected final int STATE_SHOW_ERROR = 2;
+        protected final int STATE_SHOW_LIGHT_CONNECTED = 1;
+        protected final int STATE_SHOW_LIGHT_DISCONNECTED = 2;
+        protected final int STATE_SHOW_ERROR = 3;
 
         private int state = STATE_SHOW_LOADING;
         private Light light;
@@ -92,22 +90,23 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
 
         @Override
         public void showConnected() {
-            state = STATE_SHOW_LIGHT_DETAILS;
+            state = STATE_SHOW_LIGHT_CONNECTED;
 
             logger.warn("showConnected()");
-            logger.warn(light.toString());
+            logger.warn(light.id());
         }
 
         @Override
         public void showDisconnected() {
+            state = STATE_SHOW_LIGHT_DISCONNECTED;
 
+            logger.warn("showDisconnected()");
+            logger.warn(light.id());
         }
 
         @Override
         public void setLight(Light light) {
             this.light = light;
-
-            showConnected();
         }
 
         public Light getLight() {

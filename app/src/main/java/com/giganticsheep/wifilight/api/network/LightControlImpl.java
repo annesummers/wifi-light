@@ -1,14 +1,15 @@
 package com.giganticsheep.wifilight.api.network;
 
+import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
+import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
-import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ class LightControlImpl implements LightControl {
     private final Logger logger;
 
     @SuppressWarnings("FieldNotUsedInToString")
-    private final Subscriber errorSubscriber = new ErrorSubscriber();
+    private final Subscriber errorSubscriber;
 
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<Light> lightsObservable = null;
@@ -70,9 +71,7 @@ class LightControlImpl implements LightControl {
         this.uiScheduler = uiScheduler;
 
         logger = new Logger(getClass().getName(), baseLogger);
-
-        /*fetchLights(true)
-                .subscribe(errorSubscriber);*/
+        errorSubscriber = new ErrorSubscriber(logger);
     }
 
     @Override
@@ -236,8 +235,8 @@ class LightControlImpl implements LightControl {
                 return light.id().equals(id);
             }
         })
-        .subscribeOn(ioScheduler)
-        .observeOn(uiScheduler);
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     private Observable<StatusResponse> doSetColour(final String colourQuery, final String durationQuery) {
@@ -319,19 +318,5 @@ class LightControlImpl implements LightControl {
 
     public interface Injector {
         void inject(LightControlImpl lightNetwork);
-    }
-
-    private class ErrorSubscriber extends Subscriber {
-
-        @Override
-        public void onCompleted() { }
-
-        @Override
-        public void onError(Throwable e) {
-            logger.error(e.getMessage());
-        }
-
-        @Override
-        public void onNext(Object o) { }
     }
 }
