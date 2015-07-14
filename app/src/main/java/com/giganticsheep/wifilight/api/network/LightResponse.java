@@ -25,7 +25,7 @@ class LightResponse extends Response
     public double brightness;
     public String product_name;
     public String last_seen;
-    public double seconds_since_last_seen;
+    public double seconds_since_seen;
 
     public ColourData color;
     public GroupData location;
@@ -92,7 +92,7 @@ class LightResponse extends Response
 
     @Override
     public double getSecondsSinceLastSeen() {
-        return seconds_since_last_seen;
+        return seconds_since_seen;
     }
 
     @Override
@@ -127,7 +127,7 @@ class LightResponse extends Response
                 ", brightness=" + brightness +
                 ", product_name='" + product_name + '\'' +
                 ", last_seen='" + last_seen + '\'' +
-                ", seconds_since_last_seen=" + seconds_since_last_seen +
+                ", seconds_since_last_seen=" + seconds_since_seen +
                 ", color=" + color +
                 ", location=" + location +
                 ", group=" + group +

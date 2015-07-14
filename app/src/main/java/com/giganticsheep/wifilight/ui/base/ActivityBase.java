@@ -250,10 +250,25 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         return findFragment(fragmentDetails.position());
     }
 
+    /**
+     * Subscribes to observable with subscriber, retaining the resulting Subscription so
+     * when the Activity is destroyed the Observable can be unsubscribed from.
+     *
+     * @param observable the Observable to subscribe to
+     * @param subscriber the Subscriber to subscribe with
+     * @param <T>
+     */
     protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
-        compositeSubscription.add(observable.subscribe(subscriber));
+        subscribe(observable, errorSubscriber);
     }
 
+    /**
+     * Subscribes to observable with ErrorSubscriber, retaining the resulting Subscription so
+     * when the Activity is destroyed the Observable can be unsubscribed from.
+     *
+     * @param observable the Observable to subscribe to
+     * @param <T>
+     */
     protected <T> void subscribe(final Observable<T> observable) {
         compositeSubscription.add(observable.subscribe(errorSubscriber));
     }

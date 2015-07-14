@@ -34,6 +34,11 @@ public interface LightView extends MvpView {
     void showConnected();
 
     /**
+     * Show the connecting view.
+     */
+    void showConnecting();
+
+    /**
      * Show the disconnected view.
      */
     void showDisconnected();

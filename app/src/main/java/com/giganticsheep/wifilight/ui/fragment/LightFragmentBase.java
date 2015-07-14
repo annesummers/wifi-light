@@ -79,7 +79,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @Override
-    public final void showConnected() {
+    public void showConnected() {
         logger.debug("showConnected()");
 
         getViewState().setShowConnected();
@@ -89,7 +89,17 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @Override
-    public final void showDisconnected() {
+    public void showConnecting() {
+        logger.debug("showConnecting()");
+
+        getViewState().setShowConnecting();
+
+        populateViews();
+        enableViews(false);
+    }
+
+    @Override
+    public void showDisconnected() {
         logger.debug("showDisconnected()");
 
         getViewState().setShowDisconnected();
@@ -99,14 +109,14 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @Override
-    public final void showError() {
+    public void showError() {
         logger.debug("showError()");
 
         getViewState().setShowError();
     }
 
     @Override
-    public final void showError(Throwable throwable) {
+    public void showError(Throwable throwable) {
         showError();
     }
 
@@ -117,7 +127,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         this.light = light;
     }
 
-    protected LightControlActivity getLightControlActivity() {
+    protected final LightControlActivity getLightControlActivity() {
         return (LightControlActivity) getActivity();
     }
 

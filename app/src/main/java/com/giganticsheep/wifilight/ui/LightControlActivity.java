@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +29,7 @@ import com.giganticsheep.wifilight.mvp.view.LightViewState;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
+import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
 import butterknife.InjectView;
@@ -228,6 +230,29 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         loadingLayout.setVisibility(View.GONE);
         disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showConnecting() {
+        logger.debug("showConnecting()");
+
+        getViewState().setShowConnecting();
+
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+        lightLayout.setVisibility(View.VISIBLE);
+        disconnectedLayout.setVisibility(View.VISIBLE);
+
+        // TODO onFinish is never called
+
+        new CountDownTimer(Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND, 0) {
+
+            public void onTick(long millisUntilFinished) { }
+
+            public void onFinish() {
+                getPresenter().fetchLight(getCurrentLightId());
+            }
+        }.start();
     }
 
     @Override

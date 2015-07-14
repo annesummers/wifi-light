@@ -6,7 +6,7 @@ import com.squareup.otto.Subscribe;
  * Created by anne on 29/06/15.
  * (*_*)
  */
-public class LightDetailsPresenter extends LightPresenterBase {
+public class LightDetailsPresenter extends LightFragmentPresenter {
 
     public LightDetailsPresenter(Injector injector) {
         super(injector);
@@ -20,17 +20,6 @@ public class LightDetailsPresenter extends LightPresenterBase {
 
         eventBus.unregisterForEvents(this);
     }
-
-    /**
-     * Called every time a Light is fetched from the network.
-     *
-     * @param event a LightDetailsEvent; contains a Light
-     */
-   /* @Subscribe
-    public void handleLightDetails(LightControl.LightDetailsEvent event) {
-        getView().setLight(event.light());
-    }*/
-
 
     @Subscribe
     public void handleLightChanged(LightChangedEvent event) {

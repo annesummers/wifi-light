@@ -31,34 +31,31 @@ public class LightControlPresenter extends LightPresenterBase {
     /**
      * Fetches all the available Lights.
      */
-    public void fetchLights(boolean fetchFromServer) {
+    public final void fetchLights(boolean fetchFromServer) {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
-        subscribe(lightControl.fetchLights(fetchFromServer), new Subscriber<Light>() {
+        subscribe(lightControl.fetchLights(fetchFromServer), new FetchLightsSubscriber());
+    }
 
-            @Override
-            public void onCompleted() { }
+    /**
+     * Fetches the Light with the given id.
+     *
+     * @param id the id of the Light to fetch.
+     */
+    public final void fetchLight(String id) {
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
 
-            @Override
-            public void onError(Throwable e) {
-                if (isViewAttached()) {
-                    getView().showError(e);
-                }
-            }
-
-            @Override
-            public void onNext(Light light) {
-                subscribe(eventBus.postMessage(new LightChangedEvent(light)));
-            }
-        });
+        fetchLight(id, new FetchLightsSubscriber());
     }
 
     /**
      * @return the id of the current displayed Light.
      */
-    public String getCurrentLightId() {
+    public final String getCurrentLightId() {
         return currentLightId;
     }
 
@@ -74,5 +71,23 @@ public class LightControlPresenter extends LightPresenterBase {
         return "MainActivityPresenter{" +
                 "currentLightId='" + currentLightId +
                 '}';
+    }
+
+    private class FetchLightsSubscriber extends Subscriber<Light> {
+
+        @Override
+        public void onCompleted() { }
+
+        @Override
+        public void onError(Throwable e) {
+            if (isViewAttached()) {
+                getView().showError(e);
+            }
+        }
+
+        @Override
+        public void onNext(Light light) {
+            subscribe(eventBus.postMessage(new LightChangedEvent(light)));
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.view.LightView;
+import com.giganticsheep.wifilight.util.Constants;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -48,33 +49,8 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         errorSubscriber = new ErrorSubscriber(logger);
     }
 
-    /**
-     * Fetches the Light with the given id.
-     *
-     * @param id the id of the Light to fetch.
-     */
-    public void fetchLight(String id) {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
-        subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
-
-            @Override
-            public void onCompleted() { }
-
-            @Override
-            public void onError(Throwable e) {
-                if (isViewAttached()) {
-                    getView().showError(e);
-                }
-            }
-
-            @Override
-            public void onNext(Light light) {
-                handleLightChanged(light);
-            }
-        });
+    protected void fetchLight(String id, Subscriber<Light> subscriber) {
+        subscribe(lightControl.fetchLight(id), subscriber);
     }
 
     protected void handleLightChanged(Light light) {
@@ -82,7 +58,11 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
             getView().setLight(light);
 
             if(light.isConnected()) {
-                getView().showConnected();
+                if(light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
+                    getView().showConnecting();
+                } else {
+                    getView().showConnected();
+                }
             } else {
                 getView().showDisconnected();
             }
@@ -90,20 +70,37 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     }
 
     /**
-     * Called when the Presenter is destroyed, overriden to cleanup members and
+     * Called when the Presenter is destroyed, overridden to cleanup members and
      * to unsubscribe from any services or events the Presenter may be subscribed to
      */
     public void onDestroy() {
         compositeSubscription.unsubscribe();
     }
 
+    /**
+     * Subscribes to observable with subscriber, retaining the resulting Subscription so
+     * when the Presenter is destroyed the Observable can be unsubscribed from.
+     *
+     * @param observable the Observable to subscribe to
+     * @param subscriber the Subscriber to subscribe with
+     * @param <T>
+     */
     protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
+    /**
+     * Subscribes to observable with ErrorSubscriber, retaining the resulting Subscription so
+     * when the Presenter is destroyed the Observable can be unsubscribed from.
+     *
+     * @param observable the Observable to subscribe to
+     * @param <T>
+     */
     protected <T> void subscribe(final Observable<T> observable) {
-        compositeSubscription.add(observable.subscribe(errorSubscriber));
+        subscribe(observable, errorSubscriber);
     }
+
+    public abstract void fetchLight(String id);
 
     /**
      * The Injector interface is implemented by a Component that provides the injected

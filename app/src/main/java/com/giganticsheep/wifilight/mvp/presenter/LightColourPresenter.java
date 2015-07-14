@@ -9,7 +9,7 @@ import com.squareup.otto.Subscribe;
  *
  * Presenter to handle the setting of the selected Lights' colours and brightness.
  */
-public class LightColourPresenter extends LightPresenterBase {
+public class LightColourPresenter extends LightFragmentPresenter {
 
     public LightColourPresenter(Injector injector) {
         super(injector);

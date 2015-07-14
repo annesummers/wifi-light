@@ -1,12 +1,10 @@
 package com.giganticsheep.wifilight.ui.base;
 
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,7 @@ import android.view.ViewGroup;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.Logger;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
@@ -43,6 +42,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     protected Logger logger;
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private Subscriber errorSubscriber;
 
     @Arg String name;
 
@@ -86,7 +86,8 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
             attachToRoot = args.getBoolean(FRAGMENT_ARGS_ATTACH_TO_ROOT, false);
         }
 
-        Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+        logger = new Logger(getClass().getName(), baseLogger);
+        errorSubscriber = new ErrorSubscriber(logger);
 
         orientation = getResources().getConfiguration().orientation;
     }
@@ -220,11 +221,26 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     /**
-     * Subscribes to the given Observable, retaining the resulting Subscription so when the Fragment
-     * is destroyed the Observable can be unsubscribed from
+     * Subscribes to observable with subscriber, retaining the resulting Subscription so
+     * when the Fragment is destroyed the Observable can be unsubscribed from.
+     *
+     * @param observable the Observable to subscribe to
+     * @param subscriber the Subscriber to subscribe with
+     * @param <T>
      */
-    protected <T> void subscribe(final Observable<T> observable, final Subscriber<T> subscriber) {
+    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
+    }
+
+    /**
+     * Subscribes to observable with ErrorSubscriber, retaining the resulting Subscription so
+     * when the Fragment is destroyed the Observable can be unsubscribed from.
+     *
+     * @param observable the Observable to subscribe to
+     * @param <T>
+     */
+    protected <T> void subscribe(final Observable<T> observable) {
+        subscribe(observable, errorSubscriber);
     }
 
     private void doAttachToActivity(final ActivityBase activity) {

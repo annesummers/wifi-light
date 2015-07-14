@@ -16,8 +16,9 @@ public class LightViewState implements RestoreableViewState<LightView> {
 
     private final int STATE_SHOW_LOADING = 0;
     private final int STATE_SHOW_LIGHT_CONNECTED = 1;
-    private final int STATE_SHOW_LIGHT_DISCONNECTED = 2;
-    private final int STATE_SHOW_ERROR = 3;
+    private final int STATE_SHOW_LIGHT_CONNECTING = 2;
+    private final int STATE_SHOW_LIGHT_DISCONNECTED = 3;
+    private final int STATE_SHOW_ERROR = 4;
 
     private int state = STATE_SHOW_LOADING;
 
@@ -43,6 +44,13 @@ public class LightViewState implements RestoreableViewState<LightView> {
     }
 
     /**
+     * Sets the state to STATE_SHOW_LIGHT_CONNECTING.
+     */
+    public void setShowConnecting() {
+        state = STATE_SHOW_LIGHT_CONNECTING;
+    }
+
+    /**
      * Sets the state to STATE_SHOW_LIGHT_DISCONNECTED.
      */
     public void setShowDisconnected() {
@@ -62,6 +70,10 @@ public class LightViewState implements RestoreableViewState<LightView> {
 
             case STATE_SHOW_LIGHT_CONNECTED:
                 lightView.showConnected();
+                break;
+
+            case STATE_SHOW_LIGHT_CONNECTING:
+                lightView.showConnecting();
                 break;
 
             case STATE_SHOW_LIGHT_DISCONNECTED:
