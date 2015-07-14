@@ -38,7 +38,7 @@ public abstract class LightFragmentTestBase extends UITestBase {
         light.color.kelvin = TestConstants.TEST_KELVIN;
         light.color.saturation = TestConstants.TEST_SATURATION_DOUBLE;
 
-        fragment.lightChanged(light);
+        fragment.setLight(light);
         fragment.showLight();
     }
 

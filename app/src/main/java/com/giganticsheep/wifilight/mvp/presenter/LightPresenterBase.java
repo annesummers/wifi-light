@@ -3,15 +3,16 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.StatusResponse;
-//import com.giganticsheep.wifilight.api.network.LightNetwork;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.view.LightView;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
@@ -25,13 +26,13 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
     protected final Logger logger;
 
-    protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final ErrorSubscriber errorSubscriber;
 
     @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
-    @Inject protected LightControl lightNetwork;
+    @Inject protected LightControl lightControl;
 
-    protected final FetchLightSubscriber fetchLightSubscriber = new FetchLightSubscriber();
     protected final SetLightSubscriber setLightSubscriber = new SetLightSubscriber();
 
     /**
@@ -44,6 +45,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
+        errorSubscriber = new ErrorSubscriber(logger);
     }
 
     /**
@@ -56,7 +58,30 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
             getView().showLoading();
         }
 
-        compositeSubscription.add(lightNetwork.fetchLight(id).subscribe(fetchLightSubscriber));
+        subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
+
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(Throwable e) {
+                if (isViewAttached()) {
+                    getView().showError(e);
+                }
+            }
+
+            @Override
+            public void onNext(Light light) {
+                handleLightChanged(light);
+            }
+        });
+    }
+
+    protected void handleLightChanged(Light light) {
+        if (isViewAttached()) {
+            getView().setLight(light);
+            getView().showConnected();
+        }
     }
 
     /**
@@ -65,6 +90,14 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      */
     public void onDestroy() {
         compositeSubscription.unsubscribe();
+    }
+
+    protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
+        compositeSubscription.add(observable.subscribe(subscriber));
+    }
+
+    protected <T> void subscribe(final Observable<T> observable) {
+        compositeSubscription.add(observable.subscribe(errorSubscriber));
     }
 
     /**
@@ -90,27 +123,5 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
         @Override
         public void onNext(StatusResponse light) { }
-    }
-
-    private class FetchLightSubscriber extends Subscriber<Light>  {
-
-        @Override
-        public void onCompleted() {
-            if (isViewAttached()) {
-                getView().showMainView();
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            if (isViewAttached()) {
-                getView().showError(e);
-            }
-        }
-
-        @Override
-        public void onNext(Light light) {
-            getView().lightChanged(light);
-        }
     }
 }

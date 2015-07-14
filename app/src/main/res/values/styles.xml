@@ -14,4 +14,9 @@
         <item name="android:padding">@dimen/label_padding</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
+    <style name="Theme.WifiLight.TextView.DrawerLabel" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
 </resources>

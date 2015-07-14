@@ -1,10 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.network.StatusResponse;
 import com.squareup.otto.Subscribe;
-
-import rx.Observable;
 
 /**
  * Created by anne on 29/06/15.
@@ -34,7 +31,7 @@ public class LightColourPresenter extends LightPresenterBase {
      * @param duration the duration to set the hue for.
      */
     public void setHue(final int hue, float duration) {
-        setColour(lightNetwork.setHue(hue, duration));
+        subscribe(lightControl.setHue(hue, duration), setLightSubscriber);
     }
 
     /**
@@ -44,7 +41,7 @@ public class LightColourPresenter extends LightPresenterBase {
      * @param duration the duration to set the saturation for.
      */
     public void setSaturation(final int saturation, float duration) {
-        setColour(lightNetwork.setSaturation(saturation, duration));
+        subscribe(lightControl.setSaturation(saturation, duration), setLightSubscriber);
     }
 
     /**
@@ -54,7 +51,7 @@ public class LightColourPresenter extends LightPresenterBase {
      * @param duration the duration to set the brightness for.
      */
     public void setBrightness(final int brightness, float duration) {
-        setColour(lightNetwork.setBrightness(brightness, duration));
+        subscribe(lightControl.setBrightness(brightness, duration), setLightSubscriber);
     }
 
     /**
@@ -64,7 +61,7 @@ public class LightColourPresenter extends LightPresenterBase {
      * @param duration the duration to set the kelvin for.
      */
     public void setKelvin(final int kelvin, float duration) {
-        setColour(lightNetwork.setKelvin(kelvin, duration));
+        subscribe(lightControl.setKelvin(kelvin, duration), setLightSubscriber);
     }
 
     /**
@@ -74,22 +71,16 @@ public class LightColourPresenter extends LightPresenterBase {
      * @param duration how long to set the power change for.
      */
     public void setPower(final LightControl.Power power, final float duration) {
-        compositeSubscription.add(lightNetwork.setPower(power, duration)
-                .subscribe(setLightSubscriber));
+        subscribe(lightControl.setPower(power, duration), setLightSubscriber);
     }
 
     /**
-     * Called every time a Light is fetched from the network.
+     * Called with the details of a Light to display.
      *
-     * @param event a LightDetailsEvent; contains a Light
+     * @param event a LightChangedEvent; contains a Light
      */
     @Subscribe
-    public void handleLightDetails(LightControl.LightDetailsEvent event) {
-        getView().lightChanged(event.light());
-    }
-
-    private void setColour(Observable<StatusResponse> observable) {
-        compositeSubscription.add(observable
-                .subscribe(setLightSubscriber));
+    public void handleLightChanged(LightChangedEvent event) {
+        handleLightChanged(event.getLight());
     }
 }

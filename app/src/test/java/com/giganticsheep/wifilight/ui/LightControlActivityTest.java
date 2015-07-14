@@ -168,7 +168,7 @@ public class LightControlActivityTest {
     public void testShowsLightView() {
         LightControlActivity activity = createAndGetActivity();
 
-        activity.showMainView();
+        activity.showConnected();
 
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);

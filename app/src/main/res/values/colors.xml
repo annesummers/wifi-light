@@ -20,4 +20,5 @@
     <color name="primary">#34ADBF</color>
     <color name="primary_dark">#438791</color>
     <color name="primary_accent">#05DBFA</color>
+    <color name="clear">#00FFFFFF</color>
 </resources>

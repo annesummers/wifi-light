@@ -77,6 +77,8 @@ public class LightColourFragment extends LightFragmentBase {
 
     @Override
     public void showLight() {
+        logger.debug("showLight()");
+
         hueSeekBar.setProgress(light.getHue());
         saturationSeekBar.setProgress(light.getSaturation());
         valueSeekBar.setProgress(light.getBrightness());

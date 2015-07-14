@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import com.squareup.otto.Subscribe;
+
 /**
  * Created by anne on 29/06/15.
  * (*_*)
@@ -15,5 +17,10 @@ public class LightEffectsPresenter extends LightPresenterBase {
     @Override
     public void onDestroy() {
         eventBus.unregisterForEvents(this);
+    }
+
+    @Subscribe
+    public void handleLightChanged(LightChangedEvent event) {
+        handleLightChanged(event.getLight());
     }
 }

@@ -1,10 +1,9 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
-import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.List;
+import rx.Subscriber;
 
 /**
  * Created by anne on 09/07/15.
@@ -14,10 +13,7 @@ import java.util.List;
  */
 public class LightControlPresenter extends LightPresenterBase {
 
-    // TODO current Light stuff may not be the right way to handle this
-
-    private String currentLight;
-    private ArrayList<String> newLightIds;
+    private String currentLightId;
 
     public LightControlPresenter(Injector injector) {
         super(injector);
@@ -35,68 +31,48 @@ public class LightControlPresenter extends LightPresenterBase {
     /**
      * Fetches all the available Lights.
      */
-    public void fetchLights() {
+    public void fetchLights(boolean fetchFromServer) {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
-        compositeSubscription.add(lightNetwork.fetchLights(true).subscribe(fetchLightSubscriber));
+        subscribe(lightControl.fetchLights(fetchFromServer), new Subscriber<Light>() {
+
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(Throwable e) {
+                if (isViewAttached()) {
+                    getView().showError(e);
+                }
+            }
+
+            @Override
+            public void onNext(Light light) {
+                subscribe(eventBus.postMessage(new LightChangedEvent(light)));
+            }
+        });
     }
 
     /**
      * @return the id of the current displayed Light.
      */
     public String getCurrentLightId() {
-        return currentLight;
+        return currentLightId;
     }
 
-    /**
-     * Called when all the available Lights have been fetched from the network.
-     *
-     * @param event a FetchLightsSuccessEvent
-     */
     @Subscribe
-    public synchronized void handleFetchLightsSuccess(LightControl.FetchLightsSuccessEvent event) {
-        logger.debug("handleFetchLightsSuccess()");
+    public void handleLightChanged(LightChangedEvent event) {
+        currentLightId = event.getLight().id();
 
-        List<String> lightIds = newLightIds;
-
-        if(lightIds != null && lightIds.size() > 0) {
-            currentLight = lightIds.get(0);
-        }
-
-        newLightIds = null;
-
-        if (isViewAttached()) {
-            getView().showMainView();
-        }
-    }
-
-    /**
-     * Called every time a Light has been fetched from the network.
-     *
-     * @param event a LightDetailsEvent; contains a Light
-     */
-    @Subscribe
-    public synchronized void handleLightDetails(LightControl.LightDetailsEvent event) {
-        logger.debug("handleLightDetails() " + event.light().toString());
-
-        if(newLightIds == null) {
-            newLightIds = new ArrayList<>();
-        }
-
-        newLightIds.add(event.light().id());
-
-        if (isViewAttached()) {
-            getView().lightChanged(event.light());
-        }
+        handleLightChanged(event.getLight());
     }
 
     @Override
     public String toString() {
         return "MainActivityPresenter{" +
-                "currentLight='" + currentLight + '\'' +
-                ", newLightIds=" + newLightIds +
+                "currentLightId='" + currentLightId +
                 '}';
     }
 }

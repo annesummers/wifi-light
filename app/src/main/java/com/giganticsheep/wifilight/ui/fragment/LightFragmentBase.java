@@ -38,13 +38,19 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     @Override
     protected void populateViews() {
+        logger.debug("populateViews()");
+        if(light == null) {
+            String currentLightId = getMainActivity().getCurrentLightId();
+
+            if(currentLightId != null) {
+                getPresenter().fetchLight(currentLightId);
+            }
+        }
+
         if(light != null) {
             showLight();
         } else {
-            String id = getMainActivity().getCurrentLightId();
-            if(id != null) {
-                getPresenter().fetchLight(id);
-            }
+            logger.warn("showLight() light is null!");
         }
     }
 
@@ -62,18 +68,31 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     @Override
     public void showLoading() {
+        logger.debug("showLoading()");
+
         getViewState().setShowLoading();
     }
 
     @Override
-    public void showMainView() {
-        getViewState().setShowLightDetails();
+    public void showConnected() {
+        logger.debug("showConnected()");
+
+        getViewState().setShowConnected();
 
         populateViews();
     }
 
     @Override
+    public void showDisconnected() {
+        logger.debug("showDisconnected()");
+
+        getViewState().setShowDisconnected();
+    }
+
+    @Override
     public void showError() {
+        logger.debug("showError()");
+
         getViewState().setShowError();
     }
 
@@ -83,10 +102,12 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @Override
-    public void lightChanged(Light light) {
+    public void setLight(Light light) {
+        logger.debug("setLight() " + light.id());
+
         this.light = light;
 
-        showMainView();
+        //showConnected();
     }
 
     @Override
@@ -108,7 +129,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
      * class members, enabling a LightFragmentBase derived class to inject itself
      * into the Component.
      */
-    public interface Injector extends LightPresenterBase.Injector {
+    public interface Injector {
         void inject(LightFragmentBase lightFragment);
     }
 }

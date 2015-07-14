@@ -7,13 +7,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
@@ -41,8 +44,16 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
+    @InjectView(R.id.disconnected_layout) FrameLayout disconnectedLayout;
+
+    @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @InjectView(R.id.left_drawer) ListView drawerListView;
 
     private LightControlActivityComponent component;
+    private DrawerAdapter drawerAdapter;
+    private int selectedPosition;
+
+    // Views
 
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
@@ -55,6 +66,11 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.action_toolbar);
         setSupportActionBar(toolbar);
+
+        drawerAdapter = new DrawerAdapter(component);
+
+        drawerListView.setAdapter(drawerAdapter);
+        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
     }
 
     @Override
@@ -109,6 +125,13 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
+    public final void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        getPresenter().fetchLights(false);
+    }
+
+    @Override
     public final boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -120,7 +143,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                 return true;
 
             case R.id.action_refresh:
-                presenter.fetchLights();
+                getPresenter().fetchLights(true);
                 return true;
 
             default:
@@ -150,6 +173,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
         component = DaggerLightControlActivityComponent.builder()
                 .wifiLightAppComponent(application.getComponent())
+                .lightControlActivityModule(new LightControlActivityModule(this))
                 .build();
 
         component.inject(this);
@@ -178,21 +202,44 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
+    public LightViewState getViewState() {
+        return (LightViewState) super.getViewState();
+    }
+
+    @Override
     public void showLoading() {
+        logger.debug("showLoading()");
+
         getViewState().setShowLoading();
 
         errorLayout.setVisibility(View.GONE);
+        disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         loadingLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void showMainView() {
-        getViewState().setShowLightDetails();
+    public void showConnected() {
+        logger.debug("showConnected()");
+
+        getViewState().setShowConnected();
+
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+        disconnectedLayout.setVisibility(View.GONE);
+        lightLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showDisconnected() {
+        logger.debug("showDisconnected()");
+
+        getViewState().setShowDisconnected();
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
+        disconnectedLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -202,9 +249,12 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     @Override
     public void showError(Throwable throwable) {
+        logger.debug("showError()");
+
         getViewState().setShowError();
 
         loadingLayout.setVisibility(View.GONE);
+        disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         errorLayout.setVisibility(View.VISIBLE);
 
@@ -215,18 +265,15 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
-    public void lightChanged(Light light) { }
-
-    @Override
-    public LightViewState getViewState() {
-        return (LightViewState) super.getViewState();
+    public void setLight(Light light) {
+        logger.debug("setLight() " + light.id());
     }
 
     /**
      * @return the id of the current displayed Light.
      */
     public String getCurrentLightId() {
-        return presenter.getCurrentLightId();
+        return getPresenter().getCurrentLightId();
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -276,6 +323,21 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                 default:
                     return null;
             }
+        }
+    }
+
+    private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectedPosition = position;
+
+            Light light = drawerAdapter.getItem(position);
+
+            setLight(light);
+
+            drawerListView.setItemChecked(position, true);
+            drawerLayout.closeDrawer(drawerListView);
         }
     }
 }

@@ -1,16 +1,17 @@
 package com.giganticsheep.wifilight.ui.base;
 
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
 import android.widget.Toast;
 
-import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.BaseLogger;
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.Logger;
-import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
@@ -45,6 +46,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     private int orientation;
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private Subscriber errorSubscriber;
 
     @Inject protected FragmentFactory fragmentFactory;
     @Inject protected BaseLogger baseLogger;
@@ -59,6 +61,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         setContentView(activityLayout.layoutId());
 
         logger = new Logger(getClass().getName(), baseLogger);
+        errorSubscriber = new ErrorSubscriber(logger);
 
         if(savedInstanceState != null) {
             // TODO can we get Icepick to handle this?
@@ -249,6 +252,10 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
     protected <T> void subscribe(final Observable<T> observable, Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
+    }
+
+    protected <T> void subscribe(final Observable<T> observable) {
+        compositeSubscription.add(observable.subscribe(errorSubscriber));
     }
 
     private ActivityLayout activityLayout() {

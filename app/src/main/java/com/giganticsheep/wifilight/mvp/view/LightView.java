@@ -29,14 +29,19 @@ public interface LightView extends MvpView {
     void showError(Throwable throwable);
 
     /**
-     * Show the main view
+     * Show the connected view.
      */
-    void showMainView();
+    void showConnected();
+
+    /**
+     * Show the disconnected view.
+     */
+    void showDisconnected();
 
     /**
      * Called when new Light information has be received.
      *
      * @param light the new Light details.
      */
-    void lightChanged(Light light);
+    void setLight(Light light);
 }

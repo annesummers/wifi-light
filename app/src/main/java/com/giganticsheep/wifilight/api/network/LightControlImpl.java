@@ -36,10 +36,10 @@ class LightControlImpl implements LightControl {
     private final Logger logger;
 
     @SuppressWarnings("FieldNotUsedInToString")
-    private Observable<Light> lightsObservable;
+    private final Subscriber errorSubscriber = new ErrorSubscriber();
 
     @SuppressWarnings("FieldNotUsedInToString")
-    private final Subscriber errorSubscriber;
+    private Observable<Light> lightsObservable = null;
 
     // TODO groups
     // TODO locations
@@ -47,8 +47,10 @@ class LightControlImpl implements LightControl {
     // TODO effects
     // TODO connected can we find the light?
 
-    private final NetworkDetails networkDetails;
+    @SuppressWarnings("FieldNotUsedInToString")
     private final EventBus eventBus;
+
+    private final NetworkDetails networkDetails;
 
     private final LightService lightService;
 
@@ -67,42 +69,112 @@ class LightControlImpl implements LightControl {
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
 
-        errorSubscriber = new ErrorSubscriber();
+        logger = new Logger(getClass().getName(), baseLogger);
 
-        logger = new Logger("LightNetwork", baseLogger);
-
-        fetchLights(true)
-                .subscribe(errorSubscriber);
+        /*fetchLights(true)
+                .subscribe(errorSubscriber);*/
     }
 
     @Override
     public final Observable<StatusResponse> setHue(final int hue, float duration) {
-        return doSetColour(makeHueString(LightConstants.convertHue(hue)), makeDurationString(duration));
+        return doSetColour(makeHueQuery(LightConstants.convertHue(hue)), makeDurationQuery(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
-        return doSetColour(makeSaturationString(LightConstants.convertSaturation(saturation)), makeDurationString(duration));
+        return doSetColour(makeSaturationQuery(LightConstants.convertSaturation(saturation)), makeDurationQuery(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
-        return doSetColour(makeBrightnessString(LightConstants.convertBrightness(brightness)), makeDurationString(duration));
+        return doSetColour(makeBrightnessQuery(LightConstants.convertBrightness(brightness)), makeDurationQuery(duration));
     }
 
     @Override
     public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
-        return doSetColour(makeKelvinString(kelvin + LightConstants.KELVIN_BASE), makeDurationString(duration));
+        return doSetColour(makeKelvinQuery(kelvin + LightConstants.KELVIN_BASE), makeDurationQuery(duration));
     }
 
     @Override
     public final Observable<StatusResponse> togglePower() {
-        return doToggleLights();
+        logger.debug("togglePower()");
+
+        return lightService.togglePower(networkDetails.getBaseURL1(),
+                networkDetails.getBaseURL2(),
+                NetworkConstants.URL_ALL,
+                authorisation(), "")
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        logger.error(throwable);
+                    }
+                })
+                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                    @Override
+                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+
+                        for (StatusResponse statusResponse : statusResponses) {
+                            logger.debug(statusResponse.toString());
+                        }
+
+                        return Observable.merge(observables);
+                    }
+                })
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        fetchLights(true)
+                                .subscribe(errorSubscriber);
+                    }
+                })
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     @Override
     public final Observable<StatusResponse> setPower(final Power power, final float duration) {
-        return doSetPower(power.powerString(), makeDurationString(duration));
+        String powerQuery = power.powerString();
+        String durationQuery =  makeDurationQuery(duration);
+
+        logger.debug("doSetPower() " + powerQuery + NetworkConstants.SPACE + durationQuery);
+
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(NetworkConstants.URL_STATE, powerQuery);
+        queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
+
+        return lightService.setPower(networkDetails.getBaseURL1(),
+                networkDetails.getBaseURL2(),
+                NetworkConstants.URL_ALL,
+                authorisation(),
+                queryMap)
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        logger.error(throwable);
+                    }
+                })
+                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                    @Override
+                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
+                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+
+                        for (StatusResponse statusResponse : statusResponses) {
+                            logger.debug(statusResponse.toString());
+                        }
+
+                        return Observable.merge(observables);
+                    }
+                })
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        fetchLights(true)
+                                .subscribe(errorSubscriber);
+                    }
+                })
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     @Override
@@ -163,7 +235,9 @@ class LightControlImpl implements LightControl {
             public Boolean call(Light light) {
                 return light.id().equals(id);
             }
-        });
+        })
+        .subscribeOn(ioScheduler)
+        .observeOn(uiScheduler);
     }
 
     private Observable<StatusResponse> doSetColour(final String colourQuery, final String durationQuery) {
@@ -209,105 +283,42 @@ class LightControlImpl implements LightControl {
                 .observeOn(uiScheduler);
     }
 
-    private Observable<StatusResponse> doToggleLights() {
-        logger.debug("doToggleLights()");
-
-        return lightService.togglePower(networkDetails.getBaseURL1(),
-                networkDetails.getBaseURL2(),
-                NetworkConstants.URL_ALL,
-                authorisation(), "")
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(final Throwable throwable) {
-                        logger.error(throwable);
-                    }
-                })
-                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
-                    @Override
-                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
-                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
-
-                        for (StatusResponse statusResponse : statusResponses) {
-                            logger.debug(statusResponse.toString());
-                        }
-
-                        return Observable.merge(observables);
-                    }
-                })
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        fetchLights(true)
-                                .subscribe(errorSubscriber);
-                    }
-                })
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler);
-    }
-
-    private Observable<StatusResponse> doSetPower(final String powerQuery, final String durationQuery) {
-        logger.debug("doSetPower() " + powerQuery + NetworkConstants.SPACE + durationQuery);
-
-        Map<String, String> queryMap = new HashMap<>();
-        queryMap.put(NetworkConstants.URL_STATE, powerQuery);
-        queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
-
-        return lightService.setPower(networkDetails.getBaseURL1(),
-                networkDetails.getBaseURL2(),
-                NetworkConstants.URL_ALL,
-                authorisation(),
-                queryMap)
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(final Throwable throwable) {
-                        logger.error(throwable);
-                    }
-                })
-                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
-                    @Override
-                    public Observable<StatusResponse> call(List<StatusResponse> statusResponses) {
-                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
-
-                        for (StatusResponse statusResponse : statusResponses) {
-                            logger.debug(statusResponse.toString());
-                        }
-
-                        return Observable.merge(observables);
-                    }
-                })
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        fetchLights(true)
-                                .subscribe(errorSubscriber);
-                    }
-                })
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler);
-    }
-
     private String authorisation() {
         return NetworkConstants.LABEL_BEARER + NetworkConstants.SPACE + networkDetails.getApiKey();
     }
 
-    private String makeHueString(final double hue) {
+    private String makeHueQuery(final double hue) {
         return NetworkConstants.LABEL_HUE + Double.toString(hue);
     }
 
-    private String makeSaturationString(final double saturation) {
+    private String makeSaturationQuery(final double saturation) {
         return NetworkConstants.LABEL_SATURATION + Double.toString(saturation);
     }
 
-    private String makeKelvinString(final long kelvin) {
+    private String makeKelvinQuery(final long kelvin) {
         return NetworkConstants.LABEL_KELVIN + Long.toString(kelvin);
     }
 
-    private String makeBrightnessString(final double brightness) {
+    private String makeBrightnessQuery(final double brightness) {
         return NetworkConstants.LABEL_BRIGHTNESS + Double.toString(brightness);
     }
 
-    private String makeDurationString(final float duration) {
+    private String makeDurationQuery(final float duration) {
         return Float.toString(duration);
+    }
+
+    @Override
+    public String toString() {
+        return "LightNetwork{" +
+                "uiScheduler=" + uiScheduler +
+                ", ioScheduler=" + ioScheduler +
+                ", lightService=" + lightService +
+                ", networkDetails=" + networkDetails +
+                '}';
+    }
+
+    public interface Injector {
+        void inject(LightControlImpl lightNetwork);
     }
 
     private class ErrorSubscriber extends Subscriber {
@@ -322,20 +333,5 @@ class LightControlImpl implements LightControl {
 
         @Override
         public void onNext(Object o) { }
-    }
-
-    @Override
-    public String toString() {
-        return "LightNetwork{" +
-                "uiScheduler=" + uiScheduler +
-                ", ioScheduler=" + ioScheduler +
-                ", lightService=" + lightService +
-                ", eventBus=" + eventBus +
-                ", networkDetails=" + networkDetails +
-                '}';
-    }
-
-    public interface Injector {
-        void inject(LightControlImpl lightNetwork);
     }
 }
