@@ -141,7 +141,9 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     protected abstract void showLight();
 
     /**
-     * Disables all the views in this Fragment
+     * Disables all the views in this Fragment.
+     *
+     * @param enable whether to enable the views or not
      */
     protected abstract void enableViews(boolean enable);
 

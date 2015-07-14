@@ -84,7 +84,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      *
      * @param observable the Observable to subscribe to
      * @param subscriber the Subscriber to subscribe with
-     * @param <T>
+     * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable, @NonNull Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
@@ -95,7 +95,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * when the Presenter is destroyed the Observable can be unsubscribed from.
      *
      * @param observable the Observable to subscribe to
-     * @param <T>
+     * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>(logger));

@@ -74,26 +74,31 @@ class LightControlImpl implements LightControl {
         logger = new Logger(getClass().getName(), baseLogger);
     }
 
+    @NonNull
     @Override
     public final Observable<StatusResponse> setHue(final int hue, float duration) {
         return doSetColour(makeHueQuery(LightConstants.convertHue(hue)), makeDurationQuery(duration));
     }
 
+    @NonNull
     @Override
     public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
         return doSetColour(makeSaturationQuery(LightConstants.convertSaturation(saturation)), makeDurationQuery(duration));
     }
 
+    @NonNull
     @Override
     public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
         return doSetColour(makeBrightnessQuery(LightConstants.convertBrightness(brightness)), makeDurationQuery(duration));
     }
 
+    @NonNull
     @Override
     public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
         return doSetColour(makeKelvinQuery(kelvin + LightConstants.KELVIN_BASE), makeDurationQuery(duration));
     }
 
+    @NonNull
     @Override
     public final Observable<StatusResponse> togglePower() {
         logger.debug("togglePower()");
@@ -132,6 +137,7 @@ class LightControlImpl implements LightControl {
                 .observeOn(uiScheduler);
     }
 
+    @NonNull
     @Override
     public final Observable<StatusResponse> setPower(@NonNull final Power power, final float duration) {
         String powerQuery = power.powerString();
@@ -178,7 +184,7 @@ class LightControlImpl implements LightControl {
                 .observeOn(uiScheduler);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public final Observable<Light> fetchLights(boolean fetchFromServer) {
         logger.debug("fetchLights()");

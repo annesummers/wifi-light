@@ -58,13 +58,15 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     @Inject BaseLogger baseLogger;
 
     /**
-     * Creates the named Fragment
+     * Creates the named Fragment.
      *
      * @param name the name of the Fragment to create
+     * @param fragmentFactory the FragmentFactory used to create the Fragment
      * @return the created Fragment
      * @throws Exception if the name of the fragment doesn't match any in the application
      */
-    public static FragmentBase create(final String name, @NonNull final FragmentFactory fragmentFactory) throws Exception {
+    public static FragmentBase create(@NonNull final String name,
+                                      @NonNull final FragmentFactory fragmentFactory) throws Exception {
         return fragmentFactory.createFragment(name);
     }
 
@@ -155,9 +157,10 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * Attaches this Fragment to the specified Activity
      *
      * @param activity the Activity to attach to
+     * @param attachmentDetails the details for the Fragment used when attaching to the Activity
      */
     public final void attachToActivity(@NonNull final ActivityBase activity,
-                                       final FragmentAttachmentDetails attachmentDetails) {
+                                       @NonNull final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;
 
         doAttachToActivity(activity);
@@ -228,9 +231,10 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param observable the Observable to subscribe to
      * @param subscriber the Subscriber to subscribe with
-     * @param <T>
+     * @param <T> the type the Observable is observing
      */
-    protected <T> void subscribe(@NonNull final Observable<T> observable, @NonNull Subscriber<T> subscriber) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable,
+                                 @NonNull final Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
@@ -239,7 +243,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * when the Fragment is destroyed the Observable can be unsubscribed from.
      *
      * @param observable the Observable to subscribe to
-     * @param <T>
+     * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>(logger));

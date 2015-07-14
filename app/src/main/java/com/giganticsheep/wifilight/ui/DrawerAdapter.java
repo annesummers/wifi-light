@@ -29,7 +29,7 @@ import javax.inject.Inject;
  */
 class DrawerAdapter extends BaseAdapter {
 
-    private Logger logger;
+    private final Logger logger;
 
     @Inject EventBus eventBus;
     @Inject BaseLogger baseLogger;
@@ -80,11 +80,13 @@ class DrawerAdapter extends BaseAdapter {
 
         ViewData data = null;
 
-        if (dataList.size() - 1 < position) {
-            data = new ViewData(position);
-            dataList.add(data);
-        } else {
-            data = dataList.get(position);
+        if(dataList != null) {
+            if (dataList.size() - 1 < position) {
+                data = new ViewData(position);
+                dataList.add(data);
+            } else {
+                data = dataList.get(position);
+            }
         }
 
         holder.setViewData(data);
@@ -150,8 +152,8 @@ class DrawerAdapter extends BaseAdapter {
     public class ViewHolder {
         private ViewData viewData;
 
-        private TextView lightNameTextView;
-        private ImageView lightStatusImageView;
+        private final TextView lightNameTextView;
+        private final ImageView lightStatusImageView;
 
         public ViewHolder(@NonNull View view) {
             lightNameTextView = (TextView) view.findViewById(R.id.light_name);
@@ -171,7 +173,7 @@ class DrawerAdapter extends BaseAdapter {
     }
 
     private class ViewData {
-        private int position;
+        private final int position;
 
         private Light light;
 
