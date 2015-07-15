@@ -2,6 +2,8 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.util.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +31,9 @@ class MockLightService implements LightService {
             @Override
             public void call(Subscriber<? super List<LightResponse>> subscriber) {
                 List<LightResponse> lights = new ArrayList<>();
-                LightResponse light = new LightResponse(NetworkConstants.TEST_ID);
+                LightResponse light = new LightResponse(Constants.TEST_ID);
                 lights.add(light);
-                lights.add(new LightResponse(NetworkConstants.TEST_ID2));
+                lights.add(new LightResponse(Constants.TEST_ID2));
 
                 subscriber.onNext(lights);
                 subscriber.onCompleted();
