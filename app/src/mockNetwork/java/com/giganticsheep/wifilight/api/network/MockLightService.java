@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +19,7 @@ import rx.Subscriber;
  */
 class MockLightService implements LightService {
 
-    // TODO how to share these?
-    public static final String TEST_ID = "12345abcdef";
-    public static final String TEST_ID2 = "abcdef12345";
-
+    @NonNull
     @Override
     public Observable<List<LightResponse>> listLights(@Path("url1") String url1,
                                               @Path("url2") String url2,
@@ -30,14 +29,64 @@ class MockLightService implements LightService {
             @Override
             public void call(Subscriber<? super List<LightResponse>> subscriber) {
                 List<LightResponse> lights = new ArrayList<>();
-                LightResponse light = new LightResponse(TEST_ID);
+                LightResponse light = new LightResponse(NetworkConstants.TEST_ID);
                 lights.add(light);
-                lights.add(new LightResponse(TEST_ID2));
+                lights.add(new LightResponse(NetworkConstants.TEST_ID2));
 
                 subscriber.onNext(lights);
                 subscriber.onCompleted();
             }
         });
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<StatusResponse>> togglePower(@Path("url") String url,
+                                                        @Path("url2") String url2,
+                                                        @Path("selector") String selector,
+                                                        @Header("Authorization") String authorisation,
+                                                        @Body Object empty) {
+        return statusObservable();
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<StatusResponse>> setPower(@Path("url") String url,
+                                                     @Path("url2") String url2,
+                                                     @Path("selector") String selector,
+                                                     @Header("Authorization") String authorization,
+                                                     @FieldMap Map<String, String> options) {
+        return statusObservable();
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<StatusResponse>> setColour(@Path("url") String url,
+                                                      @Path("url2") String url2,
+                                                      @Path("selector") String selector,
+                                                      @Header("Authorization") String authorization,
+                                                      @FieldMap Map<String, String> options) {
+        return statusObservable();
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<StatusResponse>> breathe(@Path("url") String url,
+                                                    @Path("url2") String url2,
+                                                    @Path("selector") String selector,
+                                                    @Header("Authorization") String authorization,
+                                                    @FieldMap Map<String, String> options) {
+        return statusObservable();
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<StatusResponse>> pulse(@Path("url") String url,
+                                                  @Path("url2") String url2,
+                                                  @Path("selector") String selector,
+                                                  @Header("Authorization") String authorization,
+                                                  @FieldMap Map<String, String> options) {
+        return statusObservable();
     }
 
     private Observable<List<StatusResponse>> statusObservable() {
@@ -51,50 +100,5 @@ class MockLightService implements LightService {
                 subscriber.onCompleted();
             }
         });
-    }
-
-    @Override
-    public Observable<List<StatusResponse>> togglePower(@Path("url") String url,
-                                                        @Path("url2") String url2,
-                                                        @Path("selector") String selector,
-                                                        @Header("Authorization") String authorisation,
-                                                        @Body Object empty) {
-        return statusObservable();
-    }
-
-    @Override
-    public Observable<List<StatusResponse>> setPower(@Path("url") String url,
-                                                     @Path("url2") String url2,
-                                                     @Path("selector") String selector,
-                                                     @Header("Authorization") String authorization,
-                                                     @FieldMap Map<String, String> options) {
-        return statusObservable();
-    }
-
-    @Override
-    public Observable<List<StatusResponse>> setColour(@Path("url") String url,
-                                                      @Path("url2") String url2,
-                                                      @Path("selector") String selector,
-                                                      @Header("Authorization") String authorization,
-                                                      @FieldMap Map<String, String> options) {
-        return statusObservable();
-    }
-
-    @Override
-    public Observable<List<StatusResponse>> breathe(@Path("url") String url,
-                                                    @Path("url2") String url2,
-                                                    @Path("selector") String selector,
-                                                    @Header("Authorization") String authorization,
-                                                    @FieldMap Map<String, String> options) {
-        return statusObservable();
-    }
-
-    @Override
-    public Observable<List<StatusResponse>> pulse(@Path("url") String url,
-                                                  @Path("url2") String url2,
-                                                  @Path("selector") String selector,
-                                                  @Header("Authorization") String authorization,
-                                                  @FieldMap Map<String, String> options) {
-        return statusObservable();
     }
 }

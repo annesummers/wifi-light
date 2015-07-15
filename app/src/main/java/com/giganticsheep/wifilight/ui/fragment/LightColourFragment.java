@@ -63,8 +63,7 @@ public class LightColourFragment extends LightFragmentBase {
     }
 
     @NonNull
-    @Override
-    public LightColourPresenter getPresenter() {
+    public LightColourPresenter getLightColourPresenter() {
         return (LightColourPresenter) super.getPresenter();
     }
 
@@ -117,9 +116,9 @@ public class LightColourFragment extends LightFragmentBase {
         Light light = getPresenter().getLight();
 
         if(isChecked && light != null && light.getPower() != LightControl.Power.ON) {
-            getPresenter().setPower(LightControl.Power.ON, LightControlActivity.DEFAULT_DURATION);
+            getLightColourPresenter().setPower(LightControl.Power.ON, LightControlActivity.DEFAULT_DURATION);
         } else if(!isChecked && light != null && light.getPower() != LightControl.Power.OFF){
-            getPresenter().setPower(LightControl.Power.OFF, LightControlActivity.DEFAULT_DURATION);
+            getLightColourPresenter().setPower(LightControl.Power.OFF, LightControlActivity.DEFAULT_DURATION);
         }
     }
 
@@ -161,13 +160,13 @@ public class LightColourFragment extends LightFragmentBase {
                 int value = values.get(seekBar);
 
                 if (seekBar.equals(hueSeekBar)) {
-                    getPresenter().setHue(value, LightControlActivity.DEFAULT_DURATION);
+                    getLightColourPresenter().setHue(value, LightControlActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(saturationSeekBar)) {
-                    getPresenter().setSaturation(value, LightControlActivity.DEFAULT_DURATION);
+                    getLightColourPresenter().setSaturation(value, LightControlActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(valueSeekBar)) {
-                    getPresenter().setBrightness(value, LightControlActivity.DEFAULT_DURATION);
+                    getLightColourPresenter().setBrightness(value, LightControlActivity.DEFAULT_DURATION);
                 } else if (seekBar.equals(kelvinSeekBar)) {
-                    getPresenter().setKelvin(value, LightControlActivity.DEFAULT_DURATION);
+                    getLightColourPresenter().setKelvin(value, LightControlActivity.DEFAULT_DURATION);
                 }
 
                 values.remove(seekBar);

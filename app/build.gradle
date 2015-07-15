@@ -43,11 +43,21 @@ android {
     productFlavors {
         mockNetwork {
             applicationId 'com.giganticsheep.wifilight.mocknetwork'
+            testApplicationId 'com.giganticsheep.wifilight.mocknetwork'
             minSdkVersion 16
             targetSdkVersion 21
         }
+
+        mockApi {
+            applicationId 'com.giganticsheep.wifilight.mockapi'
+            testApplicationId 'com.giganticsheep.wifilight.mockapi'
+            minSdkVersion 16
+            targetSdkVersion 21
+        }
+
         production {
             applicationId 'com.giganticsheep.wifilight'
+            testApplicationId 'com.giganticsheep.wifilight'
             minSdkVersion 16
             targetSdkVersion 21
         }

@@ -71,15 +71,18 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      *
      * @param light the new Light.
      */
-    protected void handleLightChanged(@NonNull final Light light) {
+    public void handleLightChanged(@NonNull final Light light) {
+       // TODO I don't like this being public, how to test fragment otherwise?
         if (isViewAttached()) {
-            if(light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
-                getView().showConnecting();
+            if (light.isConnected()) {
+                if (light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
+                    getView().showConnecting();
+                } else {
+                    getView().showConnected();
+                }
             } else {
-                getView().showConnected();
+                getView().showDisconnected();
             }
-        } else {
-            getView().showDisconnected();
         }
     }
 
@@ -152,16 +155,21 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
         @Override
         public void onNext(@NotNull final LightStatus light) {
-            // TODO handle the change in status
+            Light currentLight = getLight();
 
-           if(light.id().equals(getLight().id())) {
-               switch(light.getStatus()) {
-                   case OK:
-                       break;
-                   case OFF:
-                       break;
-                   default:
-                       break;
+           if(light.id().equals(currentLight.id())) {
+               if(isViewAttached()) {
+                   if(light.getStatus() == LightControl.Status.OK) {
+                       getView().showConnected();
+                   } else if(light.getStatus() == LightControl.Status.OFF) {
+                       getView().showDisconnected();
+                   }
+               }
+
+               if(currentLight.isConnected() && light.getStatus() != LightControl.Status.OK ||
+                  !currentLight.isConnected() && light.getStatus() != LightControl.Status.OFF) {
+
+                   fetchLight(light.id());
                }
            }
         }

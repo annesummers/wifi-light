@@ -56,11 +56,11 @@ public class LightDetailsFragment extends LightFragmentBase {
                                          getLightControlActivity().getPresenter());
     }
 
-    @NonNull
+  /*  @NonNull
     @Override
     public LightDetailsPresenter getPresenter() {
         return (LightDetailsPresenter) super.getPresenter();
-    }
+    }*/
 
     @Override
     protected void initialiseViews(View view) { }

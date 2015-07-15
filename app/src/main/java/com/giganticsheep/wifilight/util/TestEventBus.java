@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by anne on 30/06/15.
@@ -18,9 +19,16 @@ public class TestEventBus implements EventBus {
 
     private final Bus eventBus = new Bus();
 
+    private final List<Object> messages = new ArrayList<>();
+
     @Override
-    public Observable postMessage(Object messageObject) {
-        return Observable.just(messageObject);
+    public Observable postMessage(final Object messageObject) {
+        return Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber subscriber) {
+                messages.add(messageObject);
+            }
+        });
     }
 
     @Override
@@ -31,5 +39,12 @@ public class TestEventBus implements EventBus {
     @Override
     public void unregisterForEvents(Object myClass) {
         listeners.remove(myClass);
+    }
+
+    public Object popLastMessage() {
+        Object lastMessage = messages.get(messages.size() - 1);
+        messages.remove(lastMessage);
+
+        return lastMessage;
     }
 }

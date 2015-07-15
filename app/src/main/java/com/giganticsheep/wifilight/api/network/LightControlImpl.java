@@ -191,6 +191,8 @@ class LightControlImpl implements LightControl {
         logger.debug("fetchLights()");
 
         if(fetchFromServer || lightsObservable == null) {
+            final int[] lightsCount = new int[1];
+
             lightsObservable = lightService.listLights(networkDetails.getBaseURL1(),
                     networkDetails.getBaseURL2(),
                     NetworkConstants.URL_ALL,
@@ -205,15 +207,16 @@ class LightControlImpl implements LightControl {
                         @NonNull
                         @Override
                         public Observable<Light> call(@NonNull final List<LightResponse> lightResponses) {
-                            List<Observable<Light>> observables = new ArrayList(lightResponses.size());
+                            List<Observable<Light>> observables = new ArrayList();
 
                             for (Light lightResponse : lightResponses) {
                                 logger.debug(lightResponse.toString());
 
-                                eventBus.postMessage(new LightDetailsEvent(lightResponse))
+                                eventBus.postMessage(new FetchedLightEvent(lightResponse))
                                         .subscribe(new ErrorSubscriber(logger));
 
                                 observables.add(Observable.just(lightResponse));
+                                lightsCount[0]++;
                             }
 
                             return Observable.merge(observables);
@@ -222,7 +225,7 @@ class LightControlImpl implements LightControl {
                     .doOnCompleted(new Action0() {
                         @Override
                         public void call() {
-                            eventBus.postMessage(new FetchLightsSuccessEvent())
+                            eventBus.postMessage(new FetchLightsSuccessEvent(lightsCount[0]))
                                     .subscribe(new ErrorSubscriber(logger));
                         }
                     })

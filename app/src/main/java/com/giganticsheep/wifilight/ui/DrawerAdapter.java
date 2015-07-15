@@ -55,13 +55,13 @@ class DrawerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return dataList == null ? 0 : dataList.size();
+        return dataList.size();
     }
 
     @Nullable
     @Override
     public String getItem(final int position) {
-        return dataList == null ? null : dataList.get(position).getLight().id();
+        return dataList.get(position).getLight().id();
     }
 
     @Override
@@ -111,6 +111,7 @@ class DrawerAdapter extends BaseAdapter {
 
         notifyDataSetChanged();
 
+        // TODO this shouldn't be here or it will be called everytime all the lights are fetched
         ((LightControlActivity)activity).drawerListView.performItemClick(null, 0, 0L);
     }
 
@@ -120,7 +121,7 @@ class DrawerAdapter extends BaseAdapter {
      * @param event a LightDetailsEvent; contains a Light
      */
     @Subscribe
-    public synchronized void handleLightDetails(@NonNull LightControl.LightDetailsEvent event) {
+    public synchronized void handleLightDetails(@NonNull LightControl.FetchedLightEvent event) {
         logger.debug("handleLightDetails() " + event.light().id());
 
         if(allLightsFetched) {

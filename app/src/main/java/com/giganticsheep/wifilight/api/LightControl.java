@@ -40,7 +40,8 @@ public interface LightControl {
 
     enum Status {
         OK("ok"),
-        OFF("off");
+        OFF("offline"),
+        ERROR("error");
 
         private final String statusString;
 
@@ -54,9 +55,9 @@ public interface LightControl {
             return null;
         }
 
-      /*  private String getStatusString() {
+        public String getStatusString() {
             return statusString;
-        }*/
+        }
 
         Status(String statusString) {
             this.statusString = statusString;
@@ -140,12 +141,22 @@ public interface LightControl {
     @NonNull
     Observable<Light> fetchLight(final String id);
 
-    class FetchLightsSuccessEvent { }
+    class FetchLightsSuccessEvent {
+        private final int lightsFetchedCount;
 
-    class LightDetailsEvent {
+        public FetchLightsSuccessEvent(final int lightsFetchedCount) {
+            this.lightsFetchedCount = lightsFetchedCount;
+        }
+
+        public final int getLightsFetchedCount() {
+            return lightsFetchedCount;
+        }
+    }
+
+    class FetchedLightEvent {
         private final Light light;
 
-        public LightDetailsEvent(Light light) {
+        public FetchedLightEvent(Light light) {
             this.light = light;
         }
 

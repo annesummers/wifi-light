@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
 
 import rx.Subscriber;
@@ -43,16 +42,7 @@ public class LightControlPresenter extends LightPresenterBase {
             getView().showLoading();
         }
 
-        subscribe(lightControl.fetchLights(fetchFromServer), new ErrorSubscriber<Light>(logger));
-    }
-
-    @Override
-    public final void fetchLight(final String id) {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
-        fetchLight(id, new Subscriber<Light>() {
+        subscribe(lightControl.fetchLights(fetchFromServer), new Subscriber<Light>(){
 
             @Override
             public void onCompleted() { }
@@ -66,7 +56,38 @@ public class LightControlPresenter extends LightPresenterBase {
 
             @Override
             public void onNext(Light light) {
+                if(getLight() != null && light.id().equals(getLight().id())) {
+                    LightControlPresenter.this.light = light;
+
+                    subscribe(eventBus.postMessage(new LightChangedEvent(light)));
+                }
+            }
+        });
+    }
+
+    @Override
+    public final void fetchLight(final String id) {
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+
+        fetchLight(id, new Subscriber<Light>() {
+
+            @Override
+            public void onCompleted() {
                 subscribe(eventBus.postMessage(new LightChangedEvent(light)));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (isViewAttached()) {
+                    getView().showError(e);
+                }
+            }
+
+            @Override
+            public void onNext(Light light) {
+                LightControlPresenter.this.light = light;
             }
         });
     }
@@ -78,8 +99,6 @@ public class LightControlPresenter extends LightPresenterBase {
 
     @Subscribe
     public void handleLightChanged(@NonNull LightChangedEvent event) {
-        light = event.getLight();
-
         handleLightChanged(event.getLight());
     }
 
