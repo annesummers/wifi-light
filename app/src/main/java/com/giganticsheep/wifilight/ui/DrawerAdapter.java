@@ -99,7 +99,7 @@ class DrawerAdapter extends BaseAdapter {
     }
 
     /**
-     * Called when all the available Lights have been fetched from the network.
+     * Called when all the available {@link com.giganticsheep.wifilight.api.model.Light}s have been fetched from the network.
      *
      * @param event a FetchLightsSuccessEvent
      */
@@ -116,9 +116,9 @@ class DrawerAdapter extends BaseAdapter {
     }
 
     /**
-     * Called every time a Light has been fetched from the network.
+     * Called every time a {@link com.giganticsheep.wifilight.api.model.Light} has been fetched from the network.
      *
-     * @param event a LightDetailsEvent; contains a Light
+     * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
      */
     @Subscribe
     public synchronized void handleLightDetails(@NonNull LightControl.FetchedLightEvent event) {

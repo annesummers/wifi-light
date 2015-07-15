@@ -8,7 +8,7 @@ import com.squareup.otto.Subscribe;
 import rx.Subscriber;
 
 /**
- * Used by LightControlActivity as an interface between the UI and the model. <p>
+ * Used by {@link com.giganticsheep.wifilight.ui.LightControlActivity} as an interface between the UI and the model. <p>
  *
  * Created by anne on 09/07/15.<p>
  *

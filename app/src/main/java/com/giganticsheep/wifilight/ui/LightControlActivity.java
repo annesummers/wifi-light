@@ -36,8 +36,8 @@ import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import butterknife.InjectView;
 
 /**
- * The Activity containing the Fragments to control a light and also to show the
- * details of a Light as fetched from the server. <p>
+ * The Activity containing the Fragments to control a {@link com.giganticsheep.wifilight.api.model.Light} and also to show the
+ * details of a {@link com.giganticsheep.wifilight.api.model.Light} as fetched from the server. <p>
  *
  * Created by anne on 09/07/15.<p>
  *

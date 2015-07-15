@@ -119,7 +119,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     }
 
     /**
-     * Fetches the Light with the given id.
+     * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the given id.
      *
      * @param id the id of the Light to fetch.
      */

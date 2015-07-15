@@ -31,7 +31,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
     }
 
     /**
-     * Sets the hue of the selected lights.
+     * Sets the hue of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param hue the hue to set; an int between 0 and 360.
      * @param duration the duration to set the hue for.
@@ -41,7 +41,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
     }
 
     /**
-     * Sets the saturation of the selected lights.
+     * Sets the saturation of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param saturation the saturation to set; an int between 0 and 100.
      * @param duration the duration to set the saturation for.
@@ -51,7 +51,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
     }
 
     /**
-     * Sets the brightness of the selected lights.
+     * Sets the brightness of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param brightness the brightness to set; an int between 0 and 100.
      * @param duration the duration to set the brightness for.
@@ -61,7 +61,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
     }
 
     /**
-     * Sets the kelvin (warmth) of the selected lights.
+     * Sets the kelvin (warmth) of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param kelvin the kelvin to set; an int between 2500 and 9000.
      * @param duration the duration to set the kelvin for.
@@ -71,7 +71,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
     }
 
     /**
-     * Sets the power of the selected lights.
+     * Sets the power of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param power ON or OFF.
      * @param duration how long to set the power change for.
@@ -81,9 +81,9 @@ public class LightColourPresenter extends LightFragmentPresenter {
     }
 
     /**
-     * Called with the details of a Light to display.
+     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Light} to display.
      *
-     * @param event a LightChangedEvent; contains a Light
+     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
      */
     @Subscribe
     public void handleLightChanged(@NonNull LightChangedEvent event) {

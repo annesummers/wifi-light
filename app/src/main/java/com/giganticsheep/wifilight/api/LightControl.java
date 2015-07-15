@@ -65,7 +65,7 @@ public interface LightControl {
     }
 
     /**
-     * Sets the hue of the selected lights.
+     * Sets the hue of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param hue the hue to set; an int between 0 and 360.
      * @param duration the duration to set the hue for.
@@ -75,7 +75,7 @@ public interface LightControl {
     Observable<LightStatus> setHue(final int hue, float duration);
 
     /**
-     * Sets the saturation of the selected lights.
+     * Sets the saturation of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param saturation the saturation to set; an int between 0 and 100.
      * @param duration the duration to set the saturation for.
@@ -85,7 +85,7 @@ public interface LightControl {
     Observable<LightStatus> setSaturation(final int saturation, float duration);
 
     /**
-     * Sets the brightness of the selected lights.
+     * Sets the brightness of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param brightness the brightness to set; an int between 0 and 100.
      * @param duration the duration to set the brightness for.
@@ -95,7 +95,7 @@ public interface LightControl {
     Observable<LightStatus> setBrightness(final int brightness, float duration);
 
     /**
-     * Sets the kelvin (warmth) of the selected lights.
+     * Sets the kelvin (warmth) of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param kelvin the kelvin to set; an int between 2500 and 9000.
      * @param duration the duration to set the kelvin for.
@@ -105,7 +105,7 @@ public interface LightControl {
     Observable<LightStatus> setKelvin(final int kelvin, float duration);
 
     /**
-     * Toggles the power of the selected lights
+     * Toggles the power of the selected {@link com.giganticsheep.wifilight.api.model.Light}s
      *
      * @return the Observable to subscribe to.
      */
@@ -113,7 +113,7 @@ public interface LightControl {
     Observable<LightStatus> togglePower();
 
     /**
-     * Sets the power of the selected lights.
+     * Sets the power of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param power ON or OFF.
      * @param duration how long to set the power change for.
@@ -123,7 +123,7 @@ public interface LightControl {
     Observable<LightStatus> setPower(final Power power, final float duration);
 
     /**
-     * Fetch all the Lights from the network.
+     * Fetch all the {@link com.giganticsheep.wifilight.api.model.Light}s from the network.
      *
      * @param fetchFromServer whether to fetch the information from the server or to use the
      *                        cached information if we have it.
@@ -133,7 +133,7 @@ public interface LightControl {
     Observable<Light> fetchLights(boolean fetchFromServer);
 
     /**
-     * Fetches the light with the specified id.
+     * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the specified id.
      *
      * @param id a String representing the id of the Light to fetch.
      * @return the Observable to subscribe to.

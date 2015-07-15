@@ -1,7 +1,9 @@
 /**
- * Created by anne on 09/07/15.
+ * Fragments.<p>
+ *
+ * Created by anne on 09/07/15.<p>
+ *
  * (*_*)
  *
- * Fragments.
  */
 package com.giganticsheep.wifilight.ui.fragment;

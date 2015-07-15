@@ -1,7 +1,8 @@
 /**
- * Created by anne on 22/06/15.
- * (*_*)
+ * UI elements.<p>
  *
- * UI elements.
+ * Created by anne on 22/06/15.<p>
+ *
+ * (*_*)
  */
 package com.giganticsheep.wifilight.ui;
