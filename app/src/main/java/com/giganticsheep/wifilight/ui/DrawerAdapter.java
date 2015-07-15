@@ -45,7 +45,7 @@ class DrawerAdapter extends BaseAdapter {
     @NotNull
     private final List<ViewData> dataList = new ArrayList<>();
 
-    DrawerAdapter(@NonNull Injector injector) {
+    DrawerAdapter(@NonNull final Injector injector) {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
@@ -60,22 +60,24 @@ class DrawerAdapter extends BaseAdapter {
 
     @Nullable
     @Override
-    public String getItem(int position) {
+    public String getItem(final int position) {
         return dataList == null ? null : dataList.get(position).getLight().id();
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 
     @Nullable
     @Override
-    public View getView(int position, @Nullable View convertView, ViewGroup parent) {
+    public View getView(final int position,
+                        @Nullable View convertView,
+                        final ViewGroup parent) {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_list_item, parent);
+            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_list_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -84,13 +86,11 @@ class DrawerAdapter extends BaseAdapter {
 
         ViewData data = null;
 
-        if(dataList != null) {
-            if (dataList.size() - 1 < position) {
-                data = new ViewData(position);
-                dataList.add(data);
-            } else {
-                data = dataList.get(position);
-            }
+        if (dataList.size() - 1 < position) {
+            data = new ViewData(position);
+            dataList.add(data);
+        } else {
+            data = dataList.get(position);
         }
 
         holder.setViewData(data);
@@ -142,7 +142,12 @@ class DrawerAdapter extends BaseAdapter {
      * into the Component.
      */
     public interface Injector {
-        void inject(DrawerAdapter adapter);
+        /**
+         * Injects the DrawerAdapter class into the Component implementing this interface.
+         *
+         * @param adapter the class to inject.
+         */
+        void inject(final DrawerAdapter adapter);
     }
 
     /**
