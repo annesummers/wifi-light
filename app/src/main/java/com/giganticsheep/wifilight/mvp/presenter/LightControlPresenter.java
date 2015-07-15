@@ -9,10 +9,11 @@ import com.squareup.otto.Subscribe;
 import rx.Subscriber;
 
 /**
- * Created by anne on 09/07/15.
- * (*_*)
+ * Created by anne on 09/07/15.<p>
  *
- * Used by the LightControlActivity.
+ * (*_*)<p>
+ *
+ * Used by LightControlActivity as an interface between the UI and the model.
  */
 public class LightControlPresenter extends LightPresenterBase {
 
@@ -33,6 +34,9 @@ public class LightControlPresenter extends LightPresenterBase {
 
     /**
      * Fetches all the available Lights.
+     *
+     * @param fetchFromServer whether to fetch the information from the server or to use the
+     *                        cached information if we have it.
      */
     public final void fetchLights(boolean fetchFromServer) {
         if (isViewAttached()) {
@@ -47,7 +51,7 @@ public class LightControlPresenter extends LightPresenterBase {
      *
      * @param id the id of the Light to fetch.
      */
-    public final void fetchLight(String id) {
+    public final void fetchLight(final String id) {
         if (isViewAttached()) {
             getView().showLoading();
         }
@@ -88,7 +92,7 @@ public class LightControlPresenter extends LightPresenterBase {
     @NonNull
     @Override
     public String toString() {
-        return "MainActivityPresenter{" +
+        return "LightControlPresenter{" +
                 "currentLightId='" + currentLightId +
                 '}';
     }

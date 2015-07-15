@@ -9,9 +9,10 @@ import dagger.Provides;
  * Created by anne on 09/07/15.
  * (*_*)
  */
-
 @Module
 public class WifiLightAppModule {
+    // TODO let's sort this null application
+
     @Nullable
     protected final WifiLightApplication application;
 
@@ -19,7 +20,7 @@ public class WifiLightAppModule {
         this.application = null;
     }
 
-    public WifiLightAppModule(WifiLightApplication application) {
+    public WifiLightAppModule(final WifiLightApplication application) {
         this.application = application;
     }
 

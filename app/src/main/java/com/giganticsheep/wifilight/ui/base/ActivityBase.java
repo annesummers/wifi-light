@@ -134,8 +134,10 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * in a state to have Fragments attached.
      *
      * @param fragment the Fragment to queue for attachment
+     * @param details the details of the fragment to attach
      */
-    public final void queueFragmentForAttachment(final FragmentBase fragment, FragmentAttachmentDetails details) {
+    public final void queueFragmentForAttachment(@NonNull final FragmentBase fragment,
+                                                 @NonNull final FragmentAttachmentDetails details) {
         fragmentAttachmentQueue.put(fragment, details);
     }
 
@@ -153,20 +155,20 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     /**
      * Creates a new fragment and attaches it to this Activity.
      *
-     * @param attachmentDetails the details of the fragment to attach
+     * @param details the details of the fragment to attach
      */
-    protected final void attachNewFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
+    protected final void attachNewFragment(@NonNull final FragmentAttachmentDetails details) {
         FragmentBase fragment;
 
         try {
-            fragment = FragmentBase.create(attachmentDetails.name(), fragmentFactory);
+            fragment = FragmentBase.create(details.name(), fragmentFactory);
 
-            addFragment(attachmentDetails);
+            addFragment(details);
 
             if (fragmentsResumed()) {
-                fragment.attachToActivity(ActivityBase.this, attachmentDetails);
+                fragment.attachToActivity(ActivityBase.this, details);
             } else {
-                queueFragmentForAttachment(fragment, attachmentDetails);
+                queueFragmentForAttachment(fragment, details);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,7 +202,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param details the attachment details of the fragment
      */
-    void addFragment(@NonNull FragmentAttachmentDetails details) {
+    void addFragment(@NonNull final FragmentAttachmentDetails details) {
         if(attachedFragments.containsKey(details.position())) {
             final String oldName = attachedFragments.get(details.position()).name();
             if(oldName.equals(details.name())) {
@@ -258,9 +260,10 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param observable the Observable to subscribe to
      * @param subscriber the Subscriber to subscribe with
-     * @param <T>
+     * @param <T> the type the Observable is observing
      */
-    protected <T> void subscribe(@NonNull final Observable<T> observable, @NonNull Subscriber<T> subscriber) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable,
+                                 @NonNull final Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
@@ -269,7 +272,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * when the Activity is destroyed the Observable can be unsubscribed from.
      *
      * @param observable the Observable to subscribe to
-     * @param <T>
+     * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>(logger));

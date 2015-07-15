@@ -18,6 +18,8 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
 import com.squareup.otto.Subscribe;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +27,11 @@ import javax.inject.Inject;
 
 /**
  * Created by anne on 13/07/15.
- * (*_*)
+ *
  */
 class DrawerAdapter extends BaseAdapter {
 
+    @NotNull
     private final Logger logger;
 
     @Inject EventBus eventBus;
@@ -37,9 +40,10 @@ class DrawerAdapter extends BaseAdapter {
 
     private boolean allLightsFetched = true;
     private int selectedItem;
-    @Nullable
-    private List<ViewData> dataList = null;
     private int position;
+
+    @NotNull
+    private final List<ViewData> dataList = new ArrayList<>();
 
     DrawerAdapter(@NonNull Injector injector) {
         injector.inject(this);
@@ -68,10 +72,10 @@ class DrawerAdapter extends BaseAdapter {
     @Nullable
     @Override
     public View getView(int position, @Nullable View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_list_item, null);
+            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_list_item, parent);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -100,7 +104,7 @@ class DrawerAdapter extends BaseAdapter {
      * @param event a FetchLightsSuccessEvent
      */
     @Subscribe
-    public synchronized void handleFetchLightsSuccess(LightControl.FetchLightsSuccessEvent event) {
+    public synchronized void handleFetchLightsSuccess(@NotNull LightControl.FetchLightsSuccessEvent event) {
         logger.debug("handleFetchLightsSuccess()");
 
         allLightsFetched = true;
@@ -122,7 +126,7 @@ class DrawerAdapter extends BaseAdapter {
         if(allLightsFetched) {
             allLightsFetched = false;
 
-            dataList = new ArrayList<>();
+            dataList.clear();
             position = 0;
         }
 
@@ -184,5 +188,16 @@ class DrawerAdapter extends BaseAdapter {
         public Light getLight() {
             return light;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "DrawerAdapter{" +
+                "allLightsFetched=" + allLightsFetched +
+                ", activity=" + activity +
+                ", selectedItem=" + selectedItem +
+                ", position=" + position +
+                ", dataList=" + dataList +
+                '}';
     }
 }

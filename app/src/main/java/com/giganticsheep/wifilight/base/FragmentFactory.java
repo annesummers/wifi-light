@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.base;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
@@ -9,6 +8,8 @@ import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 import rx.Observable;
 
@@ -18,10 +19,10 @@ import rx.Observable;
  */
 public class FragmentFactory {
 
-    @Nullable
+    @NotNull
     private final WifiLightApplication application;
 
-    public FragmentFactory(WifiLightApplication application) {
+    public FragmentFactory(@NotNull final WifiLightApplication application) {
         this.application = application;
     }
 
@@ -44,8 +45,9 @@ public class FragmentFactory {
     }
 
     /**
-     * @param name the name of the fragment to create
-     * @return the Observable to subscribe to
+     * @throws Exception if the requested fragment doesn't exist.
+     * @param name the name of the fragment to create.
+     * @return the Observable to subscribe to.
      */
     @NonNull
     public final FragmentBase createFragment(@NonNull final String name) throws Exception {

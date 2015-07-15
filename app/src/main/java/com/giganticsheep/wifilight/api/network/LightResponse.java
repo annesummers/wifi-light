@@ -23,8 +23,7 @@ class LightResponse extends Response
 
     public String uuid;
     public boolean connected;
-    @NonNull
-    public String power = "on";
+    public String power;
     public double brightness;
     public String product_name;
     public String last_seen;

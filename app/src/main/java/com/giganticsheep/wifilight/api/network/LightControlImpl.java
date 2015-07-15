@@ -210,7 +210,7 @@ class LightControlImpl implements LightControl {
                                 logger.debug(lightResponse.toString());
 
                                 eventBus.postMessage(new LightDetailsEvent(lightResponse))
-                                        .subscribe(new ErrorSubscriber<Light>(logger));
+                                        .subscribe(new ErrorSubscriber(logger));
 
                                 observables.add(Observable.just(lightResponse));
                             }
@@ -222,7 +222,7 @@ class LightControlImpl implements LightControl {
                         @Override
                         public void call() {
                             eventBus.postMessage(new FetchLightsSuccessEvent())
-                                    .subscribe(new ErrorSubscriber<Light>(logger));
+                                    .subscribe(new ErrorSubscriber(logger));
                         }
                     })
                     .subscribeOn(ioScheduler)

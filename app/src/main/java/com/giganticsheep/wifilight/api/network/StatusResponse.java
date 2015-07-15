@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
  * (*_*)
  */
 public class StatusResponse extends Response {
-    public String status;
+    public final String status;
 
-    public StatusResponse(String status) {
+    public StatusResponse(final String status) {
         this.status = status;
     }
 

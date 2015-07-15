@@ -45,23 +45,16 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     private ViewPager viewPager;
 
-    @Nullable
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
-    @Nullable
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
-    @Nullable
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
-    @Nullable
     @InjectView(R.id.disconnected_layout) FrameLayout disconnectedLayout;
 
-    @Nullable
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
-    @Nullable
     @InjectView(R.id.left_drawer) ListView drawerListView;
 
     private LightControlActivityComponent component;
     private DrawerAdapter drawerAdapter;
-    private int selectedPosition;
 
     // Views
 
@@ -295,7 +288,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         lightLayout.setVisibility(View.VISIBLE);
         errorLayout.setVisibility(View.VISIBLE);
 
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_alert_error)
                 .setMessage(throwable.getMessage())
                 .show();
@@ -370,8 +363,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             logger.debug("onItemClick() drawer list");
-
-            selectedPosition = position;
 
             getPresenter().fetchLight(drawerAdapter.getItem(position));
 

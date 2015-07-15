@@ -25,7 +25,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
-
 /**
  * Created by anne on 22/06/15.
  * (*_*)
