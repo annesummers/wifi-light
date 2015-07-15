@@ -33,7 +33,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * @param duration the duration to set the hue for.
      */
     public void setHue(final int hue, float duration) {
-        subscribe(lightControl.setHue(hue, duration), setLightSubscriber);
+        subscribe(lightControl.setHue(hue, duration), new SetLightSubscriber());
     }
 
     /**
@@ -43,7 +43,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * @param duration the duration to set the saturation for.
      */
     public void setSaturation(final int saturation, float duration) {
-        subscribe(lightControl.setSaturation(saturation, duration), setLightSubscriber);
+        subscribe(lightControl.setSaturation(saturation, duration), new SetLightSubscriber());
     }
 
     /**
@@ -53,7 +53,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * @param duration the duration to set the brightness for.
      */
     public void setBrightness(final int brightness, float duration) {
-        subscribe(lightControl.setBrightness(brightness, duration), setLightSubscriber);
+        subscribe(lightControl.setBrightness(brightness, duration), new SetLightSubscriber());
     }
 
     /**
@@ -63,7 +63,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * @param duration the duration to set the kelvin for.
      */
     public void setKelvin(final int kelvin, float duration) {
-        subscribe(lightControl.setKelvin(kelvin, duration), setLightSubscriber);
+        subscribe(lightControl.setKelvin(kelvin, duration), new SetLightSubscriber());
     }
 
     /**
@@ -73,7 +73,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * @param duration how long to set the power change for.
      */
     public void setPower(final LightControl.Power power, final float duration) {
-        subscribe(lightControl.setPower(power, duration), setLightSubscriber);
+        subscribe(lightControl.setPower(power, duration), new SetLightSubscriber());
     }
 
     /**

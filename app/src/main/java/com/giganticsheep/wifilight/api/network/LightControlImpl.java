@@ -7,6 +7,7 @@ import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
+import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
@@ -76,31 +77,31 @@ class LightControlImpl implements LightControl {
 
     @NonNull
     @Override
-    public final Observable<StatusResponse> setHue(final int hue, float duration) {
+    public final Observable<LightStatus> setHue(final int hue, float duration) {
         return doSetColour(makeHueQuery(LightConstants.convertHue(hue)), makeDurationQuery(duration));
     }
 
     @NonNull
     @Override
-    public final Observable<StatusResponse> setSaturation(final int saturation, float duration) {
+    public final Observable<LightStatus> setSaturation(final int saturation, float duration) {
         return doSetColour(makeSaturationQuery(LightConstants.convertSaturation(saturation)), makeDurationQuery(duration));
     }
 
     @NonNull
     @Override
-    public final Observable<StatusResponse> setBrightness(final int brightness, float duration) {
+    public final Observable<LightStatus> setBrightness(final int brightness, float duration) {
         return doSetColour(makeBrightnessQuery(LightConstants.convertBrightness(brightness)), makeDurationQuery(duration));
     }
 
     @NonNull
     @Override
-    public final Observable<StatusResponse> setKelvin(final int kelvin, float duration) {
+    public final Observable<LightStatus> setKelvin(final int kelvin, float duration) {
         return doSetColour(makeKelvinQuery(kelvin + LightConstants.KELVIN_BASE), makeDurationQuery(duration));
     }
 
     @NonNull
     @Override
-    public final Observable<StatusResponse> togglePower() {
+    public final Observable<LightStatus> togglePower() {
         logger.debug("togglePower()");
 
         return lightService.togglePower(networkDetails.getBaseURL1(),
@@ -113,14 +114,14 @@ class LightControlImpl implements LightControl {
                         logger.error(throwable);
                     }
                 })
-                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
                     @NonNull
                     @Override
-                    public Observable<StatusResponse> call(@NonNull List<StatusResponse> statusResponses) {
-                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+                    public Observable<LightStatus> call(@NonNull final List<StatusResponse> LightStatuses) {
+                        List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
-                        for (StatusResponse statusResponse : statusResponses) {
-                            logger.debug(statusResponse.toString());
+                        for (LightStatus LightStatus : LightStatuses) {
+                            logger.debug(LightStatus.toString());
                         }
 
                         return Observable.merge(observables);
@@ -139,8 +140,8 @@ class LightControlImpl implements LightControl {
 
     @NonNull
     @Override
-    public final Observable<StatusResponse> setPower(@NonNull final Power power, final float duration) {
-        String powerQuery = power.powerString();
+    public final Observable<LightStatus> setPower(@NonNull final Power power, final float duration) {
+        String powerQuery = power.getPowerString();
         String durationQuery =  makeDurationQuery(duration);
 
         logger.debug("doSetPower() " + powerQuery + NetworkConstants.SPACE + durationQuery);
@@ -160,14 +161,14 @@ class LightControlImpl implements LightControl {
                         logger.error(throwable);
                     }
                 })
-                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
                     @NonNull
                     @Override
-                    public Observable<StatusResponse> call(@NonNull List<StatusResponse> statusResponses) {
-                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+                    public Observable<LightStatus> call(@NonNull final List<StatusResponse> LightStatuses) {
+                        List<Observable<LightStatus>> observables = new ArrayList(LightStatuses.size());
 
-                        for (StatusResponse statusResponse : statusResponses) {
-                            logger.debug(statusResponse.toString());
+                        for (LightStatus LightStatus : LightStatuses) {
+                            logger.debug(LightStatus.toString());
                         }
 
                         return Observable.merge(observables);
@@ -203,7 +204,7 @@ class LightControlImpl implements LightControl {
                     .flatMap(new Func1<List<LightResponse>, Observable<Light>>() {
                         @NonNull
                         @Override
-                        public Observable<Light> call(@NonNull List<LightResponse> lightResponses) {
+                        public Observable<Light> call(@NonNull final List<LightResponse> lightResponses) {
                             List<Observable<Light>> observables = new ArrayList(lightResponses.size());
 
                             for (Light lightResponse : lightResponses) {
@@ -250,7 +251,7 @@ class LightControlImpl implements LightControl {
                 .observeOn(uiScheduler);
     }
 
-    private Observable<StatusResponse> doSetColour(final String colourQuery, final String durationQuery) {
+    private Observable<LightStatus> doSetColour(final String colourQuery, final String durationQuery) {
         logger.debug("doSetColour() " + colourQuery + NetworkConstants.SPACE + durationQuery);
 
         // TODO colour set power on
@@ -270,14 +271,14 @@ class LightControlImpl implements LightControl {
                         logger.error(throwable);
                     }
                 })
-                .flatMap(new Func1<List<StatusResponse>, Observable<StatusResponse>>() {
+                .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
                     @NonNull
                     @Override
-                    public Observable<StatusResponse> call(@NonNull List<StatusResponse> statusResponses) {
-                        List<Observable<StatusResponse>> observables = new ArrayList<>(statusResponses.size());
+                    public Observable<LightStatus> call(@NonNull final List<StatusResponse> LightStatuses) {
+                        List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
-                        for (StatusResponse statusResponse : statusResponses) {
-                            logger.debug(statusResponse.toString());
+                        for (LightStatus LightStatus : LightStatuses) {
+                            logger.debug(LightStatus.toString());
                         }
 
                         return Observable.merge(observables);

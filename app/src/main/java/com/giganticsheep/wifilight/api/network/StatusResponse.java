@@ -2,32 +2,34 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.LightStatus;
+
 /**
  * Created by anne on 26/06/15.
  * (*_*)
  */
-public class StatusResponse extends Response {
-    public final String status;
+class StatusResponse extends Response implements LightStatus {
+
+    public String status;
 
     public StatusResponse(final String status) {
         this.status = status;
     }
 
-    public StatusResponse() {
-        this.status = "";
-    }
+    public StatusResponse() { }
 
     /**
-     * @return the status
+     * @return the status as a Status enum
      */
-    public String getStatus() {
-        return status;
+    public final LightControl.Status getStatus() {
+        return LightControl.Status.parse(status);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "StatusResponse{" +
+        return "LightStatus{" +
                 "status='" + status + '\'' +
                 '}';
     }

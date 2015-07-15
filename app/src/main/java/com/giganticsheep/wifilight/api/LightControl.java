@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.api;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.StatusResponse;
+import com.giganticsheep.wifilight.api.model.LightStatus;
 
 import rx.Observable;
 
@@ -17,15 +17,50 @@ public interface LightControl {
         ON ("on"),
         OFF ("off");
 
-        private final String mName;
+        private final String name;
 
-        Power(String name) {
-            mName = name;
+        public static Power parse(Power power) {
+            if (power.equals(ON.name)) {
+                return ON;
+            } else if (power.equals(OFF.name)) {
+                return OFF;
+            }
+
+            return null;
         }
 
-        public String powerString() {
-        return mName;
+        Power(String name) {
+            this.name = name;
+        }
+
+        public String getPowerString() {
+            return name;
+        }
     }
+
+    enum Status {
+        OK("ok"),
+        OFF("off");
+
+        private final String statusString;
+
+        public static Status parse(String status) {
+            if (status.equals(OK.statusString)) {
+                return OK;
+            } else if (status.equals(OFF.statusString)) {
+                return OFF;
+            }
+
+            return null;
+        }
+
+      /*  private String getStatusString() {
+            return statusString;
+        }*/
+
+        Status(String statusString) {
+            this.statusString = statusString;
+        }
     }
 
     /**
@@ -36,7 +71,7 @@ public interface LightControl {
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<StatusResponse> setHue(final int hue, float duration);
+    Observable<LightStatus> setHue(final int hue, float duration);
 
     /**
      * Sets the saturation of the selected lights.
@@ -46,7 +81,7 @@ public interface LightControl {
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<StatusResponse> setSaturation(final int saturation, float duration);
+    Observable<LightStatus> setSaturation(final int saturation, float duration);
 
     /**
      * Sets the brightness of the selected lights.
@@ -56,7 +91,7 @@ public interface LightControl {
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<StatusResponse> setBrightness(final int brightness, float duration);
+    Observable<LightStatus> setBrightness(final int brightness, float duration);
 
     /**
      * Sets the kelvin (warmth) of the selected lights.
@@ -66,7 +101,7 @@ public interface LightControl {
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<StatusResponse> setKelvin(final int kelvin, float duration);
+    Observable<LightStatus> setKelvin(final int kelvin, float duration);
 
     /**
      * Toggles the power of the selected lights
@@ -74,7 +109,7 @@ public interface LightControl {
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<StatusResponse> togglePower();
+    Observable<LightStatus> togglePower();
 
     /**
      * Sets the power of the selected lights.
@@ -84,7 +119,7 @@ public interface LightControl {
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<StatusResponse> setPower(final Power power, final float duration);
+    Observable<LightStatus> setPower(final Power power, final float duration);
 
     /**
      * Fetch all the Lights from the network.

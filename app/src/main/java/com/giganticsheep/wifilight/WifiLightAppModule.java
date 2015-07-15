@@ -24,7 +24,6 @@ public class WifiLightAppModule {
         this.application = application;
     }
 
-    @Nullable
     @Provides
     @ApplicationScope
     WifiLightApplication provideApplication() {

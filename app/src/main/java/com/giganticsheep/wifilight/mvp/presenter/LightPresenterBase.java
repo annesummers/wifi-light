@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.StatusResponse;
+import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
@@ -136,7 +136,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         void inject(@NonNull final LightPresenterBase lightPresenter);
     }
 
-    private class SetLightSubscriber extends Subscriber<StatusResponse>  {
+    protected class SetLightSubscriber extends Subscriber<LightStatus>  {
 
         @Override
         public void onCompleted() { }
@@ -149,6 +149,6 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         }
 
         @Override
-        public void onNext(StatusResponse light) { }
+        public void onNext(LightStatus light) { }
     }
 }
