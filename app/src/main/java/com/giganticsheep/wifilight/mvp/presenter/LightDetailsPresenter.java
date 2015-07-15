@@ -4,14 +4,17 @@ import android.support.annotation.NonNull;
 
 import com.squareup.otto.Subscribe;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by anne on 29/06/15.
  * (*_*)
  */
 public class LightDetailsPresenter extends LightFragmentPresenter {
 
-    public LightDetailsPresenter(Injector injector) {
-        super(injector);
+    public LightDetailsPresenter(@NotNull final Injector injector,
+                                 @NotNull final LightControlPresenter lightControlPresenter) {
+        super(injector, lightControlPresenter);
 
         eventBus.registerForEvents(this);
     }

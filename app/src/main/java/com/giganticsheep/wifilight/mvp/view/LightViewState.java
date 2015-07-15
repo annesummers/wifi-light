@@ -7,10 +7,11 @@ import android.support.annotation.Nullable;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
 /**
- * Created by anne on 29/06/15.
- * (*_*)
+ * Handles the different states the LightView can be in. <p>
  *
- * Handles the different states the LightView can be in.
+ * Created by anne on 29/06/15. <p>
+ *     
+ * (*_*)
  */
 public class LightViewState implements RestoreableViewState<LightView> {
 

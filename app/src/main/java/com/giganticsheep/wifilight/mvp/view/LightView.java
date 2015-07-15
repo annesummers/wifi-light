@@ -1,13 +1,13 @@
 package com.giganticsheep.wifilight.mvp.view;
 
-import com.giganticsheep.wifilight.api.model.Light;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 /**
- * Created by anne on 29/06/15.
- * (*_*)
+ * Interface implemented by UI elements for the Presenters to control the UI <p>
  *
- * Interface implemented by UI elements for the Presenters to control the UI
+ * Created by anne on 29/06/15. <p>
+ *
+ * (*_*)
  */
 public interface LightView extends MvpView {
 
@@ -42,11 +42,4 @@ public interface LightView extends MvpView {
      * Show the disconnected view.
      */
     void showDisconnected();
-
-    /**
-     * Called when new Light information has be received.
-     *
-     * @param light the new Light details.
-     */
-    void setLight(Light light);
 }

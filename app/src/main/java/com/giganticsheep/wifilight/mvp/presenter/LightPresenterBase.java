@@ -13,6 +13,8 @@ import com.giganticsheep.wifilight.util.Constants;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -20,16 +22,18 @@ import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by anne on 29/06/15.
- * (*_*)
+ * Base class for all the Presenters that show information about a Light.<p>
  *
- * Base class for all the Presenters that show information about a Light.
+ * Created by anne on 29/06/15.<p>
+ *
+ * (*_*)
  */
 public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
     @NonNull
     protected final Logger logger;
 
+    @NotNull
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected BaseLogger baseLogger;
@@ -69,17 +73,13 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      */
     protected void handleLightChanged(@NonNull final Light light) {
         if (isViewAttached()) {
-            getView().setLight(light);
-
-            if(light.isConnected()) {
-                if(light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
-                    getView().showConnecting();
-                } else {
-                    getView().showConnected();
-                }
+            if(light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
+                getView().showConnecting();
             } else {
-                getView().showDisconnected();
+                getView().showConnected();
             }
+        } else {
+            getView().showDisconnected();
         }
     }
 
@@ -122,6 +122,8 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      */
     public abstract void fetchLight(String id);
 
+    public abstract Light getLight();
+
     /**
      * The Injector interface is implemented by a Component that provides the injected
      * class members, enabling a LightPresenterBase derived class to inject itself
@@ -133,7 +135,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
          *
          * @param lightPresenter the class to inject.
          */
-        void inject(@NonNull final LightPresenterBase lightPresenter);
+        void inject(final LightPresenterBase lightPresenter);
     }
 
     protected class SetLightSubscriber extends Subscriber<LightStatus>  {
@@ -149,6 +151,19 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         }
 
         @Override
-        public void onNext(LightStatus light) { }
+        public void onNext(@NotNull final LightStatus light) {
+            // TODO handle the change in status
+
+           if(light.id().equals(getLight().id())) {
+               switch(light.getStatus()) {
+                   case OK:
+                       break;
+                   case OFF:
+                       break;
+                   default:
+                       break;
+               }
+           }
+        }
     }
 }

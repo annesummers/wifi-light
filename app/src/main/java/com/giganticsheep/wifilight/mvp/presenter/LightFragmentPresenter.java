@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.giganticsheep.wifilight.api.model.Light;
 
@@ -12,14 +13,25 @@ import rx.Subscriber;
  */
 public abstract class LightFragmentPresenter extends LightPresenterBase {
 
+    private final LightControlPresenter lightControlPresenter;
+
     /**
      * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
      *
      * @param injector an Injector used to inject this object into a Component that will
      *                 provide the injected class members.
+     * @param lightControlPresenter the Presenter that handles the details of the current Light.
      */
-    protected LightFragmentPresenter(@NonNull final Injector injector) {
+    protected LightFragmentPresenter(@NonNull final Injector injector,
+                                     @NonNull final LightControlPresenter lightControlPresenter) {
         super(injector);
+
+        this.lightControlPresenter = lightControlPresenter;
+    }
+
+    @Nullable
+    public Light getLight() {
+        return lightControlPresenter.getLight();
     }
 
     @Override

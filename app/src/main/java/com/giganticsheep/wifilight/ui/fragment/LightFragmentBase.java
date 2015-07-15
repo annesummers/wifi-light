@@ -3,16 +3,13 @@ package com.giganticsheep.wifilight.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.LightControlActivity;
-import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.mvp.view.LightViewState;
+import com.giganticsheep.wifilight.ui.LightControlActivity;
+import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
-
-import icepick.Icicle;
 
 /**
  * Created by anne on 25/06/15.
@@ -23,7 +20,7 @@ import icepick.Icicle;
 public abstract class LightFragmentBase extends FragmentBase<LightView, LightPresenterBase>
                                     implements LightView {
 
-    @Icicle protected Light light;
+   // @Icicle protected Light light;
 
     @Override
     public final void onCreate(Bundle savedInstanceState) {
@@ -40,15 +37,8 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     @Override
     protected final void populateViews() {
         logger.debug("populateViews()");
-        if(light == null) {
-            String currentLightId = getLightControlActivity().getCurrentLightId();
 
-            if(currentLightId != null) {
-                getPresenter().fetchLight(currentLightId);
-            }
-        }
-
-        if(light != null) {
+        if(getPresenter().getLight() != null) {
             showLight();
         } else {
             logger.warn("showLight() light is null!");
@@ -123,13 +113,13 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         showError();
     }
 
-    @Override
+    /*@Override
     public final void setLight(@NonNull Light light) {
         logger.debug("setLight() " + light.id());
 
         this.light = light;
     }
-
+*/
     @NonNull
     protected final LightControlActivity getLightControlActivity() {
         return (LightControlActivity) getActivity();

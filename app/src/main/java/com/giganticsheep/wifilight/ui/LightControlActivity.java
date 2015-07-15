@@ -23,7 +23,6 @@ import android.widget.ListView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.mvp.presenter.LightControlPresenter;
 import com.giganticsheep.wifilight.mvp.view.LightView;
@@ -264,7 +263,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             public void onTick(long millisUntilFinished) { }
 
             public void onFinish() {
-                getPresenter().fetchLight(getCurrentLightId());
+                getPresenter().fetchLight(getPresenter().getLight().id());
             }
         }.start();
     }
@@ -301,18 +300,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                 .setIcon(R.drawable.ic_alert_error)
                 .setMessage(throwable.getMessage())
                 .show();
-    }
-
-    @Override
-    public void setLight(@NonNull Light light) {
-        logger.debug("setLight() " + light.id());
-    }
-
-    /**
-     * @return the id of the current displayed Light.
-     */
-    public String getCurrentLightId() {
-        return getPresenter().getCurrentLightId();
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {

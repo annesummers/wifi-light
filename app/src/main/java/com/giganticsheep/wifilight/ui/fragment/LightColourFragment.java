@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
@@ -10,11 +9,12 @@ import android.widget.ToggleButton;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
+import com.giganticsheep.wifilight.mvp.presenter.LightColourPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.mvp.presenter.LightColourPresenter;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import java.util.HashMap;
@@ -43,15 +43,10 @@ public class LightColourFragment extends LightFragmentBase {
         return fragment;
     }
 
-    @Nullable
     @InjectView(R.id.hue_seekbar) SeekBar hueSeekBar;
-    @Nullable
     @InjectView(R.id.saturation_seekbar) SeekBar saturationSeekBar;
-    @Nullable
     @InjectView(R.id.brightness_seekbar) SeekBar valueSeekBar;
-    @Nullable
     @InjectView(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
-    @Nullable
     @InjectView(R.id.power_toggle) ToggleButton powerToggle;
 
     private final SeekBar.OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener();
@@ -63,7 +58,8 @@ public class LightColourFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightColourPresenter(getLightControlActivity().getComponent());
+        return new LightColourPresenter(getLightControlActivity().getComponent(),
+                                        getLightControlActivity().getPresenter());
     }
 
     @NonNull
@@ -89,6 +85,13 @@ public class LightColourFragment extends LightFragmentBase {
     public void showLight() {
         logger.debug("showLight()");
 
+        Light light = getPresenter().getLight();
+
+        if(light == null) {
+            logger.error("showLight() light is null");
+            return;
+        }
+
         hueSeekBar.setProgress(light.getHue());
         saturationSeekBar.setProgress(light.getSaturation());
         valueSeekBar.setProgress(light.getBrightness());
@@ -111,6 +114,8 @@ public class LightColourFragment extends LightFragmentBase {
 
     @OnCheckedChanged(R.id.power_toggle)
     public void onPowerToggle(CompoundButton compoundButton, boolean isChecked) {
+        Light light = getPresenter().getLight();
+
         if(isChecked && light != null && light.getPower() != LightControl.Power.ON) {
             getPresenter().setPower(LightControl.Power.ON, LightControlActivity.DEFAULT_DURATION);
         } else if(!isChecked && light != null && light.getPower() != LightControl.Power.OFF){

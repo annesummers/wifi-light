@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightDetailsPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
@@ -51,7 +52,8 @@ public class LightDetailsFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightDetailsPresenter(getLightControlActivity().getComponent());
+        return new LightDetailsPresenter(getLightControlActivity().getComponent(),
+                                         getLightControlActivity().getPresenter());
     }
 
     @NonNull
@@ -65,6 +67,13 @@ public class LightDetailsFragment extends LightFragmentBase {
 
     @Override
     protected void showLight() {
+        Light light = getPresenter().getLight();
+
+        if(light == null) {
+            logger.error("showLight() light is null");
+            return;
+        }
+
         nameTextView.setText(light.getName());
         idTextView.setText(light.id());
         hueTextView.setText(Integer.toString(light.getHue()));

@@ -17,9 +17,9 @@ import rx.Subscriber;
  */
 public class LightControlPresenter extends LightPresenterBase {
 
-    private String currentLightId;
+    private Light light;
 
-    public LightControlPresenter(@NonNull Injector injector) {
+    public LightControlPresenter(@NonNull final Injector injector) {
         super(injector);
 
         eventBus.registerForEvents(this);
@@ -71,16 +71,14 @@ public class LightControlPresenter extends LightPresenterBase {
         });
     }
 
-    /**
-     * @return the id of the current displayed Light.
-     */
-    public final String getCurrentLightId() {
-        return currentLightId;
+    @Override
+    public Light getLight() {
+        return light;
     }
 
     @Subscribe
     public void handleLightChanged(@NonNull LightChangedEvent event) {
-        currentLightId = event.getLight().id();
+        light = event.getLight();
 
         handleLightChanged(event.getLight());
     }
@@ -89,7 +87,7 @@ public class LightControlPresenter extends LightPresenterBase {
     @Override
     public String toString() {
         return "LightControlPresenter{" +
-                "currentLightId='" + currentLightId +
+                "Light=" + light != null ? light.id() : "null" +
                 '}';
     }
 }

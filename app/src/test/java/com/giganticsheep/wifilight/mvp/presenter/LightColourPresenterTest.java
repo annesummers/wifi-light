@@ -21,7 +21,7 @@ public class LightColourPresenterTest extends LightPresenterTestBase {
     @NonNull
     @Override
     protected LightPresenterBase createPresenter(LightPresenterBase.Injector injector) {
-        return new LightColourPresenter(injector);
+        return new LightColourPresenter(injector, new LightControlPresenter(injector));
     }
 
     @Test
