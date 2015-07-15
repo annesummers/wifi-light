@@ -9,11 +9,11 @@ import com.squareup.otto.Subscribe;
 import rx.Subscriber;
 
 /**
+ * Used by LightControlActivity as an interface between the UI and the model. <p>
+ *
  * Created by anne on 09/07/15.<p>
  *
- * (*_*)<p>
- *
- * Used by LightControlActivity as an interface between the UI and the model.
+ * (*_*)
  */
 public class LightControlPresenter extends LightPresenterBase {
 
@@ -46,11 +46,7 @@ public class LightControlPresenter extends LightPresenterBase {
         subscribe(lightControl.fetchLights(fetchFromServer), new ErrorSubscriber<Light>(logger));
     }
 
-    /**
-     * Fetches the Light with the given id.
-     *
-     * @param id the id of the Light to fetch.
-     */
+    @Override
     public final void fetchLight(final String id) {
         if (isViewAttached()) {
             getView().showLoading();

@@ -36,25 +36,38 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     @Inject protected EventBus eventBus;
     @Inject protected LightControl lightControl;
 
-    protected final SetLightSubscriber setLightSubscriber = new SetLightSubscriber();
-
     /**
      * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
      *
      * @param injector an Injector used to inject this object into a Component that will
      *                 provide the injected class members.
      */
-    protected LightPresenterBase(@NonNull Injector injector) {
+    protected LightPresenterBase(@NonNull final Injector injector) {
         injector.inject(this);
 
         logger = new Logger(getClass().getName(), baseLogger);
     }
 
-    protected void fetchLight(String id, @NonNull Subscriber<Light> subscriber) {
+    /**
+     * Fetches the Light with the given id.  Subscribes to the model's method using
+     * the Subscriber given.
+     *
+     * @param id the id of the Light to fetch.
+     * @param subscriber the Subscriber to subscribe with.
+     */
+    protected void fetchLight(@NonNull final String id,
+                              @NonNull final Subscriber<Light> subscriber) {
         subscribe(lightControl.fetchLight(id), subscriber);
     }
 
-    protected void handleLightChanged(@NonNull Light light) {
+    /**
+     * Called to provide common functionality for when the Light has changed.  Sets the Light
+     * in the associated view and calls to the view to show the correct screen depending on the
+     * status of the Light.
+     *
+     * @param light the new Light.
+     */
+    protected void handleLightChanged(@NonNull final Light light) {
         if (isViewAttached()) {
             getView().setLight(light);
 
@@ -71,7 +84,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     }
 
     /**
-     * Called when the Presenter is destroyed, overridden to cleanup members and
+     * Called when the Presenter is destroyed; overridden to cleanup members and
      * to unsubscribe from any services or events the Presenter may be subscribed to
      */
     public void onDestroy() {
@@ -86,7 +99,8 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * @param subscriber the Subscriber to subscribe with
      * @param <T> the type the Observable is observing
      */
-    protected <T> void subscribe(@NonNull final Observable<T> observable, @NonNull Subscriber<T> subscriber) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable,
+                                 @NonNull final Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
@@ -101,6 +115,11 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         subscribe(observable, new ErrorSubscriber<T>(logger));
     }
 
+    /**
+     * Fetches the Light with the given id.
+     *
+     * @param id the id of the Light to fetch.
+     */
     public abstract void fetchLight(String id);
 
     /**
@@ -109,7 +128,12 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * into the Component.
      */
     public interface Injector {
-        void inject(LightPresenterBase lightPresenter);
+        /**
+         * Injects the lightPresenter class into the Component implementing this interface.
+         *
+         * @param lightPresenter the class to inject.
+         */
+        void inject(@NonNull final LightPresenterBase lightPresenter);
     }
 
     private class SetLightSubscriber extends Subscriber<StatusResponse>  {

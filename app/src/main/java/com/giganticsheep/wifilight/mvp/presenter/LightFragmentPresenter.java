@@ -18,16 +18,12 @@ public abstract class LightFragmentPresenter extends LightPresenterBase {
      * @param injector an Injector used to inject this object into a Component that will
      *                 provide the injected class members.
      */
-    protected LightFragmentPresenter(@NonNull Injector injector) {
+    protected LightFragmentPresenter(@NonNull final Injector injector) {
         super(injector);
     }
 
-    /**
-     * Fetches the Light with the given id.
-     *
-     * @param id the id of the Light to fetch.
-     */
-    public final void fetchLight(String id) {
+    @Override
+    public final void fetchLight(@NonNull final String id) {
         if (isViewAttached()) {
             getView().showLoading();
         }
@@ -45,7 +41,7 @@ public abstract class LightFragmentPresenter extends LightPresenterBase {
             }
 
             @Override
-            public void onNext(@NonNull Light light) {
+            public void onNext(@NonNull final Light light) {
                 handleLightChanged(light);
             }
         });

@@ -36,10 +36,19 @@ import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
 import butterknife.InjectView;
 
-
+/**
+ * The Activity containing the Fragments to control a light and also to show the
+ * details of a Light as fetched from the server. <p>
+ *
+ * Created by anne on 09/07/15.<p>
+ *
+ * (*_*)
+ */
 public class LightControlActivity extends ActivityBase<LightView, LightControlPresenter>
                             implements LightView,
                             HasComponent<LightControlActivityComponent> {
+
+    // TODO javadoc links
 
     public static final float DEFAULT_DURATION = 1.0F;
 
