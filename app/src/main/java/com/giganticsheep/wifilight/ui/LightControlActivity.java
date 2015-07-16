@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.ui;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -299,6 +300,12 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_alert_error)
                 .setMessage(throwable.getMessage())
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
                 .show();
     }
 
