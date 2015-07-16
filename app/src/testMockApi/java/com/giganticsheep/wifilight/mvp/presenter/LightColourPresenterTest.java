@@ -3,17 +3,14 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.mvp.view.TestLightView;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
 
 /**
  * Created by anne on 30/06/15.
@@ -35,10 +32,7 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         getPresenter().setHue(TestConstants.TEST_HUE_INT, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-
-        Light light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
-        assertThat(light.getHue(), equalTo(TestConstants.TEST_HUE_INT));
+        assertThat(getPresenter().getLight().getHue(), equalTo(TestConstants.TEST_HUE_INT));
     }
 
     @Test
@@ -46,15 +40,38 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         setTestStatus(LightControl.Status.OFF);
         lightControlPresenter.fetchLight(Constants.TEST_ID);
 
-        Light light = getPresenter().getLight();
-        int hue = light.getHue();
+        int hue = getPresenter().getLight().getHue();
 
         getPresenter().setHue(TestConstants.TEST_HUE_INT, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
+        assertThat(getPresenter().getLight().getHue(), equalTo(hue));
+    }
 
-        light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
+    @Test
+    public void testSetHueConnectedWasDisconnected() {
+        setTestStatus(LightControl.Status.OFF);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        setTestStatus(LightControl.Status.OK);
+        getPresenter().setHue(TestConstants.TEST_HUE_INT, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
+        assertThat(getPresenter().getLight().getHue(), equalTo(TestConstants.TEST_HUE_INT));
+    }
+
+    @Test
+    public void testSetHueDisconnectedWasConnected() {
+        setTestStatus(LightControl.Status.OK);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        setTestStatus(LightControl.Status.OFF);
+
+        int hue = getPresenter().getLight().getHue();
+
+        getPresenter().setHue(TestConstants.TEST_HUE_INT, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
         assertThat(getPresenter().getLight().getHue(), equalTo(hue));
     }
 
@@ -68,8 +85,6 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
     }
 
-    // TODO test status not as expected
-
     @Test
     public void testSetSaturationConnected() {
         setTestStatus(LightControl.Status.OK);
@@ -78,10 +93,7 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         getPresenter().setSaturation(TestConstants.TEST_SATURATION_INT, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-
-        Light light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
-        assertThat(light.getSaturation(), equalTo(TestConstants.TEST_SATURATION_INT));
+        assertThat(getPresenter().getLight().getSaturation(), equalTo(TestConstants.TEST_SATURATION_INT));
     }
 
     @Test
@@ -89,15 +101,37 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         setTestStatus(LightControl.Status.OFF);
         lightControlPresenter.fetchLight(Constants.TEST_ID);
 
-        Light light = getPresenter().getLight();
-        int saturation = light.getSaturation();
+        int saturation = getPresenter().getLight().getSaturation();
 
         getPresenter().setSaturation(TestConstants.TEST_SATURATION_INT, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
+        assertThat(getPresenter().getLight().getSaturation(), equalTo(saturation));
+    }
 
-        light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
+    @Test
+    public void testSetSaturationConnectedWasDisconnected() {
+        setTestStatus(LightControl.Status.OFF);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        setTestStatus(LightControl.Status.OK);
+        getPresenter().setSaturation(TestConstants.TEST_SATURATION_INT, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
+        assertThat(getPresenter().getLight().getSaturation(), equalTo(TestConstants.TEST_SATURATION_INT));
+    }
+
+    @Test
+    public void testSetSaturationDisconnectedWasConnected() {
+        setTestStatus(LightControl.Status.OK);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        int saturation = getPresenter().getLight().getSaturation();
+
+        setTestStatus(LightControl.Status.OFF);
+        getPresenter().setSaturation(TestConstants.TEST_SATURATION_INT, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
         assertThat(getPresenter().getLight().getSaturation(), equalTo(saturation));
     }
 
@@ -119,10 +153,7 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-
-        Light light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
-        assertThat(light.getKelvin(), equalTo(TestConstants.TEST_KELVIN));
+        assertThat(getPresenter().getLight().getKelvin(), equalTo(TestConstants.TEST_KELVIN));
     }
 
     @Test
@@ -130,15 +161,38 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         setTestStatus(LightControl.Status.OFF);
         lightControlPresenter.fetchLight(Constants.TEST_ID);
 
-        Light light = getPresenter().getLight();
-        int kelvin = light.getKelvin();
+        int kelvin = getPresenter().getLight().getKelvin();
 
         getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
+        assertThat(getPresenter().getLight().getKelvin(), equalTo(kelvin));
+    }
 
-        light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
+
+    @Test
+    public void testSetKelvinConnectedWasDisconnected() {
+        setTestStatus(LightControl.Status.OFF);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        setTestStatus(LightControl.Status.OK);
+        getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
+        assertThat(getPresenter().getLight().getKelvin(), equalTo(TestConstants.TEST_KELVIN));
+    }
+
+    @Test
+    public void testSetKelvinDisconnectedWasConnected() {
+        setTestStatus(LightControl.Status.OK);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        int kelvin = getPresenter().getLight().getKelvin();
+
+        setTestStatus(LightControl.Status.OFF);
+        getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
         assertThat(getPresenter().getLight().getKelvin(), equalTo(kelvin));
     }
 
@@ -160,10 +214,7 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-
-        Light light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
-        assertThat(light.getBrightness(), equalTo(TestConstants.TEST_BRIGHTNESS_INT));
+        assertThat(getPresenter().getLight().getBrightness(), equalTo(TestConstants.TEST_BRIGHTNESS_INT));
     }
 
     @Test
@@ -171,15 +222,37 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
         setTestStatus(LightControl.Status.OFF);
         lightControlPresenter.fetchLight(Constants.TEST_ID);
 
-        Light light = getPresenter().getLight();
-        int brightness = light.getBrightness();
+        int brightness = getPresenter().getLight().getBrightness();
 
         getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
+        assertThat(getPresenter().getLight().getBrightness(), equalTo(brightness));
+    }
 
-        light = getPresenter().getLight();
-        assertThat(light, not(nullValue()));
+    @Test
+    public void testSetBrightnessConnectedWasDisconnected() {
+        setTestStatus(LightControl.Status.OFF);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        setTestStatus(LightControl.Status.OK);
+        getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
+        assertThat(getPresenter().getLight().getBrightness(), equalTo(TestConstants.TEST_BRIGHTNESS_INT));
+    }
+
+    @Test
+    public void testSetBrightnessDisconnectedWasConnected() {
+        setTestStatus(LightControl.Status.OK);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        int brightness = getPresenter().getLight().getBrightness();
+
+        setTestStatus(LightControl.Status.OFF);
+        getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
         assertThat(getPresenter().getLight().getBrightness(), equalTo(brightness));
     }
 
@@ -194,13 +267,57 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
     }
 
     @Test
-    public void testSetPowerOff() throws Exception {
+    public void testSetPowerConnected() throws Exception {
+        setTestStatus(LightControl.Status.OK);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
         testSetPower(LightControl.Power.OFF);
+
+        assertThat(getPresenter().getLight().getPower(), equalTo(LightControl.Power.OFF));
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
+
+        testSetPower(LightControl.Power.ON);
+
+        assertThat(getPresenter().getLight().getPower(), equalTo(LightControl.Power.ON));
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
     }
 
     @Test
-    public void testSetPowerOn() throws Exception {
+    public void testSetPowerDisconnected() throws Exception {
+        setTestStatus(LightControl.Status.OFF);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        LightControl.Power power = getPresenter().getLight().getPower();
+        testSetPower(LightControl.Power.OFF);
+
+        assertThat(getPresenter().getLight().getPower(), equalTo(power));
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
+
+        power = getPresenter().getLight().getPower();
         testSetPower(LightControl.Power.ON);
+
+        assertThat(getPresenter().getLight().getPower(), equalTo(power));
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
+    }
+
+    @Test
+    public void testSetPowerOffError() throws Exception {
+        setTestStatus(LightControl.Status.ERROR);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        testSetPower(LightControl.Power.OFF);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
+    }
+
+    @Test
+    public void testSetPowerOnError() throws Exception {
+        setTestStatus(LightControl.Status.ERROR);
+        lightControlPresenter.fetchLight(Constants.TEST_ID);
+
+        testSetPower(LightControl.Power.ON);
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
     }
 
     private void testSetPower(LightControl.Power power) {

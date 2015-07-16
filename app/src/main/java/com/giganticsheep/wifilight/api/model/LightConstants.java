@@ -23,15 +23,15 @@ public class LightConstants {
         return (int) hue;
     }
 
-    static double convertBrightness(int brightness) {
+    public static double convertBrightness(int brightness) {
         return (double)brightness/BRIGHTNESS_MAX;
     }
 
-    static double convertSaturation(int saturation) {
+    public static double convertSaturation(int saturation) {
         return (double)saturation/SATURATION_MAX;
     }
 
-    static double convertHue(int hue) {
+    public static double convertHue(int hue) {
         return (double) hue;
     }
 }

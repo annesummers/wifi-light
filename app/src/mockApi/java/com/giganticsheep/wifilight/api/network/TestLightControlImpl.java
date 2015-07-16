@@ -27,6 +27,8 @@ import rx.functions.Func1;
  */
 public class TestLightControlImpl implements LightControl {
 
+    private static final String INITIAL_POWER = "off";
+
     @SuppressWarnings("FieldNotUsedInToString")
     private final EventBus eventBus;
 
@@ -239,6 +241,7 @@ public class TestLightControlImpl implements LightControl {
                 @Override
                 public void call(Subscriber<? super Light> subscriber) {
                     for (LightResponse light : lights) {
+                        light.power = INITIAL_POWER;
                         light.connected = true;
                         light.seconds_since_seen = timeout;
 
@@ -256,6 +259,7 @@ public class TestLightControlImpl implements LightControl {
                 @Override
                 public void call(Subscriber<? super Light> subscriber) {
                     for (LightResponse light : lights) {
+                        light.power = INITIAL_POWER;
                         light.connected = false;
                         light.seconds_since_seen = timeout;
 
