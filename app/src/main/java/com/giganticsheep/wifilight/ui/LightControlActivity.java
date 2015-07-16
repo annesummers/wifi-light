@@ -35,6 +35,8 @@ import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
 import butterknife.InjectView;
+import butterknife.OnItemClick;
+import icepick.Icicle;
 
 /**
  * The Activity containing the Fragments to control a {@link com.giganticsheep.wifilight.api.model.Light} and also to show the
@@ -68,6 +70,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     private LightControlActivityComponent component;
     private DrawerAdapter drawerAdapter;
+
+    @Icicle int drawerSelectedPosition = Constants.INVALID;
 
     // Views
 
@@ -129,7 +133,10 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         tabLayout.setupWithViewPager(viewPager);
 
         drawerListView.setAdapter(drawerAdapter);
-        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
+
+        if(drawerSelectedPosition != Constants.INVALID) {
+            drawerListView.setItemChecked(drawerSelectedPosition, true);
+        }
     }
 
     @Override
@@ -164,6 +171,18 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @OnItemClick (R.id.left_drawer)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        logger.debug("onItemClick() drawer list");
+
+        getPresenter().fetchLight(drawerAdapter.getItem(position));
+
+        drawerSelectedPosition = position;
+
+        drawerListView.setItemChecked(position, true);
+        drawerLayout.closeDrawer(drawerListView);
     }
 
     @Override
@@ -363,19 +382,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                 default:
                     return null;
             }
-        }
-    }
-
-    private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            logger.debug("onItemClick() drawer list");
-
-            getPresenter().fetchLight(drawerAdapter.getItem(position));
-
-            drawerListView.setItemChecked(position, true);
-            drawerLayout.closeDrawer(drawerListView);
         }
     }
 }

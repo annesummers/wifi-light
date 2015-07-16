@@ -17,4 +17,5 @@ public class Constants {
     public static final String TEST_ID2 = "abcdef12345";
     public static final String TEST_NAME = "TEST";
     public static final String TEST_NAME2 = "TEST2";
+    public static final int INVALID = -1;
 }
