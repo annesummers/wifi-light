@@ -31,7 +31,7 @@ public class LightControlModule {
                                      BaseLogger baseLogger,
                                      @IOScheduler Scheduler ioScheduler,
                                      @UIScheduler Scheduler uiScheduler) {
-        return new TestLightControlImpl(
+        return new MockLightControlImpl(
                 eventBus,
                 baseLogger,
                 ioScheduler,

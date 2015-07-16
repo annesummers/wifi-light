@@ -2,11 +2,9 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.network.TestLightControlImpl;
-import com.giganticsheep.wifilight.base.TestConstants;
+import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
 import com.giganticsheep.wifilight.mvp.view.TestLightView;
-import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,11 +48,11 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
     }
 
     protected void setTestStatus(LightControl.Status status) {
-        ((TestLightControlImpl)presenter.lightControl).setStatus(status);
+        ((MockLightControlImpl)presenter.lightControl).setStatus(status);
     }
 
     protected void setLightTimeout() {
-        ((TestLightControlImpl)presenter.lightControl).setLightTimeout(true);
+        ((MockLightControlImpl)presenter.lightControl).setLightTimeout(true);
     }
 
     protected abstract LightPresenterBase createPresenter(LightPresenterBase.Injector injector);

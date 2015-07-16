@@ -8,9 +8,9 @@ import com.giganticsheep.wifilight.api.model.LightStatus;
  * Created by anne on 15/07/15. <p>
  * (*_*)
  */
-public class TestLightStatus implements LightStatus {
+public class MockLightStatus implements LightStatus {
 
-    public TestLightStatus(final String id,
+    public MockLightStatus(final String id,
                            final String name,
                            final LightControl.Status status) {
     }

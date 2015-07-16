@@ -25,7 +25,7 @@ import rx.functions.Func1;
  * Created by anne on 15/07/15. <p>
  * (*_*)
  */
-public class TestLightControlImpl implements LightControl {
+public class MockLightControlImpl implements LightControl {
 
     private static final String INITIAL_POWER = "off";
 
@@ -40,7 +40,7 @@ public class TestLightControlImpl implements LightControl {
     private Status status;
     private long timeout = 0L;
 
-    public TestLightControlImpl(final EventBus eventBus,
+    public MockLightControlImpl(final EventBus eventBus,
                                 final BaseLogger baseLogger,
                                 @IOScheduler final Scheduler ioScheduler,
                                 @UIScheduler final Scheduler uiScheduler) {
@@ -48,8 +48,13 @@ public class TestLightControlImpl implements LightControl {
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
 
-        lights.add(new LightResponse(Constants.TEST_ID));
-        lights.add(new LightResponse(Constants.TEST_ID2));
+        LightResponse light = new LightResponse(Constants.TEST_ID);
+        light.label = Constants.TEST_NAME;
+        lights.add(light);
+
+        light = new LightResponse(Constants.TEST_ID2);
+        light.label = Constants.TEST_NAME2;
+        lights.add(light);
     }
 
     @NonNull

@@ -14,13 +14,13 @@ import java.util.Date;
  * Created by anne on 13/07/15.
  * (*_*)
  */
-public class TestLight implements Light {
+public class MockLight implements Light {
     private final String id;
     public double brightness;
     public ColourData color;
     public boolean connected;
 
-    public TestLight(String testId) {
+    public MockLight(String testId) {
         this.id = testId;
 
         this.color = new ColourData();
