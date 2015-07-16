@@ -69,6 +69,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     @InjectView(R.id.action_toolbar) Toolbar toolbar;
 
     private LightControlActivityComponent component;
+
     private DrawerAdapter drawerAdapter;
 
     @Icicle int drawerSelectedPosition = Constants.INVALID;
@@ -83,8 +84,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             // we are attaching the details fragment at position 0 which is under the view pager
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
-
-        drawerAdapter = new DrawerAdapter(component);
     }
 
     @NonNull
@@ -131,6 +130,10 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         viewPager.setAdapter(pagerAdapter != null ? pagerAdapter : new LightFragmentPagerAdapter(getSupportFragmentManager()));
 
         tabLayout.setupWithViewPager(viewPager);
+
+        if(drawerAdapter == null) {
+            drawerAdapter = new DrawerAdapter(component);
+        }
 
         drawerListView.setAdapter(drawerAdapter);
 
