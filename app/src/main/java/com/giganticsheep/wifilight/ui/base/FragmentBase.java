@@ -44,11 +44,15 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Nullable
-    @Arg String name;
+    @Arg
+    public String name;
 
     private boolean viewsInitialised;
 
-    @Arg boolean attachToRoot;
+    @Arg (required = false)
+    public
+    boolean attachToRoot;
+
     private int orientation;
 
     private LayoutInflater layoutInflater;

@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
-import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
-import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
+import com.giganticsheep.wifilight.ui.fragment.LightColourFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragmentBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,15 +53,15 @@ public class FragmentFactory {
     public final FragmentBase createFragment(@NonNull final String name) throws Exception {
         if(application != null) {
             if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
-                return LightColourFragment.newInstance(name);
+                return new LightColourFragmentBuilder(name).build();
             }
 
             if (name.equals(application.getString(R.string.fragment_name_light_effects))) {
-                return LightEffectsFragment.newInstance(name);
+                return new LightEffectsFragmentBuilder(name).build();
             }
 
             if (name.equals(application.getString(R.string.fragment_name_light_details))) {
-                return LightDetailsFragment.newInstance(name);
+                return new LightDetailsFragmentBuilder(name).build();
             }
         }
 
