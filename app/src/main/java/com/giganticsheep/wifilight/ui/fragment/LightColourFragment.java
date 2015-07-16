@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -14,7 +13,6 @@ import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.mvp.presenter.LightColourPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
-import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import java.util.HashMap;
@@ -31,17 +29,6 @@ import butterknife.OnCheckedChanged;
 public class LightColourFragment extends LightFragmentBase {
 
     // TODO put toggle above pager maybe in its own fragment?
-
-    @NonNull
-    public static LightColourFragment newInstance(String name) {
-        LightColourFragment fragment = new LightColourFragment();
-
-        Bundle args = new Bundle();
-        args.putString(FragmentBase.FRAGMENT_ARGS_NAME, name);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
 
     @InjectView(R.id.hue_seekbar) SeekBar hueSeekBar;
     @InjectView(R.id.saturation_seekbar) SeekBar saturationSeekBar;
@@ -81,8 +68,8 @@ public class LightColourFragment extends LightFragmentBase {
     }
 
     @Override
-    public void showLight() {
-        logger.debug("showLight()");
+    protected void showLight() {
+        //logger.debug("showLight()");
 
         Light light = getPresenter().getLight();
 
@@ -101,7 +88,7 @@ public class LightColourFragment extends LightFragmentBase {
 
     @Override
     protected void enableViews(boolean enable) {
-        logger.debug("enableViews()");
+        //logger.debug("enableViews()");
 
         hueSeekBar.setEnabled(enable);
         saturationSeekBar.setEnabled(enable);

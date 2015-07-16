@@ -10,7 +10,10 @@ import java.io.Serializable;
  * Created by anne on 22/06/15.
  * (*_*)
  */
+
 public class Logger implements Serializable {
+
+    // TODO make this parcelable
 
     @NonNls private static final char SPACE = ' ';
     @NonNls private static final String ERROR_LABEL = "ERROR :";

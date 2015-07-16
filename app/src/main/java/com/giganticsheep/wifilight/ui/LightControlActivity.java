@@ -59,8 +59,12 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     @InjectView(R.id.light_layout) LinearLayout lightLayout;
     @InjectView(R.id.disconnected_layout) FrameLayout disconnectedLayout;
 
+    @InjectView(R.id.sliding_tabs) TabLayout tabLayout;
+
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.left_drawer) ListView drawerListView;
+
+    @InjectView(R.id.action_toolbar) Toolbar toolbar;
 
     private LightControlActivityComponent component;
     private DrawerAdapter drawerAdapter;
@@ -76,13 +80,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.action_toolbar);
-        setSupportActionBar(toolbar);
-
         drawerAdapter = new DrawerAdapter(component);
-
-        drawerListView.setAdapter(drawerAdapter);
-        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
     }
 
     @NonNull
@@ -116,6 +114,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     protected void initialiseViews() {
         super.initialiseViews();
 
+        setSupportActionBar(toolbar);
+
         PagerAdapter pagerAdapter = null;
 
         if(viewPager != null) {
@@ -126,8 +126,10 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter != null ? pagerAdapter : new LightFragmentPagerAdapter(getSupportFragmentManager()));
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        drawerListView.setAdapter(drawerAdapter);
+        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
     }
 
     @Override
@@ -238,6 +240,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     public void showConnected() {
         logger.debug("showConnected()");
 
+        getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnected();
 
         errorLayout.setVisibility(View.GONE);
@@ -250,6 +253,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     public void showConnecting() {
         logger.debug("showConnecting()");
 
+        getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnecting();
 
         errorLayout.setVisibility(View.GONE);
@@ -273,6 +277,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     public void showDisconnected() {
         logger.debug("showDisconnected()");
 
+        getViewState().setData(getPresenter().getLight());
         getViewState().setShowDisconnected();
 
         errorLayout.setVisibility(View.GONE);

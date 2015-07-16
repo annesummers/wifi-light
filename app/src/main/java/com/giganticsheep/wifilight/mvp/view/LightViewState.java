@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.giganticsheep.wifilight.api.model.Light;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
+
+import org.parceler.Parcels;
 
 /**
  * Handles the different states the LightView can be in. <p>
@@ -16,6 +19,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 public class LightViewState implements RestoreableViewState<LightView> {
 
     private static final String KEY_STATE = "key_state";
+    private static final String KEY_LIGHT = "key_light";
 
     private final int STATE_SHOW_LOADING = 0;
     private final int STATE_SHOW_LIGHT_CONNECTED = 1;
@@ -24,6 +28,7 @@ public class LightViewState implements RestoreableViewState<LightView> {
     private final int STATE_SHOW_ERROR = 4;
 
     private int state = STATE_SHOW_LOADING;
+    private Light light;
 
     /**
      * Sets the state to STATE_SHOW_LOADING.
@@ -91,6 +96,7 @@ public class LightViewState implements RestoreableViewState<LightView> {
     @Override
     public void saveInstanceState(@NonNull Bundle bundle) {
         bundle.putInt(KEY_STATE, state);
+        bundle.putParcelable(KEY_LIGHT, Parcels.wrap(light));
     }
 
     @Nullable
@@ -101,8 +107,13 @@ public class LightViewState implements RestoreableViewState<LightView> {
         }
 
         state = bundle.getInt(KEY_STATE);
+        light = Parcels.unwrap(bundle.getParcelable(KEY_LIGHT));
 
         return this;
+    }
+
+    public void setData(Light light) {
+        this.light = light;
     }
 
     @NonNull

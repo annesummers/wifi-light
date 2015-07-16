@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
@@ -9,7 +8,6 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightDetailsPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import butterknife.InjectView;
@@ -21,17 +19,6 @@ import butterknife.InjectView;
 
 @FragmentArgsInherited
 public class LightDetailsFragment extends LightFragmentBase {
-
-    @NonNull
-    public static LightDetailsFragment newInstance(String name) {
-        LightDetailsFragment fragment = new LightDetailsFragment();
-
-        Bundle args = new Bundle();
-        args.putString(FragmentBase.FRAGMENT_ARGS_NAME, name);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
 
     public LightDetailsFragment() {
         super();
@@ -55,12 +42,6 @@ public class LightDetailsFragment extends LightFragmentBase {
         return new LightDetailsPresenter(getLightControlActivity().getComponent(),
                                          getLightControlActivity().getPresenter());
     }
-
-  /*  @NonNull
-    @Override
-    public LightDetailsPresenter getPresenter() {
-        return (LightDetailsPresenter) super.getPresenter();
-    }*/
 
     @Override
     protected void initialiseViews(View view) { }

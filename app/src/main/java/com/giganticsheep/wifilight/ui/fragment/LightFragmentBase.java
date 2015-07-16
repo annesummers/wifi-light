@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.mvp.view.LightViewState;
@@ -34,12 +35,9 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     @Override
     protected final void populateViews() {
-        logger.debug("populateViews()");
-
-        if(getPresenter().getLight() != null) {
-            showLight();
-        } else {
-            logger.warn("showLight() light is null!");
+        Light light = getPresenter().getLight();
+        if(light != null) {
+            getPresenter().handleLightChanged(light);
         }
     }
 
@@ -67,15 +65,18 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         logger.debug("showLoading()");
 
         getViewState().setShowLoading();
+
+        enableViews(false);
     }
 
     @Override
     public void showConnected() {
         logger.debug("showConnected()");
 
+        getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnected();
 
-        populateViews();
+        showLight();
         enableViews(true);
     }
 
@@ -83,9 +84,10 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     public void showConnecting() {
         logger.debug("showConnecting()");
 
+        getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnecting();
 
-        populateViews();
+        showLight();
         enableViews(false);
     }
 
@@ -93,9 +95,10 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     public void showDisconnected() {
         logger.debug("showDisconnected()");
 
+        getViewState().setData(getPresenter().getLight());
         getViewState().setShowDisconnected();
 
-        populateViews();
+        showLight();
         enableViews(false);
     }
 
@@ -111,13 +114,6 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         showError();
     }
 
-    /*@Override
-    public final void setLight(@NonNull Light light) {
-        logger.debug("setLight() " + light.id());
-
-        this.light = light;
-    }
-*/
     @NonNull
     protected final LightControlActivity getLightControlActivity() {
         return (LightControlActivity) getActivity();

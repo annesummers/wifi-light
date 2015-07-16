@@ -99,6 +99,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
             setContentView(activityLayout().layoutId());
 
             initialiseViews();
+
+            getViewState().apply(this, false);
         }
     }
 

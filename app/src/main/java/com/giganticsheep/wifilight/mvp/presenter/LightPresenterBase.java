@@ -73,6 +73,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      */
     public void handleLightChanged(@NonNull final Light light) {
        // TODO I don't like this being public, how to test fragment otherwise?
+        logger.debug("handleLightChanged()");
         if (isViewAttached()) {
             if (light.isConnected()) {
                 if (light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
