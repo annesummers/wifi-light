@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by anne on 13/07/15.
  * (*_*)
  */
-public interface Light extends WifiLightData {
+public interface Light extends WifiLightData  {
 
     /**
      * @return if this light is connected or not.

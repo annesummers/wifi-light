@@ -7,7 +7,8 @@ import com.giganticsheep.wifilight.api.model.ColourData;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 
-import java.io.Serializable;
+import org.parceler.Parcel;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,9 +18,10 @@ import java.util.Locale;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-class LightResponse extends Response
-                            implements Light,
-                            Serializable {
+@Parcel
+public class LightResponse extends Response
+                            implements Light {//,
+                            //Serializable {
 
     public String uuid;
     public boolean connected;
@@ -33,6 +35,8 @@ class LightResponse extends Response
     public GroupData location;
     public GroupData group;
     public CapabilitiesData capabilities;
+
+    public LightResponse() {}
 
     public LightResponse(String id) {
         super(id);
@@ -108,9 +112,12 @@ class LightResponse extends Response
         return capabilities.has_variable_color_temp;
     }
 
-    public class CapabilitiesData {
+    @Parcel
+    public static class CapabilitiesData {
         public boolean has_color;
         public boolean has_variable_color_temp;
+
+        public CapabilitiesData() { }
 
         @NonNull
         @Override

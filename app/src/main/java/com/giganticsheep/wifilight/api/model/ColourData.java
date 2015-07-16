@@ -2,10 +2,14 @@ package com.giganticsheep.wifilight.api.model;
 
 import android.support.annotation.NonNull;
 
+import org.parceler.Parcel;
+
 /**
  * Created by anne on 13/07/15.
  * (*_*)
  */
+
+@Parcel
 public class ColourData {
     public double hue;
     public double saturation;
