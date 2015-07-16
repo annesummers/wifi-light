@@ -1,6 +1,8 @@
 package com.giganticsheep.wifilight;
 
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,16 +13,11 @@ import dagger.Provides;
  */
 @Module
 public class WifiLightAppModule {
-    // TODO let's sort this null application
 
-    @Nullable
+    @NotNull
     protected final WifiLightApplication application;
 
-    public WifiLightAppModule() {
-        this.application = null;
-    }
-
-    public WifiLightAppModule(final WifiLightApplication application) {
+    public WifiLightAppModule(@NonNull final WifiLightApplication application) {
         this.application = application;
     }
 
