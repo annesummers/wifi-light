@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
+import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
 
@@ -37,7 +38,7 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testFetchLight() throws Exception {
-        lightNetwork.fetchLight(TestConstants.TEST_ID)
+        lightNetwork.fetchLight(Constants.TEST_ID)
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<Light>() {
                     @Override
@@ -48,7 +49,7 @@ public class LightControlTest extends ModelTest {
 
                     @Override
                     public void onNext(@NonNull Light light) {
-                        assertThat(light.id(), equalTo(TestConstants.TEST_ID));
+                        assertThat(light.id(), equalTo(Constants.TEST_ID));
                     }
                 });
     }
