@@ -34,7 +34,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * Sets the hue of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param hue the hue to set; an int between 0 and 360.
-     * @param duration the duration to set the hue for.
+     * @param duration the duration to fade into the new hue.
      */
     public void setHue(final int hue, float duration) {
         subscribe(lightControl.setHue(hue, duration), new SetLightSubscriber());
@@ -44,7 +44,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * Sets the saturation of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param saturation the saturation to set; an int between 0 and 100.
-     * @param duration the duration to set the saturation for.
+     * @param duration the duration to fade into the new saturation.
      */
     public void setSaturation(final int saturation, float duration) {
         subscribe(lightControl.setSaturation(saturation, duration), new SetLightSubscriber());
@@ -54,7 +54,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * Sets the brightness of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param brightness the brightness to set; an int between 0 and 100.
-     * @param duration the duration to set the brightness for.
+     * @param duration the duration to fade into the new brightness.
      */
     public void setBrightness(final int brightness, float duration) {
         subscribe(lightControl.setBrightness(brightness, duration), new SetLightSubscriber());
@@ -64,7 +64,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * Sets the kelvin (warmth) of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param kelvin the kelvin to set; an int between 2500 and 9000.
-     * @param duration the duration to set the kelvin for.
+     * @param duration the duration to fade into the new kelvin.
      */
     public void setKelvin(final int kelvin, float duration) {
         subscribe(lightControl.setKelvin(kelvin, duration), new SetLightSubscriber());
@@ -74,7 +74,7 @@ public class LightColourPresenter extends LightFragmentPresenter {
      * Sets the power of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
      * @param power ON or OFF.
-     * @param duration how long to set the power change for.
+     * @param duration how long to set the power change.
      */
     public void setPower(final LightControl.Power power, final float duration) {
         subscribe(lightControl.setPower(power, duration), new SetLightSubscriber());
