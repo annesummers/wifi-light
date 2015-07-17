@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight.ui;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -12,7 +11,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.avast.android.dialogs.fragment.SimpleDialogFragment;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
@@ -324,15 +323,9 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         lightLayout.setVisibility(View.VISIBLE);
         errorLayout.setVisibility(View.VISIBLE);
 
-        new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_alert_error)
+        SimpleDialogFragment.createBuilder(this, getSupportFragmentManager())
                 .setMessage(throwable.getMessage())
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButtonText(android.R.string.ok)
                 .show();
     }
 
