@@ -9,8 +9,6 @@ import com.giganticsheep.wifilight.ui.fragment.LightColourFragmentBuilder;
 import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragmentBuilder;
 
-import org.jetbrains.annotations.NotNull;
-
 import rx.Observable;
 
 /**
@@ -19,10 +17,10 @@ import rx.Observable;
  */
 public class FragmentFactory {
 
-    @NotNull
+    @NonNull
     private final WifiLightApplication application;
 
-    public FragmentFactory(@NotNull final WifiLightApplication application) {
+    public FragmentFactory(@NonNull final WifiLightApplication application) {
         this.application = application;
     }
 

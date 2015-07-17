@@ -18,8 +18,6 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
 import com.squareup.otto.Subscribe;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ import javax.inject.Inject;
  */
 class DrawerAdapter extends BaseAdapter {
 
-    @NotNull
+    @NonNull
     private final Logger logger;
 
     @Inject EventBus eventBus;
@@ -42,7 +40,7 @@ class DrawerAdapter extends BaseAdapter {
     private int selectedItem;
     private int position;
 
-    @NotNull
+    @NonNull
     private final List<ViewData> dataList = new ArrayList<>();
 
     DrawerAdapter(@NonNull final Injector injector) {
@@ -104,7 +102,7 @@ class DrawerAdapter extends BaseAdapter {
      * @param event a FetchLightsSuccessEvent
      */
     @Subscribe
-    public synchronized void handleFetchLightsSuccess(@NotNull LightControl.FetchLightsSuccessEvent event) {
+    public synchronized void handleFetchLightsSuccess(@NonNull LightControl.FetchLightsSuccessEvent event) {
         logger.debug("handleFetchLightsSuccess()");
 
         allLightsFetched = true;

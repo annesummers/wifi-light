@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.squareup.otto.Subscribe;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Presenter to handle the setting of the selected Lights' colours and brightness.<p>
  *
@@ -17,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class LightColourPresenter extends LightFragmentPresenter {
 
     public LightColourPresenter(@NonNull final Injector injector,
-                                @NotNull final LightControlPresenter lightControlPresenter) {
+                                @NonNull final LightControlPresenter lightControlPresenter) {
         super(injector, lightControlPresenter);
 
         eventBus.registerForEvents(this);

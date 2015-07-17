@@ -6,7 +6,7 @@ import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterTestBase;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NonNull;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -27,7 +27,7 @@ public class TestLightView implements LightView {
     private int state = STATE_SHOW_LOADING;
 
     public TestLightView(@NonNull final LightPresenterTestBase lightPresenterTestBase, 
-                         @NotNull final BaseLogger baseLogger) {
+                         @NonNull final BaseLogger baseLogger) {
         this.lightPresenterTestBase = lightPresenterTestBase;
         this.logger = new Logger(getClass().getName(), baseLogger);
     }

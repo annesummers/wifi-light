@@ -2,8 +2,6 @@ package com.giganticsheep.wifilight;
 
 import android.support.annotation.NonNull;
 
-import org.jetbrains.annotations.NotNull;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,7 +12,7 @@ import dagger.Provides;
 @Module
 public class WifiLightAppModule {
 
-    @NotNull
+    @NonNull
     protected final WifiLightApplication application;
 
     public WifiLightAppModule(@NonNull final WifiLightApplication application) {

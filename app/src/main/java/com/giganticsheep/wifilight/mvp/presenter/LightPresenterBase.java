@@ -13,8 +13,6 @@ import com.giganticsheep.wifilight.util.Constants;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -33,7 +31,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     @NonNull
     protected final Logger logger;
 
-    @NotNull
+    @NonNull
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected BaseLogger baseLogger;
@@ -155,7 +153,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         }
 
         @Override
-        public void onNext(@NotNull final LightStatus light) {
+        public void onNext(@NonNull final LightStatus light) {
             Light currentLight = getLight();
 
            if(light.id().equals(currentLight.id())) {
