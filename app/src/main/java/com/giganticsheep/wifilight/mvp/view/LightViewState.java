@@ -67,29 +67,31 @@ public class LightViewState implements RestoreableViewState<LightView> {
 
     @Override
     public void apply(@NonNull LightView lightView, boolean retained) {
-        switch (state) {
-            case STATE_SHOW_LOADING:
-                lightView.showLoading();
-                break;
+        if (retained) {
+            switch (state) {
+                case STATE_SHOW_LOADING:
+                    lightView.showLoading();
+                    break;
 
-            case STATE_SHOW_ERROR:
-                lightView.showError();
-                break;
+                case STATE_SHOW_ERROR:
+                    lightView.showError();
+                    break;
 
-            case STATE_SHOW_LIGHT_CONNECTED:
-                lightView.showConnected();
-                break;
+                case STATE_SHOW_LIGHT_CONNECTED:
+                    lightView.showConnected();
+                    break;
 
-            case STATE_SHOW_LIGHT_CONNECTING:
-                lightView.showConnecting();
-                break;
+                case STATE_SHOW_LIGHT_CONNECTING:
+                    lightView.showConnecting();
+                    break;
 
-            case STATE_SHOW_LIGHT_DISCONNECTED:
-                lightView.showDisconnected();
-                break;
+                case STATE_SHOW_LIGHT_DISCONNECTED:
+                    lightView.showDisconnected();
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     }
 

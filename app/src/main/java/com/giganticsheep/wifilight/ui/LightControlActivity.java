@@ -236,7 +236,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     @Override
     public void onNewViewStateInstance() {
-        getViewState().apply(this, false);
+        getViewState().apply(this, true);
     }
 
     @NonNull
