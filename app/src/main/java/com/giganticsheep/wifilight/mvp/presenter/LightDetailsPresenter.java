@@ -8,7 +8,7 @@ import com.squareup.otto.Subscribe;
  * Created by anne on 29/06/15.
  * (*_*)
  */
-public class LightDetailsPresenter extends LightFragmentPresenter {
+public class LightDetailsPresenter extends LightFragmentPresenterBase {
 
     public LightDetailsPresenter(@NonNull final Injector injector,
                                  @NonNull final LightControlPresenter lightControlPresenter) {

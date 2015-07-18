@@ -49,8 +49,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                             implements LightView,
                             HasComponent<LightControlActivityComponent> {
 
-    // TODO javadoc links
-
     public static final float DEFAULT_DURATION = 1.0F;
 
     private ViewPager viewPager;
@@ -80,8 +78,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            // we are attaching the details fragment at position 0 which is under the view pager
-            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 0, true));
+            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0, false));
+            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1, false));
         }
     }
 
@@ -94,6 +92,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                 switch (position) {
                     case 0:
                         return R.id.container;
+                    case 1:
+                        return R.id.container2;
                     default:
                         return 0;
 
@@ -102,7 +102,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
             @Override
             public int fragmentContainerCount() {
-                return 1;
+                return 2;
             }
 
             @Override

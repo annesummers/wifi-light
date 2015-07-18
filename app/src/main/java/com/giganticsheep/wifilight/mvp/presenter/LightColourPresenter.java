@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.LightControl;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -12,7 +11,7 @@ import com.squareup.otto.Subscribe;
  *
  * (*_*)
  */
-public class LightColourPresenter extends LightFragmentPresenter {
+public class LightColourPresenter extends LightFragmentPresenterBase {
 
     public LightColourPresenter(@NonNull final Injector injector,
                                 @NonNull final LightControlPresenter lightControlPresenter) {
@@ -66,16 +65,6 @@ public class LightColourPresenter extends LightFragmentPresenter {
      */
     public void setKelvin(final int kelvin, float duration) {
         subscribe(lightControl.setKelvin(kelvin, duration), new SetLightSubscriber());
-    }
-
-    /**
-     * Sets the power of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
-     *
-     * @param power ON or OFF.
-     * @param duration how long to set the power change.
-     */
-    public void setPower(final LightControl.Power power, final float duration) {
-        subscribe(lightControl.setPower(power, duration), new SetLightSubscriber());
     }
 
     /**

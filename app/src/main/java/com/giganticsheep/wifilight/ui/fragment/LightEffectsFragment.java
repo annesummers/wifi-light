@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightEffectsPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
@@ -41,20 +42,10 @@ public class LightEffectsFragment extends LightFragmentBase {
     protected void initialiseViews(View view) {  }
 
     @Override
-    protected void showLight() { }
+    protected void showLight(Light light) { }
 
     @Override
     protected void enableViews(boolean enable) { }
-
-    @Override
-    protected void destroyViews() { }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        getPresenter().onDestroy();
-    }
 
     @Override
     protected boolean reinitialiseOnRotate() {

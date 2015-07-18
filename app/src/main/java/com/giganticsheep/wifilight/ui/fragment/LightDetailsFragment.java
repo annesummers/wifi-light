@@ -47,14 +47,7 @@ public class LightDetailsFragment extends LightFragmentBase {
     protected void initialiseViews(View view) { }
 
     @Override
-    protected void showLight() {
-        Light light = getPresenter().getLight();
-
-        if(light == null) {
-            logger.error("showLight() light is null");
-            return;
-        }
-
+    protected void showLight(Light light) {
         nameTextView.setText(light.getName());
         idTextView.setText(light.id());
         hueTextView.setText(Integer.toString(light.getHue()));

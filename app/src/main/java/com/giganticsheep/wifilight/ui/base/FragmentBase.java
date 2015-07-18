@@ -29,7 +29,8 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateFragment<V, P> {
+public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
+                                                        extends MvpViewStateFragment<V, P> {
 
     // TODO argument stuff
 
@@ -43,15 +44,13 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
-    @Nullable
     @Arg
     public String name;
 
-    private boolean viewsInitialised;
-
     @Arg (required = false)
-    public
-    boolean attachToRoot;
+    public boolean attachToRoot;
+
+    private boolean viewsInitialised;
 
     private int orientation;
 
@@ -109,7 +108,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         logger = new Logger(Integer.toHexString(System.identityHashCode(this)) +
@@ -226,6 +225,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
         layoutInflater.inflate(getLayoutRes(), rootView);
 
         initialiseViews(rootView);
+        populateViews();
     }
 
     /**

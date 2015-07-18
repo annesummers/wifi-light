@@ -8,6 +8,7 @@ import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.fragment.LightColourFragmentBuilder;
 import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.LightStatusFragmentBuilder;
 
 import rx.Observable;
 
@@ -60,6 +61,10 @@ public class FragmentFactory {
 
             if (name.equals(application.getString(R.string.fragment_name_light_details))) {
                 return new LightDetailsFragmentBuilder(name).build();
+            }
+
+            if (name.equals(application.getString(R.string.fragment_name_light_status))) {
+                return new LightStatusFragmentBuilder(name).build();
             }
         }
 

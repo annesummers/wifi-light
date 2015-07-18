@@ -91,9 +91,9 @@ public abstract class LightFragmentPresenterTestBase extends LightPresenterTestB
     }
 
     @NonNull
-    protected LightFragmentPresenter getPresenter() {
-        return (LightFragmentPresenter) presenter;
+    protected LightFragmentPresenterBase getPresenter() {
+        return (LightFragmentPresenterBase) presenter;
     }
 
-    protected abstract LightFragmentPresenter doCreatePresenter(LightPresenterBase.Injector injector, LightControlPresenter lightControlPresenter);
+    protected abstract LightFragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, LightControlPresenter lightControlPresenter);
 }

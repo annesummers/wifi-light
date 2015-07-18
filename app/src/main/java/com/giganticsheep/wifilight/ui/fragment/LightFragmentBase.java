@@ -41,6 +41,18 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        getPresenter().onDestroy();
+    }
+
+    @NonNull
+    protected final LightControlActivity getLightControlActivity() {
+        return (LightControlActivity) getActivity();
+    }
+
     // MVP
 
     @NonNull
@@ -114,15 +126,21 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         showError();
     }
 
-    @NonNull
-    protected final LightControlActivity getLightControlActivity() {
-        return (LightControlActivity) getActivity();
+    private void showLight() {
+        Light light = getPresenter().getLight();
+
+        if(light == null) {
+            logger.error("showLight() light is null");
+            return;
+        }
+
+        showLight(light);
     }
 
     /**
      * Shows the relevant information from the fetched Light.
      */
-    protected abstract void showLight();
+    protected abstract void showLight(Light light);
 
     /**
      * Disables all the views in this Fragment.

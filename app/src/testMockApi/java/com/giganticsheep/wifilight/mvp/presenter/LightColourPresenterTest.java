@@ -20,7 +20,7 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
 
     @NonNull
     @Override
-    protected LightFragmentPresenter doCreatePresenter(LightPresenterBase.Injector injector, LightControlPresenter lightControlPresenter) {
+    protected LightFragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, LightControlPresenter lightControlPresenter) {
         return new LightColourPresenter(injector, lightControlPresenter);
     }
 

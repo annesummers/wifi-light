@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="light_details_column_count">5</integer>
-    <integer name="light_details_row_count">6</integer>
+    <integer name="light_details_column_count">4</integer>
+    <integer name="light_details_row_count">4</integer>
 
     <integer name="light_sliders_column_count">2</integer>
     <integer name="light_sliders_row_count">4</integer>
