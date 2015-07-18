@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
+import com.squareup.otto.Subscribe;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -39,5 +40,10 @@ public class LightStatusPresenter extends LightFragmentPresenterBase {
      */
     public void setPower(final LightControl.Power power, final float duration) {
         subscribe(lightControl.setPower(power, duration), new SetLightSubscriber());
+    }
+
+    @Subscribe
+    public void handleLightChanged(@NonNull LightChangedEvent event) {
+        handleLightChanged(event.getLight());
     }
 }
