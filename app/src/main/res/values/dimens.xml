@@ -3,8 +3,11 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="activity_horizontal_half_margin">8dp</dimen>
+    <dimen name="activity_vertical_half_margin">8dp</dimen>
+
     <dimen name="default_margin">10dp</dimen>
-    <dimen name="default_half_margin">10dp</dimen>
+    <dimen name="default_half_margin">5dp</dimen>
 
     <dimen name="tab_height">48dp</dimen>
     <dimen name="seekbar_corrective_margin">50dp</dimen>
