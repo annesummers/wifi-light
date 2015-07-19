@@ -21,6 +21,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
 
 import javax.inject.Inject;
 
+import icepick.Icicle;
 import rx.Observable;
 import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
@@ -53,6 +54,8 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     private boolean viewsInitialised;
 
     private int orientation;
+
+    @Icicle boolean firstShow = true;
 
     private LayoutInflater layoutInflater;
     private FragmentAttachmentDetails attachmentDetails;
@@ -108,7 +111,8 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view,
+                              @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         logger = new Logger(Integer.toHexString(System.identityHashCode(this)) +
@@ -118,7 +122,10 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
 
         viewsInitialised = true;
 
-        populateViews();
+        if(firstShow) {
+            firstShow = false;
+            populateViews();
+        }
     }
 
     @Override

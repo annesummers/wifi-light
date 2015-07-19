@@ -100,7 +100,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
             initialiseViews();
 
-            getViewState().apply(this, false);
+            getViewState().apply(this, true);
         }
     }
 
