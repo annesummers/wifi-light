@@ -16,6 +16,7 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.Logger;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ class DrawerAdapter extends BaseAdapter {
 
         logger = new Logger(getClass().getName(), baseLogger);
 
-        eventBus.registerForEvents(this);
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<DrawerAdapter>(logger));
     }
 
     @Override

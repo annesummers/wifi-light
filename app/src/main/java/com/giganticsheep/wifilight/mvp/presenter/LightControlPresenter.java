@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
 
 import rx.Subscriber;
@@ -21,14 +22,14 @@ public class LightControlPresenter extends LightPresenterBase {
     public LightControlPresenter(@NonNull final Injector injector) {
         super(injector);
 
-        eventBus.registerForEvents(this);
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<LightControlPresenter>(logger));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this);
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<LightControlPresenter>(logger));
     }
 
     /**

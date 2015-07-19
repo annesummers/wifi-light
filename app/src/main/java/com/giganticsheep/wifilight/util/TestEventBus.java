@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.util;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.base.EventBus;
 import com.squareup.otto.Bus;
 
@@ -22,23 +24,42 @@ public class TestEventBus implements EventBus {
     private final List<Object> messages = new ArrayList<>();
 
     @Override
-    public Observable postMessage(final Object messageObject) {
-        return Observable.create(new Observable.OnSubscribe<Object>() {
+    public <T> Observable<T> postMessage(@NonNull final T messageObject) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
-            public void call(Subscriber subscriber) {
+            public void call(@NonNull Subscriber<? super T> subscriber) {
                 messages.add(messageObject);
+
+                subscriber.onNext(messageObject);
+                subscriber.onCompleted();
             }
         });
     }
 
     @Override
-    public void registerForEvents(Object myClass) {
-        listeners.add(myClass);
+    public <T> Observable<T> registerForEvents(@NonNull final T myClass) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
+            @Override
+            public void call(@NonNull Subscriber<? super T> subscriber) {
+                listeners.add(myClass);
+
+                subscriber.onNext(myClass);
+                subscriber.onCompleted();
+            }
+        });
     }
 
     @Override
-    public void unregisterForEvents(Object myClass) {
-        listeners.remove(myClass);
+    public <T> Observable<T> unregisterForEvents(@NonNull final T myClass) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
+            @Override
+            public void call(@NonNull Subscriber<? super T> subscriber) {
+                listeners.remove(myClass);
+
+                subscriber.onNext(myClass);
+                subscriber.onCompleted();
+            }
+        });
     }
 
     public Object popLastMessage() {

@@ -24,10 +24,10 @@ public class AndroidEventBus implements EventBus {
      * @param messageObject the object to post to the bus
      */
     @NonNull
-    public Observable postMessage(@NonNull final Object messageObject) {
-        return Observable.create(new Observable.OnSubscribe<Object>() {
+    public <T> Observable<T> postMessage(@NonNull final T messageObject) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
-            public void call(@NonNull Subscriber<? super Object> subscriber) {
+            public void call(@NonNull Subscriber<? super T> subscriber) {
                 try {
                     bus.post(messageObject);
                 } catch (Exception e) {
@@ -40,11 +40,35 @@ public class AndroidEventBus implements EventBus {
         }).subscribeOn(AndroidSchedulers.mainThread());
     }
 
-    public void registerForEvents(@NonNull Object myClass) {
-        bus.register(myClass);
+    public <T> Observable<T> registerForEvents(@NonNull final T myClass) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
+            @Override
+            public void call(@NonNull Subscriber<? super T> subscriber) {
+                try {
+                    bus.register(myClass);
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+
+                subscriber.onNext(myClass);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(AndroidSchedulers.mainThread());
     }
 
-    public void unregisterForEvents(@NonNull Object myClass) {
-        bus.unregister(myClass);
+    public <T> Observable<T> unregisterForEvents(@NonNull final T myClass) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
+            @Override
+            public void call(@NonNull Subscriber<? super T> subscriber) {
+                try {
+                    bus.unregister(myClass);
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+
+                subscriber.onNext(myClass);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(AndroidSchedulers.mainThread());
     }
 }

@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -17,14 +18,14 @@ public class LightColourPresenter extends LightFragmentPresenterBase {
                                 @NonNull final LightControlPresenter lightControlPresenter) {
         super(injector, lightControlPresenter);
 
-        eventBus.registerForEvents(this);
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<LightColourPresenter>(logger));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         
-        eventBus.unregisterForEvents(this);
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<LightColourPresenter>(logger));
     }
 
     /**

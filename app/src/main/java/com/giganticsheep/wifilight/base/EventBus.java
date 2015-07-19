@@ -7,8 +7,8 @@ import rx.Observable;
  * (*_*)
  */
 public interface EventBus {
-    <T> Observable<T> postMessage(final Object messageObject);
+    <T> Observable<T> postMessage(T messageObject);
 
-    void registerForEvents(Object myClass);
-    void unregisterForEvents(Object myClass);
+    <T> Observable<T> registerForEvents(T myClass);
+    <T> Observable<T> unregisterForEvents(T myClass);
 }
