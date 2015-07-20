@@ -1,11 +1,10 @@
-package presenter;
+package com.giganticsheep.wifilight.mvp.presenter;
 
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.TestLightResponse;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
-import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.fragment.LightFragmentBase;
 import com.giganticsheep.wifilight.util.Constants;
 

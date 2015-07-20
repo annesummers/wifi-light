@@ -107,7 +107,7 @@ public class LightControlPresenter extends LightPresenterBase {
     @Override
     public String toString() {
         return "LightControlPresenter{" +
-                "Light=" + light != null ? light.id() : "null" +
+                "Light=" + ((light != null) ? light.id() : "null") +
                 '}';
     }
 }

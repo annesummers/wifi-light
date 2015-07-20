@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.ui;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
+import com.giganticsheep.wifilight.ui.fragment.LightStatusFragment;
 
 import org.junit.After;
 import org.junit.Before;
@@ -87,8 +89,6 @@ public class LightControlActivityTest {
 
     @Test
     public void testLoadsViewPager() {
-        // TODO how to test the viewpager; at the moment find view by id just returns the last view attached to the pager
-
         LightControlActivity activity = createAndGetActivity();
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
@@ -98,31 +98,62 @@ public class LightControlActivityTest {
 
         Fragment fragment2 = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 1);
         assertThat(fragment2, instanceOf(LightEffectsFragment.class));
+    }
+
+    @Test
+    public void testLoadsTabs() {
+        LightControlActivity activity = createAndGetActivity();
 
         ViewGroup tabs = (ViewGroup) activityController.get().findViewById(R.id.sliding_tabs);
 
         assertThat(tabs, not(nullValue()));
-
-      /*  View firstTab = tabs.getChildAt(0);
-        firstTab.performClick();
-
-        assertThat(fragment.getView().getVisibility(), equalTo(View.VISIBLE));
-        assertThat(fragment2.getView().getVisibility(), equalTo(View.INVISIBLE));
-
-        View secondTab = tabs.getChildAt(1);
-        secondTab.performClick();
-
-        assertThat(fragment.getView().getVisibility(), equalTo(View.INVISIBLE));
-        assertThat(fragment2.getView().getVisibility(), equalTo(View.VISIBLE));*/
     }
 
     @Test
-    public void testLoadsLightDetails() {
+    public void testConfigurationChanged() {
+        Bundle savedState = new Bundle();
+        activityController
+                .create()
+                .postCreate(savedState)
+                .start()
+                .resume();
+
+        LightControlActivity activity = activityController.get();
+
+        activity.showConnected();
+
+        Configuration newConfig = new Configuration();
+        newConfig.orientation = Configuration.ORIENTATION_LANDSCAPE;
+
+        activity.onConfigurationChanged(newConfig);
+
+        View loadingView = activity.findViewById(R.id.loading_layout);
+        View errorView = activity.findViewById(R.id.error_layout);
+        View mainView = activity.findViewById(R.id.light_layout);
+        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+
+        assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(errorView.getVisibility(), equalTo(View.GONE));
+        assertThat(loadingView.getVisibility(), equalTo(View.GONE));
+        assertThat(disconnectedView.getVisibility(), equalTo(View.GONE));
+    }
+
+    @Test
+    public void testShowsLightStatusFragment() {
         LightControlActivity activity = createAndGetActivity();
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
-        assertThat(fragmentManager.findFragmentById(R.id.container), instanceOf(LightDetailsFragment.class));
+        assertThat(fragmentManager.findFragmentById(R.id.container), instanceOf(LightStatusFragment.class));
+    }
+
+    @Test
+    public void testShowsLightDetailsFragment() {
+        LightControlActivity activity = createAndGetActivity();
+
+        FragmentManager fragmentManager  = activity.getSupportFragmentManager();
+
+        assertThat(fragmentManager.findFragmentById(R.id.container2), instanceOf(LightDetailsFragment.class));
     }
 
     @Test
@@ -134,38 +165,33 @@ public class LightControlActivityTest {
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);
         View mainView = activity.findViewById(R.id.light_layout);
+        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(disconnectedView.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
     public void testShowsErrorView() {
         LightControlActivity activity = createAndGetActivity();
 
-        Exception errorException = null;
-
-        try {
-            activity.showError();
-        } catch (Exception e) {
-            // exception is thrown when we try to show an AlertDialog
-            errorException = e;
-        }
-
-        assertThat(errorException, not(nullValue()));
+        activity.showError();
 
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);
         View mainView = activity.findViewById(R.id.light_layout);
+        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
 
-        /*assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(loadingView.getVisibility(), equalTo(View.GONE));
-        assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));*/
+        assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(disconnectedView.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
-    public void testShowsLightView() {
+    public void testShowsConnectedView() {
         LightControlActivity activity = createAndGetActivity();
 
         activity.showConnected();
@@ -173,18 +199,56 @@ public class LightControlActivityTest {
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);
         View mainView = activity.findViewById(R.id.light_layout);
+        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
 
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
         assertThat(loadingView.getVisibility(), equalTo(View.GONE));
+        assertThat(disconnectedView.getVisibility(), equalTo(View.GONE));
+    }
+
+    @Test
+    public void testShowsConnectingView() {
+        LightControlActivity activity = createAndGetActivity();
+
+        activity.showConnecting();
+
+        View loadingView = activity.findViewById(R.id.loading_layout);
+        View errorView = activity.findViewById(R.id.error_layout);
+        View mainView = activity.findViewById(R.id.light_layout);
+        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+
+        assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(errorView.getVisibility(), equalTo(View.GONE));
+        assertThat(loadingView.getVisibility(), equalTo(View.GONE));
+        assertThat(disconnectedView.getVisibility(), equalTo(View.VISIBLE));
+    }
+
+    @Test
+    public void testShowsDisconnectedView() {
+        LightControlActivity activity = createAndGetActivity();
+
+        activity.showDisconnected();
+
+        View loadingView = activity.findViewById(R.id.loading_layout);
+        View errorView = activity.findViewById(R.id.error_layout);
+        View mainView = activity.findViewById(R.id.light_layout);
+        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+
+        assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(errorView.getVisibility(), equalTo(View.GONE));
+        assertThat(loadingView.getVisibility(), equalTo(View.GONE));
+        assertThat(disconnectedView.getVisibility(), equalTo(View.VISIBLE));
     }
 
     @Test
     public void testRefreshShown() {
         LightControlActivity activity = createAndGetActivity();
 
-        //ToolbarActionBar actionBar = activity.getSupportActionBar();
-        //actionBar.
+        View refreshButton = activity.findViewById(R.id.action_refresh);
+
+        assertThat(refreshButton, not(nullValue()));
+        assertThat(refreshButton.getVisibility(), equalTo(View.VISIBLE));
     }
 
     @Test

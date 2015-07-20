@@ -284,7 +284,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
         // TODO onFinish is never called
 
-        new CountDownTimer(Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND, 0) {
+        new CountDownTimer(1000, 10) {//Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND, 0) {
 
             public void onTick(long millisUntilFinished) { }
 
