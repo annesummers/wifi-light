@@ -51,7 +51,7 @@ public class LightControlActivityTest {
     public void tearDown() throws Exception { }
 
     @Test
-    public void test_create_notNull() {
+    public void testCreateNotNull() {
         LightControlActivity activity = activityController
                 .create()
                 .postCreate(null)
@@ -63,7 +63,7 @@ public class LightControlActivityTest {
     }
 
     @Test
-    public void test_recreate_notNull() {
+    public void testRecreateNotNull() {
         Bundle savedState = new Bundle();
         activityController
                 .create()
