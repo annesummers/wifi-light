@@ -48,7 +48,6 @@ class LightControlImpl implements LightControl {
     // TODO locations
     // TODO selectors
     // TODO effects
-    // TODO connected can we find the light?
 
     @SuppressWarnings("FieldNotUsedInToString")
     private final EventBus eventBus;

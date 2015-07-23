@@ -43,17 +43,6 @@ public class ControlPresenterTest extends LightPresenterTestBase {
 
         // TODO how to test this as it has no feedback in the PResenter
 
-        /*Object successEvent = ((TestEventBus)eventBus).popLastMessage();
-        assertThat(successEvent, instanceOf(LightControl.FetchLightsSuccessEvent.class));
-
-        Object lightEvent;
-
-        int lightsFetched = ((LightControl.FetchLightsSuccessEvent)successEvent).getLightsFetchedCount();
-        for(int i = 0; i < lightsFetched; i++) {
-            lightEvent = ((TestEventBus)eventBus).popLastMessage();
-            assertThat(lightEvent, instanceOf(LightControl.FetchedLightEvent.class));
-        }*/
-
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LOADING));
 
         getPresenter().fetchLights(false);

@@ -94,10 +94,10 @@ public class LightControlActivityTest {
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
         Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 0);
-        assertThat(fragment, instanceOf(ColourFragment.class));
+        assertThat(fragment, instanceOf(WhiteFragment.class));
 
         Fragment fragment2 = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 1);
-        assertThat(fragment2, instanceOf(WhiteFragment.class));
+        assertThat(fragment2, instanceOf(ColourFragment.class));
     }
 
     @Test

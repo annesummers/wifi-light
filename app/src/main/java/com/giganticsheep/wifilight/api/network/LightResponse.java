@@ -20,8 +20,7 @@ import java.util.Locale;
  */
 @Parcel
 public class LightResponse extends Response
-                            implements Light {//,
-                            //Serializable {
+                            implements Light {
 
     public String uuid;
     public boolean connected;
@@ -47,7 +46,7 @@ public class LightResponse extends Response
         capabilities = new CapabilitiesData();
     }
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ", Locale.US);
+    public SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ", Locale.US);
 
     @Override
     public boolean isConnected() {

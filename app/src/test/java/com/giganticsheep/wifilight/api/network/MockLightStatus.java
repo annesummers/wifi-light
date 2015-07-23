@@ -8,25 +8,21 @@ import com.giganticsheep.wifilight.api.model.LightStatus;
  * Created by anne on 15/07/15. <p>
  * (*_*)
  */
-public class MockLightStatus implements LightStatus {
+public class MockLightStatus extends MockLightBase
+                             implements LightStatus {
+
+    private final LightControl.Status status;
 
     public MockLightStatus(final String id,
-                           final String name,
+                           final String label,
                            final LightControl.Status status) {
+        super(id, label);
+
+        this.status = status;
     }
 
     @Override
     public LightControl.Status getStatus() {
-        return null;
-    }
-
-    @Override
-    public String id() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
+        return status;
     }
 }

@@ -363,9 +363,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
             try {
                 switch(position) {
                     case 0:
-                         return fragmentFactory.createFragment(getString(R.string.fragment_name_light_colour));
+                         return fragmentFactory.createFragment(getString(R.string.fragment_name_light_white));
                     case 1:
-                        return fragmentFactory.createFragment(getString(R.string.fragment_name_light_white));
+                        return fragmentFactory.createFragment(getString(R.string.fragment_name_light_colour));
                     case 2:
                         return fragmentFactory.createFragment(getString(R.string.fragment_name_light_effects));
                     default:
@@ -383,9 +383,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         public CharSequence getPageTitle(int position) {
             switch(position) {
                 case 0:
-                    return getString(R.string.fragment_name_light_colour);
-                case 1:
                     return getString(R.string.fragment_name_light_white);
+                case 1:
+                    return getString(R.string.fragment_name_light_colour);
                 case 2:
                     return getString(R.string.fragment_name_light_effects);
                 default:

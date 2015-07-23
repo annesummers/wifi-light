@@ -55,14 +55,14 @@ public class ColourFragment extends LightFragmentBase {
     }
 
     @Override
-    protected void showLight(Light light) {
+    protected void showLight(@NonNull final Light light) {
         hueSeekBar.setProgress(light.getHue());
         saturationSeekBar.setProgress(light.getSaturation());
         valueSeekBar.setProgress(light.getBrightness());
     }
 
     @Override
-    protected void enableViews(boolean enable) {
+    protected void enableViews(final boolean enable) {
         //logger.debug("enableViews()");
 
         hueSeekBar.setEnabled(enable);

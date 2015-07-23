@@ -6,8 +6,6 @@ import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterTestBase;
 
-import org.jetbrains.annotations.NonNull;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 15/07/15. <p>

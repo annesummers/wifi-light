@@ -1,7 +1,6 @@
-package com.giganticsheep.wifilight;
+package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.ColourData;
@@ -14,32 +13,25 @@ import java.util.Date;
  * Created by anne on 13/07/15.
  * (*_*)
  */
-public class TestLightResponse implements Light {
-
-    private final String id;
-    public String label;
+public class MockLight extends MockLightBase
+                        implements Light {
 
     public boolean connected;
+
+    @NonNull
     public LightControl.Power power;
 
     public double brightness;
-    public ColourData color;
-
-    public TestLightResponse(String testId) {
-        this.id = testId;
-
-        this.color = new ColourData();
-    }
-
-    @Override
-    public String id() {
-        return id;
-    }
 
     @NonNull
-    @Override
-    public String getLabel() {
-        return label;
+    public ColourData color;
+
+    public MockLight(@NonNull final String id,
+                     @NonNull final String label) {
+        super(id, label);
+
+        this.color = new ColourData();
+        this.power = LightControl.Power.OFF;
     }
 
     @Override
@@ -73,10 +65,10 @@ public class TestLightResponse implements Light {
         return power;
     }
 
-    @Nullable
+    @NonNull
     @Override
     public Date getLastSeen() {
-        return null;
+        return new Date();
     }
 
     @Override
@@ -84,19 +76,19 @@ public class TestLightResponse implements Light {
         return 0;
     }
 
-    @Nullable
+    @NonNull
     @Override
     public String getProductName() {
-        return null;
+        return "Test";
     }
 
     @Override
     public boolean hasColour() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean hasVariableColourTemp() {
-        return false;
+        return true;
     }
 }

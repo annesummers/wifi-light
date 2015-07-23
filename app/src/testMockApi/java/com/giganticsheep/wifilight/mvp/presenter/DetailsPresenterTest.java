@@ -10,8 +10,8 @@ public class DetailsPresenterTest extends FragmentPresenterTestBase {
 
     @NonNull
     @Override
-    protected FragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector,
-                                                       ControlPresenter controlPresenter) {
+    protected FragmentPresenterBase doCreatePresenter(@NonNull final LightPresenterBase.Injector injector,
+                                                      @NonNull final ControlPresenter controlPresenter) {
         return new DetailsPresenter(injector, controlPresenter);
     }
 

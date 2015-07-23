@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.TestLightResponse;
+import com.giganticsheep.wifilight.MockLight;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
@@ -15,7 +15,7 @@ import com.giganticsheep.wifilight.ui.fragment.LightFragmentBase;
  */
 public class TestPresenter extends LightPresenterBase {
 
-    private final TestLightResponse light = new TestLightResponse(TestConstants.TEST_ID);
+    private final MockLight light = new MockLight(TestConstants.TEST_ID);
     private final LightFragmentBase fragment;
 
     /**

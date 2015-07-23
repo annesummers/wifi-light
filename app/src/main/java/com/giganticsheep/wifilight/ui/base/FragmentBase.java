@@ -33,8 +33,6 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
                                                         extends MvpViewStateFragment<V, P> {
 
-    // TODO argument stuff
-
     private static final int INVALID = -1;
 
     protected static final String FRAGMENT_ARGS_NAME = "name";
