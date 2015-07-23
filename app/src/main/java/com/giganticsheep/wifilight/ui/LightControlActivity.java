@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.ui;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -32,6 +31,9 @@ import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -281,17 +283,14 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         disconnectedLayout.setVisibility(View.VISIBLE);
-
-        // TODO onFinish is never called
-
-        new CountDownTimer(1000, 10) {//Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND, 0) {
-
-            public void onTick(long millisUntilFinished) { }
-
-            public void onFinish() {
+        
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
                 getPresenter().fetchLight(getPresenter().getLight().id());
             }
-        }.start();
+        }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);
     }
 
     @Override
