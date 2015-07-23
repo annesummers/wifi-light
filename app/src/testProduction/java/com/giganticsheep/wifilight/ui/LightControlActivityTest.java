@@ -11,7 +11,6 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.ui.fragment.ColourFragment;
 import com.giganticsheep.wifilight.ui.fragment.DetailsFragment;
-import com.giganticsheep.wifilight.ui.fragment.EffectsFragment;
 import com.giganticsheep.wifilight.ui.fragment.StatusFragment;
 import com.giganticsheep.wifilight.ui.fragment.WhiteFragment;
 
@@ -99,9 +98,6 @@ public class LightControlActivityTest {
 
         Fragment fragment2 = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 1);
         assertThat(fragment2, instanceOf(WhiteFragment.class));
-
-        Fragment fragment3 = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 2);
-        assertThat(fragment3, instanceOf(EffectsFragment.class));
     }
 
     @Test
