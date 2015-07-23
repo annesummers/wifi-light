@@ -12,20 +12,20 @@ import com.squareup.otto.Subscribe;
  *
  * (*_*)
  */
-public class LightColourPresenter extends LightFragmentPresenterBase {
+public class ColourPresenter extends BrightnessPresenterBase {
 
-    public LightColourPresenter(@NonNull final Injector injector,
-                                @NonNull final LightControlPresenter lightControlPresenter) {
-        super(injector, lightControlPresenter);
+    public ColourPresenter(@NonNull final Injector injector,
+                           @NonNull final ControlPresenter controlPresenter) {
+        super(injector, controlPresenter);
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<LightColourPresenter>(logger));
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<ColourPresenter>(logger));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<LightColourPresenter>(logger));
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<ColourPresenter>(logger));
     }
 
     /**
@@ -46,26 +46,6 @@ public class LightColourPresenter extends LightFragmentPresenterBase {
      */
     public void setSaturation(final int saturation, float duration) {
         subscribe(lightControl.setSaturation(saturation, duration), new SetLightSubscriber());
-    }
-
-    /**
-     * Sets the brightness of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
-     *
-     * @param brightness the brightness to set; an int between 0 and 100.
-     * @param duration the duration to fade into the new brightness.
-     */
-    public void setBrightness(final int brightness, float duration) {
-        subscribe(lightControl.setBrightness(brightness, duration), new SetLightSubscriber());
-    }
-
-    /**
-     * Sets the kelvin (warmth) of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
-     *
-     * @param kelvin the kelvin to set; an int between 2500 and 9000.
-     * @param duration the duration to fade into the new kelvin.
-     */
-    public void setKelvin(final int kelvin, float duration) {
-        subscribe(lightControl.setKelvin(kelvin, duration), new SetLightSubscriber());
     }
 
     /**

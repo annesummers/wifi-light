@@ -11,26 +11,26 @@ import com.squareup.otto.Subscribe;
  * Created by anne on 17/07/15. <p>
  * (*_*)
  */
-public class LightStatusPresenter extends LightFragmentPresenterBase {
+public class StatusPresenter extends FragmentPresenterBase {
     /**
      * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
      *
      * @param injector              an Injector used to inject this object into a Component that will
      *                              provide the injected class members.
-     * @param lightControlPresenter the Presenter that handles the details of the current Light.
+     * @param controlPresenter the Presenter that handles the details of the current Light.
      */
-    public LightStatusPresenter(@NonNull final Injector injector,
-                                @NonNull final LightControlPresenter lightControlPresenter) {
-        super(injector, lightControlPresenter);
+    public StatusPresenter(@NonNull final Injector injector,
+                           @NonNull final ControlPresenter controlPresenter) {
+        super(injector, controlPresenter);
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<LightStatusPresenter>(logger));
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<StatusPresenter>(logger));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<LightStatusPresenter>(logger));
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<StatusPresenter>(logger));
     }
 
     /**

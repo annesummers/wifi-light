@@ -20,12 +20,12 @@ import static org.hamcrest.core.IsNot.not;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public class LightControlPresenterTest extends LightPresenterTestBase {
+public class ControlPresenterTest extends LightPresenterTestBase {
 
     @NonNull
     @Override
     protected LightPresenterBase createPresenter(@NonNull final LightPresenterBase.Injector injector) {
-        return new LightControlPresenter(injector);
+        return new ControlPresenter(injector);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class LightControlPresenterTest extends LightPresenterTestBase {
     }
 
     @NonNull
-    private LightControlPresenter getPresenter() {
-        return (LightControlPresenter) presenter;
+    private ControlPresenter getPresenter() {
+        return (ControlPresenter) presenter;
     }
 }

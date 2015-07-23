@@ -15,10 +15,15 @@ import java.util.Date;
  * (*_*)
  */
 public class TestLightResponse implements Light {
+
     private final String id;
+    public String label;
+
+    public boolean connected;
+    public LightControl.Power power;
+
     public double brightness;
     public ColourData color;
-    public boolean connected;
 
     public TestLightResponse(String testId) {
         this.id = testId;
@@ -33,8 +38,8 @@ public class TestLightResponse implements Light {
 
     @NonNull
     @Override
-    public String getName() {
-        return "test";
+    public String getLabel() {
+        return label;
     }
 
     @Override
@@ -65,7 +70,7 @@ public class TestLightResponse implements Light {
     @NonNull
     @Override
     public LightControl.Power getPower() {
-        return LightControl.Power.OFF;
+        return power;
     }
 
     @Nullable

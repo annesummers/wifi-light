@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.mvp.presenter.LightEffectsPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.EffectsPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
@@ -14,23 +14,23 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
  * (*_*)
  */
 @FragmentArgsInherited
-public class LightEffectsFragment extends LightFragmentBase {
+public class EffectsFragment extends LightFragmentBase {
 
-    public LightEffectsFragment() {
+    public EffectsFragment() {
         super();
     }
 
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightEffectsPresenter(getLightControlActivity().getComponent(),
+        return new EffectsPresenter(getLightControlActivity().getComponent(),
                                          getLightControlActivity().getPresenter());
     }
 
     @NonNull
     @Override
-    public LightEffectsPresenter getPresenter() {
-        return (LightEffectsPresenter) super.getPresenter();
+    public EffectsPresenter getPresenter() {
+        return (EffectsPresenter) super.getPresenter();
     }
 
     @Override

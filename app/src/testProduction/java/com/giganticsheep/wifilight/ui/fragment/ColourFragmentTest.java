@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 19)
-public class LightColourFragmentTest extends LightFragmentTestBase {
+public class ColourFragmentTest extends LightFragmentTestBase {
 
     @NonNull
     @Override
@@ -32,17 +32,15 @@ public class LightColourFragmentTest extends LightFragmentTestBase {
     }
 
     @Test
-    public void testSetLightDetails() throws Exception {
+    public void testSetLightDetails() {
         super.testSetLightDetails();
 
         SeekBar brightnessSeekbar = (SeekBar) fragment.getView().findViewById(R.id.brightness_seekbar);
         SeekBar hueSeekbar = (SeekBar) fragment.getView().findViewById(R.id.hue_seekbar);
-        SeekBar kelvinSeekbar = (SeekBar) fragment.getView().findViewById(R.id.kelvin_seekbar);
         SeekBar saturationSeekbar = (SeekBar) fragment.getView().findViewById(R.id.saturation_seekbar);
 
         assertThat(brightnessSeekbar.getProgress(), equalTo(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE)));
         assertThat(hueSeekbar.getProgress(), equalTo(LightConstants.convertHue(TestConstants.TEST_HUE_DOUBLE)));
-        assertThat(kelvinSeekbar.getProgress(), equalTo(TestConstants.TEST_KELVIN - LightConstants.KELVIN_BASE));
         assertThat(saturationSeekbar.getProgress(), equalTo(LightConstants.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE)));
     }
 }

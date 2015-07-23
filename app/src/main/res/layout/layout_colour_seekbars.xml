@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/default_margin"
     grid:columnCount="@integer/light_sliders_column_count"
-    grid:rowCount="@integer/light_sliders_row_count"
+    grid:rowCount="@integer/colour_sliders_row_count"
     tools:showIn="@layout/fragment_colour">
 
     <TextView
@@ -66,23 +66,4 @@
         grid:layout_columnWeight="1"
         grid:layout_gravity="center_vertical"
         android:max="@integer/light_slider_brightness_max" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        grid:layout_row="3"
-        grid:layout_rowSpan="1"
-        grid:layout_column="0"
-        grid:layout_columnSpan="1"
-        android:text="@string/label_light_kelvin"
-        style="@style/Theme.WifiLight.TextView.Label1" />
-
-    <SeekBar
-        android:id="@+id/kelvin_seekbar"
-        grid:layout_row="3"
-        grid:layout_rowSpan="1"
-        grid:layout_column="1"
-        grid:layout_columnSpan="1"
-        grid:layout_columnWeight="1"
-        grid:layout_gravity="center_vertical"
-        android:max="@integer/light_slider_kelvin_max" />
 </android.support.v7.widget.GridLayout>

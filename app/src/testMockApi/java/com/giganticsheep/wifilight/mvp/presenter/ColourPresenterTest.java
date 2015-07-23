@@ -16,12 +16,12 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 30/06/15.
  * (*_*)
  */
-public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
+public class ColourPresenterTest extends FragmentPresenterTestBase {
 
     @NonNull
     @Override
-    protected LightFragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, LightControlPresenter lightControlPresenter) {
-        return new LightColourPresenter(injector, lightControlPresenter);
+    protected FragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, ControlPresenter controlPresenter) {
+        return new ColourPresenter(injector, controlPresenter);
     }
 
     @Test
@@ -325,7 +325,7 @@ public class LightColourPresenterTest extends LightFragmentPresenterTestBase {
     }
 
     @NonNull
-    protected LightColourPresenter getPresenter() {
-        return (LightColourPresenter) presenter;
+    protected ColourPresenter getPresenter() {
+        return (ColourPresenter) presenter;
     }
 }

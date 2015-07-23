@@ -3,10 +3,10 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.TestLightResponse;
+import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.fragment.LightFragmentBase;
-import com.giganticsheep.wifilight.util.Constants;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -15,7 +15,7 @@ import com.giganticsheep.wifilight.util.Constants;
  */
 public class TestPresenter extends LightPresenterBase {
 
-    private final TestLightResponse light = new TestLightResponse(Constants.TEST_ID);
+    private final TestLightResponse light = new TestLightResponse(TestConstants.TEST_ID);
     private final LightFragmentBase fragment;
 
     /**
@@ -28,6 +28,11 @@ public class TestPresenter extends LightPresenterBase {
         super(injector);
 
         this.fragment = fragment;
+
+        light.label = TestConstants.TEST_LABEL;
+
+        light.connected = TestConstants.TEST_CONNECTED.equals(TestConstants.TEST_CONNECTED_STRING) ? true : false;
+        light.power = TestConstants.TEST_POWER ? LightControl.Power.ON : LightControl.Power.OFF;
 
         light.brightness = TestConstants.TEST_BRIGHTNESS_DOUBLE;
         light.color.hue = TestConstants.TEST_HUE_DOUBLE;

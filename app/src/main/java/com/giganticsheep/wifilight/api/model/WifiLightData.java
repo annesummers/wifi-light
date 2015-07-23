@@ -15,5 +15,5 @@ public interface WifiLightData {
      *
      * @return the name of this data object
      */
-    String getName();
+    String getLabel();
 }

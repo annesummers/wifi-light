@@ -26,7 +26,7 @@ class Response implements/* Serializable,*/ WifiLightData {
     }
 
     @Override
-    public final String getName() {
+    public final String getLabel() {
         return label;
     }
 

@@ -5,10 +5,11 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.fragment.LightColourFragmentBuilder;
-import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragmentBuilder;
-import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragmentBuilder;
-import com.giganticsheep.wifilight.ui.fragment.LightStatusFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.ColourFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.DetailsFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.EffectsFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.StatusFragmentBuilder;
+import com.giganticsheep.wifilight.ui.fragment.WhiteFragmentBuilder;
 
 import rx.Observable;
 
@@ -50,22 +51,24 @@ public class FragmentFactory {
      */
     @NonNull
     public final FragmentBase createFragment(@NonNull final String name) throws Exception {
-        if(application != null) {
-            if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
-                return new LightColourFragmentBuilder(name).build();
-            }
+        if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
+            return new ColourFragmentBuilder(name).build();
+        }
 
-            if (name.equals(application.getString(R.string.fragment_name_light_effects))) {
-                return new LightEffectsFragmentBuilder(name).build();
-            }
+        if (name.equals(application.getString(R.string.fragment_name_light_white))) {
+            return new WhiteFragmentBuilder(name).build();
+        }
 
-            if (name.equals(application.getString(R.string.fragment_name_light_details))) {
-                return new LightDetailsFragmentBuilder(name).build();
-            }
+        if (name.equals(application.getString(R.string.fragment_name_light_effects))) {
+            return new EffectsFragmentBuilder(name).build();
+        }
 
-            if (name.equals(application.getString(R.string.fragment_name_light_status))) {
-                return new LightStatusFragmentBuilder(name).build();
-            }
+        if (name.equals(application.getString(R.string.fragment_name_light_details))) {
+            return new DetailsFragmentBuilder(name).build();
+        }
+
+        if (name.equals(application.getString(R.string.fragment_name_light_status))) {
+            return new StatusFragmentBuilder(name).build();
         }
 
         throw new Exception("Fragment does not exist");

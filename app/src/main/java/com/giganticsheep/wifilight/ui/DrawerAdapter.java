@@ -173,7 +173,7 @@ class DrawerAdapter extends BaseAdapter {
             this.viewData = viewData;
 
             if(viewData.getLight() != null) {
-                lightNameTextView.setText(viewData.getLight().getName());
+                lightNameTextView.setText(viewData.getLight().getLabel());
                 lightStatusImageView.setImageResource(viewData.getLight().isConnected() ?
                         R.drawable.ic_action_tick :
                         R.drawable.ic_action_warning);

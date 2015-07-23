@@ -19,7 +19,7 @@ public class GroupData implements Group {
     }
 
     @Override
-    public String getName() {
+    public String getLabel() {
         return name;
     }
 }

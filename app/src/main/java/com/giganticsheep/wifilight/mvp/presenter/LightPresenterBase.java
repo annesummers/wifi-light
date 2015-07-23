@@ -70,7 +70,6 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * @param light the new Light.
      */
     public void handleLightChanged(@NonNull final Light light) {
-       // TODO I don't like this being public, how to test fragment otherwise?
         logger.debug("handleLightChanged()");
         if (isViewAttached()) {
             if (light.isConnected()) {
@@ -140,7 +139,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         void inject(final LightPresenterBase lightPresenter);
     }
 
-    protected class SetLightSubscriber extends Subscriber<LightStatus>  {
+    public class SetLightSubscriber extends Subscriber<LightStatus>  {
 
         @Override
         public void onCompleted() { }

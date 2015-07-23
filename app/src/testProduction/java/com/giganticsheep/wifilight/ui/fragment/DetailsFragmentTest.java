@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 19)
-public class LightDetailsFragmentTest extends LightFragmentTestBase {
+public class DetailsFragmentTest extends LightFragmentTestBase {
 
     @NonNull
     @Override
@@ -32,13 +32,19 @@ public class LightDetailsFragmentTest extends LightFragmentTestBase {
     }
 
     @Test
-    public void testSetLightDetails() throws Exception {
+    public void testSetLightDetails() {
         super.testSetLightDetails();
+
+        TextView idTextView = (TextView) fragment.getView().findViewById(R.id.id_textview);
+        TextView labelTextView = (TextView) fragment.getView().findViewById(R.id.name_textview);
 
         TextView brightnessTextView = (TextView) fragment.getView().findViewById(R.id.brightness_textview);
         TextView hueTextView = (TextView) fragment.getView().findViewById(R.id.hue_textview);
         TextView kelvinTextView = (TextView) fragment.getView().findViewById(R.id.kelvin_textview);
         TextView saturationTextView = (TextView) fragment.getView().findViewById(R.id.saturation_textview);
+
+        assertThat((String)(idTextView.getText()), equalTo(TestConstants.TEST_ID));
+        assertThat((String)(labelTextView.getText()), equalTo(TestConstants.TEST_LABEL));
 
         assertThat((String)(brightnessTextView.getText()), equalTo(Integer.toString(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE))));
         assertThat((String)(hueTextView.getText()), equalTo(Integer.toString(LightConstants.convertHue(TestConstants.TEST_HUE_DOUBLE))));

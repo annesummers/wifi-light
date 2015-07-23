@@ -21,6 +21,8 @@ import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 public abstract class LightFragmentBase extends FragmentBase<LightView, LightPresenterBase>
                                     implements LightView {
 
+    protected OnLightSeekBarChangeListener seekBarChangeListener;
+
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.mvp.presenter.LightDetailsPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.DetailsPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
@@ -18,9 +18,9 @@ import butterknife.InjectView;
  */
 
 @FragmentArgsInherited
-public class LightDetailsFragment extends LightFragmentBase {
+public class DetailsFragment extends LightFragmentBase {
 
-    public LightDetailsFragment() {
+    public DetailsFragment() {
         super();
     }
 
@@ -39,7 +39,7 @@ public class LightDetailsFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightDetailsPresenter(getLightControlActivity().getComponent(),
+        return new DetailsPresenter(getLightControlActivity().getComponent(),
                                          getLightControlActivity().getPresenter());
     }
 
@@ -48,7 +48,7 @@ public class LightDetailsFragment extends LightFragmentBase {
 
     @Override
     protected void showLight(Light light) {
-        nameTextView.setText(light.getName());
+        nameTextView.setText(light.getLabel());
         idTextView.setText(light.id());
         hueTextView.setText(Integer.toString(light.getHue()));
         saturationTextView.setText(Integer.toString(light.getSaturation()));

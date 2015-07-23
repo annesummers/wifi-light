@@ -12,7 +12,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
-import com.giganticsheep.wifilight.mvp.presenter.LightStatusPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.StatusPresenter;
 import com.giganticsheep.wifilight.ui.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
@@ -25,25 +25,25 @@ import butterknife.OnCheckedChanged;
  * (*_*)
  */
 @FragmentArgsInherited
-public class LightStatusFragment extends LightFragmentBase {
+public class StatusFragment extends LightFragmentBase {
 
     @InjectView(R.id.power_toggle) ToggleButton powerToggle;
     @InjectView(R.id.status_textview) TextView statusTextView;
 
-    public LightStatusFragment() {
+    public StatusFragment() {
         super();
     }
 
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new LightStatusPresenter(getLightControlActivity().getComponent(),
+        return new StatusPresenter(getLightControlActivity().getComponent(),
                 getLightControlActivity().getPresenter());
     }
 
     @NonNull
-    public LightStatusPresenter getLightStatusPresenter() {
-        return (LightStatusPresenter) super.getPresenter();
+    public StatusPresenter getLightStatusPresenter() {
+        return (StatusPresenter) super.getPresenter();
     }
 
     @Override

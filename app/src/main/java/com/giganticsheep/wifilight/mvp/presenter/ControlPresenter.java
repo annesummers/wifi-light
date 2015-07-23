@@ -15,21 +15,21 @@ import rx.Subscriber;
  *
  * (*_*)
  */
-public class LightControlPresenter extends LightPresenterBase {
+public class ControlPresenter extends LightPresenterBase {
 
     private Light light;
 
-    public LightControlPresenter(@NonNull final Injector injector) {
+    public ControlPresenter(@NonNull final Injector injector) {
         super(injector);
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<LightControlPresenter>(logger));
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>(logger));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<LightControlPresenter>(logger));
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>(logger));
     }
 
     /**
@@ -58,7 +58,7 @@ public class LightControlPresenter extends LightPresenterBase {
             @Override
             public void onNext(Light light) {
                 if(getLight() != null && light.id().equals(getLight().id())) {
-                    LightControlPresenter.this.light = light;
+                    ControlPresenter.this.light = light;
 
                     subscribe(eventBus.postMessage(new LightChangedEvent(light)));
                 }
@@ -88,7 +88,7 @@ public class LightControlPresenter extends LightPresenterBase {
 
             @Override
             public void onNext(Light light) {
-                LightControlPresenter.this.light = light;
+                ControlPresenter.this.light = light;
             }
         });
     }

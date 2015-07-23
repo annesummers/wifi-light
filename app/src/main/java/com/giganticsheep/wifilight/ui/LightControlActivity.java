@@ -22,8 +22,9 @@ import android.widget.ListView;
 import com.avast.android.dialogs.fragment.SimpleDialogFragment;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
-import com.giganticsheep.wifilight.mvp.presenter.LightControlPresenter;
+import com.giganticsheep.wifilight.mvp.presenter.ControlPresenter;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.mvp.view.LightViewState;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
@@ -47,7 +48,7 @@ import icepick.Icicle;
  *
  * (*_*)
  */
-public class LightControlActivity extends ActivityBase<LightView, LightControlPresenter>
+public class LightControlActivity extends ActivityBase<LightView, ControlPresenter>
                             implements LightView,
                             HasComponent<LightControlActivityComponent> {
 
@@ -226,8 +227,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     @NonNull
     @Override
-    public LightControlPresenter createPresenter() {
-        return new LightControlPresenter(getComponent());
+    public ControlPresenter createPresenter() {
+        return new ControlPresenter(getComponent());
     }
 
     @NonNull
@@ -283,12 +284,16 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         disconnectedLayout.setVisibility(View.VISIBLE);
-        
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                getPresenter().fetchLight(getPresenter().getLight().id());
+                Light light = getPresenter().getLight();
+
+                if(light != null) {
+                    getPresenter().fetchLight(getPresenter().getLight().id());
+                }
             }
         }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);
     }
@@ -329,7 +334,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {
-        final int PAGE_COUNT = 2;
+        final int PAGE_COUNT = 3;
 
         public LightFragmentPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -353,8 +358,10 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             try {
                 switch(position) {
                     case 0:
-                        return fragmentFactory.createFragment(getString(R.string.fragment_name_light_colour));
+                         return fragmentFactory.createFragment(getString(R.string.fragment_name_light_colour));
                     case 1:
+                        return fragmentFactory.createFragment(getString(R.string.fragment_name_light_white));
+                    case 2:
                         return fragmentFactory.createFragment(getString(R.string.fragment_name_light_effects));
                     default:
                         return null;
@@ -373,6 +380,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                 case 0:
                     return getString(R.string.fragment_name_light_colour);
                 case 1:
+                    return getString(R.string.fragment_name_light_white);
+                case 2:
                     return getString(R.string.fragment_name_light_effects);
                 default:
                     return null;

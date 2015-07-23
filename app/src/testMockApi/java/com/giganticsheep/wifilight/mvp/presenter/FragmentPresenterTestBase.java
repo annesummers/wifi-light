@@ -21,17 +21,17 @@ import static org.hamcrest.core.IsNot.not;
  *
  * (*_*)
  */
-public abstract class LightFragmentPresenterTestBase extends LightPresenterTestBase {
+public abstract class FragmentPresenterTestBase extends LightPresenterTestBase {
 
-    protected LightControlPresenter lightControlPresenter;
+    protected ControlPresenter controlPresenter;
 
     @NonNull
     @Override
     protected final LightPresenterBase createPresenter(@NonNull final LightPresenterBase.Injector injector) {
-        lightControlPresenter = new LightControlPresenter(injector);
-        lightControlPresenter.attachView(new TestLightView(this, baseLogger));
+        controlPresenter = new ControlPresenter(injector);
+        controlPresenter.attachView(new TestLightView(this, baseLogger));
 
-        return doCreatePresenter(injector, lightControlPresenter);
+        return doCreatePresenter(injector, controlPresenter);
     }
 
     @Test
@@ -44,7 +44,7 @@ public abstract class LightFragmentPresenterTestBase extends LightPresenterTestB
     @Test
     public void testGetCurrentLightWithLight() {
         setTestStatus(LightControl.Status.OK);
-        lightControlPresenter.fetchLight(Constants.TEST_ID);
+        controlPresenter.fetchLight(Constants.TEST_ID);
 
         Light light = getPresenter().getLight();
 
@@ -91,9 +91,9 @@ public abstract class LightFragmentPresenterTestBase extends LightPresenterTestB
     }
 
     @NonNull
-    protected LightFragmentPresenterBase getPresenter() {
-        return (LightFragmentPresenterBase) presenter;
+    protected FragmentPresenterBase getPresenter() {
+        return (FragmentPresenterBase) presenter;
     }
 
-    protected abstract LightFragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, LightControlPresenter lightControlPresenter);
+    protected abstract FragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, ControlPresenter controlPresenter);
 }

@@ -70,7 +70,7 @@ public class MockLightControlImpl implements LightControl {
 
                         StatusResponse statusResponse = new StatusResponse();
                         statusResponse.id = light.id();
-                        statusResponse.label = light.getName();
+                        statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
                         subscriber.onNext(statusResponse);
@@ -100,7 +100,7 @@ public class MockLightControlImpl implements LightControl {
 
                         StatusResponse statusResponse = new StatusResponse();
                         statusResponse.id = light.id();
-                        statusResponse.label = light.getName();
+                        statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
                         subscriber.onNext(statusResponse);
@@ -130,7 +130,7 @@ public class MockLightControlImpl implements LightControl {
 
                         StatusResponse statusResponse = new StatusResponse();
                         statusResponse.id = light.id();
-                        statusResponse.label = light.getName();
+                        statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
                         subscriber.onNext(statusResponse);
@@ -160,7 +160,7 @@ public class MockLightControlImpl implements LightControl {
 
                         StatusResponse statusResponse = new StatusResponse();
                         statusResponse.id = light.id();
-                        statusResponse.label = light.getName();
+                        statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
                         subscriber.onNext(statusResponse);
@@ -190,7 +190,7 @@ public class MockLightControlImpl implements LightControl {
 
                         StatusResponse statusResponse = new StatusResponse();
                         statusResponse.id = light.id();
-                        statusResponse.label = light.getName();
+                        statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
                         subscriber.onNext(statusResponse);
@@ -220,7 +220,7 @@ public class MockLightControlImpl implements LightControl {
 
                         StatusResponse statusResponse = new StatusResponse();
                         statusResponse.id = light.id();
-                        statusResponse.label = light.getName();
+                        statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
                         subscriber.onNext(statusResponse);
@@ -303,7 +303,7 @@ public class MockLightControlImpl implements LightControl {
                 for (LightResponse light : lights) {
                     StatusResponse statusResponse = new StatusResponse();
                     statusResponse.id = light.id();
-                    statusResponse.label = light.getName();
+                    statusResponse.label = light.getLabel();
                     statusResponse.status = Status.OFF.getStatusString();
 
                     subscriber.onNext(statusResponse);

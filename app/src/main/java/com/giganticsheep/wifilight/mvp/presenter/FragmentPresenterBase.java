@@ -11,27 +11,27 @@ import rx.Subscriber;
  * Created by anne on 14/07/15.
  * (*_*)
  */
-public abstract class LightFragmentPresenterBase extends LightPresenterBase {
+public abstract class FragmentPresenterBase extends LightPresenterBase {
 
-    private final LightControlPresenter lightControlPresenter;
+    private final ControlPresenter controlPresenter;
 
     /**
      * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
      *
      * @param injector an Injector used to inject this object into a Component that will
      *                 provide the injected class members.
-     * @param lightControlPresenter the Presenter that handles the details of the current Light.
+     * @param controlPresenter the Presenter that handles the details of the current Light.
      */
-    protected LightFragmentPresenterBase(@NonNull final Injector injector,
-                                         @NonNull final LightControlPresenter lightControlPresenter) {
+    protected FragmentPresenterBase(@NonNull final Injector injector,
+                                    @NonNull final ControlPresenter controlPresenter) {
         super(injector);
 
-        this.lightControlPresenter = lightControlPresenter;
+        this.controlPresenter = controlPresenter;
     }
 
     @Nullable
     public Light getLight() {
-        return lightControlPresenter.getLight();
+        return controlPresenter.getLight();
     }
 
     @Override

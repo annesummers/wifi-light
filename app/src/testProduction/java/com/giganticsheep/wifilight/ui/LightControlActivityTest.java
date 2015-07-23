@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.ui.fragment.LightColourFragment;
-import com.giganticsheep.wifilight.ui.fragment.LightDetailsFragment;
-import com.giganticsheep.wifilight.ui.fragment.LightEffectsFragment;
-import com.giganticsheep.wifilight.ui.fragment.LightStatusFragment;
+import com.giganticsheep.wifilight.ui.fragment.ColourFragment;
+import com.giganticsheep.wifilight.ui.fragment.DetailsFragment;
+import com.giganticsheep.wifilight.ui.fragment.EffectsFragment;
+import com.giganticsheep.wifilight.ui.fragment.StatusFragment;
+import com.giganticsheep.wifilight.ui.fragment.WhiteFragment;
 
 import org.junit.After;
 import org.junit.Before;
@@ -94,10 +95,13 @@ public class LightControlActivityTest {
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
         Fragment fragment = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 0);
-        assertThat(fragment, instanceOf(LightColourFragment.class));
+        assertThat(fragment, instanceOf(ColourFragment.class));
 
         Fragment fragment2 = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 1);
-        assertThat(fragment2, instanceOf(LightEffectsFragment.class));
+        assertThat(fragment2, instanceOf(WhiteFragment.class));
+
+        Fragment fragment3 = fragmentManager.findFragmentByTag("android:switcher:" + R.id.pager + ":" + 2);
+        assertThat(fragment3, instanceOf(EffectsFragment.class));
     }
 
     @Test
@@ -144,7 +148,7 @@ public class LightControlActivityTest {
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
-        assertThat(fragmentManager.findFragmentById(R.id.container), instanceOf(LightStatusFragment.class));
+        assertThat(fragmentManager.findFragmentById(R.id.container), instanceOf(StatusFragment.class));
     }
 
     @Test
@@ -153,7 +157,7 @@ public class LightControlActivityTest {
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
-        assertThat(fragmentManager.findFragmentById(R.id.container2), instanceOf(LightDetailsFragment.class));
+        assertThat(fragmentManager.findFragmentById(R.id.container2), instanceOf(DetailsFragment.class));
     }
 
     @Test
