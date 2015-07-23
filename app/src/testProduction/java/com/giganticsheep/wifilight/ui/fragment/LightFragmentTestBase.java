@@ -6,7 +6,6 @@ import com.giganticsheep.wifilight.ui.LightControlActivity;
 import com.giganticsheep.wifilight.ui.UITestBase;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.robolectric.util.SupportFragmentTestUtil;
 
 import static org.hamcrest.core.IsNot.not;
@@ -36,7 +35,6 @@ public abstract class LightFragmentTestBase extends UITestBase {
         fragment.setPresenter(presenter);
     }
 
-    @Test
     public void testSetLightDetails() {
         assertThat(fragment.getView(), not(nullValue()));
 
