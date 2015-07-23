@@ -83,7 +83,7 @@ class DrawerAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        ViewData data = null;
+        ViewData data;
 
         if (dataList.size() - 1 < position) {
             data = new ViewData(position);
@@ -110,7 +110,7 @@ class DrawerAdapter extends BaseAdapter {
 
         notifyDataSetChanged();
 
-        // TODO this shouldn't be here or it will be called everytime all the lights are fetched
+        // TODO this shouldn't be here or it will be called every time all the lights are fetched
         ((LightControlActivity)activity).drawerListView.performItemClick(null, 0, 0L);
     }
 

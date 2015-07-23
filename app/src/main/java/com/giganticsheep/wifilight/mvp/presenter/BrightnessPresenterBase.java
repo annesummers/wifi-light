@@ -9,8 +9,8 @@ import android.support.annotation.NonNull;
  */
 public abstract class BrightnessPresenterBase extends FragmentPresenterBase {
 
-    public BrightnessPresenterBase(@NonNull final Injector injector,
-                                   @NonNull final ControlPresenter controlPresenter) {
+    protected BrightnessPresenterBase(@NonNull final Injector injector,
+                            @NonNull final ControlPresenter controlPresenter) {
         super(injector, controlPresenter);
     }
 

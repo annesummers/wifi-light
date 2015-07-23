@@ -8,6 +8,7 @@ import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.util.Constants;
@@ -35,7 +36,8 @@ public class MockLightControlImpl implements LightControl {
     private final Scheduler ioScheduler;
     private final Scheduler uiScheduler;
 
-    private List<LightResponse> lights = new ArrayList();
+    private final List<LightResponse> lights = new ArrayList<>();
+    private final Logger logger;
 
     private Status status;
     private long timeout = 0L;
@@ -47,6 +49,8 @@ public class MockLightControlImpl implements LightControl {
         this.eventBus = eventBus;
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
+
+        this.logger = new Logger(getClass().getName(), baseLogger);
 
         LightResponse light = new LightResponse(Constants.TEST_ID);
         light.label = Constants.TEST_NAME;

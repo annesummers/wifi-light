@@ -33,7 +33,7 @@ public class WhiteFragment extends LightFragmentBase {
     }
 
     @NonNull
-    public WhitePresenter getLightWhitePresenter() {
+    private WhitePresenter getLightWhitePresenter() {
         return (WhitePresenter) super.getPresenter();
     }
 

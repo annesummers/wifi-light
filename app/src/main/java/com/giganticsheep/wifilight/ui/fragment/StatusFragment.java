@@ -42,7 +42,7 @@ public class StatusFragment extends LightFragmentBase {
     }
 
     @NonNull
-    public StatusPresenter getLightStatusPresenter() {
+    private StatusPresenter getLightStatusPresenter() {
         return (StatusPresenter) super.getPresenter();
     }
 

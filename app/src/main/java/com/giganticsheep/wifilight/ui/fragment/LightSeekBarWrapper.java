@@ -8,7 +8,7 @@ import android.widget.SeekBar;
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-public interface LightSeekBarWrapper {
+interface LightSeekBarWrapper {
 
     void setLightValue(@NonNull final SeekBar seekBar,
                                 final int value);

@@ -7,14 +7,14 @@ import com.google.gson.annotations.SerializedName;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-class Response implements/* Serializable,*/ WifiLightData {
+class Response implements WifiLightData {
     @SerializedName("cod")
     public int httpCode;
 
     public String id;
     public String label;
 
-    public Response(String id) {
+    protected Response(String id) {
         this.id = id;
     }
 

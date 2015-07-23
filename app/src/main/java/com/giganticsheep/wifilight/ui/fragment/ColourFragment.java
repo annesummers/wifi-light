@@ -38,7 +38,7 @@ public class ColourFragment extends LightFragmentBase {
     }
 
     @NonNull
-    public ColourPresenter getLightColourPresenter() {
+    private ColourPresenter getLightColourPresenter() {
         return (ColourPresenter) super.getPresenter();
     }
 

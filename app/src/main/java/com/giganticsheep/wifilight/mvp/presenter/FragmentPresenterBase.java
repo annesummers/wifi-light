@@ -23,7 +23,7 @@ public abstract class FragmentPresenterBase extends LightPresenterBase {
      * @param controlPresenter the Presenter that handles the details of the current Light.
      */
     protected FragmentPresenterBase(@NonNull final Injector injector,
-                                    @NonNull final ControlPresenter controlPresenter) {
+                          @NonNull final ControlPresenter controlPresenter) {
         super(injector);
 
         this.controlPresenter = controlPresenter;

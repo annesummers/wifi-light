@@ -164,7 +164,7 @@ class LightControlImpl implements LightControl {
                     @NonNull
                     @Override
                     public Observable<LightStatus> call(@NonNull final List<StatusResponse> LightStatuses) {
-                        List<Observable<LightStatus>> observables = new ArrayList(LightStatuses.size());
+                        List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
                         for (LightStatus LightStatus : LightStatuses) {
                             logger.debug(LightStatus.toString());
@@ -206,13 +206,13 @@ class LightControlImpl implements LightControl {
                         @NonNull
                         @Override
                         public Observable<Light> call(@NonNull final List<LightResponse> lightResponses) {
-                            List<Observable<Light>> observables = new ArrayList();
+                            List<Observable<Light>> observables = new ArrayList<>();
 
                             for (Light lightResponse : lightResponses) {
                                 logger.debug(lightResponse.toString());
 
                                 eventBus.postMessage(new FetchedLightEvent(lightResponse))
-                                        .subscribe(new ErrorSubscriber(logger));
+                                        .subscribe(new ErrorSubscriber<>(logger));
 
                                 observables.add(Observable.just(lightResponse));
                                 lightsCount[0]++;
@@ -225,7 +225,7 @@ class LightControlImpl implements LightControl {
                         @Override
                         public void call() {
                             eventBus.postMessage(new FetchLightsSuccessEvent(lightsCount[0]))
-                                    .subscribe(new ErrorSubscriber(logger));
+                                    .subscribe(new ErrorSubscriber<>(logger));
                         }
                     })
                     .subscribeOn(ioScheduler)

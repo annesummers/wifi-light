@@ -66,7 +66,8 @@ public class LightViewState implements RestoreableViewState<LightView> {
     }
 
     @Override
-    public void apply(@NonNull LightView lightView, boolean retained) {
+    public void apply(@NonNull final LightView lightView,
+                      final boolean retained) {
         switch (state) {
             case STATE_SHOW_LOADING:
                 lightView.showLoading();

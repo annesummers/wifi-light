@@ -17,7 +17,7 @@ import rx.Subscriber;
  */
 public class TestEventBus implements EventBus {
 
-    List<Object> listeners = new ArrayList();
+    private final List<Object> listeners = new ArrayList<>();
 
     private final Bus eventBus = new Bus();
 
