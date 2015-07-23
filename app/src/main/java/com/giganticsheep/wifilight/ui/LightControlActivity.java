@@ -292,7 +292,12 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
                 Light light = getPresenter().getLight();
 
                 if(light != null) {
-                    getPresenter().fetchLight(getPresenter().getLight().id());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getPresenter().fetchLight(getPresenter().getLight().id());
+                        }
+                    });
                 }
             }
         }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);
