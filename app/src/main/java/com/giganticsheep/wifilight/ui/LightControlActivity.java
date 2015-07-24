@@ -32,6 +32,8 @@ import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -172,6 +174,16 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
             case R.id.action_refresh:
                 getPresenter().fetchLights(true);
+                return true;
+
+            case R.id.action_about:
+                new LibsBuilder()
+                        //Pass the fields of your application to the lib so it can find all external lib information
+                        .withFields(R.string.class.getFields())
+                                //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT)
+                                //start the activity
+                        .start(this);
                 return true;
 
             default:

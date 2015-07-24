@@ -103,6 +103,11 @@ dependencies {
 
     compile 'com.avast:android-styled-dialogs:2.2.0'
 
+    // about library
+    compile('com.mikepenz:aboutlibraries:5.0.9@aar') {
+        transitive = true
+    }
+
     testCompile 'junit:junit:4.12'
     testCompile('org.robolectric:robolectric:3.0-rc3') {
         exclude group: 'commons-logging', module: 'commons-logging'
