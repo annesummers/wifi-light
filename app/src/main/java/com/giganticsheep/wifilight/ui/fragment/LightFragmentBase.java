@@ -12,6 +12,9 @@ import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
+import hugo.weaving.DebugLog;
+import timber.log.Timber;
+
 /**
  * Created by anne on 25/06/15.
  * (*_*)
@@ -74,19 +77,17 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         return (LightViewState) super.getViewState();
     }
 
+    @DebugLog
     @Override
     public final void showLoading() {
-        logger.debug("showLoading()");
-
         getViewState().setShowLoading();
 
         enableViews(false);
     }
 
+    @DebugLog
     @Override
     public void showConnected() {
-        logger.debug("showConnected()");
-
         getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnected();
 
@@ -94,10 +95,9 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         enableViews(true);
     }
 
+    @DebugLog
     @Override
     public void showConnecting() {
-        logger.debug("showConnecting()");
-
         getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnecting();
 
@@ -105,10 +105,9 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         enableViews(false);
     }
 
+    @DebugLog
     @Override
     public void showDisconnected() {
-        logger.debug("showDisconnected()");
-
         getViewState().setData(getPresenter().getLight());
         getViewState().setShowDisconnected();
 
@@ -116,10 +115,9 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         enableViews(false);
     }
 
+    @DebugLog
     @Override
     public void showError() {
-        logger.debug("showError()");
-
         getViewState().setShowError();
     }
 
@@ -132,7 +130,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         Light light = getPresenter().getLight();
 
         if(light == null) {
-            logger.error("showLight() light is null");
+            Timber.e("showLight() light is null");
             return;
         }
 

@@ -22,14 +22,14 @@ public class ControlPresenter extends LightPresenterBase {
     public ControlPresenter(@NonNull final Injector injector) {
         super(injector);
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>(logger));
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>(logger));
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>());
     }
 
     /**

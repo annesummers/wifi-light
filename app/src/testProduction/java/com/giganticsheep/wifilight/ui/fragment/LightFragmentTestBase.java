@@ -8,6 +8,8 @@ import com.giganticsheep.wifilight.ui.UITestBase;
 import org.junit.Before;
 import org.robolectric.util.SupportFragmentTestUtil;
 
+import timber.log.Timber;
+
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -41,7 +43,7 @@ public abstract class LightFragmentTestBase extends UITestBase {
         try {
             fragment.showLight(presenter.getLight());
         } catch(Exception e) {
-            logger.debug(e.getMessage());
+            Timber.d(e.getMessage(), "Animation throws an exception under Robolectric");
         }
     }
 

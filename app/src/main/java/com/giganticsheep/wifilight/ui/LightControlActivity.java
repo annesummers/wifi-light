@@ -38,6 +38,7 @@ import java.util.TimerTask;
 
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import hugo.weaving.DebugLog;
 import icepick.Icicle;
 
 /**
@@ -178,10 +179,12 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         }
     }
 
+    @DebugLog
     @OnItemClick (R.id.left_drawer)
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        logger.debug("onItemClick() drawer list");
-
+    public void onItemClick(final AdapterView<?> parent,
+                            final View view,
+                            final int position,
+                            final long id) {
         getPresenter().fetchLight(drawerAdapter.getItem(position));
 
         drawerSelectedPosition = position;
@@ -248,10 +251,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         return (LightViewState) super.getViewState();
     }
 
+    @DebugLog
     @Override
     public void showLoading() {
-        logger.debug("showLoading()");
-
         getViewState().setShowLoading();
 
         errorLayout.setVisibility(View.GONE);
@@ -260,10 +262,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         loadingLayout.setVisibility(View.VISIBLE);
     }
 
+    @DebugLog
     @Override
     public void showConnected() {
-        logger.debug("showConnected()");
-
         getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnected();
 
@@ -273,10 +274,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         lightLayout.setVisibility(View.VISIBLE);
     }
 
+    @DebugLog
     @Override
     public void showConnecting() {
-        logger.debug("showConnecting()");
-
         getViewState().setData(getPresenter().getLight());
         getViewState().setShowConnecting();
 
@@ -303,10 +303,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);
     }
 
+    @DebugLog
     @Override
     public void showDisconnected() {
-        logger.debug("showDisconnected()");
-
         getViewState().setData(getPresenter().getLight());
         getViewState().setShowDisconnected();
 
@@ -321,10 +320,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         showError(new Exception("Unknown error"));
     }
 
+    @DebugLog
     @Override
     public void showError(@NonNull Throwable throwable) {
-        logger.debug("showError()");
-
         getViewState().setShowError();
 
         loadingLayout.setVisibility(View.GONE);

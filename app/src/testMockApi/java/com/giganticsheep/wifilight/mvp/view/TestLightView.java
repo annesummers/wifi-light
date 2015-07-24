@@ -19,57 +19,54 @@ public class TestLightView implements LightView {
     public static final int STATE_SHOW_LIGHT_DISCONNECTED = 3;
     public static final int STATE_SHOW_ERROR = 4;
 
-    private final Logger logger;
-
     private LightPresenterTestBase lightPresenterTestBase;
     private int state = STATE_SHOW_LOADING;
 
     public TestLightView(@NonNull final LightPresenterTestBase lightPresenterTestBase, 
                          @NonNull final BaseLogger baseLogger) {
         this.lightPresenterTestBase = lightPresenterTestBase;
-        this.logger = new Logger(getClass().getName(), baseLogger);
     }
 
     @Override
     public void showLoading() {
         state = STATE_SHOW_LOADING;
 
-        logger.warn("showLoading()");
+        Timber.w("showLoading()");
     }
 
     @Override
     public void showError() {
         state = STATE_SHOW_ERROR;
 
-        logger.warn("showError()");
+        Timber.w("showError()");
     }
 
     @Override
     public void showError(@NonNull Throwable throwable) {
         state = STATE_SHOW_ERROR;
 
-        logger.warn("showError() " + throwable.getMessage());
+        Timber.w("showError() " + throwable.getMessage());
     }
 
     @Override
     public void showConnected() {
         state = STATE_SHOW_LIGHT_CONNECTED;
 
-        logger.warn("showConnected()");
+        Timber.w("showConnected()");
     }
 
     @Override
     public void showConnecting() {
         state = STATE_SHOW_LIGHT_CONNECTING;
 
-        logger.warn("showConnecting()");
+        Timber.w("showConnecting()");
     }
 
     @Override
     public void showDisconnected() {
         state = STATE_SHOW_LIGHT_DISCONNECTED;
 
-        logger.warn("showDisconnected()");
+        Timber.w("showDisconnected()");
     }
 
     public int getState() {

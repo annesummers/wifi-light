@@ -15,14 +15,14 @@ public class DetailsPresenter extends FragmentPresenterBase {
                             @NonNull final ControlPresenter controlPresenter) {
         super(injector, controlPresenter);
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<DetailsPresenter>(logger));
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<DetailsPresenter>());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<DetailsPresenter>(logger));
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<DetailsPresenter>());
     }
 
     @Subscribe

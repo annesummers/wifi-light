@@ -63,8 +63,6 @@ public class ColourFragment extends LightFragmentBase {
 
     @Override
     protected void enableViews(final boolean enable) {
-        //logger.debug("enableViews()");
-
         hueSeekBar.setEnabled(enable);
         saturationSeekBar.setEnabled(enable);
         valueSeekBar.setEnabled(enable);

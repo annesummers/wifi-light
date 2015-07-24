@@ -16,14 +16,14 @@ public class WhitePresenter extends BrightnessPresenterBase {
                           @NonNull final ControlPresenter presenter) {
         super(injector, presenter);
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<WhitePresenter>(logger));
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<WhitePresenter>());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<WhitePresenter>(logger));
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<WhitePresenter>());
     }
 
     /**

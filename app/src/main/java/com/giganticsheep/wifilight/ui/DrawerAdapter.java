@@ -13,9 +13,7 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
 
@@ -24,17 +22,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Created by anne on 13/07/15.
  *
  */
 class DrawerAdapter extends BaseAdapter {
 
-    @NonNull
-    private final Logger logger;
-
     @Inject EventBus eventBus;
-    @Inject BaseLogger baseLogger;
     @Inject Activity activity;
 
     private boolean allLightsFetched = true;
@@ -47,9 +43,7 @@ class DrawerAdapter extends BaseAdapter {
     DrawerAdapter(@NonNull final Injector injector) {
         injector.inject(this);
 
-        logger = new Logger(getClass().getName(), baseLogger);
-
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<DrawerAdapter>(logger));
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<DrawerAdapter>());
     }
 
     @Override
@@ -102,10 +96,9 @@ class DrawerAdapter extends BaseAdapter {
      *
      * @param event a FetchLightsSuccessEvent
      */
+    @DebugLog
     @Subscribe
     public synchronized void handleFetchLightsSuccess(@NonNull LightControl.FetchLightsSuccessEvent event) {
-        logger.debug("handleFetchLightsSuccess()");
-
         allLightsFetched = true;
 
         notifyDataSetChanged();
@@ -119,10 +112,9 @@ class DrawerAdapter extends BaseAdapter {
      *
      * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
      */
+    @DebugLog
     @Subscribe
     public synchronized void handleLightDetails(@NonNull LightControl.FetchedLightEvent event) {
-        logger.debug("handleLightDetails() " + event.light().id());
-
         if(allLightsFetched) {
             allLightsFetched = false;
 

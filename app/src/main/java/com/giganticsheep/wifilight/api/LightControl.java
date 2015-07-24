@@ -151,6 +151,13 @@ public interface LightControl {
         public final int getLightsFetchedCount() {
             return lightsFetchedCount;
         }
+
+        @Override
+        public String toString() {
+            return "FetchLightsSuccessEvent{" +
+                    "lightsFetchedCount=" + lightsFetchedCount +
+                    '}';
+        }
     }
 
     class FetchedLightEvent {
@@ -162,6 +169,13 @@ public interface LightControl {
 
         public final Light light() {
             return light;
+        }
+
+        @Override
+        public String toString() {
+            return "FetchedLightEvent{" +
+                    "light=" + light +
+                    '}';
         }
     }
 }

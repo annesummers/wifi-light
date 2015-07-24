@@ -37,7 +37,6 @@ public class MockLightControlImpl implements LightControl {
     private final Scheduler uiScheduler;
 
     private final List<LightResponse> lights = new ArrayList<>();
-    private final Logger logger;
 
     private Status status;
     private long timeout = 0L;
@@ -49,8 +48,6 @@ public class MockLightControlImpl implements LightControl {
         this.eventBus = eventBus;
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
-
-        this.logger = new Logger(getClass().getName(), baseLogger);
 
         LightResponse light = new LightResponse(Constants.TEST_ID);
         light.label = Constants.TEST_NAME;

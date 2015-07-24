@@ -10,16 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.FragmentFactory;
-import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
-
-import javax.inject.Inject;
 
 import icepick.Icicle;
 import rx.Observable;
@@ -38,9 +34,6 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     protected static final String FRAGMENT_ARGS_NAME = "name";
     private static final String FRAGMENT_ARGS_ATTACH_TO_ROOT = "attach_to_root";
 
-    @SuppressWarnings("FieldNotUsedInToString")
-    protected Logger logger;
-
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Arg
@@ -57,8 +50,6 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private LayoutInflater layoutInflater;
     private FragmentAttachmentDetails attachmentDetails;
-
-    @Inject BaseLogger baseLogger;
 
     /**
      * Creates the named Fragment.
@@ -92,8 +83,6 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
             attachToRoot = args.getBoolean(FRAGMENT_ARGS_ATTACH_TO_ROOT, false);
         }
 
-        logger = new Logger(getClass().getName(), baseLogger);
-
         orientation = getResources().getConfiguration().orientation;
     }
 
@@ -112,9 +101,6 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     public void onViewCreated(@NonNull final View view,
                               @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        logger = new Logger(Integer.toHexString(System.identityHashCode(this)) +
-                " " + getClass().getName(), baseLogger);
 
         initialiseViews(view);
 
@@ -254,7 +240,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
-        subscribe(observable, new ErrorSubscriber<T>(logger));
+        subscribe(observable, new ErrorSubscriber<T>());
     }
 
     private void doAttachToActivity(@NonNull final ActivityBase activity) {

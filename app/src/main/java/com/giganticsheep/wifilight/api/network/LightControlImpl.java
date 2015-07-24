@@ -8,9 +8,7 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.api.model.LightStatus;
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
@@ -20,25 +18,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Scheduler;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import timber.log.Timber;
 
 /**
- * Created by anne on 22/06/15.
- * (*_*)
- *
  * An implementation of LightControl to handle the communication with the server.
+ * <p>
+ * Created by anne on 22/06/15.
+ * <p>
+ *     (*_*)
  */
 
 @ApplicationScope
 class LightControlImpl implements LightControl {
 
-    @NonNull
     @SuppressWarnings("FieldNotUsedInToString")
-    private final Logger logger;
+    private final EventBus eventBus;
 
     @Nullable
     @SuppressWarnings("FieldNotUsedInToString")
@@ -49,11 +49,7 @@ class LightControlImpl implements LightControl {
     // TODO selectors
     // TODO effects
 
-    @SuppressWarnings("FieldNotUsedInToString")
-    private final EventBus eventBus;
-
     private final NetworkDetails networkDetails;
-
     private final LightService lightService;
 
     private final Scheduler ioScheduler;
@@ -62,7 +58,6 @@ class LightControlImpl implements LightControl {
     public LightControlImpl(final NetworkDetails networkDetails,
                             final LightService lightService,
                             final EventBus eventBus,
-                            final BaseLogger baseLogger,
                             @IOScheduler final Scheduler ioScheduler,
                             @UIScheduler final Scheduler uiScheduler) {
         this.lightService = lightService;
@@ -70,8 +65,6 @@ class LightControlImpl implements LightControl {
         this.eventBus = eventBus;
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
-
-        logger = new Logger(getClass().getName(), baseLogger);
     }
 
     @NonNull
@@ -98,11 +91,10 @@ class LightControlImpl implements LightControl {
         return doSetColour(makeKelvinQuery(kelvin + LightConstants.KELVIN_BASE), makeDurationQuery(duration));
     }
 
+    @DebugLog
     @NonNull
     @Override
     public final Observable<LightStatus> togglePower() {
-        logger.debug("togglePower()");
-
         return lightService.togglePower(networkDetails.getBaseURL1(),
                 networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
@@ -110,7 +102,7 @@ class LightControlImpl implements LightControl {
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(final Throwable throwable) {
-                        logger.error(throwable);
+                        Timber.e(throwable, "togglePower()");
                     }
                 })
                 .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
@@ -120,7 +112,7 @@ class LightControlImpl implements LightControl {
                         List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
                         for (LightStatus LightStatus : LightStatuses) {
-                            logger.debug(LightStatus.toString());
+                            Timber.d(LightStatus.toString());
                         }
 
                         return Observable.merge(observables);
@@ -130,20 +122,20 @@ class LightControlImpl implements LightControl {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                .subscribe(new ErrorSubscriber<Light>(logger));
+                                .subscribe(new ErrorSubscriber<Light>());
                     }
                 })
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
 
+    @DebugLog
     @NonNull
     @Override
-    public final Observable<LightStatus> setPower(@NonNull final Power power, final float duration) {
+    public final Observable<LightStatus> setPower(@NonNull final Power power,
+                                                  final float duration) {
         String powerQuery = power.getPowerString();
         String durationQuery =  makeDurationQuery(duration);
-
-        logger.debug("doSetPower() " + powerQuery + NetworkConstants.SPACE + durationQuery);
 
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put(NetworkConstants.URL_STATE, powerQuery);
@@ -157,7 +149,7 @@ class LightControlImpl implements LightControl {
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(final Throwable throwable) {
-                        logger.error(throwable);
+                        Timber.e(throwable, "setPower()");
                     }
                 })
                 .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
@@ -167,7 +159,7 @@ class LightControlImpl implements LightControl {
                         List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
                         for (LightStatus LightStatus : LightStatuses) {
-                            logger.debug(LightStatus.toString());
+                            Timber.d(LightStatus.toString());
                         }
 
                         return Observable.merge(observables);
@@ -177,18 +169,17 @@ class LightControlImpl implements LightControl {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                .subscribe(new ErrorSubscriber<Light>(logger));
+                                .subscribe(new ErrorSubscriber<Light>());
                     }
                 })
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
 
+    @DebugLog
     @NonNull
     @Override
-    public final Observable<Light> fetchLights(boolean fetchFromServer) {
-        logger.debug("fetchLights()");
-
+    public final Observable<Light> fetchLights(final boolean fetchFromServer) {
         if(fetchFromServer || lightsObservable == null) {
             final int[] lightsCount = new int[1];
 
@@ -199,7 +190,7 @@ class LightControlImpl implements LightControl {
                     .doOnError(new Action1<Throwable>() {
                         @Override
                         public void call(final Throwable throwable) {
-                            logger.error(throwable);
+                            Timber.e(throwable, "fetchLights()");
                         }
                     })
                     .flatMap(new Func1<List<LightResponse>, Observable<Light>>() {
@@ -209,10 +200,10 @@ class LightControlImpl implements LightControl {
                             List<Observable<Light>> observables = new ArrayList<>();
 
                             for (Light lightResponse : lightResponses) {
-                                logger.debug(lightResponse.toString());
+                                Timber.d(lightResponse.toString());
 
                                 eventBus.postMessage(new FetchedLightEvent(lightResponse))
-                                        .subscribe(new ErrorSubscriber<>(logger));
+                                        .subscribe(new ErrorSubscriber<>());
 
                                 observables.add(Observable.just(lightResponse));
                                 lightsCount[0]++;
@@ -225,7 +216,7 @@ class LightControlImpl implements LightControl {
                         @Override
                         public void call() {
                             eventBus.postMessage(new FetchLightsSuccessEvent(lightsCount[0]))
-                                    .subscribe(new ErrorSubscriber<>(logger));
+                                    .subscribe(new ErrorSubscriber<>());
                         }
                     })
                     .subscribeOn(ioScheduler)
@@ -236,6 +227,7 @@ class LightControlImpl implements LightControl {
         return lightsObservable;
     }
 
+    @DebugLog
     @NonNull
     @Override
     public final Observable<Light> fetchLight(@Nullable final String id) {
@@ -253,9 +245,10 @@ class LightControlImpl implements LightControl {
                 .observeOn(uiScheduler);
     }
 
-    private Observable<LightStatus> doSetColour(final String colourQuery, final String durationQuery) {
-        logger.debug("doSetColour() " + colourQuery + NetworkConstants.SPACE + durationQuery);
-
+    @DebugLog
+    @NonNull
+    private Observable<LightStatus> doSetColour(@Nullable final String colourQuery,
+                                                @Nullable final String durationQuery) {
         // TODO colour set power on
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put(NetworkConstants.URL_COLOUR, colourQuery);
@@ -270,7 +263,7 @@ class LightControlImpl implements LightControl {
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(final Throwable throwable) {
-                        logger.error(throwable);
+                        Timber.e(throwable, "setColour");
                     }
                 })
                 .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
@@ -280,7 +273,7 @@ class LightControlImpl implements LightControl {
                         List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
                         for (LightStatus LightStatus : LightStatuses) {
-                            logger.debug(LightStatus.toString());
+                            Timber.d(LightStatus.toString());
                         }
 
                         return Observable.merge(observables);
@@ -290,7 +283,7 @@ class LightControlImpl implements LightControl {
                     @Override
                     public void call() {
                         fetchLights(true)
-                                .subscribe(new ErrorSubscriber<Light>(logger));
+                                .subscribe(new ErrorSubscriber<Light>());
                     }
                 })
                 .subscribeOn(ioScheduler)
@@ -326,14 +319,13 @@ class LightControlImpl implements LightControl {
         return Float.toString(duration);
     }
 
-    @NonNull
     @Override
     public String toString() {
-        return "LightNetwork{" +
-                "uiScheduler=" + uiScheduler +
-                ", ioScheduler=" + ioScheduler +
+        return "LightControlImpl{" +
+                "networkDetails=" + networkDetails +
                 ", lightService=" + lightService +
-                ", networkDetails=" + networkDetails +
+                ", ioScheduler=" + ioScheduler +
+                ", uiScheduler=" + uiScheduler +
                 '}';
     }
 }

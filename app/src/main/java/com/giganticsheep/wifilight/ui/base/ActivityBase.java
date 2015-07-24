@@ -9,10 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
-import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
@@ -36,9 +34,6 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
-    @SuppressWarnings("FieldNotUsedInToString")
-    protected Logger logger;
-
     @Icicle private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
 
     private final Map<FragmentBase, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
@@ -50,7 +45,6 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected FragmentFactory fragmentFactory;
-    @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
 
     @Override
@@ -60,8 +54,6 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         activityLayout = createActivityLayout();
 
         setContentView(activityLayout.layoutId());
-
-        logger = new Logger(getClass().getName(), baseLogger);
 
         if(savedInstanceState != null) {
             // TODO can we get Icepick to handle this?
@@ -277,7 +269,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
-        subscribe(observable, new ErrorSubscriber<T>(logger));
+        subscribe(observable, new ErrorSubscriber<T>());
     }
 
     private ActivityLayout activityLayout() {

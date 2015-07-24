@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.util.Constants;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
@@ -15,6 +13,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
@@ -29,12 +28,8 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
     @NonNull
-    protected final Logger logger;
-
-    @NonNull
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
-    @Inject protected BaseLogger baseLogger;
     @Inject protected EventBus eventBus;
     @Inject protected LightControl lightControl;
 
@@ -46,8 +41,6 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      */
     protected LightPresenterBase(@NonNull final Injector injector) {
         injector.inject(this);
-
-        logger = new Logger(getClass().getName(), baseLogger);
     }
 
     /**
@@ -69,8 +62,8 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      *
      * @param light the new Light.
      */
+    @DebugLog
     public void handleLightChanged(@NonNull final Light light) {
-        logger.debug("handleLightChanged()");
         if (isViewAttached()) {
             if (light.isConnected()) {
                 if (light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
@@ -113,7 +106,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
-        subscribe(observable, new ErrorSubscriber<T>(logger));
+        subscribe(observable, new ErrorSubscriber<T>());
     }
 
     /**

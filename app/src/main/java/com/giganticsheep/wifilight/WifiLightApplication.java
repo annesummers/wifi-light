@@ -2,11 +2,14 @@ package com.giganticsheep.wifilight;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
 
 import org.jetbrains.annotations.NonNls;
+
+import timber.log.Timber;
 
 /**
  * Created by anne on 22/06/15.
@@ -23,6 +26,10 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
     @Override
     public final void onCreate() {
         super.onCreate();
+
+        if(BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         buildComponentAndInject();
     }
@@ -48,5 +55,17 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
     private void buildComponentAndInject() {
         component = WifiLightAppComponent.Initializer.init(this);
         component.inject(this);
+    }
+
+    /**
+     * A tree which logs important information for crash reporting.
+     **/
+    private static class CrashReportingTree extends Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+                return;
+            }
+        }
     }
 }
