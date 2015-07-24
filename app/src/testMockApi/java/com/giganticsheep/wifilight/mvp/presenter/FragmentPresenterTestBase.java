@@ -29,7 +29,7 @@ public abstract class FragmentPresenterTestBase extends LightPresenterTestBase {
     @Override
     protected final LightPresenterBase createPresenter(@NonNull final LightPresenterBase.Injector injector) {
         controlPresenter = new ControlPresenter(injector);
-        controlPresenter.attachView(new TestLightView(this, baseLogger));
+        controlPresenter.attachView(new TestLightView(this));
 
         return doCreatePresenter(injector, controlPresenter);
     }

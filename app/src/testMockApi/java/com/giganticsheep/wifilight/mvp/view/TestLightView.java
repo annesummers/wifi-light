@@ -2,9 +2,9 @@ package com.giganticsheep.wifilight.mvp.view;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.base.BaseLogger;
-import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterTestBase;
+
+import timber.log.Timber;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -22,8 +22,7 @@ public class TestLightView implements LightView {
     private LightPresenterTestBase lightPresenterTestBase;
     private int state = STATE_SHOW_LOADING;
 
-    public TestLightView(@NonNull final LightPresenterTestBase lightPresenterTestBase, 
-                         @NonNull final BaseLogger baseLogger) {
+    public TestLightView(@NonNull final LightPresenterTestBase lightPresenterTestBase) {
         this.lightPresenterTestBase = lightPresenterTestBase;
     }
 

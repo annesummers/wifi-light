@@ -21,9 +21,6 @@ import java.util.Map;
 import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Scheduler;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -99,32 +96,18 @@ class LightControlImpl implements LightControl {
                 networkDetails.getBaseURL2(),
                 NetworkConstants.URL_ALL,
                 authorisation(), "")
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(final Throwable throwable) {
-                        Timber.e(throwable, "togglePower()");
-                    }
-                })
-                .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
-                    @NonNull
-                    @Override
-                    public Observable<LightStatus> call(@NonNull final List<StatusResponse> LightStatuses) {
-                        List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
+                .doOnError(throwable -> Timber.e(throwable, "togglePower()"))
+                .flatMap(LightStatuses -> {
+                    List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
-                        for (LightStatus LightStatus : LightStatuses) {
-                            Timber.d(LightStatus.toString());
-                        }
+                    for (LightStatus LightStatus : LightStatuses) {
+                        Timber.d(LightStatus.toString());
+                    }
 
-                        return Observable.merge(observables);
-                    }
+                    return Observable.merge(observables);
                 })
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        fetchLights(true)
-                                .subscribe(new ErrorSubscriber<Light>());
-                    }
-                })
+                .doOnCompleted(() -> fetchLights(true)
+                        .subscribe(new ErrorSubscriber<>()))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
@@ -146,32 +129,18 @@ class LightControlImpl implements LightControl {
                 NetworkConstants.URL_ALL,
                 authorisation(),
                 queryMap)
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(final Throwable throwable) {
-                        Timber.e(throwable, "setPower()");
-                    }
-                })
-                .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
-                    @NonNull
-                    @Override
-                    public Observable<LightStatus> call(@NonNull final List<StatusResponse> LightStatuses) {
-                        List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
+                .doOnError(throwable -> Timber.e(throwable, "setPower()"))
+                .flatMap(LightStatuses -> {
+                    List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
-                        for (LightStatus LightStatus : LightStatuses) {
-                            Timber.d(LightStatus.toString());
-                        }
+                    for (LightStatus LightStatus : LightStatuses) {
+                        Timber.d(LightStatus.toString());
+                    }
 
-                        return Observable.merge(observables);
-                    }
+                    return Observable.merge(observables);
                 })
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        fetchLights(true)
-                                .subscribe(new ErrorSubscriber<Light>());
-                    }
-                })
+                .doOnCompleted(() -> fetchLights(true)
+                        .subscribe(new ErrorSubscriber<>()))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
@@ -187,38 +156,24 @@ class LightControlImpl implements LightControl {
                     networkDetails.getBaseURL2(),
                     NetworkConstants.URL_ALL,
                     authorisation())
-                    .doOnError(new Action1<Throwable>() {
-                        @Override
-                        public void call(final Throwable throwable) {
-                            Timber.e(throwable, "fetchLights()");
-                        }
-                    })
-                    .flatMap(new Func1<List<LightResponse>, Observable<Light>>() {
-                        @NonNull
-                        @Override
-                        public Observable<Light> call(@NonNull final List<LightResponse> lightResponses) {
-                            List<Observable<Light>> observables = new ArrayList<>();
+                    .doOnError(throwable -> Timber.e(throwable, "fetchLights()"))
+                    .flatMap(lightResponses -> {
+                        List<Observable<Light>> observables = new ArrayList<>();
 
-                            for (Light lightResponse : lightResponses) {
-                                Timber.d(lightResponse.toString());
+                        for (Light lightResponse : lightResponses) {
+                            Timber.d(lightResponse.toString());
 
-                                eventBus.postMessage(new FetchedLightEvent(lightResponse))
-                                        .subscribe(new ErrorSubscriber<>());
-
-                                observables.add(Observable.just(lightResponse));
-                                lightsCount[0]++;
-                            }
-
-                            return Observable.merge(observables);
-                        }
-                    })
-                    .doOnCompleted(new Action0() {
-                        @Override
-                        public void call() {
-                            eventBus.postMessage(new FetchLightsSuccessEvent(lightsCount[0]))
+                            eventBus.postMessage(new FetchedLightEvent(lightResponse))
                                     .subscribe(new ErrorSubscriber<>());
+
+                            observables.add(Observable.just(lightResponse));
+                            lightsCount[0]++;
                         }
+
+                        return Observable.merge(observables);
                     })
+                    .doOnCompleted(() -> eventBus.postMessage(new FetchLightsSuccessEvent(lightsCount[0]))
+                            .subscribe(new ErrorSubscriber<>()))
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)
                     .cache();
@@ -235,12 +190,7 @@ class LightControlImpl implements LightControl {
             return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
         }
 
-        return fetchLights(false).filter(new Func1<Light, Boolean>() {
-            @Override
-            public Boolean call(@NonNull Light light) {
-                return light.id().equals(id);
-            }
-        })
+        return fetchLights(false).filter(light -> light.id().equals(id))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
@@ -260,32 +210,18 @@ class LightControlImpl implements LightControl {
                 NetworkConstants.URL_ALL,
                 authorisation(),
                 queryMap)
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(final Throwable throwable) {
-                        Timber.e(throwable, "setColour");
-                    }
-                })
-                .flatMap(new Func1<List<StatusResponse>, Observable<LightStatus>>() {
-                    @NonNull
-                    @Override
-                    public Observable<LightStatus> call(@NonNull final List<StatusResponse> LightStatuses) {
-                        List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
+                .doOnError(throwable -> Timber.e(throwable, "setColour"))
+                .flatMap(LightStatuses -> {
+                    List<Observable<LightStatus>> observables = new ArrayList<>(LightStatuses.size());
 
-                        for (LightStatus LightStatus : LightStatuses) {
-                            Timber.d(LightStatus.toString());
-                        }
+                    for (LightStatus LightStatus : LightStatuses) {
+                        Timber.d(LightStatus.toString());
+                    }
 
-                        return Observable.merge(observables);
-                    }
+                    return Observable.merge(observables);
                 })
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        fetchLights(true)
-                                .subscribe(new ErrorSubscriber<Light>());
-                    }
-                })
+                .doOnCompleted(() -> fetchLights(true)
+                        .subscribe(new ErrorSubscriber<Light>()))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }

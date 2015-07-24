@@ -2,13 +2,10 @@ package com.giganticsheep.wifilight.base.dagger;
 
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.util.AndroidEventBus;
-import com.giganticsheep.wifilight.util.ApplicationLogger;
 import com.giganticsheep.wifilight.util.TestEventBus;
-import com.giganticsheep.wifilight.util.TestLogger;
 
 import dagger.Module;
 import dagger.Provides;
@@ -31,16 +28,6 @@ public class WifiLightModule {
     // for the test component
     public WifiLightModule() {
         application = null;
-    }
-
-    @Provides
-    @ApplicationScope
-    BaseLogger provideBaseLogger() {
-        if(application != null) {
-            return new ApplicationLogger(application);
-        } else {
-            return new TestLogger("WifiLight Tests");
-        }
     }
 
     @Provides

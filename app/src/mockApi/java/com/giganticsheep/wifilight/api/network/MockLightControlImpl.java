@@ -6,9 +6,7 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.api.model.LightStatus;
-import com.giganticsheep.wifilight.base.BaseLogger;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.base.Logger;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.util.Constants;
@@ -19,7 +17,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
-import rx.functions.Func1;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -42,7 +39,6 @@ public class MockLightControlImpl implements LightControl {
     private long timeout = 0L;
 
     public MockLightControlImpl(final EventBus eventBus,
-                                final BaseLogger baseLogger,
                                 @IOScheduler final Scheduler ioScheduler,
                                 @UIScheduler final Scheduler uiScheduler) {
         this.eventBus = eventBus;
@@ -288,12 +284,7 @@ public class MockLightControlImpl implements LightControl {
     @Override
     public Observable<Light> fetchLight(final String id) {
         return fetchLights(false)
-                .filter(new Func1<Light, Boolean>() {
-                    @Override
-                    public Boolean call(Light light) {
-                        return light.id().equals(id);
-                    }
-                });
+                .filter(light -> light.id().equals(id));
     }
 
     private Observable<LightStatus> offObservable() {

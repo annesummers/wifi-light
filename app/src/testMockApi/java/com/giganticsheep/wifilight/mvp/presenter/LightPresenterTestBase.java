@@ -36,7 +36,7 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
     public void setUp() throws Exception {
         presenter = createPresenter(component);
 
-        view = new TestLightView(this, baseLogger);
+        view = new TestLightView(this);
         presenter.attachView(view);
     }
 
