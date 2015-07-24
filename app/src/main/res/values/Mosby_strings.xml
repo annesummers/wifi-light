@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="define_int_Mosby"></string>
+    <string name="library_Mosby_author">Hannes Dorfmann</string>
+    <string name="library_Mosby_authorWebsite">http://hannesdorfmann.com/</string>
+    <string name="library_Mosby_libraryName">Mosby</string>
+    <string name="library_Mosby_libraryDescription">A Model-View-Presenter library for modern Android apps.</string>
+    <string name="library_Mosby_libraryVersion">1.2.0</string>
+    <string name="library_Mosby_isOpenSource">true</string>
+    <string name="library_Mosby_repositoryLink">https://github.com/sockeqwe/mosby</string>
+</resources>
