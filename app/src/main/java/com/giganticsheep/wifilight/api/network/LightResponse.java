@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.ColourData;
+import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
+import com.giganticsheep.wifilight.api.model.Location;
 
 import org.parceler.Parcel;
 
@@ -109,6 +111,16 @@ public class LightResponse extends Response
     @Override
     public boolean hasVariableColourTemp() {
         return capabilities.has_variable_color_temp;
+    }
+
+    @Override
+    public Location getLocation() {
+        return location;
+    }
+
+    @Override
+    public Group getGroup() {
+        return group;
     }
 
     @Parcel

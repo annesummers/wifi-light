@@ -15,6 +15,16 @@ public class Constants {
     public static final String TEST_ID = "12345abcdef";
     @NonNls
     public static final String TEST_ID2 = "abcdef12345";
+
+    public static final String TEST_ID3 = "ad33efgg345";
+    public static final String TEST_ID4 = "ad33ehahgag345";
+    public static final String TEST_GROUP_ID = "fsfsgsg444";
+    public static final String TEST_GROUP_ID2 = "fsssssg444";
+
+    public static final String TEST_LOCATION_ID = "hujg25325u";
+    public static final String TEST_LOCATION_ID2 = "hujggg25u";
+
+
     public static final String TEST_NAME = "TEST";
     public static final String TEST_NAME2 = "TEST2";
     public static final int INVALID = -1;

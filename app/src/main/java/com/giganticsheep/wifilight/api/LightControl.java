@@ -2,8 +2,10 @@ package com.giganticsheep.wifilight.api;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
+import com.giganticsheep.wifilight.api.model.Location;
 
 import rx.Observable;
 
@@ -141,6 +143,26 @@ public interface LightControl {
     @NonNull
     Observable<Light> fetchLight(final String id);
 
+    /**
+     * Fetch all the {@link com.giganticsheep.wifilight.api.model.Group}s from the network.
+     *
+     * @param fetchFromServer whether to fetch the information from the server or to use the
+     *                        cached information if we have it.
+     * @return the Observable to subscribe to.
+     */
+    @NonNull
+    Observable<Group> fetchGroups(final boolean fetchFromServer);
+
+    /**
+     * Fetch all the {@link com.giganticsheep.wifilight.api.model.Location}s from the network.
+     *
+     * @param fetchFromServer whether to fetch the information from the server or to use the
+     *                        cached information if we have it.
+     * @return the Observable to subscribe to.
+     */
+    @NonNull
+    Observable<Location> fetchLocations(final boolean fetchFromServer);
+
     class FetchLightsSuccessEvent {
         private final int lightsFetchedCount;
 
@@ -175,6 +197,82 @@ public interface LightControl {
         public String toString() {
             return "FetchedLightEvent{" +
                     "light=" + light +
+                    '}';
+        }
+    }
+
+    class FetchLocationsSuccessEvent {
+        private final int locationsFetchedCount;
+
+        public FetchLocationsSuccessEvent(final int count) {
+            locationsFetchedCount = count;
+        }
+
+        public final int getLocationsFetchedCount() {
+            return locationsFetchedCount;
+        }
+
+        @Override
+        public String toString() {
+            return "FetchLocationsSuccessEvent{" +
+                    "locationsFetchedCount=" + locationsFetchedCount +
+                    '}';
+        }
+    }
+
+    class FetchedLocationEvent {
+        private final Location location;
+
+        public FetchedLocationEvent(Location location) {
+            this.location = location;
+        }
+
+        public final Location getLocation() {
+            return location;
+        }
+
+        @Override
+        public String toString() {
+            return "FetchedLocationEvent{" +
+                    "location=" + location +
+                    '}';
+        }
+    }
+
+    class FetchGroupsSuccessEvent {
+        private final int groupsFetchedCount;
+
+        public FetchGroupsSuccessEvent(final int count) {
+            groupsFetchedCount = count;
+        }
+
+        public final int getGroupsFetchedCount() {
+            return groupsFetchedCount;
+        }
+
+        @Override
+        public String toString() {
+            return "FetchGroupsSuccessEvent{" +
+                    "groupsFetchedCount=" + groupsFetchedCount +
+                    '}';
+        }
+    }
+
+    class FetchedGroupEvent {
+        private final Group group;
+
+        public FetchedGroupEvent(Group group) {
+            this.group = group;
+        }
+
+        public final Group getGroup() {
+            return group;
+        }
+
+        @Override
+        public String toString() {
+            return "FetchedGroupEvent{" +
+                    "group=" + group +
                     '}';
         }
     }

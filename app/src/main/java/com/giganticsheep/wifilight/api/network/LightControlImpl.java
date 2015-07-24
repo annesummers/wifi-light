@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.api.model.LightStatus;
+import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
@@ -40,6 +42,12 @@ class LightControlImpl implements LightControl {
     @Nullable
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<Light> lightsObservable = null;
+    @Nullable
+    @SuppressWarnings("FieldNotUsedInToString")
+    private Observable<Location> locationsObservable = null;
+    @Nullable
+    @SuppressWarnings("FieldNotUsedInToString")
+    private Observable<Group> groupsObservable = null;
 
     // TODO groups
     // TODO locations
@@ -148,11 +156,98 @@ class LightControlImpl implements LightControl {
     @DebugLog
     @NonNull
     @Override
+    public final Observable<Location> fetchLocations(final boolean fetchFromServer) {
+        if(fetchFromServer || locationsObservable == null) {
+            final int[] locationCount = new int[1];
+
+            locationsObservable = lightService.listLights(
+                    networkDetails.getBaseURL1(),
+                    networkDetails.getBaseURL2(),
+                    NetworkConstants.URL_ALL,
+                    authorisation())
+                    .doOnError(throwable -> Timber.e(throwable, "fetchLocations()"))
+                    .flatMap(lightResponses -> {
+                        List<Observable<Location>> observables = new ArrayList<>();
+                        Map<String, Location> locations = new HashMap<>();
+
+                        for (Light lightResponse : lightResponses) {
+                            Timber.d(lightResponse.toString());
+
+                            Location location = lightResponse.getLocation();
+                            if (!locations.containsKey(location.id())) {
+                                locations.put(location.id(), location);
+                                observables.add(Observable.just(location));
+                                locationCount[0]++;
+
+                                eventBus.postMessage(new FetchedLocationEvent(location))
+                                        .subscribe(new ErrorSubscriber<>());
+                            }
+                        }
+
+                        return Observable.merge(observables);
+                    })
+                    .doOnCompleted(() -> eventBus.postMessage(new FetchLocationsSuccessEvent(locationCount[0]))
+                            .subscribe(new ErrorSubscriber<>()))
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler)
+                    .cache();
+        }
+
+        return locationsObservable;
+    }
+
+    @DebugLog
+    @NonNull
+    @Override
+    public final Observable<Group> fetchGroups(final boolean fetchFromServer) {
+        if(fetchFromServer || groupsObservable == null) {
+            final int[] groupCount = new int[1];
+
+            groupsObservable = lightService.listLights(
+                    networkDetails.getBaseURL1(),
+                    networkDetails.getBaseURL2(),
+                    NetworkConstants.URL_ALL,
+                    authorisation())
+                    .doOnError(throwable -> Timber.e(throwable, "fetchLocations()"))
+                    .flatMap(lightResponses -> {
+                        List<Observable<Group>> observables = new ArrayList<>();
+                        Map<String, Group> groups = new HashMap<>();
+
+                        for (Light lightResponse : lightResponses) {
+                            Timber.d(lightResponse.toString());
+
+                            Group group = lightResponse.getGroup();
+                            if (!groups.containsKey(group.id())) {
+                                groups.put(group.id(), group);
+                                observables.add(Observable.just(group));
+                                groupCount[0]++;
+
+                                eventBus.postMessage(new FetchedGroupEvent(group))
+                                        .subscribe(new ErrorSubscriber<>());
+                            }
+                        }
+
+                        return Observable.merge(observables);
+                    })
+                    .doOnCompleted(() -> eventBus.postMessage(new FetchGroupsSuccessEvent(groupCount[0]))
+                            .subscribe(new ErrorSubscriber<>()))
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler)
+                    .cache();
+        }
+
+        return groupsObservable;
+    }
+
+    @DebugLog
+    @NonNull
+    @Override
     public final Observable<Light> fetchLights(final boolean fetchFromServer) {
         if(fetchFromServer || lightsObservable == null) {
             final int[] lightsCount = new int[1];
 
-            lightsObservable = lightService.listLights(networkDetails.getBaseURL1(),
+            lightsObservable = lightService.listLights(
+                    networkDetails.getBaseURL1(),
                     networkDetails.getBaseURL2(),
                     NetworkConstants.URL_ALL,
                     authorisation())

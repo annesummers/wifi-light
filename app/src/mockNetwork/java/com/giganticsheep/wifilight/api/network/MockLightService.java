@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.util.Constants;
 
 import java.util.ArrayList;
@@ -31,9 +32,26 @@ class MockLightService implements LightService {
             @Override
             public void call(Subscriber<? super List<LightResponse>> subscriber) {
                 List<LightResponse> lights = new ArrayList<>();
+
                 LightResponse light = new LightResponse(Constants.TEST_ID);
+                light.group.id = Constants.TEST_GROUP_ID;
+                light.location.id = Constants.TEST_LOCATION_ID;
                 lights.add(light);
-                lights.add(new LightResponse(Constants.TEST_ID2));
+
+                light = new LightResponse(Constants.TEST_ID2);
+                light.group.id = Constants.TEST_GROUP_ID2;
+                light.location.id = Constants.TEST_LOCATION_ID;
+                lights.add(light);
+
+                light = new LightResponse(Constants.TEST_ID3);
+                light.group.id = Constants.TEST_GROUP_ID;
+                light.location.id = Constants.TEST_LOCATION_ID2;
+                lights.add(light);
+
+                light = new LightResponse(Constants.TEST_ID4);
+                light.group.id = Constants.TEST_GROUP_ID;
+                light.location.id = Constants.TEST_LOCATION_ID;
+                lights.add(light);
 
                 subscriber.onNext(lights);
                 subscriber.onCompleted();
@@ -96,7 +114,13 @@ class MockLightService implements LightService {
             @Override
             public void call(Subscriber<? super List<StatusResponse>> subscriber) {
                 List<StatusResponse> responses = new ArrayList<>();
-                responses.add(new StatusResponse());
+
+                StatusResponse response = new StatusResponse();
+                response.id = Constants.TEST_ID;
+                response.label = Constants.TEST_NAME;
+                response.status = LightControl.Status.OK.getStatusString();
+
+                responses.add(response);
 
                 subscriber.onNext(responses);
                 subscriber.onCompleted();

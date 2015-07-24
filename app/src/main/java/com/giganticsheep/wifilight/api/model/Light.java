@@ -66,4 +66,14 @@ public interface Light extends WifiLightData  {
      * @return whether this light has colour temperature or not
      */
     boolean hasVariableColourTemp(); // conversion methods
+
+    /**
+     * @return the {@link com.giganticsheep.wifilight.api.model.Location} this Light belongs to.
+     */
+    Location getLocation();
+
+    /**
+     * @return the {@link com.giganticsheep.wifilight.api.model.Group} this Light belongs to.
+     */
+    Group getGroup();
 }
