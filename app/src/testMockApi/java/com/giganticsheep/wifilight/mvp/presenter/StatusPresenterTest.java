@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.mvp.view.TestLightView;
-import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
 
@@ -17,13 +16,12 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-public class StatusPresenterTest extends FragmentPresenterTestBase {
+public class StatusPresenterTest extends LightPresenterTestBase {
 
     @NonNull
     @Override
-    protected FragmentPresenterBase doCreatePresenter(@NonNull final LightPresenterBase.Injector injector,
-                                                      @NonNull final ControlPresenter controlPresenter) {
-        return new StatusPresenter(injector, controlPresenter);
+    protected LightPresenterBase createPresenter(@NonNull final LightPresenterBase.Injector injector) {
+        return new StatusPresenter(injector);
     }
 
     @NonNull
@@ -35,58 +33,63 @@ public class StatusPresenterTest extends FragmentPresenterTestBase {
     @Test
     public void testSetPowerConnected() throws Exception {
         setTestStatus(LightControl.Status.OK);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
         testSetPower(LightControl.Power.OFF);
 
-        assertThat(getPresenter().getLight().getPower(), equalTo(LightControl.Power.OFF));
+        assertThat(view.getLight().getPower(), equalTo(LightControl.Power.OFF));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
 
         testSetPower(LightControl.Power.ON);
 
-        assertThat(getPresenter().getLight().getPower(), equalTo(LightControl.Power.ON));
+        assertThat(view.getLight().getPower(), equalTo(LightControl.Power.ON));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
     }
 
     @Test
     public void testSetPowerDisconnected() throws Exception {
         setTestStatus(LightControl.Status.OFF);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
-        LightControl.Power power = getPresenter().getLight().getPower();
+        LightControl.Power power = view.getLight().getPower();
         testSetPower(LightControl.Power.OFF);
 
-        assertThat(getPresenter().getLight().getPower(), equalTo(power));
+        assertThat(view.getLight().getPower(), equalTo(power));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
 
-        power = getPresenter().getLight().getPower();
+        power = view.getLight().getPower();
         testSetPower(LightControl.Power.ON);
 
-        assertThat(getPresenter().getLight().getPower(), equalTo(power));
+        assertThat(view.getLight().getPower(), equalTo(power));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
     }
 
     @Test
     public void testSetPowerOffError() throws Exception {
-        setTestStatus(LightControl.Status.ERROR);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        setTestStatus(LightControl.Status.OK);
+        fetchLightAndHandleEvent();
 
-        testSetPower(LightControl.Power.OFF);
+        setTestStatus(LightControl.Status.ERROR);
+        getPresenter().setPower(LightControl.Power.OFF, TestConstants.TEST_DURATION);
+        handleErrorEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
     }
 
     @Test
     public void testSetPowerOnError() throws Exception {
-        setTestStatus(LightControl.Status.ERROR);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        setTestStatus(LightControl.Status.OK);
+        fetchLightAndHandleEvent();
 
-        testSetPower(LightControl.Power.ON);
+        setTestStatus(LightControl.Status.ERROR);
+        getPresenter().setPower(LightControl.Power.ON, TestConstants.TEST_DURATION);
+        handleErrorEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
     }
 
     private void testSetPower(LightControl.Power power) {
         getPresenter().setPower(power, TestConstants.TEST_DURATION);
+        handleLightChangedEvent();
     }
 }

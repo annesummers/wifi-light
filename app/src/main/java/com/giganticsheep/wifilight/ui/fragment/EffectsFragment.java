@@ -23,8 +23,7 @@ public class EffectsFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new EffectsPresenter(getLightControlActivity().getComponent(),
-                                         getLightControlActivity().getPresenter());
+        return new EffectsPresenter(getLightControlActivity().getComponent());
     }
 
     @NonNull

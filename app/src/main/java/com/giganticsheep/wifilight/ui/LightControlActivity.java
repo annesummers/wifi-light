@@ -135,10 +135,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
         tabLayout.setupWithViewPager(viewPager);
 
-        if(drawerAdapter == null) {
-            drawerAdapter = new DrawerAdapter(component);
-        }
-
         drawerListView.setAdapter(drawerAdapter);
 
         if(drawerSelectedPosition != Constants.INVALID) {
@@ -234,6 +230,10 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         return component;
     }
 
+    public void clickDrawerItem(final int position) {
+        drawerListView.performItemClick(null, position, 0L);
+    }
+
     // MVP
 
     @NonNull
@@ -272,8 +272,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     @DebugLog
     @Override
-    public void showConnected() {
-        getViewState().setData(getPresenter().getLight());
+    public void showConnected(@NonNull final Light light) {
+        getViewState().setData(light);
         getViewState().setShowConnected();
 
         errorLayout.setVisibility(View.GONE);
@@ -284,8 +284,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     @DebugLog
     @Override
-    public void showConnecting() {
-        getViewState().setData(getPresenter().getLight());
+    public void showConnecting(@NonNull final Light light) {
+        getViewState().setData(light);
         getViewState().setShowConnecting();
 
         errorLayout.setVisibility(View.GONE);
@@ -297,24 +297,15 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Light light = getPresenter().getLight();
-
-                if(light != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getPresenter().fetchLight(getPresenter().getLight().id());
-                        }
-                    });
-                }
+                runOnUiThread(() -> getPresenter().fetchLight(light.id()));
             }
         }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);
     }
 
     @DebugLog
     @Override
-    public void showDisconnected() {
-        getViewState().setData(getPresenter().getLight());
+    public void showDisconnected(@NonNull final Light light) {
+        getViewState().setData(light);
         getViewState().setShowDisconnected();
 
         errorLayout.setVisibility(View.GONE);

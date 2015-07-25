@@ -12,7 +12,7 @@ import org.parceler.Parcel;
 @Parcel
 public class GroupData implements Group, Location {
     public String id;
-    public String name;
+    public String label;
 
     @Override
     public String id() {
@@ -21,6 +21,14 @@ public class GroupData implements Group, Location {
 
     @Override
     public String getLabel() {
-        return name;
+        return label;
+    }
+
+    @Override
+    public String toString() {
+        return "GroupData{" +
+                "id='" + id + '\'' +
+                ", name='" + label + '\'' +
+                '}';
     }
 }

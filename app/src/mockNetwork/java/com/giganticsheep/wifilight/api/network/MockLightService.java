@@ -117,7 +117,7 @@ class MockLightService implements LightService {
 
                 StatusResponse response = new StatusResponse();
                 response.id = Constants.TEST_ID;
-                response.label = Constants.TEST_NAME;
+                response.label = Constants.TEST_LABEL;
                 response.status = LightControl.Status.OK.getStatusString();
 
                 responses.add(response);

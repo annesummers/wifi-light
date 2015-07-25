@@ -7,11 +7,10 @@ import android.support.annotation.NonNull;
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-public abstract class BrightnessPresenterBase extends FragmentPresenterBase {
+public abstract class BrightnessPresenterBase extends LightPresenterBase {
 
-    protected BrightnessPresenterBase(@NonNull final Injector injector,
-                            @NonNull final ControlPresenter controlPresenter) {
-        super(injector, controlPresenter);
+    protected BrightnessPresenterBase(@NonNull final Injector injector) {
+        super(injector);
     }
 
     /**

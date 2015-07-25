@@ -48,11 +48,27 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      * the Subscriber given.
      *
      * @param id the id of the Light to fetch.
-     * @param subscriber the Subscriber to subscribe with.
      */
-    protected void fetchLight(@NonNull final String id,
-                              @NonNull final Subscriber<Light> subscriber) {
-        subscribe(lightControl.fetchLight(id), subscriber);
+    public void fetchLight(final String id) {
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+
+        subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
+
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(Throwable e) {
+                subscribe(eventBus.postMessage(new ErrorEvent(e)));
+            }
+
+            @Override
+            public void onNext(Light light) {
+                subscribe(eventBus.postMessage(new LightChangedEvent(light)));
+            }
+        });
     }
 
     /**
@@ -67,13 +83,20 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         if (isViewAttached()) {
             if (light.isConnected()) {
                 if (light.getSecondsSinceLastSeen() > Constants.LAST_SEEN_TIMEOUT_SECONDS) {
-                    getView().showConnecting();
+                    getView().showConnecting(light);
                 } else {
-                    getView().showConnected();
+                    getView().showConnected(light);
                 }
             } else {
-                getView().showDisconnected();
+                getView().showDisconnected(light);
             }
+        }
+    }
+
+    @DebugLog
+    public void handleError(Throwable error) {
+        if (isViewAttached()) {
+            getView().showError(error);
         }
     }
 
@@ -110,15 +133,6 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     }
 
     /**
-     * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the given id.
-     *
-     * @param id the id of the Light to fetch.
-     */
-    public abstract void fetchLight(String id);
-
-    public abstract Light getLight();
-
-    /**
      * The Injector interface is implemented by a Component that provides the injected
      * class members, enabling a LightPresenterBase derived class to inject itself
      * into the Component.
@@ -139,30 +153,12 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
         @Override
         public void onError(Throwable e) {
-            if (isViewAttached()) {
-                getView().showError(e);
-            }
+            subscribe(eventBus.postMessage(new ErrorEvent(e)));
         }
 
         @Override
         public void onNext(@NonNull final LightStatus light) {
-            Light currentLight = getLight();
-
-           if(light.id().equals(currentLight.id())) {
-               if(isViewAttached()) {
-                   if(light.getStatus() == LightControl.Status.OK) {
-                       getView().showConnected();
-                   } else if(light.getStatus() == LightControl.Status.OFF) {
-                       getView().showDisconnected();
-                   }
-               }
-
-               if(currentLight.isConnected() && light.getStatus() != LightControl.Status.OK ||
-                  !currentLight.isConnected() && light.getStatus() != LightControl.Status.OFF) {
-
-                   fetchLight(light.id());
-               }
-           }
+            fetchLight(light.id());
         }
     }
 }

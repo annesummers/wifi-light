@@ -7,6 +7,7 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.base.TestConstants;
+import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,8 +44,8 @@ public class DetailsFragmentTest extends LightFragmentTestBase {
         TextView kelvinTextView = (TextView) fragment.getView().findViewById(R.id.kelvin_textview);
         TextView saturationTextView = (TextView) fragment.getView().findViewById(R.id.saturation_textview);
 
-        assertThat((String)(idTextView.getText()), equalTo(TestConstants.TEST_ID));
-        assertThat((String)(labelTextView.getText()), equalTo(TestConstants.TEST_LABEL));
+        assertThat((String)(idTextView.getText()), equalTo(Constants.TEST_ID));
+        assertThat((String)(labelTextView.getText()), equalTo(Constants.TEST_LABEL));
 
         assertThat((String)(brightnessTextView.getText()), equalTo(Integer.toString(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE))));
         assertThat((String)(hueTextView.getText()), equalTo(Integer.toString(LightConstants.convertHue(TestConstants.TEST_HUE_DOUBLE))));

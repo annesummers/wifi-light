@@ -18,14 +18,21 @@ public class Constants {
 
     public static final String TEST_ID3 = "ad33efgg345";
     public static final String TEST_ID4 = "ad33ehahgag345";
+
     public static final String TEST_GROUP_ID = "fsfsgsg444";
     public static final String TEST_GROUP_ID2 = "fsssssg444";
 
     public static final String TEST_LOCATION_ID = "hujg25325u";
     public static final String TEST_LOCATION_ID2 = "hujggg25u";
 
+    public static final String TEST_LABEL = "TEST";
+    public static final String TEST_LABEL2 = "TEST2";
 
-    public static final String TEST_NAME = "TEST";
-    public static final String TEST_NAME2 = "TEST2";
+    public static final String TEST_GROUP_LABEL = "TEST_GROUP";
+    public static final String TEST_GROUP_LABEL2 = "TEST_GROUP2";
+
+    public static final String TEST_LOCATION_LABEL = "TEST_LOCATION";
+    public static final String TEST_LOCATION_LABEL2 = "TEST_LOCATION2";
+
     public static final int INVALID = -1;
 }

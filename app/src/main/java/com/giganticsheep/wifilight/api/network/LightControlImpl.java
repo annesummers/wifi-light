@@ -4,6 +4,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.giganticsheep.wifilight.ApplicationScope;
+import com.giganticsheep.wifilight.api.FetchGroupsEvent;
+import com.giganticsheep.wifilight.api.FetchLightsEvent;
+import com.giganticsheep.wifilight.api.FetchLocationsEvent;
+import com.giganticsheep.wifilight.api.FetchedGroupEvent;
+import com.giganticsheep.wifilight.api.FetchedLightEvent;
+import com.giganticsheep.wifilight.api.FetchedLocationEvent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
@@ -186,7 +192,7 @@ class LightControlImpl implements LightControl {
 
                         return Observable.merge(observables);
                     })
-                    .doOnCompleted(() -> eventBus.postMessage(new FetchLocationsSuccessEvent(locationCount[0]))
+                    .doOnCompleted(() -> eventBus.postMessage(new FetchLocationsEvent(locationCount[0]))
                             .subscribe(new ErrorSubscriber<>()))
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)
@@ -229,7 +235,7 @@ class LightControlImpl implements LightControl {
 
                         return Observable.merge(observables);
                     })
-                    .doOnCompleted(() -> eventBus.postMessage(new FetchGroupsSuccessEvent(groupCount[0]))
+                    .doOnCompleted(() -> eventBus.postMessage(new FetchGroupsEvent(groupCount[0]))
                             .subscribe(new ErrorSubscriber<>()))
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)
@@ -267,7 +273,7 @@ class LightControlImpl implements LightControl {
 
                         return Observable.merge(observables);
                     })
-                    .doOnCompleted(() -> eventBus.postMessage(new FetchLightsSuccessEvent(lightsCount[0]))
+                    .doOnCompleted(() -> eventBus.postMessage(new FetchLightsEvent(lightsCount[0]))
                             .subscribe(new ErrorSubscriber<>()))
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)

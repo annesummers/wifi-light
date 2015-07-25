@@ -37,6 +37,8 @@ public class MockLight extends MockLightBase
 
         this.color = new ColourData();
         this.power = LightControl.Power.OFF;
+        this.group = new GroupData();
+        this.location = new GroupData();
     }
 
     @Override

@@ -11,50 +11,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.giganticsheep.wifilight.mvp.presenter.LightNetworkPresenter;
+import com.giganticsheep.wifilight.ui.fragment.DrawerFragment;
 
 import javax.inject.Inject;
-
-import hugo.weaving.DebugLog;
 
 /**
  * Created by anne on 13/07/15.
  *
  */
-class DrawerAdapter extends BaseAdapter {
+public class DrawerAdapter extends BaseAdapter {
 
-    @Inject EventBus eventBus;
     @Inject Activity activity;
 
-    private boolean allLightsFetched = true;
+    private final DrawerFragment fragment;
+
     private int selectedItem;
     private int position;
 
-    @NonNull
-    private final List<ViewData> dataList = new ArrayList<>();
-
-    DrawerAdapter(@NonNull final Injector injector) {
+    public DrawerAdapter(@NonNull final Injector injector,
+                         @NonNull final DrawerFragment fragment) {
         injector.inject(this);
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<DrawerAdapter>());
+        this.fragment = fragment;
     }
 
     @Override
     public int getCount() {
-        return dataList.size();
+        return fragment.getPresenter().getNetwork().size();
     }
 
     @Nullable
     @Override
     public String getItem(final int position) {
-        return dataList.get(position).getLight().id();
+        return fragment.getPresenter().getNetwork().get(position).getLight().id();
     }
 
     @Override
@@ -67,65 +57,28 @@ class DrawerAdapter extends BaseAdapter {
     public View getView(final int position,
                         @Nullable View convertView,
                         final ViewGroup parent) {
-        ViewHolder holder;
+        LightViewHolder holder;
 
         if (convertView == null) {
             convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_list_item, null);
-            holder = new ViewHolder(convertView);
+            holder = new LightViewHolder(convertView);
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (LightViewHolder) convertView.getTag();
         }
 
-        ViewData data;
+        LightNetworkPresenter.LightViewData data;
 
-        if (dataList.size() - 1 < position) {
+       /* if (dataList.size() - 1 < position) {
             data = new ViewData(position);
             dataList.add(data);
-        } else {
-            data = dataList.get(position);
-        }
+        } else {*/
+            data = fragment.getPresenter().getNetwork().get(position);
+      //  }
 
         holder.setViewData(data);
 
         return convertView;
-    }
-
-    /**
-     * Called when all the available {@link com.giganticsheep.wifilight.api.model.Light}s have been fetched from the network.
-     *
-     * @param event a FetchLightsSuccessEvent
-     */
-    @DebugLog
-    @Subscribe
-    public synchronized void handleFetchLightsSuccess(@NonNull LightControl.FetchLightsSuccessEvent event) {
-        allLightsFetched = true;
-
-        notifyDataSetChanged();
-
-        // TODO this shouldn't be here or it will be called every time all the lights are fetched
-        ((LightControlActivity)activity).drawerListView.performItemClick(null, 0, 0L);
-    }
-
-    /**
-     * Called every time a {@link com.giganticsheep.wifilight.api.model.Light} has been fetched from the network.
-     *
-     * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
-     */
-    @DebugLog
-    @Subscribe
-    public synchronized void handleLightDetails(@NonNull LightControl.FetchedLightEvent event) {
-        if(allLightsFetched) {
-            allLightsFetched = false;
-
-            dataList.clear();
-            position = 0;
-        }
-
-        ViewData data = new ViewData(position++);
-        data.light = event.light();
-
-        dataList.add(data);
     }
 
     /**
@@ -150,18 +103,18 @@ class DrawerAdapter extends BaseAdapter {
      *
      * The data for the entry is set via setViewData(ViewData viewData).
      */
-    public class ViewHolder {
-        private ViewData viewData;
+    public class LightViewHolder {
+        private LightNetworkPresenter.LightViewData viewData;
 
         private final TextView lightNameTextView;
         private final ImageView lightStatusImageView;
 
-        public ViewHolder(@NonNull View view) {
+        public LightViewHolder(@NonNull View view) {
             lightNameTextView = (TextView) view.findViewById(R.id.light_name);
             lightStatusImageView = (ImageView) view.findViewById(R.id.light_status);
         }
 
-        public void setViewData(@NonNull ViewData viewData) {
+        public void setViewData(@NonNull final LightNetworkPresenter.LightViewData viewData) {
             this.viewData = viewData;
 
             if(viewData.getLight() != null) {
@@ -171,30 +124,5 @@ class DrawerAdapter extends BaseAdapter {
                         R.drawable.ic_action_warning);
             }
         }
-    }
-
-    private class ViewData {
-        private final int position;
-
-        private Light light;
-
-        public ViewData(int position) {
-            this.position = position;
-        }
-
-        public Light getLight() {
-            return light;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "DrawerAdapter{" +
-                "allLightsFetched=" + allLightsFetched +
-                ", activity=" + activity +
-                ", selectedItem=" + selectedItem +
-                ", position=" + position +
-                ", dataList=" + dataList +
-                '}';
     }
 }

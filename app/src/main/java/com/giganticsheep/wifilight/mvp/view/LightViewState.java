@@ -16,33 +16,15 @@ import org.parceler.Parcels;
  *     
  * (*_*)
  */
-public class LightViewState implements RestoreableViewState<LightView> {
+public class LightViewState extends ViewStateBase<LightView> {
 
-    private static final String KEY_STATE = "key_state";
     private static final String KEY_LIGHT = "key_light";
 
-    private final int STATE_SHOW_LOADING = 0;
-    private final int STATE_SHOW_LIGHT_CONNECTED = 1;
-    private final int STATE_SHOW_LIGHT_CONNECTING = 2;
-    private final int STATE_SHOW_LIGHT_DISCONNECTED = 3;
-    private final int STATE_SHOW_ERROR = 4;
+    private final int STATE_SHOW_LIGHT_CONNECTED = STATE_MAX + 1;
+    private final int STATE_SHOW_LIGHT_CONNECTING = STATE_MAX + 2;
+    private final int STATE_SHOW_LIGHT_DISCONNECTED = STATE_MAX + 3;
 
-    private int state = STATE_SHOW_LOADING;
     private Light light;
-
-    /**
-     * Sets the state to STATE_SHOW_LOADING.
-     */
-    public void setShowLoading() {
-        state = STATE_SHOW_LOADING;
-    }
-
-    /**
-     * Sets the state to STATE_SHOW_ERROR.
-     */
-    public void setShowError() {
-        state = STATE_SHOW_ERROR;
-    }
 
     /**
      * Sets the state to STATE_SHOW_LIGHT_CONNECTED.
@@ -69,59 +51,46 @@ public class LightViewState implements RestoreableViewState<LightView> {
     public void apply(@NonNull final LightView lightView,
                       final boolean retained) {
         switch (state) {
-            case STATE_SHOW_LOADING:
-                lightView.showLoading();
-                break;
-
-            case STATE_SHOW_ERROR:
-                lightView.showError();
-                break;
-
             case STATE_SHOW_LIGHT_CONNECTED:
-                lightView.showConnected();
+                lightView.showConnected(light);
                 break;
 
             case STATE_SHOW_LIGHT_CONNECTING:
-                lightView.showConnecting();
+                lightView.showConnecting(light);
                 break;
 
             case STATE_SHOW_LIGHT_DISCONNECTED:
-                lightView.showDisconnected();
+                lightView.showDisconnected(light);
                 break;
 
             default:
+                super.apply(lightView, retained);
                 break;
         }
     }
 
     @Override
-    public void saveInstanceState(@NonNull Bundle bundle) {
-        bundle.putInt(KEY_STATE, state);
+    public void saveInstanceState(@NonNull final Bundle bundle) {
+        super.saveInstanceState(bundle);
+
         bundle.putParcelable(KEY_LIGHT, Parcels.wrap(light));
     }
 
     @Nullable
     @Override
-    public RestoreableViewState<LightView> restoreInstanceState(@Nullable Bundle bundle) {
+    public RestoreableViewState<LightView> restoreInstanceState(@Nullable final Bundle bundle) {
         if (bundle == null) {
             return null;
         }
 
-        state = bundle.getInt(KEY_STATE);
+        super.restoreInstanceState(bundle);
+
         light = Parcels.unwrap(bundle.getParcelable(KEY_LIGHT));
 
         return this;
     }
 
-    public void setData(Light light) {
+    public void setData(final Light light) {
         this.light = light;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "LightViewState{" +
-                "state=" + state +
-                '}';
     }
 }

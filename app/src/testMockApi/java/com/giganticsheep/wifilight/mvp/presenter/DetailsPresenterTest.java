@@ -6,13 +6,12 @@ import android.support.annotation.NonNull;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public class DetailsPresenterTest extends FragmentPresenterTestBase {
+public class DetailsPresenterTest extends LightPresenterTestBase {
 
     @NonNull
     @Override
-    protected FragmentPresenterBase doCreatePresenter(@NonNull final LightPresenterBase.Injector injector,
-                                                      @NonNull final ControlPresenter controlPresenter) {
-        return new DetailsPresenter(injector, controlPresenter);
+    protected LightPresenterBase createPresenter(@NonNull final LightPresenterBase.Injector injector) {
+        return new DetailsPresenter(injector);
     }
 
     @NonNull

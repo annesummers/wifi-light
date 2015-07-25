@@ -2,11 +2,12 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.MockLight;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.network.MockLight;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.fragment.LightFragmentBase;
+import com.giganticsheep.wifilight.util.Constants;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -15,7 +16,7 @@ import com.giganticsheep.wifilight.ui.fragment.LightFragmentBase;
  */
 public class TestPresenter extends LightPresenterBase {
 
-    private final MockLight light = new MockLight(TestConstants.TEST_ID);
+    private final MockLight light = new MockLight(Constants.TEST_ID, Constants.TEST_LABEL);
     private final LightFragmentBase fragment;
 
     /**
@@ -28,8 +29,6 @@ public class TestPresenter extends LightPresenterBase {
         super(injector);
 
         this.fragment = fragment;
-
-        light.label = TestConstants.TEST_LABEL;
 
         light.connected = TestConstants.TEST_CONNECTED.equals(TestConstants.TEST_CONNECTED_STRING) ? true : false;
         light.power = TestConstants.TEST_POWER ? LightControl.Power.ON : LightControl.Power.OFF;
@@ -47,7 +46,6 @@ public class TestPresenter extends LightPresenterBase {
         }
     }
 
-    @Override
     public Light getLight() {
         return light;
     }

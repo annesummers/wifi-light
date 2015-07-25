@@ -13,7 +13,6 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.mvp.presenter.StatusPresenter;
-import com.giganticsheep.wifilight.ui.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import butterknife.InjectView;
@@ -37,8 +36,7 @@ public class StatusFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new StatusPresenter(getLightControlActivity().getComponent(),
-                getLightControlActivity().getPresenter());
+        return new StatusPresenter(getLightControlActivity().getComponent());
     }
 
     @NonNull
@@ -73,13 +71,7 @@ public class StatusFragment extends LightFragmentBase {
 
     @OnCheckedChanged(R.id.power_toggle)
     public void onPowerToggle(CompoundButton compoundButton, boolean isChecked) {
-        Light light = getPresenter().getLight();
-
-        if(isChecked && light != null && light.getPower() != LightControl.Power.ON) {
-            getLightStatusPresenter().setPower(LightControl.Power.ON, LightControlActivity.DEFAULT_DURATION);
-        } else if(!isChecked && light != null && light.getPower() != LightControl.Power.OFF){
-            getLightStatusPresenter().setPower(LightControl.Power.OFF, LightControlActivity.DEFAULT_DURATION);
-        }
+        getLightStatusPresenter().setPower(isChecked);
     }
 
     @Override

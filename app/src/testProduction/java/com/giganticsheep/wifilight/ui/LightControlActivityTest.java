@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.api.network.MockLight;
 import com.giganticsheep.wifilight.ui.fragment.ColourFragment;
 import com.giganticsheep.wifilight.ui.fragment.DetailsFragment;
 import com.giganticsheep.wifilight.ui.fragment.StatusFragment;
 import com.giganticsheep.wifilight.ui.fragment.WhiteFragment;
+import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.After;
 import org.junit.Before;
@@ -120,7 +122,7 @@ public class LightControlActivityTest {
 
         LightControlActivity activity = activityController.get();
 
-        activity.showConnected();
+        activity.showConnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
 
         Configuration newConfig = new Configuration();
         newConfig.orientation = Configuration.ORIENTATION_LANDSCAPE;
@@ -194,7 +196,7 @@ public class LightControlActivityTest {
     public void testShowsConnectedView() {
         LightControlActivity activity = createAndGetActivity();
 
-        activity.showConnected();
+        activity.showConnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
 
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);
@@ -211,7 +213,7 @@ public class LightControlActivityTest {
     public void testShowsConnectingView() {
         LightControlActivity activity = createAndGetActivity();
 
-        activity.showConnecting();
+        activity.showConnecting(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
 
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);
@@ -228,7 +230,7 @@ public class LightControlActivityTest {
     public void testShowsDisconnectedView() {
         LightControlActivity activity = createAndGetActivity();
 
-        activity.showDisconnected();
+        activity.showDisconnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
 
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);

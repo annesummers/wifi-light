@@ -2,11 +2,9 @@ package com.giganticsheep.wifilight.mvp.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.mvp.view.LightView;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
-
-import rx.Subscriber;
 
 /**
  * Used by {@link com.giganticsheep.wifilight.ui.LightControlActivity} as an interface between the UI and the model. <p>
@@ -17,19 +15,22 @@ import rx.Subscriber;
  */
 public class ControlPresenter extends LightPresenterBase {
 
-    private Light light;
-
     public ControlPresenter(@NonNull final Injector injector) {
         super(injector);
-
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>());
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void attachView(LightView view) {
+        super.attachView(view);
 
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<ControlPresenter>());
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
+    }
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
     /**
@@ -43,71 +44,11 @@ public class ControlPresenter extends LightPresenterBase {
             getView().showLoading();
         }
 
-        subscribe(lightControl.fetchLights(fetchFromServer), new Subscriber<Light>(){
-
-            @Override
-            public void onCompleted() { }
-
-            @Override
-            public void onError(Throwable e) {
-                if (isViewAttached()) {
-                    getView().showError(e);
-                }
-            }
-
-            @Override
-            public void onNext(Light light) {
-                if(getLight() != null && light.id().equals(getLight().id())) {
-                    ControlPresenter.this.light = light;
-
-                    subscribe(eventBus.postMessage(new LightChangedEvent(light)));
-                }
-            }
-        });
-    }
-
-    @Override
-    public final void fetchLight(final String id) {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
-        fetchLight(id, new Subscriber<Light>() {
-
-            @Override
-            public void onCompleted() {
-                subscribe(eventBus.postMessage(new LightChangedEvent(light)));
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (isViewAttached()) {
-                    getView().showError(e);
-                }
-            }
-
-            @Override
-            public void onNext(Light light) {
-                ControlPresenter.this.light = light;
-            }
-        });
-    }
-
-    @Override
-    public Light getLight() {
-        return light;
+        subscribe(lightControl.fetchLights(fetchFromServer), new ErrorSubscriber<>());
     }
 
     @Subscribe
     public void handleLightChanged(@NonNull LightChangedEvent event) {
         handleLightChanged(event.getLight());
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "LightControlPresenter{" +
-                "Light=" + ((light != null) ? light.id() : "null") +
-                '}';
     }
 }

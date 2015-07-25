@@ -1,10 +1,13 @@
 package com.giganticsheep.wifilight.mvp.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
 import com.giganticsheep.wifilight.mvp.view.TestLightView;
+import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,8 +44,36 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
     }
 
     @Test
-    public void testFetchLightNullId() {
-        presenter.fetchLight(null);
+    public void testTestFetchLightConnected() {
+        setTestStatus(LightControl.Status.OK);
+        fetchLightAndHandleEvent();
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
+    }
+
+    @Test
+    public void testTestFetchLightConnecting() {
+        setTestStatus(LightControl.Status.OK);
+        setLightTimeout();
+
+        fetchLightAndHandleEvent();
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTING));
+    }
+
+    @Test
+    public void testTestFetchLightDisconnected() {
+        setTestStatus(LightControl.Status.OFF);
+        fetchLightAndHandleEvent();
+
+        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
+    }
+
+    @Test
+    public void testTestFetchLightError() {
+        setTestStatus(LightControl.Status.ERROR);
+        presenter.fetchLight(Constants.TEST_ID);
+        handleErrorEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
     }
@@ -55,6 +86,27 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
         ((MockLightControlImpl)presenter.lightControl).setLightTimeout(true);
     }
 
-    protected abstract LightPresenterBase createPresenter(LightPresenterBase.Injector injector);
+    protected void fetchLightAndHandleEvent() {
+        presenter.fetchLight(Constants.TEST_ID);
+        handleLightChangedEvent();
+    }
 
+    protected void handleLightChangedEvent() {
+        LightChangedEvent event = getCheckedEvent(LightChangedEvent.class);
+
+        presenter.handleLightChanged(event.getLight());
+    }
+
+    protected void handleErrorEvent() {
+        ErrorEvent event = getCheckedEvent(ErrorEvent.class);
+
+        presenter.handleError(event.getError());
+    }
+
+    @NonNull
+    protected LightPresenterBase getPresenter() {
+        return presenter;
+    }
+
+    protected abstract LightPresenterBase createPresenter(LightPresenterBase.Injector injector);
 }

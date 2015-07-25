@@ -13,7 +13,6 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import hugo.weaving.DebugLog;
-import timber.log.Timber;
 
 /**
  * Created by anne on 25/06/15.
@@ -40,10 +39,10 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     @Override
     protected final void populateViews() {
-        Light light = getPresenter().getLight();
+      /*  Light light = light;
         if(light != null) {
             getPresenter().handleLightChanged(light);
-        }
+        }*/
     }
 
     @Override
@@ -68,7 +67,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     @Override
     public final void onNewViewStateInstance() {
-        getViewState().apply(this, true);
+        getViewState().apply(this, false);
     }
 
     @NonNull
@@ -87,31 +86,31 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
 
     @DebugLog
     @Override
-    public void showConnected() {
-        getViewState().setData(getPresenter().getLight());
+    public void showConnected(@NonNull final Light light) {
+        getViewState().setData(light);
         getViewState().setShowConnected();
 
-        showLight();
+        showLight(light);
         enableViews(true);
     }
 
     @DebugLog
     @Override
-    public void showConnecting() {
-        getViewState().setData(getPresenter().getLight());
+    public void showConnecting(@NonNull final Light light) {
+        getViewState().setData(light);
         getViewState().setShowConnecting();
 
-        showLight();
+        showLight(light);
         enableViews(false);
     }
 
     @DebugLog
     @Override
-    public void showDisconnected() {
-        getViewState().setData(getPresenter().getLight());
+    public void showDisconnected(@NonNull final Light light) {
+        getViewState().setData(light);
         getViewState().setShowDisconnected();
 
-        showLight();
+        showLight(light);
         enableViews(false);
     }
 
@@ -126,21 +125,10 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         showError();
     }
 
-    private void showLight() {
-        Light light = getPresenter().getLight();
-
-        if(light == null) {
-            Timber.e("showLight() light is null");
-            return;
-        }
-
-        showLight(light);
-    }
-
     /**
      * Shows the relevant information from the fetched Light.
      */
-    protected abstract void showLight(Light light);
+    protected abstract void showLight(@NonNull final Light light);
 
     /**
      * Disables all the views in this Fragment.

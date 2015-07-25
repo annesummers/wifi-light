@@ -3,16 +3,12 @@ package com.giganticsheep.wifilight.mvp.presenter;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.mvp.view.TestLightView;
-import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -23,25 +19,25 @@ import static org.hamcrest.core.IsNot.not;
  */
 public abstract class FragmentPresenterTestBase extends LightPresenterTestBase {
 
-    protected ControlPresenter controlPresenter;
+   // protected ControlPresenter controlPresenter;
 
-    @NonNull
+   /* @NonNull
     @Override
     protected final LightPresenterBase createPresenter(@NonNull final LightPresenterBase.Injector injector) {
-        controlPresenter = new ControlPresenter(injector);
-        controlPresenter.attachView(new TestLightView(this));
+        //controlPresenter = new ControlPresenter(injector);
+     //   controlPresenter.attachView(view);
 
         return doCreatePresenter(injector, controlPresenter);
-    }
-
+    }*/
+/*
     @Test
     public void testGetCurrentLightNoLight() {
         Light light = getPresenter().getLight();
 
         assertThat(light, equalTo(null));
     }
-
-    @Test
+*/
+   /* @Test
     public void testGetCurrentLightWithLight() {
         setTestStatus(LightControl.Status.OK);
         controlPresenter.fetchLight(Constants.TEST_ID);
@@ -50,12 +46,12 @@ public abstract class FragmentPresenterTestBase extends LightPresenterTestBase {
 
         assertThat(light, not(nullValue()));
         assertThat(light.id(), equalTo(Constants.TEST_ID));
-    }
+    }*/
 
     @Test
     public void testTestFetchLightConnected() {
         setTestStatus(LightControl.Status.OK);
-        doTestFetchLight();
+        fetchLightAndHandleEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
     }
@@ -65,7 +61,7 @@ public abstract class FragmentPresenterTestBase extends LightPresenterTestBase {
         setTestStatus(LightControl.Status.OK);
         setLightTimeout();
 
-        doTestFetchLight();
+        fetchLightAndHandleEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTING));
     }
@@ -73,7 +69,7 @@ public abstract class FragmentPresenterTestBase extends LightPresenterTestBase {
     @Test
     public void testTestFetchLightDisconnected() {
         setTestStatus(LightControl.Status.OFF);
-        doTestFetchLight();
+        fetchLightAndHandleEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
     }
@@ -81,19 +77,15 @@ public abstract class FragmentPresenterTestBase extends LightPresenterTestBase {
     @Test
     public void testTestFetchLightError() {
         setTestStatus(LightControl.Status.ERROR);
-        doTestFetchLight();
+        fetchLightAndHandleEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
     }
 
-    private void doTestFetchLight() {
-        getPresenter().fetchLight(Constants.TEST_ID);
-    }
-
     @NonNull
-    protected FragmentPresenterBase getPresenter() {
-        return (FragmentPresenterBase) presenter;
+    protected LightPresenterBase getPresenter() {
+        return presenter;
     }
 
-    protected abstract FragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, ControlPresenter controlPresenter);
+    //protected abstract FragmentPresenterBase doCreatePresenter(LightPresenterBase.Injector injector, ControlPresenter controlPresenter);*/
 }

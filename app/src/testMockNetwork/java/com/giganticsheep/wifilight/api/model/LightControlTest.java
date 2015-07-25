@@ -2,6 +2,12 @@ package com.giganticsheep.wifilight.api.model;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.FetchGroupsEvent;
+import com.giganticsheep.wifilight.api.FetchLightsEvent;
+import com.giganticsheep.wifilight.api.FetchLocationsEvent;
+import com.giganticsheep.wifilight.api.FetchedGroupEvent;
+import com.giganticsheep.wifilight.api.FetchedLightEvent;
+import com.giganticsheep.wifilight.api.FetchedLocationEvent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.util.Constants;
@@ -30,8 +36,8 @@ public class LightControlTest extends ModelTest {
                     @Override
                     public void onCompleted() {
                         Object lightChangedEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(lightChangedEvent, instanceOf(LightControl.FetchLightsSuccessEvent.class));
-                        assertThat(((LightControl.FetchLightsSuccessEvent)lightChangedEvent).getLightsFetchedCount(), equalTo(lightsCount[0]));
+                        assertThat(lightChangedEvent, instanceOf(FetchLightsEvent.class));
+                        assertThat(((FetchLightsEvent)lightChangedEvent).getLightsFetchedCount(), equalTo(lightsCount[0]));
                     }
 
                     @Override
@@ -42,8 +48,8 @@ public class LightControlTest extends ModelTest {
                         lightsCount[0]++;
 
                         Object fetchLightEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchLightEvent, instanceOf(LightControl.FetchedLightEvent.class));
-                        assertThat(((LightControl.FetchedLightEvent) fetchLightEvent).light(), equalTo(light));
+                        assertThat(fetchLightEvent, instanceOf(FetchedLightEvent.class));
+                        assertThat(((FetchedLightEvent) fetchLightEvent).getLight(), equalTo(light));
                     }
                 });
     }
@@ -56,8 +62,8 @@ public class LightControlTest extends ModelTest {
                     @Override
                     public void onCompleted() {
                         Object fetchLocationEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchLocationEvent, instanceOf(LightControl.FetchLocationsSuccessEvent.class));
-                        assertThat(((LightControl.FetchLocationsSuccessEvent)fetchLocationEvent).getLocationsFetchedCount(), equalTo(locationsCount[0]));
+                        assertThat(fetchLocationEvent, instanceOf(FetchLocationsEvent.class));
+                        assertThat(((FetchLocationsEvent)fetchLocationEvent).getLocationsFetchedCount(), equalTo(locationsCount[0]));
                     }
 
                     @Override
@@ -68,8 +74,8 @@ public class LightControlTest extends ModelTest {
                         locationsCount[0]++;
 
                         Object fetchLocationEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchLocationEvent, instanceOf(LightControl.FetchedLocationEvent.class));
-                        assertThat(((LightControl.FetchedLocationEvent)fetchLocationEvent).getLocation(), equalTo(location));
+                        assertThat(fetchLocationEvent, instanceOf(FetchedLocationEvent.class));
+                        assertThat(((FetchedLocationEvent)fetchLocationEvent).getLocation(), equalTo(location));
                     }
                 });
     }
@@ -82,8 +88,8 @@ public class LightControlTest extends ModelTest {
                     @Override
                     public void onCompleted() {
                         Object fetchGroupEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchGroupEvent, instanceOf(LightControl.FetchGroupsSuccessEvent.class));
-                        assertThat(((LightControl.FetchGroupsSuccessEvent)fetchGroupEvent).getGroupsFetchedCount(), equalTo(groupsCount[0]));
+                        assertThat(fetchGroupEvent, instanceOf(FetchGroupsEvent.class));
+                        assertThat(((FetchGroupsEvent)fetchGroupEvent).getGroupsFetchedCount(), equalTo(groupsCount[0]));
                     }
 
                     @Override
@@ -94,8 +100,8 @@ public class LightControlTest extends ModelTest {
                         groupsCount[0]++;
 
                         Object fetchGroupEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchGroupEvent, instanceOf(LightControl.FetchedGroupEvent.class));
-                        assertThat(((LightControl.FetchedGroupEvent)fetchGroupEvent).getGroup(), equalTo(group));
+                        assertThat(fetchGroupEvent, instanceOf(FetchedGroupEvent.class));
+                        assertThat(((FetchedGroupEvent)fetchGroupEvent).getGroup(), equalTo(group));
                     }
                 });
     }

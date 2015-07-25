@@ -3,7 +3,9 @@ package com.giganticsheep.wifilight.ui;
 import android.app.Activity;
 
 import com.giganticsheep.wifilight.WifiLightAppComponent;
+import com.giganticsheep.wifilight.mvp.presenter.LightNetworkPresenter;
 import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
+import com.giganticsheep.wifilight.ui.fragment.DrawerFragment;
 import com.giganticsheep.wifilight.ui.fragment.LightFragmentBase;
 
 import dagger.Component;
@@ -19,7 +21,9 @@ import dagger.Component;
         modules = { LightControlActivityModule.class })
 public interface LightControlActivityComponent extends LightFragmentBase.Injector,
                                                         LightPresenterBase.Injector,
-                                                        DrawerAdapter.Injector {
+                                                        DrawerFragment.Injector,
+                                                        DrawerAdapter.Injector,
+                                                        LightNetworkPresenter.Injector {
 
     Activity activity();
 

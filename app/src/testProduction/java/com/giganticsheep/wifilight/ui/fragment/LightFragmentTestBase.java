@@ -26,10 +26,7 @@ public abstract class LightFragmentTestBase extends UITestBase {
     @Before
     public void setUp() throws Exception {
         fragment = (LightFragmentBase) fragmentFactory.createFragment(getFragmentName());
-        presenter = new TestPresenter(new LightPresenterBase.Injector() {
-            @Override
-            public void inject(LightPresenterBase lightPresenter) { }
-        }, fragment);
+        presenter = new TestPresenter(lightPresenter -> { }, fragment);
 
         SupportFragmentTestUtil.startFragment(fragment, LightControlActivity.class);
 

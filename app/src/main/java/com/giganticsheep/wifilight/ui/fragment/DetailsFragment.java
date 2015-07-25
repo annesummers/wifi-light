@@ -39,8 +39,7 @@ public class DetailsFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new DetailsPresenter(getLightControlActivity().getComponent(),
-                                         getLightControlActivity().getPresenter());
+        return new DetailsPresenter(getLightControlActivity().getComponent());
     }
 
     @Override

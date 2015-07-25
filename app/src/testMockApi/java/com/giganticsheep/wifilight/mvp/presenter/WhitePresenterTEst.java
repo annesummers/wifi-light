@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.mvp.view.TestLightView;
-import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
 
@@ -21,9 +20,8 @@ public class WhitePresenterTest extends BrightnessPresenterTestBase {
 
     @NonNull
     @Override
-    protected FragmentPresenterBase doCreatePresenter(@NonNull final LightPresenterBase.Injector injector,
-                                                      @NonNull final ControlPresenter controlPresenter) {
-        return new WhitePresenter(injector, controlPresenter);
+    protected LightPresenterBase createPresenter(LightPresenterBase.Injector injector) {
+        return new WhitePresenter(injector);
     }
 
     @NonNull
@@ -35,61 +33,68 @@ public class WhitePresenterTest extends BrightnessPresenterTestBase {
     @Test
     public void testSetKelvinConnected() {
         setTestStatus(LightControl.Status.OK);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
-        getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+        testSetKelvin();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-        assertThat(getPresenter().getLight().getKelvin(), equalTo(TestConstants.TEST_KELVIN));
+        assertThat(view.getLight().getKelvin(), equalTo(TestConstants.TEST_KELVIN));
     }
 
     @Test
     public void testSetKelvinDisconnected() {
         setTestStatus(LightControl.Status.OFF);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
-        int kelvin = getPresenter().getLight().getKelvin();
+        int kelvin = view.getLight().getKelvin();
 
-        getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+        testSetKelvin();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
-        assertThat(getPresenter().getLight().getKelvin(), equalTo(kelvin));
+        assertThat(view.getLight().getKelvin(), equalTo(kelvin));
     }
 
 
     @Test
     public void testSetKelvinConnectedWasDisconnected() {
         setTestStatus(LightControl.Status.OFF);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
         setTestStatus(LightControl.Status.OK);
-        getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+        testSetKelvin();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-        assertThat(getPresenter().getLight().getKelvin(), equalTo(TestConstants.TEST_KELVIN));
+        assertThat(view.getLight().getKelvin(), equalTo(TestConstants.TEST_KELVIN));
     }
 
     @Test
     public void testSetKelvinDisconnectedWasConnected() {
         setTestStatus(LightControl.Status.OK);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
-        int kelvin = getPresenter().getLight().getKelvin();
+        int kelvin = view.getLight().getKelvin();
 
         setTestStatus(LightControl.Status.OFF);
-        getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+        testSetKelvin();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
-        assertThat(getPresenter().getLight().getKelvin(), equalTo(kelvin));
+        assertThat(view.getLight().getKelvin(), equalTo(kelvin));
     }
 
     @Test
     public void testSetKelvinError() {
-        setTestStatus(LightControl.Status.ERROR);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        setTestStatus(LightControl.Status.OK);
+        fetchLightAndHandleEvent();
 
+        setTestStatus(LightControl.Status.ERROR);
         getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+        handleErrorEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
+    }
+
+    private void testSetKelvin() {
+        getPresenter().setKelvin(TestConstants.TEST_KELVIN, TestConstants.TEST_DURATION);
+        handleLightChangedEvent();
     }
 }

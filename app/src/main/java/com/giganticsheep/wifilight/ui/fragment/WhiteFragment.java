@@ -28,8 +28,7 @@ public class WhiteFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new WhitePresenter(getLightControlActivity().getComponent(),
-                getLightControlActivity().getPresenter());
+        return new WhitePresenter(getLightControlActivity().getComponent());
     }
 
     @NonNull

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.mvp.view.TestLightView;
-import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-public abstract class BrightnessPresenterTestBase extends FragmentPresenterTestBase {
+public abstract class BrightnessPresenterTestBase extends LightPresenterTestBase {
 
     @NonNull
     @Override
@@ -28,60 +27,67 @@ public abstract class BrightnessPresenterTestBase extends FragmentPresenterTestB
     @Test
     public void testSetBrightnessConnected() {
         setTestStatus(LightControl.Status.OK);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
-        getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+        testSetBrightness();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-        assertThat(getPresenter().getLight().getBrightness(), equalTo(TestConstants.TEST_BRIGHTNESS_INT));
+        assertThat(view.getLight().getBrightness(), equalTo(TestConstants.TEST_BRIGHTNESS_INT));
     }
 
     @Test
     public void testSetBrightnessDisconnected() {
         setTestStatus(LightControl.Status.OFF);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
-        int brightness = getPresenter().getLight().getBrightness();
+        int brightness = view.getLight().getBrightness();
 
-        getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+        testSetBrightness();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
-        assertThat(getPresenter().getLight().getBrightness(), equalTo(brightness));
+        assertThat(view.getLight().getBrightness(), equalTo(brightness));
     }
 
     @Test
     public void testSetBrightnessConnectedWasDisconnected() {
         setTestStatus(LightControl.Status.OFF);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
         setTestStatus(LightControl.Status.OK);
-        getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+        testSetBrightness();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
-        assertThat(getPresenter().getLight().getBrightness(), equalTo(TestConstants.TEST_BRIGHTNESS_INT));
+        assertThat(view.getLight().getBrightness(), equalTo(TestConstants.TEST_BRIGHTNESS_INT));
     }
 
     @Test
     public void testSetBrightnessDisconnectedWasConnected() {
         setTestStatus(LightControl.Status.OK);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        fetchLightAndHandleEvent();
 
-        int brightness = getPresenter().getLight().getBrightness();
+        int brightness = view.getLight().getBrightness();
 
         setTestStatus(LightControl.Status.OFF);
-        getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+        testSetBrightness();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
-        assertThat(getPresenter().getLight().getBrightness(), equalTo(brightness));
+        assertThat(view.getLight().getBrightness(), equalTo(brightness));
     }
 
     @Test
     public void testSetBrightnessError() {
-        setTestStatus(LightControl.Status.ERROR);
-        controlPresenter.fetchLight(Constants.TEST_ID);
+        setTestStatus(LightControl.Status.OK);
+        fetchLightAndHandleEvent();
 
+        setTestStatus(LightControl.Status.ERROR);
         getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+        handleErrorEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
+    }
+
+    private void testSetBrightness() {
+        getPresenter().setBrightness(TestConstants.TEST_BRIGHTNESS_INT, TestConstants.TEST_DURATION);
+        handleLightChangedEvent();
     }
 }

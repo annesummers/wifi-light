@@ -18,6 +18,4 @@ public class TestConstants {
     public static final String TEST_CONNECTED_STRING = "CONNECTED";
     public static final String TEST_DISCONNECTED_STRING = "DISCONNECTED";
     public static final String TEST_CONNECTED = TEST_CONNECTED_STRING;
-    public static final String TEST_ID = "absdef12345";
-    public static final String TEST_LABEL = "test";
 }
