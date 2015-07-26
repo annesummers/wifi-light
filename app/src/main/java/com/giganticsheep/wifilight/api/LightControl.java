@@ -163,4 +163,12 @@ public interface LightControl {
     @NonNull
     Observable<Location> fetchLocations(final boolean fetchFromServer);
 
+    /**
+     * Fetches all the Locations, Groups and Lights from the network.
+     *
+     * @return the Observable to subscribe to.
+     */
+    @NonNull
+    Observable<Location> fetchLightNetwork();
+
 }

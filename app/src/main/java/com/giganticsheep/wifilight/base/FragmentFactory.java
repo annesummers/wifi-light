@@ -5,11 +5,12 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.fragment.ColourFragmentBuilder;
-import com.giganticsheep.wifilight.ui.fragment.DetailsFragmentBuilder;
-import com.giganticsheep.wifilight.ui.fragment.EffectsFragmentBuilder;
-import com.giganticsheep.wifilight.ui.fragment.StatusFragmentBuilder;
-import com.giganticsheep.wifilight.ui.fragment.WhiteFragmentBuilder;
+import com.giganticsheep.wifilight.ui.colour.ColourFragmentBuilder;
+import com.giganticsheep.wifilight.ui.control.DrawerFragmentBuilder;
+import com.giganticsheep.wifilight.ui.details.DetailsFragmentBuilder;
+import com.giganticsheep.wifilight.ui.effects.EffectsFragmentBuilder;
+import com.giganticsheep.wifilight.ui.status.StatusFragmentBuilder;
+import com.giganticsheep.wifilight.ui.white.WhiteFragmentBuilder;
 
 import rx.Observable;
 
@@ -69,6 +70,10 @@ public class FragmentFactory {
 
         if (name.equals(application.getString(R.string.fragment_name_light_status))) {
             return new StatusFragmentBuilder(name).build();
+        }
+
+        if (name.equals(application.getString(R.string.fragment_name_drawer))) {
+            return new DrawerFragmentBuilder(name).build();
         }
 
         throw new Exception("Fragment does not exist");

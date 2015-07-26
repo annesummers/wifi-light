@@ -11,6 +11,12 @@ import java.util.Date;
 public interface Light extends WifiLightData  {
 
     /**
+     *
+     * @return the name of this Light
+     */
+    String getLabel();
+
+    /**
      * @return if this light is connected or not.
      */
     boolean isConnected();

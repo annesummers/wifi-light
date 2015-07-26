@@ -17,6 +17,7 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
 
+import hugo.weaving.DebugLog;
 import icepick.Icicle;
 import rx.Observable;
 import rx.Subscriber;
@@ -31,7 +32,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private static final int INVALID = -1;
 
-    protected static final String FRAGMENT_ARGS_NAME = "name";
+    private static final String FRAGMENT_ARGS_NAME = "name";
     private static final String FRAGMENT_ARGS_ATTACH_TO_ROOT = "attach_to_root";
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -152,6 +153,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param activity the Activity to attach to
      * @param attachmentDetails the details for the Fragment used when attaching to the Activity
      */
+    @DebugLog
     public final void attachToActivity(@NonNull final ActivityBase activity,
                                        @NonNull final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;
@@ -197,7 +199,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @return the Activity associated with this Fragment
      */
     @NonNull
-    protected final ActivityBase getBaseActivity() {
+    private ActivityBase getBaseActivity() {
         return (ActivityBase) getActivity();
     }
 
@@ -227,8 +229,8 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param subscriber the Subscriber to subscribe with
      * @param <T> the type the Observable is observing
      */
-    protected <T> void subscribe(@NonNull final Observable<T> observable,
-                                 @NonNull final Subscriber<T> subscriber) {
+    private <T> void subscribe(@NonNull final Observable<T> observable,
+                               @NonNull final Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import icepick.Icicle;
 import rx.Observable;
 import rx.Subscriber;
@@ -38,7 +39,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private final Map<FragmentBase, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
 
-    private ActivityLayout activityLayout;
+    protected ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
     private int orientation;
 
@@ -130,8 +131,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param fragment the Fragment to queue for attachment
      * @param details the details of the fragment to attach
      */
-    public final void queueFragmentForAttachment(@NonNull final FragmentBase fragment,
-                                                 @NonNull final FragmentAttachmentDetails details) {
+    private void queueFragmentForAttachment(@NonNull final FragmentBase fragment,
+                                            @NonNull final FragmentAttachmentDetails details) {
         fragmentAttachmentQueue.put(fragment, details);
     }
 
@@ -151,6 +152,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param details the details of the fragment to attach
      */
+    @DebugLog
     protected final void attachNewFragment(@NonNull final FragmentAttachmentDetails details) {
         FragmentBase fragment;
 
@@ -175,7 +177,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param attachmentDetails the details of the fragment to attach
      */
-    protected final void attachFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
+    private void attachFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(attachmentDetails.name());
@@ -196,7 +198,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param details the attachment details of the fragment
      */
-    void addFragment(@NonNull final FragmentAttachmentDetails details) {
+    private void addFragment(@NonNull final FragmentAttachmentDetails details) {
         if(attachedFragments.containsKey(details.position())) {
             final String oldName = attachedFragments.get(details.position()).name();
             if(oldName.equals(details.name())) {
@@ -212,7 +214,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     /**
      * @return whether the fragments have been resumed or not
      */
-    public final boolean fragmentsResumed() {
+    private boolean fragmentsResumed() {
         return fragmentsResumed;
     }
 
@@ -231,7 +233,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @return the found fragment
      */
     @NonNull
-    protected FragmentBase findFragment(final int position) {
+    private FragmentBase findFragment(final int position) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         return (FragmentBase) fragmentManager.findFragmentById(containerIdFromPosition(position));
@@ -256,8 +258,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param subscriber the Subscriber to subscribe with
      * @param <T> the type the Observable is observing
      */
-    protected <T> void subscribe(@NonNull final Observable<T> observable,
-                                 @NonNull final Subscriber<T> subscriber) {
+    private <T> void subscribe(@NonNull final Observable<T> observable,
+                               @NonNull final Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 

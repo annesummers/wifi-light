@@ -83,5 +83,10 @@
             android:layout_below="@+id/action_toolbar"/>
     </RelativeLayout>
 
-    <include layout="@layout/layout_drawer_listview" />
+    <FrameLayout
+        android:id="@+id/container_drawer"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
+
 </android.support.v4.widget.DrawerLayout>

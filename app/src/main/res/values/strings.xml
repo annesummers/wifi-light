@@ -30,5 +30,8 @@
     <string name="aboutLibraries_description_text">WifiLight is a replacement app for LIFX\'s
         excellent Android application for controlling LIFX WiFi enabled lights.
         It currently contains no improvements over the official app :-D</string>
+    <string name="fragment_name_drawer">Drawer</string>
+    <string name="action_drawer_open">Open</string>
+    <string name="action_drawer_close">Close</string>
 
 </resources>

@@ -5,4 +5,10 @@ package com.giganticsheep.wifilight.api.model;
  * (*_*)
  */
 public interface Group extends WifiLightData {
+
+    /**
+     *
+     * @return the name of this data object
+     */
+    String getName();
 }

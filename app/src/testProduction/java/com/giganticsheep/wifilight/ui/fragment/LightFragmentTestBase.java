@@ -1,8 +1,8 @@
 package com.giganticsheep.wifilight.ui.fragment;
 
-import com.giganticsheep.wifilight.mvp.presenter.LightPresenterBase;
 import com.giganticsheep.wifilight.mvp.presenter.TestPresenter;
-import com.giganticsheep.wifilight.ui.LightControlActivity;
+import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
+import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.UITestBase;
 
 import org.junit.Before;

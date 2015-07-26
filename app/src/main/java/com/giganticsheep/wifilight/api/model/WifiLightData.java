@@ -10,10 +10,4 @@ public interface WifiLightData {
      * @return the id of this data object
      */
     String id();
-
-    /**
-     *
-     * @return the name of this data object
-     */
-    String getLabel();
 }

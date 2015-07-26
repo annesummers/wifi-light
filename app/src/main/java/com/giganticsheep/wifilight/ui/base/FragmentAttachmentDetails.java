@@ -19,7 +19,7 @@ public class FragmentAttachmentDetails implements Parcelable {
         this.addToBackStack = addToBackStack;
     }
 
-    protected FragmentAttachmentDetails(@NonNull final Parcel in) {
+    private FragmentAttachmentDetails(@NonNull final Parcel in) {
         name = in.readString();
         position = in.readInt();
         addToBackStack = in.readByte() != 0;

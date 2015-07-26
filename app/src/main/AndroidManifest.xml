@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.WifiLight" >
         <activity
-            android:name="com.giganticsheep.wifilight.ui.LightControlActivity"
+            android:name=".ui.control.LightControlActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize">
             <intent-filter>
