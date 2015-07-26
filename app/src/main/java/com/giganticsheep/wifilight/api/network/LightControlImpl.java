@@ -273,8 +273,8 @@ class LightControlImpl implements LightControl {
                 public void onCompleted() {
                     subscriber.onCompleted();
 
-                    fetchGroups(true).subscribe(new ErrorSubscriber<>());
-                    fetchLights(true).subscribe(new ErrorSubscriber<>());
+                    fetchGroups(true).subscribe(new ErrorEventSubscriber<>(eventBus));
+                    fetchLights(true).subscribe(new ErrorEventSubscriber<>(eventBus));
                 }
 
                 @Override
@@ -387,4 +387,5 @@ class LightControlImpl implements LightControl {
                 ", uiScheduler=" + uiScheduler +
                 '}';
     }
+
 }

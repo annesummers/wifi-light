@@ -40,7 +40,9 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     @Nullable
     private LightNetwork lightNetwork = null;
 
-    private int position;
+    private int groupPosition;
+    private int childPosition;
+
     private LightNetwork network;
 
     @DebugLog
@@ -119,7 +121,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     @DebugLog
     public synchronized void onEvent(@NonNull FetchLightsEvent event) {
         if(event.getLightsFetchedCount() > 0) {
-            getView().showLightNetwork(lightNetwork, position);
+            getView().showLightNetwork(lightNetwork, groupPosition, childPosition);
         }
     }
 
@@ -132,11 +134,20 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     public synchronized void onEvent(@NonNull FetchedLightEvent event) {
         if(lightNetwork != null) {
             Light light = event.getLight();
+
+            if(lightNetwork.lightExists(light.getGroup().id(), light.id())) {
+                lightNetwork.remove(light.getGroup().id(), light.id());
+            }
             lightNetwork.add(new LightViewData(light.id(),
                     light.getLabel(),
                     light.isConnected(),
                     light.getGroup().id()));
         }
+    }
+
+    @DebugLog
+    public synchronized void onEvent(@NonNull ErrorEvent event) {
+
     }
 
     /**
@@ -163,8 +174,9 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         subscribe(observable, new ErrorSubscriber<T>());
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setPosition(int groupPosition, int childPosition) {
+        this.groupPosition = groupPosition;
+        this.childPosition = childPosition;
     }
 
     /**

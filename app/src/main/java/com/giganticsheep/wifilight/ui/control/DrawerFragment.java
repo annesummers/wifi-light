@@ -2,11 +2,8 @@ package com.giganticsheep.wifilight.ui.control;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.DrawerLayout;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.base.EventBus;
@@ -17,7 +14,6 @@ import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import javax.inject.Inject;
 
 import butterknife.InjectView;
-import butterknife.OnItemClick;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
@@ -32,9 +28,9 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
     @Inject EventBus eventBus;
 
-    @InjectView(R.id.left_drawer) ListView drawerListView;
+    @InjectView(R.id.left_drawer) ExpandableListView drawerListView;
 
-    DrawerAdapter adapter;
+    private DrawerAdapter adapter;
 
     @DebugLog
     @Override
@@ -53,27 +49,18 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     protected void initialiseViews(View view) {
         adapter = new DrawerAdapter(getLightControlActivity().getComponent());
         drawerListView.setAdapter(adapter);
-    }
 
-    void setupDrawer(final FrameLayout drawerContainer, final DrawerLayout drawerLayout) {
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
+        drawerListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
 
-    }
+            getPresenter().setPosition(groupPosition, childPosition);
+            getPresenter().fetchLight(adapter.getChild(groupPosition, childPosition));
 
-    @DebugLog
-    @OnItemClick(R.id.left_drawer)
-    public void onItemClick(final AdapterView<?> parent,
-                            final View view,
-                            final int position,
-                            final long id) {
+            drawerListView.setSelectedChild(groupPosition, childPosition, true);
 
-        getPresenter().setPosition(position);
-        getPresenter().fetchLight(adapter.getItem(position));
+            getLightControlActivity().closeDrawer();
 
-        drawerListView.setItemChecked(position, true);
-
-        getLightControlActivity().closeDrawer();
+            return true;
+        });
     }
 
     public void clickDrawerItem(final int position) {
@@ -135,13 +122,14 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @DebugLog
     @Override
     public void showLightNetwork(@NonNull final LightNetwork lightNetwork,
-                                 final int position) {
-        getViewState().setShowLightNetwork(lightNetwork, position);
+                                 final int groupPosition,
+                                 final int childPosition) {
+        getViewState().setShowLightNetwork(lightNetwork, groupPosition, childPosition);
 
-        adapter.setLightNetwork(lightNetwork, position);
+        adapter.setLightNetwork(lightNetwork, groupPosition, childPosition);
         adapter.notifyDataSetChanged();
 
-        clickDrawerItem(position);
+        clickDrawerItem(groupPosition);
     }
 
     @DebugLog

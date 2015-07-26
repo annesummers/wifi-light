@@ -11,48 +11,80 @@ import java.util.List;
  */
 public class LightNetwork {
 
-    private final List<LightNetworkPresenter.LightViewData> lightDataList = new ArrayList<>();
-    private final HashMap<LightNetworkPresenter.GroupViewData, List<LightNetworkPresenter.LightViewData>> groupDataMap = new HashMap<>();
+    private final List<LightNetworkPresenter.GroupViewData> groupDataList = new ArrayList<>();
+    private final HashMap<String, List<LightNetworkPresenter.LightViewData>> groupsDataMap = new HashMap<>();
 
     public void clear() {
-        lightDataList.clear();
-        groupDataMap.clear();
+        groupDataList.clear();
+        groupsDataMap.clear();
     }
 
     public void add(LightNetworkPresenter.GroupViewData group) {
-        List<LightNetworkPresenter.LightViewData> subList = new ArrayList<>();
+        //List<LightNetworkPresenter.LightViewData> subList = new ArrayList<>();
 
-        for(LightNetworkPresenter.LightViewData light : lightDataList) {
-            if(light.getGroupId().equals(group.getId())) {
+        groupDataList.add(group);
+        groupsDataMap.put(group.getId(), new ArrayList<>());
+
+       /* for(LightNetworkPresenter.GroupViewData group : groupDataList) {
+            if(group.getId().equals(group.getId())) {
                 subList.add(light);
             }
-        }
+        }*/
 
-        groupDataMap.put(group, subList);
+        //groupsDataMap.put(group, subList);
     }
 
     public void add(LightNetworkPresenter.LightViewData light) {
-        lightDataList.add(light);
+       // groupDataList.add(light);
 
         List<LightNetworkPresenter.LightViewData> subList;
 
-        for(LightNetworkPresenter.GroupViewData group : groupDataMap.keySet()) {
-            if (group.getId().equals(light.getGroupId())) {
-                subList = groupDataMap.get(group);
-                subList.add(light);
+        if(groupsDataMap.containsKey(light.getGroupId())) {
+            subList = groupsDataMap.get(light.getGroupId());
 
-                groupDataMap.put(group, subList);
-
-                break;
-            }
+            subList.add(light);
+            groupsDataMap.put(light.getGroupId(), subList);
         }
     }
 
     public int size() {
-        return lightDataList.size();
+        return groupDataList.size();
     }
 
-    public LightNetworkPresenter.LightViewData get(final int position) {
-        return lightDataList.get(position);
+   // public LightNetworkPresenter.LightViewData get(final int position) {
+     //   return 0;//groupDataList.get(position);
+    //}
+
+    public LightNetworkPresenter.LightViewData get(int groupPosition, int childPosition) {
+        return groupsDataMap.get(groupDataList.get(groupPosition).getId()).get(childPosition);
+    }
+
+    public int lightCount(int groupPosition) {
+        return groupsDataMap.get(groupDataList.get(groupPosition).getId()).size();
+    }
+
+    public LightNetworkPresenter.GroupViewData get(int groupPosition) {
+        return groupDataList.get(groupPosition);
+    }
+
+    public boolean lightExists(String groupId, String lightId) {
+        List<LightNetworkPresenter.LightViewData> lights = groupsDataMap.get(groupId);
+        for(LightNetworkPresenter.LightViewData light : lights) {
+            if(light.getId().equals(lightId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void remove(String groupId, String lightId) {
+        List<LightNetworkPresenter.LightViewData> lights = groupsDataMap.get(groupId);
+        for(LightNetworkPresenter.LightViewData light : lights) {
+            if(light.getId().equals(lightId)) {
+                lights.remove(light);
+                break;
+            }
+        }
     }
 }

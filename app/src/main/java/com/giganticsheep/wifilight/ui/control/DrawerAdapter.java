@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,11 +20,12 @@ import hugo.weaving.DebugLog;
  * Created by anne on 13/07/15.
  *
  */
-public class DrawerAdapter extends BaseAdapter {
+public class DrawerAdapter extends BaseExpandableListAdapter {
 
     @Inject Activity activity;
 
-    private int position;
+    private int groupPosition;
+    private int childPosition;
     private LightNetwork lightNetwork = new LightNetwork();
 
     @DebugLog
@@ -33,25 +34,29 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return lightNetwork.size();
+    public int getChildrenCount(final int groupPosition) {
+        return lightNetwork.lightCount(groupPosition);
     }
 
     @Nullable
     @Override
-    public String getItem(final int position) {
-        return lightNetwork.get(position).getId();
+    public String getChild(final int groupPosition,
+                           final int childPosition) {
+        return lightNetwork.get(groupPosition, childPosition).getId();
     }
 
     @Override
-    public long getItemId(final int position) {
-        return position;
+    public long getChildId(final int groupPosition,
+                           final int childPosition) {
+        return childPosition;
     }
 
     @DebugLog
-    @Nullable
+    @NonNull
     @Override
-    public View getView(final int position,
+    public View getChildView(final int groupPosition,
+                             final int childPosition,
+                             boolean isLastChild,
                         @Nullable View convertView,
                         final ViewGroup parent) {
         LightViewHolder holder;
@@ -64,14 +69,64 @@ public class DrawerAdapter extends BaseAdapter {
             holder = (LightViewHolder) convertView.getTag();
         }
 
-        holder.setViewData(lightNetwork.get(position));
+        holder.setViewData(lightNetwork.get(groupPosition, childPosition));
 
         return convertView;
     }
 
-    public void setLightNetwork(@NonNull final LightNetwork lightNetwork, final int position) {
+    @Override
+    public Object getGroup(int groupPosition) {
+        return lightNetwork.get(groupPosition);
+    }
+
+    @Override
+    public int getGroupCount() {
+        return lightNetwork.size();
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @DebugLog
+    @NonNull
+    @Override
+    public View getGroupView(int groupPosition,
+                             boolean isExpanded,
+                             View convertView,
+                             ViewGroup parent) {
+        GroupViewHolder holder;
+
+        if (convertView == null) {
+            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_group_item, null);
+            holder = new GroupViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (GroupViewHolder) convertView.getTag();
+        }
+
+        holder.setViewData(lightNetwork.get(groupPosition));
+
+        return convertView;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+
+    public void setLightNetwork(@NonNull final LightNetwork lightNetwork,
+                                final int groupPosition,
+                                final int childPosition) {
         this.lightNetwork = lightNetwork;
-        this.position = position;
+        this.groupPosition = groupPosition;
+        this.childPosition = childPosition;
     }
 
     /**
@@ -90,7 +145,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     /**
      * Holds the views for an entry in the list.  Once an instance of this class has been created
-     * for an entry and the views inflated it is stored in the tag for the View for that list position.
+     * for an entry and the views inflated it is stored in the tag for the View for that list groupPosition.
      * This enables the views to be recycled quickly when the elements change or the list is scrolled
      * off the screen. <p>
      *
@@ -114,6 +169,22 @@ public class DrawerAdapter extends BaseAdapter {
             lightStatusImageView.setImageResource(viewData.isConnected() ?
                     R.drawable.ic_action_tick :
                     R.drawable.ic_action_warning);
+        }
+    }
+
+    private class GroupViewHolder {
+        private LightNetworkPresenter.GroupViewData viewData;
+
+        private final TextView groupNameTextView;
+
+        public GroupViewHolder(View view) {
+            groupNameTextView = (TextView) view.findViewById(R.id.group_name);
+        }
+
+        public void setViewData(@NonNull final LightNetworkPresenter.GroupViewData viewData) {
+            this.viewData = viewData;
+
+            groupNameTextView.setText(viewData.getLabel());
         }
     }
 }
