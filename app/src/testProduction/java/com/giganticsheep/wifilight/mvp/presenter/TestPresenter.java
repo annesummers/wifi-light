@@ -26,7 +26,7 @@ public class TestPresenter extends LightPresenterBase {
      * @param injector an Injector used to inject this object into a Component that will
      *                 provide the injected class members.
      */
-    public TestPresenter(@NonNull Injector injector, LightFragmentBase fragment) {
+    public TestPresenter(@NonNull final Injector injector, final LightFragmentBase fragment) {
         super(injector);
 
         this.fragment = fragment;
@@ -42,6 +42,10 @@ public class TestPresenter extends LightPresenterBase {
 
     @Override
     public void fetchLight(final String id) {
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+
         if (light.id().equals(id)) {
             fragment.getPresenter().handleLightChanged(light);
         }

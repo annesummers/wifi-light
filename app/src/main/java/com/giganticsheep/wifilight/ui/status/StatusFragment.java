@@ -62,7 +62,7 @@ public class StatusFragment extends LightFragmentBase {
 
     @DebugLog
     @Override
-    protected void showLight(Light light) {
+    public void showLight(Light light) {
         powerToggle.setChecked(light.getPower() == LightControl.Power.ON);
 
         String oldStatus = (String) statusTextView.getText();

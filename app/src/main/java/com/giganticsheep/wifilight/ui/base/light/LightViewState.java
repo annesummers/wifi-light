@@ -21,9 +21,9 @@ public class LightViewState extends ViewStateBase<LightView> {
 
     private static final String KEY_LIGHT = "key_light";
 
-    private final int STATE_SHOW_LIGHT_CONNECTED = STATE_MAX + 1;
-    private final int STATE_SHOW_LIGHT_CONNECTING = STATE_MAX + 2;
-    private final int STATE_SHOW_LIGHT_DISCONNECTED = STATE_MAX + 3;
+    private static final int STATE_SHOW_LIGHT_CONNECTED = STATE_MAX + 1;
+    private static final int STATE_SHOW_LIGHT_CONNECTING = STATE_MAX + 2;
+    private static final int STATE_SHOW_LIGHT_DISCONNECTED = STATE_MAX + 3;
 
     private Light light;
 

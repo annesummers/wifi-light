@@ -52,7 +52,7 @@ public class WhiteFragment extends LightFragmentBase {
 
     @DebugLog
     @Override
-    protected void showLight(@NonNull final Light light) {
+    public void showLight(@NonNull final Light light) {
         valueSeekBar.setProgress(light.getBrightness());
         kelvinSeekBar.setProgress(light.getKelvin() - LightConstants.KELVIN_BASE);
     }

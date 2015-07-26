@@ -48,7 +48,7 @@ public class DetailsFragment extends LightFragmentBase {
 
     @DebugLog
     @Override
-    protected void showLight(Light light) {
+    public void showLight(Light light) {
         nameTextView.setText(light.getLabel());
         idTextView.setText(light.id());
         hueTextView.setText(Integer.toString(light.getHue()));

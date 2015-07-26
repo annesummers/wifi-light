@@ -30,7 +30,6 @@ public class MockLightBase implements WifiLightData {
     }
 
     @NonNull
-    @Override
     public String getLabel() {
         return label;
     }

@@ -6,24 +6,26 @@ import android.support.annotation.Nullable;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
+import java.io.Serializable;
+
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class ViewStateBase<T extends ViewBase> implements RestoreableViewState<T> {
+public class ViewStateBase<T extends ViewBase> implements RestoreableViewState<T>, Serializable {
 
-    private static final String KEY_STATE = "key_state";
-    private static final String KEY_ERROR = "key_error";
+    static final String KEY_STATE = "key_state";
+    static final String KEY_ERROR = "key_error";
 
-    private final int STATE_SHOW_LOADING = 0;
-    private final int STATE_SHOW_ERROR = 1;
+    final static int STATE_SHOW_LOADING = 0;
+    final static int STATE_SHOW_ERROR = 1;
 
-    protected final int STATE_MAX = STATE_SHOW_ERROR;
+    protected static final int STATE_MAX = STATE_SHOW_ERROR;
 
     protected int state = STATE_SHOW_LOADING;
 
-    private Throwable error;
+    Throwable error;
 
     /**
      * Sets the state to STATE_SHOW_LOADING.

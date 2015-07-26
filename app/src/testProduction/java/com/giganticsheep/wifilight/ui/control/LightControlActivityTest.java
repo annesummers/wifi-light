@@ -28,6 +28,8 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
 
+import timber.log.Timber;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -128,7 +130,11 @@ public class LightControlActivityTest {
         Configuration newConfig = new Configuration();
         newConfig.orientation = Configuration.ORIENTATION_LANDSCAPE;
 
-        activity.onConfigurationChanged(newConfig);
+        try {
+            activity.onConfigurationChanged(newConfig);
+        } catch (Exception e) {
+            Timber.e(e, "Exception thrown");
+        }
 
         View loadingView = activity.findViewById(R.id.loading_layout);
         View errorView = activity.findViewById(R.id.error_layout);

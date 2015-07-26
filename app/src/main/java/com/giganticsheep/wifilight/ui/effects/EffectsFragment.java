@@ -41,7 +41,7 @@ public class EffectsFragment extends LightFragmentBase {
     protected void initialiseViews(View view) {  }
 
     @Override
-    protected void showLight(Light light) { }
+    public void showLight(Light light) { }
 
     @Override
     protected void enableViews(boolean enable) { }

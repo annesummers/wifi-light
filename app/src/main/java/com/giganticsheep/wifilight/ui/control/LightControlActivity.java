@@ -40,6 +40,7 @@ import java.util.TimerTask;
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
 import icepick.Icicle;
+import timber.log.Timber;
 
 /**
  * The Activity containing the Fragments to control a {@link com.giganticsheep.wifilight.api.model.Light} and also to show the
@@ -83,12 +84,14 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     protected final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState == null) {
-            fragmentViewState = new LightViewState();
+        fragmentViewState = new LightViewState();
 
+        if (savedInstanceState == null) {
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 2, false));
+        } else {
+            Timber.d("here");
         }
     }
 

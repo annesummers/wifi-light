@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import hugo.weaving.DebugLog;
+import timber.log.Timber;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -42,16 +43,15 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
         setRetainInstance(true);
 
-        adapter = new DrawerAdapter(getLightControlActivity().getComponent());
-
-        //if(drawerSelectedPosition != Constants.INVALID) {
-        //    drawerListView.setItemChecked(drawerSelectedPosition, true);
-        //}
+        if(savedInstanceState != null) {
+            Timber.d("here");
+        }
     }
 
     @DebugLog
     @Override
     protected void initialiseViews(View view) {
+        adapter = new DrawerAdapter(getLightControlActivity().getComponent());
         drawerListView.setAdapter(adapter);
     }
 

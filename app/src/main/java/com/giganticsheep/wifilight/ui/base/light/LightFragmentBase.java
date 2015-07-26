@@ -50,7 +50,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @NonNull
-    protected final LightControlActivity getLightControlActivity() {
+    public final LightControlActivity getLightControlActivity() {
         return (LightControlActivity) getActivity();
     }
 
@@ -59,7 +59,12 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     @NonNull
     @Override
     public final ViewState createViewState() {
-        return getLightControlActivity().getFragmentViewState();
+        ViewState viewState = getLightControlActivity().getFragmentViewState();
+        if(viewState == null) {
+            viewState = new LightViewState();
+        }
+
+        return viewState;
     }
 
     @Override
@@ -122,7 +127,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     /**
      * Shows the relevant information from the fetched Light.
      */
-    protected abstract void showLight(@NonNull final Light light);
+    public abstract void showLight(@NonNull final Light light);
 
     /**
      * Disables all the views in this Fragment.
