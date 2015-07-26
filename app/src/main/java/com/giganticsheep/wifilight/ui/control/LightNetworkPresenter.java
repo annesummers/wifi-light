@@ -109,10 +109,11 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     @DebugLog
     @Subscribe
     public synchronized void handleFetchGroupsSuccess(@NonNull FetchGroupsEvent event) {
-        if(event.getGroupsFetchedCount() > 0) {
-            getView().showLightNetwork(lightNetwork, position);
-        }
+       // if(event.getGroupsFetchedCount() > 0) {
+        //    getView().showLightNetwork(lightNetwork, position);
+       // }
     }
+
 
     /**
      * Called every time a {@link com.giganticsheep.wifilight.api.model.Light} has been fetched from the network.

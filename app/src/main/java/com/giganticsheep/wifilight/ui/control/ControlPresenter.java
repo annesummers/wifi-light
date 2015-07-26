@@ -50,7 +50,6 @@ public class ControlPresenter extends LightPresenterBase {
         subscribe(lightControl.fetchLightNetwork(), new FetchLightsErrorSubscriber<>());
     }
 
-    @DebugLog
     @Subscribe
     public void handleLightChanged(@NonNull LightChangedEvent event) {
         handleLightChanged(event.getLight());

@@ -45,19 +45,18 @@ public class WhiteFragment extends LightFragmentBase {
 
     @DebugLog
     @Override
-    protected void initialiseViews(View view) {
+    protected void initialiseViews(@NonNull final View view) {
         valueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         kelvinSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
     @DebugLog
     @Override
-    protected void showLight(Light light) {
+    protected void showLight(@NonNull final Light light) {
         valueSeekBar.setProgress(light.getBrightness());
         kelvinSeekBar.setProgress(light.getKelvin() - LightConstants.KELVIN_BASE);
     }
 
-    @DebugLog
     @Override
     protected void enableViews(boolean enable) {
         valueSeekBar.setEnabled(enable);

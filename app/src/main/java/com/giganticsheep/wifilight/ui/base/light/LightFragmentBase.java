@@ -59,7 +59,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     @NonNull
     @Override
     public final ViewState createViewState() {
-        return new LightViewState();
+        return getLightControlActivity().getFragmentViewState();
     }
 
     @Override

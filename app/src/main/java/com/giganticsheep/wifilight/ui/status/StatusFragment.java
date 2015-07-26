@@ -34,6 +34,16 @@ public class StatusFragment extends LightFragmentBase {
         super();
     }
 
+    // Views
+
+    @DebugLog
+    @OnCheckedChanged(R.id.power_toggle)
+    public void onPowerToggle(CompoundButton compoundButton, boolean isChecked) {
+        getLightStatusPresenter().setPower(isChecked);
+    }
+
+    // MVP
+
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
@@ -66,16 +76,9 @@ public class StatusFragment extends LightFragmentBase {
         }
     }
 
-    @DebugLog
     @Override
     protected void enableViews(boolean enable) {
         powerToggle.setEnabled(enable);
-    }
-
-    @DebugLog
-    @OnCheckedChanged(R.id.power_toggle)
-    public void onPowerToggle(CompoundButton compoundButton, boolean isChecked) {
-        getLightStatusPresenter().setPower(isChecked);
     }
 
     @Override

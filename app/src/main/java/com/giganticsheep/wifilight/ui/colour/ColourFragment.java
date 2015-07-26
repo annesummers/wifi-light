@@ -65,7 +65,6 @@ public class ColourFragment extends LightFragmentBase {
         valueSeekBar.setProgress(light.getBrightness());
     }
 
-    @DebugLog
     @Override
     protected void enableViews(final boolean enable) {
         hueSeekBar.setEnabled(enable);

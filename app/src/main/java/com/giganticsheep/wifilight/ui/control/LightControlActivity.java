@@ -67,7 +67,10 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.container_drawer) FrameLayout drawerContainerLayout;
 
+    private ActionBarDrawerToggle drawerToggle;
+
     private LightControlActivityComponent component;
+    private LightViewState fragmentViewState;
 
     // Views
 
@@ -77,45 +80,13 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
+            fragmentViewState = new LightViewState();
+            
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 2, false));
         }
     }
-
-    @NonNull
-    @Override
-    protected final ActivityLayout createActivityLayout() {
-        return new ActivityLayout() {
-            @Override
-            public int fragmentContainer(final int position) {
-                switch (position) {
-                    case 0:
-                        return R.id.container;
-                    case 1:
-                        return R.id.container2;
-                    case 2:
-                        return R.id.container_drawer;
-                    default:
-                        return 0;
-
-                }
-            }
-
-            @Override
-            public int fragmentContainerCount() {
-                return 3;
-            }
-
-            @Override
-            public int layoutId() {
-                return R.layout.activity_main;
-            }
-        };
-    }
-    private ActionBarDrawerToggle drawerToggle;
-    private boolean userLearnedDrawer;
-    private static final String PREF_USER_LEARNED_DRAWER = "user_learned_drawer";
 
     @DebugLog
     @Override
@@ -178,17 +149,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         return super.onCreateOptionsMenu(menu);
     }
 
-    void closeDrawer() {
-        drawerLayout.closeDrawer(drawerContainerLayout);
-    }
-
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setDisplayShowTitleEnabled(true);
-    }
-
-
     @Override
     public final void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -236,9 +196,50 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         eventBus.unregisterForEvents(this);
     }
 
+    @NonNull
+    @Override
+    protected final ActivityLayout createActivityLayout() {
+        return new ActivityLayout() {
+            @Override
+            public int fragmentContainer(final int position) {
+                switch (position) {
+                    case 0:
+                        return R.id.container;
+                    case 1:
+                        return R.id.container2;
+                    case 2:
+                        return R.id.container_drawer;
+                    default:
+                        return 0;
+
+                }
+            }
+
+            @Override
+            public int fragmentContainerCount() {
+                return 3;
+            }
+
+            @Override
+            public int layoutId() {
+                return R.layout.activity_main;
+            }
+        };
+    }
+
     @Override
     protected boolean reinitialiseOnRotate() {
         return true;
+    }
+
+    void closeDrawer() {
+        drawerLayout.closeDrawer(drawerContainerLayout);
+    }
+
+    private void showGlobalContextActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayShowTitleEnabled(true);
     }
 
     // MVP
@@ -265,6 +266,12 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     public LightViewState getViewState() {
         return (LightViewState) super.getViewState();
     }
+
+    @NonNull
+    public LightViewState getFragmentViewState() {
+        return fragmentViewState;
+    }
+
 
     @DebugLog
     @Override
@@ -360,10 +367,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @Override
     public LightControlActivityComponent getComponent() {
         return component;
-    }
-
-    public void closeDrawer(View drawerView) {
-        drawerLayout.closeDrawer(drawerView);
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {
