@@ -23,7 +23,7 @@ public class LightNetwork {
         List<LightNetworkPresenter.LightViewData> subList = new ArrayList<>();
 
         for(LightNetworkPresenter.LightViewData light : lightDataList) {
-            if(light.getLight().getGroup().id().equals(group.getGroup().id())) {
+            if(light.getGroupId().equals(group.getId())) {
                 subList.add(light);
             }
         }
@@ -37,7 +37,7 @@ public class LightNetwork {
         List<LightNetworkPresenter.LightViewData> subList;
 
         for(LightNetworkPresenter.GroupViewData group : groupDataMap.keySet()) {
-            if (group.getGroup().id().equals(light.getLight().id())) {
+            if (group.getId().equals(light.getGroupId())) {
                 subList = groupDataMap.get(group);
                 subList.add(light);
 

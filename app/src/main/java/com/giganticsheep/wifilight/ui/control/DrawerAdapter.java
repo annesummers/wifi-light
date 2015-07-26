@@ -40,7 +40,7 @@ public class DrawerAdapter extends BaseAdapter {
     @Nullable
     @Override
     public String getItem(final int position) {
-        return lightNetwork.get(position).getLight().id();
+        return lightNetwork.get(position).getId();
     }
 
     @Override
@@ -110,12 +110,10 @@ public class DrawerAdapter extends BaseAdapter {
         public void setViewData(@NonNull final LightNetworkPresenter.LightViewData viewData) {
             this.viewData = viewData;
 
-            if(viewData.getLight() != null) {
-                lightNameTextView.setText(viewData.getLight().getLabel());
-                lightStatusImageView.setImageResource(viewData.getLight().isConnected() ?
-                        R.drawable.ic_action_tick :
-                        R.drawable.ic_action_warning);
-            }
+            lightNameTextView.setText(viewData.getLabel());
+            lightStatusImageView.setImageResource(viewData.isConnected() ?
+                    R.drawable.ic_action_tick :
+                    R.drawable.ic_action_warning);
         }
     }
 }

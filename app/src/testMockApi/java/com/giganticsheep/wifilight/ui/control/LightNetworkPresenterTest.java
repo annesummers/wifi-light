@@ -9,6 +9,8 @@ import org.junit.Test;
  */
 public class LightNetworkPresenterTest {
 
+    // TODO test presenter
+
     @Test
     public void testFetchLight() throws Exception {
 

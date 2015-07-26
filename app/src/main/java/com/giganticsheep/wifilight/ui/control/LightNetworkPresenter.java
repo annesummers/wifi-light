@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.ui.control;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.FetchGroupsEvent;
 import com.giganticsheep.wifilight.api.FetchLightsEvent;
 import com.giganticsheep.wifilight.api.FetchLocationsEvent;
 import com.giganticsheep.wifilight.api.FetchedGroupEvent;
@@ -92,23 +91,11 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     /**
      * Called when all the available {@link com.giganticsheep.wifilight.api.model.Location}s have been fetched from the network.
      *
-     * @param event a FetchLocationsSuccessEvent
+     * @param event a FetchLocationsEvent
      */
     @DebugLog
     public synchronized void onEvent(@NonNull FetchLocationsEvent event) {
         lightNetwork = new LightNetwork();
-    }
-
-    /**
-     * Called when all the available {@link com.giganticsheep.wifilight.api.model.Group}s have been fetched from the network.
-     *
-     * @param event a FetchGroupsSuccessEvent
-     */
-    @DebugLog
-    public synchronized void onEvent(@NonNull FetchGroupsEvent event) {
-       // if(event.getGroupsFetchedCount() > 0) {
-        //    getView().showLightNetwork(lightNetwork, position);
-       // }
     }
 
     /**
@@ -119,14 +106,15 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     @DebugLog
     public synchronized void onEvent(@NonNull FetchedGroupEvent event) {
         if(lightNetwork != null) {
-            lightNetwork.add(new GroupViewData(0, event.getGroup()));
+            Group group = event.getGroup();
+            lightNetwork.add(new GroupViewData(group.id(), group.getName()));
         }
     }
 
     /**
      * Called when all the available {@link com.giganticsheep.wifilight.api.model.Light}s have been fetched from the network.
      *
-     * @param event a FetchLightsSuccessEvent
+     * @param event a FetchLightsEvent
      */
     @DebugLog
     public synchronized void onEvent(@NonNull FetchLightsEvent event) {
@@ -143,7 +131,11 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     @DebugLog
     public synchronized void onEvent(@NonNull FetchedLightEvent event) {
         if(lightNetwork != null) {
-            lightNetwork.add(new LightViewData(0, event.getLight()));
+            Light light = event.getLight();
+            lightNetwork.add(new LightViewData(light.id(),
+                    light.getLabel(),
+                    light.isConnected(),
+                    light.getGroup().id()));
         }
     }
 
@@ -189,50 +181,52 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         void inject(final LightNetworkPresenter presenter);
     }
 
-    public static class LightViewData {
-        private final int position;
-        private final Light light;
+    protected static class ListItemData {
+        private final String id;
+        private final String label;
 
-        public LightViewData(final int position,
-                             final Light light) {
-            this.position = position;
-            this.light = light;
+        public ListItemData(final String id,
+                            final String label) {
+            this.id = id;
+            this.label = label;
         }
 
-        public Light getLight() {
-            return light;
+        public final String getId() {
+            return id;
         }
 
-        @Override
-        public String toString() {
-            return "LightViewData{" +
-                    "position=" + position +
-                    ", getLight=" + light +
-                    '}';
+        public final String getLabel() {
+            return label;
         }
     }
 
-    public static class GroupViewData {
-        private final int position;
-        private final Group group;
+    public static class LightViewData extends ListItemData {
+        private final boolean connected;
+        private final String groupId;
 
-        public GroupViewData(final int position,
-                             final Group group) {
-            this.position = position;
-            this.group = group;
+        public LightViewData(final String id,
+                             final String label,
+                             final boolean connected,
+                             final String groupId) {
+            super(id, label);
+
+            this.connected = connected;
+            this.groupId = groupId;
         }
 
-        public Group getGroup() {
-            return group;
+        public final boolean isConnected() {
+            return connected;
         }
 
-        @Override
-        public String toString() {
-            return "GroupViewData{" +
-                    "position=" + position +
-                    ", group=" + group +
-                    '}';
+        public String getGroupId() {
+            return groupId;
         }
     }
 
+    public static class GroupViewData extends ListItemData {
+        public GroupViewData(final String id,
+                             final String label) {
+            super(id, label);
+        }
+    }
 }
