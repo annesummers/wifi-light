@@ -79,9 +79,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     protected final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        fragmentViewState = new LightViewState();
+
         if (savedInstanceState == null) {
-            fragmentViewState = new LightViewState();
-            
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 2, false));

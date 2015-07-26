@@ -15,7 +15,6 @@ import com.giganticsheep.wifilight.ui.ErrorEvent;
 import com.giganticsheep.wifilight.ui.LightChangedEvent;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.squareup.otto.Subscribe;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -96,24 +95,21 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      * @param event a FetchLocationsSuccessEvent
      */
     @DebugLog
-    @Subscribe
-    public synchronized void handleFetchLocationsSuccess(@NonNull FetchLocationsEvent event) {
+    public synchronized void onEvent(@NonNull FetchLocationsEvent event) {
         lightNetwork = new LightNetwork();
     }
 
-        /**
-         * Called when all the available {@link com.giganticsheep.wifilight.api.model.Group}s have been fetched from the network.
-         *
-         * @param event a FetchGroupsSuccessEvent
-         */
+    /**
+     * Called when all the available {@link com.giganticsheep.wifilight.api.model.Group}s have been fetched from the network.
+     *
+     * @param event a FetchGroupsSuccessEvent
+     */
     @DebugLog
-    @Subscribe
-    public synchronized void handleFetchGroupsSuccess(@NonNull FetchGroupsEvent event) {
+    public synchronized void onEvent(@NonNull FetchGroupsEvent event) {
        // if(event.getGroupsFetchedCount() > 0) {
         //    getView().showLightNetwork(lightNetwork, position);
        // }
     }
-
 
     /**
      * Called every time a {@link com.giganticsheep.wifilight.api.model.Light} has been fetched from the network.
@@ -121,8 +117,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
      */
     @DebugLog
-    @Subscribe
-    public synchronized void handleGroupDetails(@NonNull FetchedGroupEvent event) {
+    public synchronized void onEvent(@NonNull FetchedGroupEvent event) {
         if(lightNetwork != null) {
             lightNetwork.add(new GroupViewData(0, event.getGroup()));
         }
@@ -134,8 +129,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      * @param event a FetchLightsSuccessEvent
      */
     @DebugLog
-    @Subscribe
-    public synchronized void handleFetchLightsSuccess(@NonNull FetchLightsEvent event) {
+    public synchronized void onEvent(@NonNull FetchLightsEvent event) {
         if(event.getLightsFetchedCount() > 0) {
             getView().showLightNetwork(lightNetwork, position);
         }
@@ -147,8 +141,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
      */
     @DebugLog
-    @Subscribe
-    public synchronized void handleLightDetails(@NonNull FetchedLightEvent event) {
+    public synchronized void onEvent(@NonNull FetchedLightEvent event) {
         if(lightNetwork != null) {
             lightNetwork.add(new LightViewData(0, event.getLight()));
         }

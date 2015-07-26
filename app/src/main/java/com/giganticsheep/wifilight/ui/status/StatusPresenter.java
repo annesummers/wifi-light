@@ -3,12 +3,8 @@ package com.giganticsheep.wifilight.ui.status;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.ui.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
-import com.squareup.otto.Subscribe;
 
 import hugo.weaving.DebugLog;
 
@@ -29,20 +25,6 @@ class StatusPresenter extends LightPresenterBase {
         super(injector);
     }
 
-    @Override
-    public void attachView(LightView view) {
-        super.attachView(view);
-
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
-    }
-
-    @Override
-    public void detachView(boolean retainInstance) {
-        super.detachView(retainInstance);
-
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<>());
-    }
-
     /**
      * Sets the power of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
@@ -57,10 +39,5 @@ class StatusPresenter extends LightPresenterBase {
             subscribe(lightControl.setPower(LightControl.Power.OFF, LightControlActivity.DEFAULT_DURATION),
                     new SetLightSubscriber());
         }
-    }
-
-    @Subscribe
-    public void handleLightChanged(@NonNull LightChangedEvent event) {
-        handleLightChanged(event.getLight());
     }
 }

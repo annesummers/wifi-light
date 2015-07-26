@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.util;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.base.EventBus;
-import com.squareup.otto.Bus;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -15,7 +14,7 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class AndroidEventBus implements EventBus {
 
-    private final Bus bus = new Bus();
+    private final de.greenrobot.event.EventBus bus = new de.greenrobot.event.EventBus();
 
     /**
      * Posts a message to the global event bus.  Classes must register to receive messages

@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.util;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.base.EventBus;
-import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +17,6 @@ import rx.Subscriber;
 public class TestEventBus implements EventBus {
 
     private final List<Object> listeners = new ArrayList<>();
-
-    private final Bus eventBus = new Bus();
 
     private final List<Object> messages = new ArrayList<>();
 

@@ -32,8 +32,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected EventBus eventBus;
-    @Inject
-    public LightControl lightControl;
+    @Inject public LightControl lightControl;
 
     /**
      * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
@@ -43,6 +42,20 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      */
     protected LightPresenterBase(@NonNull final Injector injector) {
         injector.inject(this);
+    }
+
+    @Override
+    public void attachView(LightView view) {
+        super.attachView(view);
+
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
+    }
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+
+        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
     /**
@@ -101,6 +114,15 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         if (isViewAttached()) {
             getView().showError(error);
         }
+    }
+
+    /**
+     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Light} to display.
+     *
+     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
+     */
+    public void onEvent(@NonNull LightChangedEvent event) {
+        handleLightChanged(event.getLight());
     }
 
     /**
