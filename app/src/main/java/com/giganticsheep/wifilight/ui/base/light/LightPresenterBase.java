@@ -125,6 +125,11 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         handleLightChanged(event.getLight());
     }
 
+    @DebugLog
+    public synchronized void onEvent(@NonNull ErrorEvent event) {
+        getView().showError(event.getError());
+    }
+
     /**
      * Called when the Presenter is destroyed; overridden to cleanup members and
      * to unsubscribe from any services or events the Presenter may be subscribed to

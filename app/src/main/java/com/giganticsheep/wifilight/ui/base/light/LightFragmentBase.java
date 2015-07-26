@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.ui.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
@@ -32,14 +33,6 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     @Override
     protected final void injectDependencies() {
         getLightControlActivity().getComponent().inject(this);
-    }
-
-    @Override
-    protected final void populateViews() {
-      /*  Light light = light;
-        if(light != null) {
-            getPresenter().handleLightChanged(light);
-        }*/
     }
 
     @Override
