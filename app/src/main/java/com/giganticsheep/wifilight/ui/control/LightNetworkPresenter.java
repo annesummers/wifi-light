@@ -67,6 +67,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param id the id of the Light to fetch.
      */
+    @DebugLog
     public void fetchLight(final String id) {
         if (isViewAttached()) {
             getView().showLoading();
@@ -75,8 +76,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
             @Override
-            public void onCompleted() {
-            }
+            public void onCompleted() { }
 
             @Override
             public void onError(Throwable e) {

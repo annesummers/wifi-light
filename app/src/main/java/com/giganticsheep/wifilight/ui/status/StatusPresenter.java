@@ -29,7 +29,6 @@ class StatusPresenter extends LightPresenterBase {
         super(injector);
     }
 
-    @DebugLog
     @Override
     public void attachView(LightView view) {
         super.attachView(view);
@@ -37,7 +36,6 @@ class StatusPresenter extends LightPresenterBase {
         eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
-    @DebugLog
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
@@ -48,20 +46,8 @@ class StatusPresenter extends LightPresenterBase {
     /**
      * Sets the power of the selected {@link com.giganticsheep.wifilight.api.model.Light}s.
      *
-     * @param power ON or OFF.
-     * @param duration how long to set the power change.
+     * @param isOn
      */
-    @DebugLog
-    public void setPower(final LightControl.Power power, final float duration) {
-        subscribe(lightControl.setPower(power, duration), new SetLightSubscriber());
-    }
-
-    @DebugLog
-    @Subscribe
-    public void handleLightChanged(@NonNull LightChangedEvent event) {
-        handleLightChanged(event.getLight());
-    }
-
     @DebugLog
     public void setPower(boolean isOn) {
         if(isOn /*&& light != null && light.getPower() != LightControl.Power.ON*/) {
@@ -71,5 +57,10 @@ class StatusPresenter extends LightPresenterBase {
             subscribe(lightControl.setPower(LightControl.Power.OFF, LightControlActivity.DEFAULT_DURATION),
                     new SetLightSubscriber());
         }
+    }
+
+    @Subscribe
+    public void handleLightChanged(@NonNull LightChangedEvent event) {
+        handleLightChanged(event.getLight());
     }
 }

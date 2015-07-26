@@ -8,8 +8,6 @@ import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.squareup.otto.Subscribe;
 
-import hugo.weaving.DebugLog;
-
 /**
  * Created by anne on 29/06/15.
  * (*_*)
@@ -20,7 +18,6 @@ class DetailsPresenter extends LightPresenterBase {
         super(injector);
     }
 
-    @DebugLog
     @Override
     public void attachView(LightView view) {
         super.attachView(view);
@@ -28,7 +25,6 @@ class DetailsPresenter extends LightPresenterBase {
         eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
-    @DebugLog
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
@@ -36,7 +32,6 @@ class DetailsPresenter extends LightPresenterBase {
         eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
-    @DebugLog
     @Subscribe
     public void handleLightChanged(@NonNull LightChangedEvent event) {
         handleLightChanged(event.getLight());

@@ -51,6 +51,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      *
      * @param id the id of the Light to fetch.
      */
+    @DebugLog
     public void fetchLight(final String id) {
         if (isViewAttached()) {
             getView().showLoading();

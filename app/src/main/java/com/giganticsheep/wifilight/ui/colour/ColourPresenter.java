@@ -23,7 +23,6 @@ class ColourPresenter extends BrightnessPresenterBase {
         super(injector);
     }
 
-    @DebugLog
     @Override
     public void attachView(LightView view) {
         super.attachView(view);
@@ -31,7 +30,6 @@ class ColourPresenter extends BrightnessPresenterBase {
         eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
-    @DebugLog
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
@@ -66,7 +64,6 @@ class ColourPresenter extends BrightnessPresenterBase {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
      */
-    @DebugLog
     @Subscribe
     public void handleLightChanged(@NonNull LightChangedEvent event) {
         handleLightChanged(event.getLight());

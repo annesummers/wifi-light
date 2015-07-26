@@ -27,7 +27,6 @@ public class ControlPresenter extends LightPresenterBase {
         super(injector);
     }
 
-    @DebugLog
     @Override
     public void attachView(LightView view) {
         super.attachView(view);
@@ -35,7 +34,6 @@ public class ControlPresenter extends LightPresenterBase {
         eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
-    @DebugLog
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
