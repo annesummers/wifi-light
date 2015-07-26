@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.avast.android.dialogs.fragment.SimpleDialogFragment;
 import com.giganticsheep.wifilight.R;
@@ -38,6 +39,7 @@ import java.util.TimerTask;
 
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
+import icepick.Icicle;
 
 /**
  * The Activity containing the Fragments to control a {@link com.giganticsheep.wifilight.api.model.Light} and also to show the
@@ -54,6 +56,11 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     public static final float DEFAULT_DURATION = 1.0F;
 
     private ViewPager viewPager;
+    private ActionBarDrawerToggle drawerToggle;
+
+    private LightControlActivityComponent component;
+
+    @Icicle LightViewState fragmentViewState;
 
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
@@ -67,10 +74,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.container_drawer) FrameLayout drawerContainerLayout;
 
-    private ActionBarDrawerToggle drawerToggle;
-
-    private LightControlActivityComponent component;
-    private LightViewState fragmentViewState;
+    private TextView title;
 
     // Views
 
@@ -79,9 +83,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     protected final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fragmentViewState = new LightViewState();
-
         if (savedInstanceState == null) {
+            fragmentViewState = new LightViewState();
+
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1, false));
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 2, false));
@@ -96,8 +100,11 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+       // actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        title = (TextView) toolbar.findViewById(R.id.title_textview);
 
         PagerAdapter pagerAdapter = null;
 
@@ -237,9 +244,9 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     }
 
     private void showGlobalContextActionBar() {
-        ActionBar actionBar = getSupportActionBar();
+       // ActionBar actionBar = getSupportActionBar();
 
-        actionBar.setDisplayShowTitleEnabled(true);
+       // actionBar.setDisplayShowTitleEnabled(false);
     }
 
     // MVP
@@ -272,7 +279,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         return fragmentViewState;
     }
 
-
     @DebugLog
     @Override
     public void showLoading() {
@@ -289,6 +295,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     public void showConnected(@NonNull final Light light) {
         getViewState().setShowConnected(light);
 
+        title.setText(light.getLabel());
+
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
         disconnectedLayout.setVisibility(View.GONE);
@@ -299,6 +307,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @Override
     public void showConnecting(@NonNull final Light light) {
         getViewState().setShowConnecting(light);
+
+        title.setText(light.getLabel());
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
@@ -318,6 +328,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @Override
     public void showDisconnected(@NonNull final Light light) {
         getViewState().setShowDisconnected(light);
+
+        title.setText(light.getLabel());
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
@@ -349,7 +361,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     // Dagger
 
-    @DebugLog
     @Override
     protected void injectDependencies() {
         super.injectDependencies();
@@ -370,7 +381,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {
-        final int PAGE_COUNT = 3;
+        final int PAGE_COUNT = 2;
 
         public LightFragmentPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);

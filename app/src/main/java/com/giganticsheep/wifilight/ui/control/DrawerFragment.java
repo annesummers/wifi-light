@@ -158,7 +158,6 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
     // Dagger
 
-    @DebugLog
     @Override
     protected final void injectDependencies() {
         getLightControlActivity().getComponent().inject(this);
