@@ -11,6 +11,7 @@ import com.giganticsheep.wifilight.util.AndroidEventBus;
 
 import dagger.Module;
 import dagger.Provides;
+import timber.log.Timber;
 
 /**
  * Created by anne on 28/06/15.
@@ -36,5 +37,12 @@ public class WifiLightModule {
     @ApplicationScope
     FragmentFactory provideFragmentFactory(WifiLightApplication application) {
         return new FragmentFactory(application);
+    }
+
+    @NonNull
+    @Provides
+    @ApplicationScope
+    Timber.Tree provideTree() {
+        return new Timber.DebugTree();
     }
 }

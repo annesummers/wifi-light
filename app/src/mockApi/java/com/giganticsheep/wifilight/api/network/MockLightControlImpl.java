@@ -18,6 +18,7 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.util.Constants;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,21 +68,21 @@ public class MockLightControlImpl implements LightControl {
 
         GroupData group = new GroupData();
         group.id = Constants.TEST_GROUP_ID;
-        group.label = Constants.TEST_GROUP_LABEL;
+        group.name = Constants.TEST_GROUP_LABEL;
         groups.add(group);
 
         group = new GroupData();
         group.id = Constants.TEST_GROUP_ID2;
-        group.label = Constants.TEST_GROUP_LABEL2;
+        group.name = Constants.TEST_GROUP_LABEL2;
         groups.add(group);
 
         GroupData location = new GroupData();
         location.id = Constants.TEST_LOCATION_ID;
-        location.label = Constants.TEST_LOCATION_LABEL;
+        location.name = Constants.TEST_LOCATION_LABEL;
         groups.add(location);
 
         location.id = Constants.TEST_LOCATION_ID2;
-        location.label = Constants.TEST_LOCATION_LABEL2;
+        location.name = Constants.TEST_LOCATION_LABEL2;
         groups.add(location);
     }
 
@@ -359,7 +360,7 @@ public class MockLightControlImpl implements LightControl {
     @NonNull
     @Override
     public Observable<Location> fetchLocations(boolean fetchFromServer) {
-        if (status == Status.OK) {
+        if (status == Status.OK || status == Status.OFF) {
             return Observable.create(new Observable.OnSubscribe<Location>() {
 
                 @Override
@@ -374,19 +375,40 @@ public class MockLightControlImpl implements LightControl {
                     subscriber.onCompleted();
                 }
             });
-        } else if (status == Status.OFF) {
+        } else if (status == Status.ERROR) {
+            return Observable.error(new Throwable("Error from server"));
+        } else {
+            return Observable.error(new Throwable("Status unknown"));
+        }
+    }
+
+    @NonNull
+    @Override
+    public Observable<Location> fetchLightNetwork() {
+        if (status == Status.OK || status == Status.OFF) {
             return Observable.create(new Observable.OnSubscribe<Location>() {
 
                 @Override
                 public void call(Subscriber<? super Location> subscriber) {
-                    for (Location location : locations) {
+                    fetchLocations(true).subscribe(new Subscriber<Location>() {
+                        @Override
+                        public void onCompleted() {
+                            subscriber.onCompleted();
 
-                        eventBus.postMessage(new FetchedLocationEvent(location));
-                        subscriber.onNext(location);
-                    }
+                            fetchGroups(true).subscribe(new ErrorSubscriber<>());
+                            fetchLights(true).subscribe(new ErrorSubscriber<>());
+                        }
 
-                    eventBus.postMessage(new FetchLocationsEvent(lights.size()));
-                    subscriber.onCompleted();
+                        @Override
+                        public void onError(Throwable e) {
+                            subscriber.onError(e);
+                        }
+
+                        @Override
+                        public void onNext(Location location) {
+                            subscriber.onNext(location);
+                        }
+                    });
                 }
             });
         } else if (status == Status.ERROR) {

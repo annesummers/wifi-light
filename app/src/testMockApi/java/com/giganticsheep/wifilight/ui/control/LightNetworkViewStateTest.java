@@ -26,7 +26,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetworkPresenter.LightNetwork lightNetwork) {
+            public void showLightNetwork(LightNetwork lightNetwork, int position) {
                 Assert.fail("showLightNetwork() instead of showLoading()");
             }
 
@@ -59,7 +59,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetworkPresenter.LightNetwork lightNetwork) {
+            public void showLightNetwork(LightNetwork lightNetwork, int position) {
                 Assert.fail("showLightNetwork() instead of showError()");
             }
 
@@ -92,7 +92,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetworkPresenter.LightNetwork lightNetwork) {
+            public void showLightNetwork(LightNetwork lightNetwork, int position) {
                 Assert.fail("showLightNetwork() instead of showError(Throwable)");
             }
 
@@ -125,7 +125,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetworkPresenter.LightNetwork lightNetwork) {
+            public void showLightNetwork(LightNetwork lightNetwork, int position) {
                 showNetworkCalled.set(true);
             }
 
@@ -141,7 +141,7 @@ public class LightNetworkViewStateTest {
         };
 
         LightNetworkViewState viewState = new LightNetworkViewState();
-        viewState.setShowLightNetwork();
+        viewState.setShowLightNetwork(new LightNetwork(), 0);
         viewState.apply(view, false);
 
         assertTrue(showNetworkCalled.get());

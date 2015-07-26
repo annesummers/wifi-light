@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.ui.status;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.LightPresenterTestBase;
 import com.giganticsheep.wifilight.ui.base.light.TestLightView;
 
@@ -36,12 +35,12 @@ public class StatusPresenterTest extends LightPresenterTestBase {
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
-        testSetPower(LightControl.Power.OFF);
+        testSetPower(false);
 
         assertThat(view.getLight().getPower(), equalTo(LightControl.Power.OFF));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
 
-        testSetPower(LightControl.Power.ON);
+        testSetPower(true);
 
         assertThat(view.getLight().getPower(), equalTo(LightControl.Power.ON));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
@@ -53,13 +52,13 @@ public class StatusPresenterTest extends LightPresenterTestBase {
         fetchLightAndHandleEvent();
 
         LightControl.Power power = view.getLight().getPower();
-        testSetPower(LightControl.Power.OFF);
+        testSetPower(false);
 
         assertThat(view.getLight().getPower(), equalTo(power));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
 
         power = view.getLight().getPower();
-        testSetPower(LightControl.Power.ON);
+        testSetPower(true);
 
         assertThat(view.getLight().getPower(), equalTo(power));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
@@ -71,7 +70,7 @@ public class StatusPresenterTest extends LightPresenterTestBase {
         fetchLightAndHandleEvent();
 
         setTestStatus(LightControl.Status.ERROR);
-        getPresenter().setPower(LightControl.Power.OFF, TestConstants.TEST_DURATION);
+        getPresenter().setPower(false);
         handleErrorEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
@@ -83,14 +82,14 @@ public class StatusPresenterTest extends LightPresenterTestBase {
         fetchLightAndHandleEvent();
 
         setTestStatus(LightControl.Status.ERROR);
-        getPresenter().setPower(LightControl.Power.ON, TestConstants.TEST_DURATION);
+        getPresenter().setPower(true);
         handleErrorEvent();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_ERROR));
     }
 
-    private void testSetPower(LightControl.Power power) {
-        getPresenter().setPower(power, TestConstants.TEST_DURATION);
+    private void testSetPower(boolean isOn) {
+        getPresenter().setPower(isOn);
         handleLightChangedEvent();
     }
 }

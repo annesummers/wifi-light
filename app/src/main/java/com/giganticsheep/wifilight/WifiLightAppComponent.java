@@ -20,8 +20,8 @@ import dagger.Component;
                         SchedulersModule.class,
                         LightControlModule.class } )
 public interface WifiLightAppComponent extends WifiLightAppGraph,
-        WifiLightGraph,
-        SchedulersGraph,
+                                                WifiLightGraph,
+                                                SchedulersGraph,
                                                 LightControlGraph {
 
     final class Initializer {

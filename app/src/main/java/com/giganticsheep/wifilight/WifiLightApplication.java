@@ -9,6 +9,8 @@ import com.giganticsheep.wifilight.base.dagger.HasComponent;
 
 import org.jetbrains.annotations.NonNls;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /**
@@ -21,17 +23,19 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
     @NonNls private static final String DEFAULT_URL_STRING1 = "v1beta1";
     @NonNls private static final String DEFAULT_URL_STRING2 = "lights";
 
+    @Inject Timber.Tree loggerTree;
+
     private WifiLightAppComponent component;
 
     @Override
     public final void onCreate() {
         super.onCreate();
 
-        if(BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
-
         buildComponentAndInject();
+
+        if(BuildConfig.DEBUG) {
+            Timber.plant(loggerTree);
+        }
     }
 
     @Override

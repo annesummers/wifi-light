@@ -188,8 +188,7 @@ public class LightViewStateTest {
         };
 
         LightViewState viewState = new LightViewState();
-        viewState.setShowConnected();
-        viewState.setData(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
+        viewState.setShowConnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
         viewState.apply(view, false);
 
         assertTrue(connectedCalled.get());
@@ -233,8 +232,7 @@ public class LightViewStateTest {
         };
 
         LightViewState viewState = new LightViewState();
-        viewState.setShowConnecting();
-        viewState.setData(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
+        viewState.setShowConnecting(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
         viewState.apply(view, false);
 
         assertTrue(connectingCalled.get());
@@ -278,8 +276,7 @@ public class LightViewStateTest {
         };
 
         LightViewState viewState = new LightViewState();
-        viewState.setShowDisconnected();
-        viewState.setData(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
+        viewState.setShowDisconnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
         viewState.apply(view, false);
 
         assertTrue(disconnectedCalled.get());

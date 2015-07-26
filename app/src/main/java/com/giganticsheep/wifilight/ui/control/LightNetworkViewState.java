@@ -76,14 +76,4 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
 
         return this;
     }
-
-   /* @DebugLog
-    public void setLightNetwork(@NonNull final LightNetworkPresenter.LightNetwork lightNetwork) {
-        this.lightNetwork = lightNetwork;
-    }
-
-    @DebugLog
-    public void setPosition(final int position) {
-        this.selectedPosition = position;
-    }*/
 }

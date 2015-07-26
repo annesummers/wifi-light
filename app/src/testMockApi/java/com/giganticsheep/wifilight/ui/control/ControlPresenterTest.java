@@ -27,31 +27,11 @@ public class ControlPresenterTest extends LightPresenterTestBase {
     @Test
     public void testFetchLightsFromNetwork() {
         setTestStatus(LightControl.Status.OK);
-        getPresenter().fetchLights(true);
-
-        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LOADING));
-    }
-
-    @Test
-    public void testFetchLightsFromCacheCached() {
-        setTestStatus(LightControl.Status.OK);
-        getPresenter().fetchLights(true);
-
-        // TODO how to test this as it has no feedback in the PResenter
+        getPresenter().fetchLightNetwork();
 
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LOADING));
 
-        getPresenter().fetchLights(false);
-
-        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LOADING));
-    }
-
-    @Test
-    public void testFetchLightsFromCacheNotCached() {
-        setTestStatus(LightControl.Status.OK);
-        getPresenter().fetchLights(false);
-
-        assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LOADING));
+        //  TODO test events
     }
 
     @Test

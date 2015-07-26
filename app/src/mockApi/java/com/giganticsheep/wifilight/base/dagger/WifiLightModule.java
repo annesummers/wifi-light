@@ -6,9 +6,11 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.util.AndroidEventBus;
 import com.giganticsheep.wifilight.util.TestEventBus;
+import com.giganticsheep.wifilight.util.TestTree;
 
 import dagger.Module;
 import dagger.Provides;
+import timber.log.Timber;
 
 /**
  * Created by anne on 28/06/15.
@@ -47,6 +49,16 @@ public class WifiLightModule {
             return new FragmentFactory(application);
         } else {
             return new FragmentFactory();
+        }
+    }
+
+    @Provides
+    @ApplicationScope
+    Timber.Tree provideTree() {
+        if(application != null) {
+            return new Timber.DebugTree();
+        } else {
+            return new TestTree();
         }
     }
 }
