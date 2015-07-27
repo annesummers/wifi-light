@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.ui.control;
 
+import com.giganticsheep.wifilight.BuildConfig;
+
 import org.junit.Test;
 
 /**
@@ -11,21 +13,37 @@ public class DrawerFragmentTest {
 
     @Test
     public void testShowLoading() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
 
     }
 
     @Test
     public void testShowLightNetwork() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
 
     }
 
     @Test
     public void testShowError() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
 
     }
 
     @Test
     public void testShowError1() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
 
     }
 }

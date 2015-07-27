@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.fragment;
+package com.giganticsheep.wifilight.ui.white;
 
 import android.support.annotation.NonNull;
 import android.widget.SeekBar;
@@ -7,6 +7,7 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.base.TestConstants;
+import com.giganticsheep.wifilight.ui.base.LightFragmentTestBase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,10 @@ public class WhiteFragmentTest extends LightFragmentTestBase {
 
     @Test
     public void testSetLightDetails() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         super.testSetLightDetails();
 
         SeekBar brightnessSeekbar = (SeekBar) fragment.getView().findViewById(R.id.brightness_seekbar);

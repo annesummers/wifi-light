@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.fragment;
+package com.giganticsheep.wifilight.ui.details;
 
 import android.support.annotation.NonNull;
 import android.widget.TextView;
@@ -7,6 +7,7 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.base.TestConstants;
+import com.giganticsheep.wifilight.ui.base.LightFragmentTestBase;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
@@ -34,6 +35,10 @@ public class DetailsFragmentTest extends LightFragmentTestBase {
 
     @Test
     public void testSetLightDetails() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         super.testSetLightDetails();
 
         TextView idTextView = (TextView) fragment.getView().findViewById(R.id.id_textview);

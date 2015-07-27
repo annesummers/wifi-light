@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.fragment;
+package com.giganticsheep.wifilight.ui.status;
 
 import android.support.annotation.NonNull;
 import android.widget.TextView;
@@ -7,6 +7,7 @@ import android.widget.ToggleButton;
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.base.TestConstants;
+import com.giganticsheep.wifilight.ui.base.LightFragmentTestBase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,10 @@ public class StatusFragmentTest extends LightFragmentTestBase {
 
     @Test
     public void testSetLightDetails() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         super.testSetLightDetails();
 
         ToggleButton powerToggle = (ToggleButton) fragment.getView().findViewById(R.id.power_toggle);

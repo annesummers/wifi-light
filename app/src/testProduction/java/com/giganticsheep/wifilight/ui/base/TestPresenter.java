@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.mvp.presenter;
+package com.giganticsheep.wifilight.ui.base;
 
 import android.support.annotation.NonNull;
 

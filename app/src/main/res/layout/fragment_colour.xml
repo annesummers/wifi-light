@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.GridLayout
+        android:id="@+id/sliders_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
@@ -29,6 +30,7 @@
             grid:layout_column="1"
             grid:layout_columnSpan="1"
             grid:layout_columnWeight="1"
+            grid:layout_gravity="center_vertical"
             android:max="@integer/light_slider_hue_max" />
 
         <TextView
@@ -51,7 +53,7 @@
             grid:layout_gravity="center_vertical"
             android:max="@integer/light_slider_saturation_max" />
 
-        <TextView
+     <!--   <TextView
             android:layout_width="wrap_content"
             grid:layout_row="2"
             grid:layout_rowSpan="1"
@@ -59,7 +61,7 @@
             grid:layout_columnSpan="1"
             grid:layout_gravity="center_vertical"
             android:text="@string/label_light_brightness"
-            style="@style/Theme.WifiLight.TextView.Label1" />
+            style="@style/Theme.WifiLight.TextView.Label1" />-->
 
         <SeekBar
             android:id="@+id/brightness_seekbar"
@@ -70,6 +72,5 @@
             grid:layout_columnWeight="1"
             grid:layout_gravity="center_vertical"
             android:max="@integer/light_slider_brightness_max" />
-
     </android.support.v7.widget.GridLayout>
 </RelativeLayout>

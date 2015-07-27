@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui;
+package com.giganticsheep.wifilight.ui.control;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.network.MockLight;
 import com.giganticsheep.wifilight.ui.colour.ColourFragment;
-import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.details.DetailsFragment;
 import com.giganticsheep.wifilight.ui.status.StatusFragment;
 import com.giganticsheep.wifilight.ui.white.WhiteFragment;
@@ -57,6 +56,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testCreateNotNull() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = activityController
                 .create()
                 .postCreate(null)
@@ -69,6 +72,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testRecreateNotNull() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         Bundle savedState = new Bundle();
         activityController
                 .create()
@@ -94,6 +101,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testLoadsViewPager() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
@@ -107,6 +118,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testLoadsTabs() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         ViewGroup tabs = (ViewGroup) activityController.get().findViewById(R.id.sliding_tabs);
@@ -116,6 +131,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testConfigurationChanged() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         Bundle savedState = new Bundle();
         activityController
                 .create()
@@ -149,6 +168,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testShowsLightStatusFragment() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
@@ -158,6 +181,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testShowsLightDetailsFragment() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
@@ -167,6 +194,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testShowsLoadingView() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         activity.showLoading();
@@ -184,6 +215,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testShowsErrorView() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         activity.showError();
@@ -201,6 +236,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testShowsConnectedView() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         activity.showConnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
@@ -218,6 +257,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testShowsConnectingView() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         activity.showConnecting(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
@@ -235,6 +278,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testShowsDisconnectedView() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         activity.showDisconnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
@@ -252,6 +299,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testRefreshShown() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         View refreshButton = activity.findViewById(R.id.action_refresh);
@@ -262,6 +313,10 @@ public class LightControlActivityTest {
 
     @Test
     public void testRefreshRefreshesData() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         LightControlActivity activity = createAndGetActivity();
 
         ShadowActivity shadowActivity = Shadows.shadowOf(activity);
