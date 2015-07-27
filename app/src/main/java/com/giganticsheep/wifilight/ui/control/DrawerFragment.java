@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.base.EventBus;
@@ -29,6 +30,8 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @Inject EventBus eventBus;
 
     @InjectView(R.id.left_drawer) ExpandableListView drawerListView;
+    @InjectView(R.id.error_layout) FrameLayout errorLayout;
+    @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
 
     private DrawerAdapter adapter;
 
@@ -63,8 +66,15 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         });
     }
 
-    public void clickDrawerItem(final int position) {
-        drawerListView.performItemClick(null, position, 0L);
+    public void clickDrawerItem(final int groupPosition, final int childPosition) {
+        long packedPos = ExpandableListView.getPackedPositionForChild(groupPosition, childPosition);
+        int flatPos = drawerListView.getFlatListPosition(packedPos);
+        int adjustedPos = flatPos - drawerListView.getFirstVisiblePosition();
+
+        View childToClick = drawerListView.getChildAt(adjustedPos);
+        long id = adapter.getChildId(groupPosition, childPosition);
+
+        drawerListView.performItemClick(childToClick, adjustedPos, id);
     }
 
     @Override
@@ -94,7 +104,13 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
     @Override
     public ViewState createViewState() {
-        return new LightNetworkViewState();
+        ViewState viewState = getLightControlActivity().getDrawerViewState();
+
+        if (viewState == null) {
+            return new LightNetworkViewState();
+        } else {
+            return viewState;
+        }
     }
 
     @Override
@@ -117,6 +133,10 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @Override
     public void showLoading() {
         getViewState().setShowLoading();
+
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.VISIBLE);
+        drawerListView.setVisibility(View.GONE);
     }
 
     @DebugLog
@@ -126,22 +146,36 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
                                  final int childPosition) {
         getViewState().setShowLightNetwork(lightNetwork, groupPosition, childPosition);
 
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+        drawerListView.setVisibility(View.VISIBLE);
+
         adapter.setLightNetwork(lightNetwork, groupPosition, childPosition);
         adapter.notifyDataSetChanged();
 
-        clickDrawerItem(groupPosition);
+        drawerListView.expandGroup(0);
+
+        clickDrawerItem(childPosition, groupPosition);
     }
 
     @DebugLog
     @Override
     public void showError() {
         getViewState().setShowError();
+
+        errorLayout.setVisibility(View.VISIBLE);
+        loadingLayout.setVisibility(View.GONE);
+        drawerListView.setVisibility(View.GONE);
     }
 
     @DebugLog
     @Override
     public void showError(Throwable throwable) {
         getViewState().setShowError(throwable);
+
+        errorLayout.setVisibility(View.VISIBLE);
+        loadingLayout.setVisibility(View.GONE);
+        drawerListView.setVisibility(View.GONE);
     }
 
     // Dagger

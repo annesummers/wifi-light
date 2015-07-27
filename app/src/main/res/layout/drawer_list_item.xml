@@ -18,8 +18,7 @@
         android:layout_toStartOf="@+id/light_status"
         android:layout_margin="@dimen/default_margin"
         android:layout_gravity="center_vertical"
-        style="@style/Theme.WifiLight.TextView.DrawerLabel"
-        android:src="@string/test_string" />
+        style="@style/Theme.WifiLight.TextView.DrawerLabel" />
 
     <ImageView
         android:id="@+id/light_status"
@@ -30,6 +29,6 @@
         android:layout_margin="@dimen/default_margin"
         android:layout_gravity="center"
         android:src="@drawable/ic_action_tick"
-        android:contentDescription="Light Status" />
+        android:contentDescription="@string/description_light_status" />
 
 </RelativeLayout>

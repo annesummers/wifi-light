@@ -69,10 +69,6 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      */
     @DebugLog
     public void fetchLight(final String id) {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
             @Override
@@ -138,6 +134,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
             if(lightNetwork.lightExists(light.getGroup().id(), light.id())) {
                 lightNetwork.remove(light.getGroup().id(), light.id());
             }
+
             lightNetwork.add(new LightViewData(light.id(),
                     light.getLabel(),
                     light.isConnected(),

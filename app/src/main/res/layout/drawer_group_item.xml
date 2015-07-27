@@ -7,5 +7,8 @@
     <TextView
         android:id="@+id/group_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_gravity="center_vertical"
+        style="@style/Theme.WifiLight.TextView.DrawerLabel" />
 </FrameLayout>

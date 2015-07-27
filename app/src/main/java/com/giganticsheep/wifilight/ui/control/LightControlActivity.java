@@ -32,6 +32,7 @@ import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.ui.base.light.LightViewState;
 import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
+import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import java.util.Timer;
@@ -39,7 +40,6 @@ import java.util.TimerTask;
 
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
-import icepick.Icicle;
 import timber.log.Timber;
 
 /**
@@ -61,7 +61,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     private LightControlActivityComponent component;
 
-    @Icicle LightViewState fragmentViewState;
+    LightViewState fragmentViewState;
+    LightNetworkViewState drawerViewState;
 
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
@@ -85,6 +86,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         super.onCreate(savedInstanceState);
 
         fragmentViewState = new LightViewState();
+        drawerViewState = new LightNetworkViewState();
 
         if (savedInstanceState == null) {
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0, false));
@@ -151,10 +153,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @Override
     public final boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        if (drawerLayout != null && drawerLayout.isDrawerOpen(drawerContainerLayout)) {
-            showGlobalContextActionBar();
-        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -246,12 +244,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         drawerLayout.closeDrawer(drawerContainerLayout);
     }
 
-    private void showGlobalContextActionBar() {
-       // ActionBar actionBar = getSupportActionBar();
-
-       // actionBar.setDisplayShowTitleEnabled(false);
-    }
-
     // MVP
 
     @NonNull
@@ -279,7 +271,11 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     @NonNull
     public LightViewState getFragmentViewState() {
-        return fragmentViewState;
+        if(fragmentViewState == null) {
+            return getViewState();//fragmentViewState;
+        } else {
+            return fragmentViewState;
+        }
     }
 
     @DebugLog
@@ -381,6 +377,10 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @Override
     public LightControlActivityComponent getComponent() {
         return component;
+    }
+
+    public ViewState getDrawerViewState() {
+        return drawerViewState;
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {

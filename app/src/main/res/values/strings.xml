@@ -33,5 +33,6 @@
     <string name="fragment_name_drawer">Drawer</string>
     <string name="action_drawer_open">Open</string>
     <string name="action_drawer_close">Close</string>
+    <string name="description_light_status">Light Status</string>
 
 </resources>
