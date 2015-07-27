@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.api.model;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.FetchGroupsEvent;
 import com.giganticsheep.wifilight.api.FetchLightsEvent;
 import com.giganticsheep.wifilight.api.FetchLocationsEvent;
@@ -30,6 +31,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testFetchLights() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         int[] lightsCount = new int[1];
         lightNetwork.fetchLights(true)
                 .subscribe(new Subscriber<Light>() {
@@ -56,6 +61,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testFetchLocations() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         int[] locationsCount = new int[1];
         lightNetwork.fetchLocations(true)
                 .subscribe(new Subscriber<Location>() {
@@ -82,6 +91,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testFetchGroups() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         int[] groupsCount = new int[1];
         lightNetwork.fetchGroups(true)
                 .subscribe(new Subscriber<Group>() {
@@ -108,6 +121,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testFetchLight() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         lightNetwork.fetchLight(Constants.TEST_ID)
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<Light>() {
@@ -126,6 +143,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testSetHue() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         lightNetwork.setHue(300, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
@@ -141,6 +162,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testSetSaturation() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         lightNetwork.setSaturation(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
@@ -156,6 +181,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testSetBrightness() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         lightNetwork.setBrightness(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
@@ -171,6 +200,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testSetKelvin() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         lightNetwork.setKelvin(3000, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
@@ -186,6 +219,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testToggleLights() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         lightNetwork.togglePower()
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
@@ -201,6 +238,10 @@ public class LightControlTest extends ModelTest {
 
     @Test
     public void testSetPower() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         lightNetwork.setPower(LightControl.Power.ON, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override

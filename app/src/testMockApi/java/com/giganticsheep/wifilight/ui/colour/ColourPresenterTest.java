@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.colour;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenterTestBase;
@@ -26,6 +27,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetHueConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -37,6 +42,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetHueDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -50,6 +59,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetHueConnectedWasDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -62,6 +75,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetHueDisconnectedWasConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -76,6 +93,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetHueError() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -93,6 +114,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetSaturationConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -104,6 +129,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetSaturationDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -117,6 +146,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetSaturationConnectedWasDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -129,6 +162,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetSaturationDisconnectedWasConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -143,6 +180,10 @@ public class ColourPresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetSaturationError() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 

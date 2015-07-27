@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
@@ -49,6 +50,10 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
 
     @Test
     public void testTestFetchLightConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -57,6 +62,10 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
 
     @Test
     public void testTestFetchLightConnecting() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         setLightTimeout();
 
@@ -67,6 +76,10 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
 
     @Test
     public void testTestFetchLightDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -75,6 +88,10 @@ public abstract class LightPresenterTestBase extends WifiLightTestBase {
 
     @Test
     public void testTestFetchLightError() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.ERROR);
         presenter.fetchLight(Constants.TEST_ID);
         handleErrorEvent();

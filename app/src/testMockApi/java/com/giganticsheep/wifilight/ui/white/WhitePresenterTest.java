@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.white;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenterTestBase;
@@ -33,6 +34,10 @@ public class WhitePresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetKelvinConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -44,6 +49,10 @@ public class WhitePresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetKelvinDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -58,6 +67,10 @@ public class WhitePresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetKelvinConnectedWasDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -70,6 +83,10 @@ public class WhitePresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetKelvinDisconnectedWasConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -84,6 +101,10 @@ public class WhitePresenterTest extends BrightnessPresenterTestBase {
 
     @Test
     public void testSetKelvinError() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 

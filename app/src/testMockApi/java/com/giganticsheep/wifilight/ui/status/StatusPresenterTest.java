@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.status;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.ui.base.LightPresenterTestBase;
 import com.giganticsheep.wifilight.ui.base.light.TestLightView;
@@ -32,6 +33,10 @@ public class StatusPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testSetPowerConnected() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -48,6 +53,10 @@ public class StatusPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testSetPowerDisconnected() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -66,6 +75,10 @@ public class StatusPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testSetPowerOffError() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -78,6 +91,10 @@ public class StatusPresenterTest extends LightPresenterTestBase {
 
     @Test
     public void testSetPowerOnError() throws Exception {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 

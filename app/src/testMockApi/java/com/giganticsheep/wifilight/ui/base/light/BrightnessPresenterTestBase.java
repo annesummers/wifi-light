@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.base.light;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.LightPresenterTestBase;
@@ -26,6 +27,10 @@ public abstract class BrightnessPresenterTestBase extends LightPresenterTestBase
 
     @Test
     public void testSetBrightnessConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -37,6 +42,10 @@ public abstract class BrightnessPresenterTestBase extends LightPresenterTestBase
 
     @Test
     public void testSetBrightnessDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -50,6 +59,10 @@ public abstract class BrightnessPresenterTestBase extends LightPresenterTestBase
 
     @Test
     public void testSetBrightnessConnectedWasDisconnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OFF);
         fetchLightAndHandleEvent();
 
@@ -62,6 +75,10 @@ public abstract class BrightnessPresenterTestBase extends LightPresenterTestBase
 
     @Test
     public void testSetBrightnessDisconnectedWasConnected() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 
@@ -76,6 +93,10 @@ public abstract class BrightnessPresenterTestBase extends LightPresenterTestBase
 
     @Test
     public void testSetBrightnessError() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         setTestStatus(LightControl.Status.OK);
         fetchLightAndHandleEvent();
 

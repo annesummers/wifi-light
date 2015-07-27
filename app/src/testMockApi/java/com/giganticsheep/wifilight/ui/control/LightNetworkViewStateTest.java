@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.ui.control;
 
+import com.giganticsheep.wifilight.BuildConfig;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -17,6 +19,10 @@ public class LightNetworkViewStateTest {
 
     @Test
     public void testShowLoading() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         final AtomicBoolean loadingCalled = new AtomicBoolean(false);
 
         LightNetworkView view = new LightNetworkView() {
@@ -26,7 +32,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int position) {
+            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
                 Assert.fail("showLightNetwork() instead of showLoading()");
             }
 
@@ -50,6 +56,10 @@ public class LightNetworkViewStateTest {
 
     @Test
     public void testShowError() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         LightNetworkView view = new LightNetworkView() {
@@ -59,7 +69,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int position) {
+            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
                 Assert.fail("showLightNetwork() instead of showError()");
             }
 
@@ -83,6 +93,10 @@ public class LightNetworkViewStateTest {
 
     @Test
     public void testShowErrorThrowable() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         LightNetworkView view = new LightNetworkView() {
@@ -92,7 +106,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int position) {
+            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
                 Assert.fail("showLightNetwork() instead of showError(Throwable)");
             }
 
@@ -116,6 +130,10 @@ public class LightNetworkViewStateTest {
 
     @Test
     public void testShowLightNetwork() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         final AtomicBoolean showNetworkCalled = new AtomicBoolean(false);
 
         LightNetworkView view = new LightNetworkView() {
@@ -125,7 +143,7 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int position) {
+            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
                 showNetworkCalled.set(true);
             }
 
@@ -141,7 +159,7 @@ public class LightNetworkViewStateTest {
         };
 
         LightNetworkViewState viewState = new LightNetworkViewState();
-        viewState.setShowLightNetwork(new LightNetwork(), 0);
+        viewState.setShowLightNetwork(new LightNetwork(), 0, 0);
         viewState.apply(view, false);
 
         assertTrue(showNetworkCalled.get());

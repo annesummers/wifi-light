@@ -16,7 +16,6 @@ import hugo.weaving.DebugLog;
  */
 public class ControlPresenter extends LightPresenterBase {
 
-    @DebugLog
     public ControlPresenter(@NonNull final Injector injector) {
         super(injector);
     }
