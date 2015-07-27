@@ -20,23 +20,11 @@ public class LightNetwork {
     }
 
     public void add(LightNetworkPresenter.GroupViewData group) {
-        //List<LightNetworkPresenter.LightViewData> subList = new ArrayList<>();
-
         groupDataList.add(group);
         groupsDataMap.put(group.getId(), new ArrayList<>());
-
-       /* for(LightNetworkPresenter.GroupViewData group : groupDataList) {
-            if(group.getId().equals(group.getId())) {
-                subList.add(light);
-            }
-        }*/
-
-        //groupsDataMap.put(group, subList);
     }
 
     public void add(LightNetworkPresenter.LightViewData light) {
-       // groupDataList.add(light);
-
         List<LightNetworkPresenter.LightViewData> subList;
 
         if(groupsDataMap.containsKey(light.getGroupId())) {
@@ -50,10 +38,6 @@ public class LightNetwork {
     public int size() {
         return groupDataList.size();
     }
-
-   // public LightNetworkPresenter.LightViewData get(final int position) {
-     //   return 0;//groupDataList.get(position);
-    //}
 
     public LightNetworkPresenter.LightViewData get(int groupPosition, int childPosition) {
         return groupsDataMap.get(groupDataList.get(groupPosition).getId()).get(childPosition);

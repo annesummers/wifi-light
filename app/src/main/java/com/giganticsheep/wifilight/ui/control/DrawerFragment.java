@@ -58,6 +58,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
             getPresenter().setPosition(groupPosition, childPosition);
             getPresenter().fetchLight(adapter.getChild(groupPosition, childPosition));
 
+            drawerListView.expandGroup(groupPosition);
             drawerListView.setSelectedChild(groupPosition, childPosition, true);
 
             getLightControlActivity().closeDrawer();
@@ -153,7 +154,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         adapter.setLightNetwork(lightNetwork, groupPosition, childPosition);
         adapter.notifyDataSetChanged();
 
-        drawerListView.expandGroup(0);
+        //drawerListView.expandGroup(0);
 
         clickDrawerItem(childPosition, groupPosition);
     }
