@@ -28,6 +28,10 @@ android {
         exclude 'LICENSE.txt'
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         release {
             resValue("string", "DEFAULT_API_KEY", DUNCAN_API_KEY)
