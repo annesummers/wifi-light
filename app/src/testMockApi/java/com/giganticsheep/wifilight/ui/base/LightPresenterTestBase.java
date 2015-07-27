@@ -9,7 +9,6 @@ import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
 import com.giganticsheep.wifilight.ui.ErrorEvent;
 import com.giganticsheep.wifilight.ui.LightChangedEvent;
-import com.giganticsheep.wifilight.ui.base.TestPresenterComponent;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.base.light.TestLightView;
 import com.giganticsheep.wifilight.util.Constants;

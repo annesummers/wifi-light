@@ -72,7 +72,8 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
             @Override
-            public void onCompleted() { }
+            public void onCompleted() {
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -116,7 +117,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      */
     @DebugLog
     public synchronized void onEvent(@NonNull FetchLightsEvent event) {
-        if(event.getLightsFetchedCount() > 0) {
+        if(event.getLightsFetchedCount() > 0 && lightNetwork != null) {
             getView().showLightNetwork(lightNetwork, groupPosition, childPosition);
         }
     }
@@ -142,10 +143,10 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         }
     }
 
-    @DebugLog
+   /* @DebugLog
     public synchronized void onEvent(@NonNull ErrorEvent event) {
 
-    }
+    }*/
 
     /**
      * Subscribes to observable with subscriber, retaining the resulting Subscription so
@@ -167,7 +168,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      * @param observable the Observable to subscribe to
      * @param <T> the type the Observable is observing
      */
-    protected <T> void subscribe(@NonNull final Observable<T> observable) {
+    private <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>());
     }
 

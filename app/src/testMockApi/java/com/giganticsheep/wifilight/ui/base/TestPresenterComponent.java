@@ -3,6 +3,8 @@ package com.giganticsheep.wifilight.ui.base;
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.base.TestModule;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
+import com.giganticsheep.wifilight.ui.control.LightNetworkPresenter;
+import com.giganticsheep.wifilight.ui.control.LightNetworkPresenterTest;
 
 import dagger.Component;
 
@@ -15,7 +17,9 @@ import dagger.Component;
 @Component(
         dependencies = {WifiLightTestsComponent.class},
         modules = { TestModule.class } )
-interface TestPresenterComponent extends LightPresenterBase.Injector {
+public interface TestPresenterComponent extends LightPresenterBase.Injector,
+        LightNetworkPresenter.Injector {
 
     void inject(LightPresenterTestBase presenterTest);
+    void inject(LightNetworkPresenterTest presenterTest);
 }
