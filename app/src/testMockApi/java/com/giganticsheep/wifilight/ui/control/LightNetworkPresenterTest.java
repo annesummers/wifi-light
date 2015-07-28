@@ -83,9 +83,9 @@ public class LightNetworkPresenterTest extends MockedTestBase {
 
     @Test
     public void testNetworkReceivedOK() throws Exception {
-       // if(BuildConfig.DEBUG) {
-       //     return;
-       // }
+        if(BuildConfig.DEBUG) {
+            return;
+        }
 
         GroupData testGroup = new GroupData();
         testGroup.name = Constants.TEST_GROUP_LABEL;

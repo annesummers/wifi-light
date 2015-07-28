@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
@@ -44,7 +45,6 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
 
     private LightNetwork network;
 
-  //  @DebugLog
     public LightNetworkPresenter(@NonNull final Injector injector) {
         injector.inject(this);
 
@@ -53,7 +53,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
-   // @DebugLog
+    @DebugLog
     public void onDestroy() {
         compositeSubscription.unsubscribe();
 
@@ -66,7 +66,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param id the id of the Light to fetch.
      */
- //   @DebugLog
+    @DebugLog
     public void fetchLight(final String id) {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
@@ -91,7 +91,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param event a FetchLocationsEvent
      */
-  //  @DebugLog
+    @DebugLog
     public synchronized void onEvent(@NonNull FetchLocationsEvent event) {
         lightNetwork = new LightNetwork();
     }
@@ -114,7 +114,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param event a FetchLightsEvent
      */
-  //  @DebugLog
+    @DebugLog
     public synchronized void onEvent(@NonNull FetchLightsEvent event) {
         if(event.getLightsFetchedCount() > 0 && lightNetwork != null) {
             getView().showLightNetwork(lightNetwork, groupPosition, childPosition);
@@ -128,7 +128,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
      */
-   // @DebugLog
+    @DebugLog
     public synchronized void onEvent(@NonNull FetchedLightEvent event) {
         if(lightNetwork != null) {
             Light light = event.getLight();
