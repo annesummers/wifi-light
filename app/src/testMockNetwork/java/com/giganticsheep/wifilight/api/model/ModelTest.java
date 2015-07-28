@@ -1,13 +1,13 @@
 package com.giganticsheep.wifilight.api.model;
 
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
-import com.giganticsheep.wifilight.base.WifiLightTestBase;
+import com.giganticsheep.wifilight.base.MockedTestBase;
 
 /**
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public class ModelTest extends WifiLightTestBase {
+public class ModelTest extends MockedTestBase {
     private TestModelComponent component;
 
     @Override

@@ -81,7 +81,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return lightNetwork.size();
+        return lightNetwork.groupCount();
     }
 
     @Override
@@ -152,7 +152,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
      * The data for the entry is set via setViewData(ViewData viewData).
      */
     public class LightViewHolder {
-        private LightNetworkPresenter.LightViewData viewData;
+        private LightViewData viewData;
 
         private final TextView lightNameTextView;
         private final ImageView lightStatusImageView;
@@ -162,7 +162,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
             lightStatusImageView = (ImageView) view.findViewById(R.id.light_status);
         }
 
-        public void setViewData(@NonNull final LightNetworkPresenter.LightViewData viewData) {
+        public void setViewData(@NonNull final LightViewData viewData) {
             this.viewData = viewData;
 
             lightNameTextView.setText(viewData.getLabel());
@@ -173,7 +173,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
     }
 
     private class GroupViewHolder {
-        private LightNetworkPresenter.GroupViewData viewData;
+        private GroupViewData viewData;
 
         private final TextView groupNameTextView;
 
@@ -181,7 +181,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
             groupNameTextView = (TextView) view.findViewById(R.id.group_name);
         }
 
-        public void setViewData(@NonNull final LightNetworkPresenter.GroupViewData viewData) {
+        public void setViewData(@NonNull final GroupViewData viewData) {
             this.viewData = viewData;
 
             groupNameTextView.setText(viewData.getLabel());

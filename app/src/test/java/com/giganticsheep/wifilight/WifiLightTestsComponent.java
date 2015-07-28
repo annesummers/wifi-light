@@ -15,9 +15,7 @@ import dagger.Component;
  */
 
 @ApplicationScope
-@Component(modules = { WifiLightModule.class,
-                        SchedulersModule.class,
-                        LightControlModule.class} )
+@Component(modules = {LightControlModule.class} )
 public interface WifiLightTestsComponent extends WifiLightGraph,
                                                 SchedulersGraph,
                                                 LightControlGraph {

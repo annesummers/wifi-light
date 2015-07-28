@@ -33,7 +33,9 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
 
         buildComponentAndInject();
 
-        if(BuildConfig.DEBUG) {
+        if(BuildConfig.DEBUG ||
+                BuildConfig.APPLICATION_ID.equals("com.giganticsheep.wifilight.mocknetwork") ||
+                        BuildConfig.APPLICATION_ID.equals("com.giganticsheep.wifilight.mockapi")) {
             Timber.plant(loggerTree);
         }
     }

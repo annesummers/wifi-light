@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 
-import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
@@ -45,16 +44,16 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
 
     private LightNetwork network;
 
-    @DebugLog
+  //  @DebugLog
     public LightNetworkPresenter(@NonNull final Injector injector) {
         injector.inject(this);
 
-        lightNetwork = new LightNetwork();
+        lightNetwork = null;
 
         eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
-    @DebugLog
+   // @DebugLog
     public void onDestroy() {
         compositeSubscription.unsubscribe();
 
@@ -67,7 +66,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param id the id of the Light to fetch.
      */
-    @DebugLog
+ //   @DebugLog
     public void fetchLight(final String id) {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
@@ -92,7 +91,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param event a FetchLocationsEvent
      */
-    @DebugLog
+  //  @DebugLog
     public synchronized void onEvent(@NonNull FetchLocationsEvent event) {
         lightNetwork = new LightNetwork();
     }
@@ -102,7 +101,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
      */
-    @DebugLog
+  //  @DebugLog
     public synchronized void onEvent(@NonNull FetchedGroupEvent event) {
         if(lightNetwork != null) {
             Group group = event.getGroup();
@@ -115,11 +114,13 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param event a FetchLightsEvent
      */
-    @DebugLog
+  //  @DebugLog
     public synchronized void onEvent(@NonNull FetchLightsEvent event) {
         if(event.getLightsFetchedCount() > 0 && lightNetwork != null) {
             getView().showLightNetwork(lightNetwork, groupPosition, childPosition);
         }
+
+        lightNetwork = null;
     }
 
     /**
@@ -127,7 +128,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
      */
-    @DebugLog
+   // @DebugLog
     public synchronized void onEvent(@NonNull FetchedLightEvent event) {
         if(lightNetwork != null) {
             Light light = event.getLight();
@@ -210,33 +211,4 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         }
     }
 
-    public static class LightViewData extends ListItemData {
-        private final boolean connected;
-        private final String groupId;
-
-        public LightViewData(final String id,
-                             final String label,
-                             final boolean connected,
-                             final String groupId) {
-            super(id, label);
-
-            this.connected = connected;
-            this.groupId = groupId;
-        }
-
-        public final boolean isConnected() {
-            return connected;
-        }
-
-        public String getGroupId() {
-            return groupId;
-        }
-    }
-
-    public static class GroupViewData extends ListItemData {
-        public GroupViewData(final String id,
-                             final String label) {
-            super(id, label);
-        }
-    }
 }

@@ -6,7 +6,7 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
-import com.giganticsheep.wifilight.base.WifiLightTestBase;
+import com.giganticsheep.wifilight.base.MockedTestBase;
 import com.giganticsheep.wifilight.ui.ErrorEvent;
 import com.giganticsheep.wifilight.ui.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
@@ -23,7 +23,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public abstract class LightPresenterTestBase extends WifiLightTestBase {
+public abstract class LightPresenterTestBase extends MockedTestBase {
 
     private TestPresenterComponent component;
 
