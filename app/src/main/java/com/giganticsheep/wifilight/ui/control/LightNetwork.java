@@ -2,6 +2,9 @@ package com.giganticsheep.wifilight.ui.control;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.api.model.Location;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,21 +16,23 @@ import java.util.List;
  */
 public class LightNetwork {
 
-    private final List<GroupViewData> groupDataList = new ArrayList<>();
+    private final List<Group> groupDataList = new ArrayList<>();
     private final HashMap<String, List<LightViewData>> groupsDataMap = new HashMap<>();
+
+    private Location location;
 
     public void clear() {
         groupDataList.clear();
         groupsDataMap.clear();
     }
 
-    public void add(@NonNull final GroupViewData group) throws IllegalArgumentException {
-        if(groupsDataMap.containsKey(group.getId())) {
+    public void add(@NonNull final Group group) throws IllegalArgumentException {
+        if(groupsDataMap.containsKey(group.id())) {
             throw new IllegalArgumentException("A group with that id already exists");
         }
 
         groupDataList.add(group);
-        groupsDataMap.put(group.getId(), new ArrayList<>());
+        groupsDataMap.put(group.id(), new ArrayList<>());
     }
 
     public void add(@NonNull final LightViewData light) throws IllegalArgumentException {
@@ -49,23 +54,27 @@ public class LightNetwork {
         }
     }
 
+    public void add(@NonNull final Location location) {
+        this.location = location;
+    }
+
     public int groupCount() {
         return groupDataList.size();
     }
 
     public LightViewData get(int groupPosition, int childPosition) throws IndexOutOfBoundsException {
-        String groupId = get(groupPosition).getId();
+        String groupId = get(groupPosition).id();
         List<LightViewData> lightList = groupsDataMap.get(groupId);
         return lightList.get(childPosition);
     }
 
     public int lightCount(int groupPosition)  throws IndexOutOfBoundsException {
-        String groupId = get(groupPosition).getId();
+        String groupId = get(groupPosition).id();
         List<LightViewData> lightList = groupsDataMap.get(groupId);
         return lightList.size();
     }
 
-    public GroupViewData get(int groupPosition) throws IndexOutOfBoundsException {
+    public Group get(int groupPosition) throws IndexOutOfBoundsException {
         return groupDataList.get(groupPosition);
     }
 
@@ -84,7 +93,7 @@ public class LightNetwork {
         return false;
     }
 
-    public void remove(String groupId, String lightId) {
+    public final void remove(String groupId, String lightId) {
         if(!groupsDataMap.containsKey(groupId)) {
             throw new IllegalArgumentException("Group does not exist");
         }
@@ -96,5 +105,9 @@ public class LightNetwork {
                 break;
             }
         }
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

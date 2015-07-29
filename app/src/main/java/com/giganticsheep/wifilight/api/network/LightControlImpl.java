@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.FetchGroupsEvent;
+import com.giganticsheep.wifilight.api.FetchLightNetworkEvent;
 import com.giganticsheep.wifilight.api.FetchLightsEvent;
 import com.giganticsheep.wifilight.api.FetchLocationsEvent;
 import com.giganticsheep.wifilight.api.FetchedGroupEvent;
@@ -16,6 +17,7 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.api.model.WifiLightData;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
@@ -29,7 +31,6 @@ import java.util.Map;
 import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Scheduler;
-import rx.Subscriber;
 import timber.log.Timber;
 
 /**
@@ -59,8 +60,6 @@ class LightControlImpl implements LightControl {
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<List<LightResponse>> lightResponsesObservable = null;
 
-    // TODO groups
-    // TODO locations
     // TODO selectors
     // TODO effects
 
@@ -267,27 +266,15 @@ class LightControlImpl implements LightControl {
     @NonNull
     @Override
     public Observable<Location> fetchLightNetwork() {
-        return Observable.create(subscriber -> {
-            fetchLocations(true).subscribe(new Subscriber<Location>() {
-                @Override
-                public void onCompleted() {
-                    subscriber.onCompleted();
+        List<Observable<? extends WifiLightData>> observables = new ArrayList<>();
 
-                    fetchGroups(true).subscribe(new ErrorEventSubscriber<>(eventBus));
-                    fetchLights(true).subscribe(new ErrorEventSubscriber<>(eventBus));
-                }
+        observables.add(fetchLocations(true));
+        observables.add(fetchGroups(true));
+        observables.add(fetchLights(true));
 
-                @Override
-                public void onError(Throwable e) {
-                    subscriber.onError(e);
-                }
-
-                @Override
-                public void onNext(Location location) {
-                    subscriber.onNext(location);
-                }
-            });
-        });
+        return Observable.zip(observables, args -> (Location) args[0])
+                .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent())
+                        .subscribe(new ErrorSubscriber<>()));
     }
 
     private Observable<List<LightResponse>> fetchLightResponses(final boolean fetchFromServer) {

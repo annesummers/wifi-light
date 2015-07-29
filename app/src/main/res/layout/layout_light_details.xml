@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/light_details_label"
-        android:padding="@dimen/default_half_margin"
+        android:padding="@dimen/label_padding"
         android:background="@color/background_secondary"
         grid:columnCount="@integer/light_details_column_count"
         grid:rowCount="@integer/light_details_row_count"

@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import dagger.Module;
@@ -23,5 +24,11 @@ public class WifiLightAppModule {
     @ApplicationScope
     WifiLightApplication provideApplication() {
         return application;
+    }
+
+    @Provides
+    @ApplicationScope
+    SharedPreferences providePreferences() {
+        return application.getPreferences();
     }
 }

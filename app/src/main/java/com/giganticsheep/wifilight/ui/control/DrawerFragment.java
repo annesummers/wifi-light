@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.base.EventBus;
@@ -32,6 +33,8 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @InjectView(R.id.left_drawer) ExpandableListView drawerListView;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
+
+    @InjectView(R.id.drawer_textview) TextView drawerTextView;
 
     private DrawerAdapter adapter;
 
@@ -154,7 +157,9 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         adapter.setLightNetwork(lightNetwork, groupPosition, childPosition);
         adapter.notifyDataSetChanged();
 
-        //drawerListView.expandGroup(0);
+        drawerTextView.setText(lightNetwork.getLocation().getName());
+
+        drawerListView.expandGroup(0);
 
         clickDrawerItem(childPosition, groupPosition);
     }

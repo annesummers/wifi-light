@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.api.model.Group;
 
 import javax.inject.Inject;
 
@@ -167,13 +168,13 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
 
             lightNameTextView.setText(viewData.getLabel());
             lightStatusImageView.setImageResource(viewData.isConnected() ?
-                    R.drawable.ic_action_tick :
-                    R.drawable.ic_action_warning);
+                    R.drawable.ic_status_tick :
+                    R.drawable.ic_status_warning);
         }
     }
 
     private class GroupViewHolder {
-        private GroupViewData viewData;
+        private Group viewData;
 
         private final TextView groupNameTextView;
 
@@ -181,10 +182,10 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
             groupNameTextView = (TextView) view.findViewById(R.id.group_name);
         }
 
-        public void setViewData(@NonNull final GroupViewData viewData) {
+        public void setViewData(@NonNull final Group viewData) {
             this.viewData = viewData;
 
-            groupNameTextView.setText(viewData.getLabel());
+            groupNameTextView.setText(viewData.getName());
         }
     }
 }

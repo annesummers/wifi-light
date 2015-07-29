@@ -31,4 +31,6 @@ public class Constants {
     public static final String TEST_LOCATION_LABEL2 = "TEST_LOCATION2";
 
     public static final int INVALID = -1;
+
+    public static final boolean SHOW_ERROR_DIALOG = false;
 }

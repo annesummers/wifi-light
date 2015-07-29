@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight;
 
-import com.giganticsheep.wifilight.WifiLightApplication;
+import android.content.SharedPreferences;
 
 /**
  * Created by anne on 09/07/15.
@@ -10,4 +10,5 @@ public interface WifiLightAppGraph {
     void inject(WifiLightApplication application);
 
     WifiLightApplication application();
+    SharedPreferences preferences();
 }

@@ -5,14 +5,40 @@
     android:id="@+id/error_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_primary"
+    android:background="@color/background_tertiary"
     android:visibility="gone"
     tools:showIn="@layout/activity_main">
 
-    <ImageView
+    <RelativeLayout
         android:id="@+id/error_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_alert_error"
-        android:contentDescription="error_image" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:layout_margin="@dimen/default_margin">
+        <ImageView
+            android:id="@+id/error_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_alert_error"
+            android:layout_gravity="center_vertical"
+            android:layout_alignTop="@+id/error_textview"
+            android:layout_alignBottom="@+id/error_textview"
+            android:padding="@dimen/default_padding"
+            android:contentDescription="@string/description_error_image"/>
+        <TextView
+            android:id="@+id/error_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toRightOf="@+id/error_imageview"
+            android:layout_toEndOf="@+id/error_imageview"
+            android:padding="@dimen/label_padding"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:gravity="center_vertical" />
+    </RelativeLayout>
 </FrameLayout>

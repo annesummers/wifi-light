@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/preferences_header_title_server">
+
+        <EditTextPreference
+            android:title="@string/preference_title_api_key"
+            android:key="@string/preference_key_api_key"
+            android:summary="@string/preference_summary_api_key"/>
+       <!-- <EditTextPreference
+            android:title="@string/preference_title_server"
+            android:key="@string/preference_server"
+            android:summary="@string/preference_summary_server"/>-->
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/preferences_header_title_app">
+
+        <CheckBoxPreference
+            android:title="@string/preference_title_show_details"
+            android:key="@string/preference_key_show_details"
+            android:summary="@string/preference_summary_show_details"/>
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
+import com.giganticsheep.wifilight.api.network.ServerErrorEventSubscriber;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.ui.ErrorEvent;
 import com.giganticsheep.wifilight.ui.LightChangedEvent;
@@ -176,14 +177,10 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         void inject(final LightPresenterBase lightPresenter);
     }
 
-    public class SetLightSubscriber extends Subscriber<LightStatus>  {
+    public class SetLightSubscriber extends ServerErrorEventSubscriber<LightStatus> {
 
-        @Override
-        public void onCompleted() { }
-
-        @Override
-        public void onError(Throwable e) {
-            subscribe(eventBus.postMessage(new ErrorEvent(e)));
+        public SetLightSubscriber() {
+            super(eventBus);
         }
 
         @Override

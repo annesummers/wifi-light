@@ -34,13 +34,13 @@ android {
 
     buildTypes {
         release {
-            resValue("string", "DEFAULT_API_KEY", DUNCAN_API_KEY)
+            resValue("string", "default_api_key", DEFAULT_API_KEY)
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            resValue("string", "DEFAULT_API_KEY", DUNCAN_API_KEY)
+            resValue("string", "default_api_key", DEFAULT_API_KEY)
 
             debuggable true
         }

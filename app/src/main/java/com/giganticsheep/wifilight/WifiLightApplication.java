@@ -1,13 +1,13 @@
 package com.giganticsheep.wifilight;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
-
-import org.jetbrains.annotations.NonNls;
 
 import javax.inject.Inject;
 
@@ -19,11 +19,9 @@ import timber.log.Timber;
  */
 public class WifiLightApplication extends Application implements HasComponent<WifiLightAppComponent> {
 
-    @NonNls private static final String DEFAULT_SERVER_STRING = "https://api.lifx.com";
-    @NonNls private static final String DEFAULT_URL_STRING1 = "v1beta1";
-    @NonNls private static final String DEFAULT_URL_STRING2 = "lights";
-
     @Inject Timber.Tree loggerTree;
+
+    private SharedPreferences preferences;
 
     private WifiLightAppComponent component;
 
@@ -31,12 +29,27 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
     public final void onCreate() {
         super.onCreate();
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         buildComponentAndInject();
 
         if(BuildConfig.DEBUG ||
                 BuildConfig.APPLICATION_ID.equals("com.giganticsheep.wifilight.mocknetwork") ||
                         BuildConfig.APPLICATION_ID.equals("com.giganticsheep.wifilight.mockapi")) {
             Timber.plant(loggerTree);
+        }
+
+        String preference_server = getString(R.string.preference_key_server);
+
+        if(preferences.getString(preference_server, "").equals("")) {
+            SharedPreferences.Editor preferencesEditor = preferences.edit();
+
+            preferencesEditor.putString(preference_server, getResources().getString(R.string.default_server));
+            preferencesEditor.putString(getString(R.string.preference_key_api_key), getResources().getString(R.string.default_api_key));
+            preferencesEditor.putString(getString(R.string.preference_key_url1), getResources().getString(R.string.default_url1));
+            preferencesEditor.putString(getString(R.string.preference_key_url2), getResources().getString(R.string.default_url2));
+
+            preferencesEditor.apply();
         }
     }
 
@@ -47,15 +60,24 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
 
     @NonNull
     public NetworkDetails getNetworkDetails() {
+        String preference_api_key = getString(R.string.preference_key_api_key);
+        String preference_url1 = getString(R.string.preference_key_url1);
+        String preference_url2 = getString(R.string.preference_key_url2);
+
         return new NetworkDetails(
-                getResources().getString(R.string.DEFAULT_API_KEY),
-                DEFAULT_URL_STRING1,
-                DEFAULT_URL_STRING2);
+                preferences.getString(preference_api_key, getString(R.string.default_api_key)),
+                preferences.getString(preference_url1, getString(R.string.default_url1)),
+                preferences.getString(preference_url2, getString(R.string.default_url2)));
     }
 
     @NonNull
     public String getServerURL() {
-        return DEFAULT_SERVER_STRING;
+        return preferences.getString(getString(R.string.preference_key_server), getResources().getString(R.string.default_server));
+    }
+
+    @NonNull
+    public SharedPreferences getPreferences() {
+        return preferences;
     }
 
     private void buildComponentAndInject() {

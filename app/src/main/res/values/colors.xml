@@ -7,6 +7,8 @@
 
     <color name="background_primary">#DEDEDE</color>
     <color name="background_secondary">#767676</color>
+    <color name="background_tertiary">#989898</color>
+    <color name="background_title">#BABABA</color>
     <color name="half_grey">#88898989</color>
 
     <color name="text_primary">#454545</color>

@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <include
-            layout="@layout/layout_actionbar"
+            layout="@layout/layout_support_actionbar"
             android:id="@+id/action_toolbar" />
 
         <LinearLayout

@@ -1,11 +1,9 @@
 package com.giganticsheep.wifilight.ui.control;
 
-import android.app.Activity;
-
 import com.giganticsheep.wifilight.WifiLightAppComponent;
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
-import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
+import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 
 import dagger.Component;
 
@@ -24,7 +22,7 @@ public interface LightControlActivityComponent extends LightFragmentBase.Injecto
                                                         DrawerAdapter.Injector,
                                                         LightNetworkPresenter.Injector {
 
-    Activity activity();
+    //Activity activity();
 
     void inject(LightControlActivity activity);
 }

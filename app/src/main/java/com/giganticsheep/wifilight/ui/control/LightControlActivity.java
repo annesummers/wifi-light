@@ -1,9 +1,11 @@
 package com.giganticsheep.wifilight.ui.control;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -30,6 +32,7 @@ import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.ui.base.light.LightViewState;
+import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
@@ -61,8 +64,10 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     private LightControlActivityComponent component;
 
-    LightViewState fragmentViewState;
-    LightNetworkViewState drawerViewState;
+    private LightViewState fragmentViewState;
+    private LightNetworkViewState drawerViewState;
+
+    private DialogFragment errorDialog;
 
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
@@ -75,6 +80,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.container_drawer) FrameLayout drawerContainerLayout;
+
+    @InjectView(R.id.error_textview) TextView errorTextView;
 
     private TextView title;
 
@@ -105,8 +112,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-       // actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
         title = (TextView) toolbar.findViewById(R.id.title_textview);
@@ -146,8 +151,6 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
                 };
 
         drawerLayout.post(() -> drawerToggle.syncState());
-        drawerLayout.setDrawerListener(drawerToggle);
-
     }
 
     @Override
@@ -175,6 +178,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
             switch (id) {
                 case R.id.action_settings:
+                    Intent intent = new Intent(this, WifiPreferenceActivity.class);
+                    startActivity(intent);
                     return true;
 
                 case R.id.action_refresh:
@@ -202,6 +207,11 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         super.onDestroy();
 
         eventBus.unregisterForEvents(this);
+
+        if(errorDialog != null) {
+            errorDialog.dismiss();
+            errorDialog = null;
+        }
     }
 
     @NonNull
@@ -272,7 +282,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
     @NonNull
     public LightViewState getFragmentViewState() {
         if(fragmentViewState == null) {
-            return getViewState();//fragmentViewState;
+            return getViewState();
         } else {
             return fragmentViewState;
         }
@@ -287,6 +297,25 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         loadingLayout.setVisibility(View.VISIBLE);
+
+        setDrawerState(false);
+    }
+
+    public void setDrawerState(boolean isEnabled) {
+        if ( isEnabled ) {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            drawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
+            drawerToggle.setDrawerIndicatorEnabled(true);
+
+            drawerLayout.post(() -> drawerToggle.syncState());
+
+        } else {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            drawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
+            drawerToggle.setDrawerIndicatorEnabled(false);
+
+            drawerLayout.post(() -> drawerToggle.syncState());
+        }
     }
 
     @DebugLog
@@ -300,6 +329,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         loadingLayout.setVisibility(View.GONE);
         disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
+
+        setDrawerState(true);
     }
 
     @DebugLog
@@ -313,6 +344,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         disconnectedLayout.setVisibility(View.VISIBLE);
+
+        setDrawerState(true);
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -334,6 +367,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         disconnectedLayout.setVisibility(View.VISIBLE);
+
+        setDrawerState(true);
     }
 
     @DebugLog
@@ -344,18 +379,28 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     @DebugLog
     @Override
-    public void showError(@NonNull Throwable throwable) {
-        getViewState().setShowError();
+    public void showError(@NonNull final Throwable throwable) {
+        getViewState().setShowError(throwable);
+
+        errorTextView.setText(throwable.getMessage());
 
         loadingLayout.setVisibility(View.GONE);
         disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         errorLayout.setVisibility(View.VISIBLE);
 
-        SimpleDialogFragment.createBuilder(this, getSupportFragmentManager())
-                .setMessage(throwable.getMessage())
-                .setPositiveButtonText(android.R.string.ok)
-                .show();
+        setDrawerState(false);
+
+        if(Constants.SHOW_ERROR_DIALOG) {
+            if (errorDialog != null) {
+                errorDialog.dismiss();
+            }
+
+            errorDialog = SimpleDialogFragment.createBuilder(this, getSupportFragmentManager())
+                    .setMessage(throwable.getMessage())
+                    .setPositiveButtonText(android.R.string.ok)
+                    .show();
+        }
     }
 
     // Dagger
