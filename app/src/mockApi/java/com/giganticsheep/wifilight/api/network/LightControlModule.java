@@ -20,7 +20,8 @@ import rx.Scheduler;
  */
 
 @Module( includes = {   WifiLightModule.class,
-                        SchedulersModule.class }  )
+                        SchedulersModule.class,
+                        NetworkModule.class }  )
 public class LightControlModule {
 
     @NonNull

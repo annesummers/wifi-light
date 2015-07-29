@@ -60,10 +60,10 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     }
 
     /**
-     * Fetches the Light with the given id.  Subscribes to the model's method using
+     * Fetches the Light with the given getId.  Subscribes to the model's method using
      * the Subscriber given.
      *
-     * @param id the id of the Light to fetch.
+     * @param id the getId of the Light to fetch.
      */
     @DebugLog
     public void fetchLight(final String id) {
@@ -185,7 +185,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
 
         @Override
         public void onNext(@NonNull final LightStatus light) {
-            fetchLight(light.id());
+            fetchLight(light.getId());
         }
     }
 }

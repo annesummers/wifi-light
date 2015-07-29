@@ -50,7 +50,7 @@ public class DetailsFragment extends LightFragmentBase {
     @Override
     public void showLight(Light light) {
         nameTextView.setText(light.getLabel());
-        idTextView.setText(light.id());
+        idTextView.setText(light.getId());
         hueTextView.setText(Integer.toString(light.getHue()));
         saturationTextView.setText(Integer.toString(light.getSaturation()));
         brightnessTextView.setText(Integer.toString(light.getBrightness()));

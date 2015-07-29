@@ -351,7 +351,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(() -> getPresenter().fetchLight(light.id()));
+                runOnUiThread(() -> getPresenter().fetchLight(light.getId()));
             }
         }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);
     }

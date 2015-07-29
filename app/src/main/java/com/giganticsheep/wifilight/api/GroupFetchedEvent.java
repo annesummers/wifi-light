@@ -7,10 +7,10 @@ import com.giganticsheep.wifilight.api.model.Group;
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class FetchedGroupEvent {
+public class GroupFetchedEvent {
     private final Group group;
 
-    public FetchedGroupEvent(Group group) {
+    public GroupFetchedEvent(Group group) {
         this.group = group;
     }
 

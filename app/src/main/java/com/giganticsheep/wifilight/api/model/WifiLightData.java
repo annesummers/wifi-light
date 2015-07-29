@@ -7,7 +7,7 @@ package com.giganticsheep.wifilight.api.model;
 public interface WifiLightData {
     /**
      *
-     * @return the id of this data object
+     * @return the getId of this data object
      */
-    String id();
+    String getId();
 }

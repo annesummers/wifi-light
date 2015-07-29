@@ -2,12 +2,12 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.FetchGroupsEvent;
-import com.giganticsheep.wifilight.api.FetchLightsEvent;
-import com.giganticsheep.wifilight.api.FetchLocationsEvent;
-import com.giganticsheep.wifilight.api.FetchedGroupEvent;
-import com.giganticsheep.wifilight.api.FetchedLightEvent;
-import com.giganticsheep.wifilight.api.FetchedLocationEvent;
+import com.giganticsheep.wifilight.api.FetchedGroupsEvent;
+import com.giganticsheep.wifilight.api.FetchedLightsEvent;
+import com.giganticsheep.wifilight.api.FetchedLocationsEvent;
+import com.giganticsheep.wifilight.api.GroupFetchedEvent;
+import com.giganticsheep.wifilight.api.LightFetchedEvent;
+import com.giganticsheep.wifilight.api.LocationFetchedEvent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
@@ -98,7 +98,7 @@ public class MockLightControlImpl implements LightControl {
                         light.color.hue = hue;
 
                         StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.id();
+                        statusResponse.id = light.getId();
                         statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
@@ -128,7 +128,7 @@ public class MockLightControlImpl implements LightControl {
                         light.color.saturation = LightConstants.convertSaturation(saturation);
 
                         StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.id();
+                        statusResponse.id = light.getId();
                         statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
@@ -158,7 +158,7 @@ public class MockLightControlImpl implements LightControl {
                         light.brightness = LightConstants.convertBrightness(brightness);
 
                         StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.id();
+                        statusResponse.id = light.getId();
                         statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
@@ -188,7 +188,7 @@ public class MockLightControlImpl implements LightControl {
                         light.color.kelvin = kelvin;
 
                         StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.id();
+                        statusResponse.id = light.getId();
                         statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
@@ -218,7 +218,7 @@ public class MockLightControlImpl implements LightControl {
                         light.power = (light.getPower() == Power.ON) ? Power.OFF.getPowerString() : Power.ON.getPowerString();
 
                         StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.id();
+                        statusResponse.id = light.getId();
                         statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
@@ -248,7 +248,7 @@ public class MockLightControlImpl implements LightControl {
                         light.power = power.getPowerString();
 
                         StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.id();
+                        statusResponse.id = light.getId();
                         statusResponse.label = light.getLabel();
                         statusResponse.status = Status.OK.getStatusString();
 
@@ -278,11 +278,11 @@ public class MockLightControlImpl implements LightControl {
                         light.connected = true;
                         light.seconds_since_seen = timeout;
 
-                        eventBus.postMessage(new FetchedLightEvent(light));
+                        eventBus.postMessage(new LightFetchedEvent(light));
                         subscriber.onNext(light);
                     }
 
-                    eventBus.postMessage(new FetchLightsEvent(lights.size()));
+                    eventBus.postMessage(new FetchedLightsEvent(lights.size()));
                     subscriber.onCompleted();
                 }
             });
@@ -295,11 +295,11 @@ public class MockLightControlImpl implements LightControl {
                         light.connected = false;
                         light.seconds_since_seen = timeout;
 
-                        eventBus.postMessage(new FetchedLightEvent(light));
+                        eventBus.postMessage(new LightFetchedEvent(light));
                         subscriber.onNext(light);
                     }
 
-                    eventBus.postMessage(new FetchLightsEvent(lights.size()));
+                    eventBus.postMessage(new FetchedLightsEvent(lights.size()));
                     subscriber.onCompleted();
                 }
             });
@@ -314,7 +314,7 @@ public class MockLightControlImpl implements LightControl {
     @Override
     public Observable<Light> fetchLight(final String id) {
         return fetchLights(false)
-                .filter(light -> light.id().equals(id));
+                .filter(light -> light.getId().equals(id));
     }
 
     @NonNull
@@ -327,11 +327,11 @@ public class MockLightControlImpl implements LightControl {
                 public void call(Subscriber<? super Group> subscriber) {
                     for (GroupData group : groups) {
 
-                        eventBus.postMessage(new FetchedGroupEvent(group));
+                        eventBus.postMessage(new GroupFetchedEvent(group));
                         subscriber.onNext(group);
                     }
 
-                    eventBus.postMessage(new FetchGroupsEvent(lights.size()));
+                    eventBus.postMessage(new FetchedGroupsEvent(lights.size()));
                     subscriber.onCompleted();
                 }
             });
@@ -342,11 +342,11 @@ public class MockLightControlImpl implements LightControl {
                 public void call(Subscriber<? super Group> subscriber) {
                     for (GroupData group : groups) {
 
-                        eventBus.postMessage(new FetchedGroupEvent(group));
+                        eventBus.postMessage(new GroupFetchedEvent(group));
                         subscriber.onNext(group);
                     }
 
-                    eventBus.postMessage(new FetchGroupsEvent(lights.size()));
+                    eventBus.postMessage(new FetchedGroupsEvent(lights.size()));
                     subscriber.onCompleted();
                 }
             });
@@ -367,11 +367,11 @@ public class MockLightControlImpl implements LightControl {
                 public void call(Subscriber<? super Location> subscriber) {
                     for (Location location : locations) {
 
-                        eventBus.postMessage(new FetchedLocationEvent(location));
+                        eventBus.postMessage(new LocationFetchedEvent(location));
                         subscriber.onNext(location);
                     }
 
-                    eventBus.postMessage(new FetchLocationsEvent(lights.size()));
+                    eventBus.postMessage(new FetchedLocationsEvent(lights.size()));
                     subscriber.onCompleted();
                 }
             });
@@ -425,7 +425,7 @@ public class MockLightControlImpl implements LightControl {
             public void call(Subscriber<? super LightStatus> subscriber) {
                 for (LightResponse light : lights) {
                     StatusResponse statusResponse = new StatusResponse();
-                    statusResponse.id = light.id();
+                    statusResponse.id = light.getId();
                     statusResponse.label = light.getLabel();
                     statusResponse.status = Status.OFF.getStatusString();
 

@@ -32,7 +32,7 @@ public class StatusPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testSetPowerConnected() throws Exception {
+    public void testSetPowerConnected() {
         if(BuildConfig.DEBUG) {
             return;
         }
@@ -52,7 +52,7 @@ public class StatusPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testSetPowerDisconnected() throws Exception {
+    public void testSetPowerDisconnected() {
         if(BuildConfig.DEBUG) {
             return;
         }
@@ -74,7 +74,7 @@ public class StatusPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testSetPowerOffError() throws Exception {
+    public void testSetPowerOffError() {
         if(BuildConfig.DEBUG) {
             return;
         }
@@ -90,7 +90,7 @@ public class StatusPresenterTest extends LightPresenterTestBase {
     }
 
     @Test
-    public void testSetPowerOnError() throws Exception {
+    public void testSetPowerOnError() {
         if(BuildConfig.DEBUG) {
             return;
         }

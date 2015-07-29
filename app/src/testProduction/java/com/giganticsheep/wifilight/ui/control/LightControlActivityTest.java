@@ -47,12 +47,12 @@ public class LightControlActivityTest {
     private ActivityController<LightControlActivity> activityController;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         activityController = Robolectric.buildActivity(LightControlActivity.class);
     }
 
     @After
-    public void tearDown() throws Exception { }
+    public void tearDown() { }
 
     @Test
     public void testCreateNotNull() {

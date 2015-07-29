@@ -220,7 +220,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
     /**
      * @param position the position in the activity
-     * @return the resource container id
+     * @return the resource container getId
      */
     final int containerIdFromPosition(final int position) {
         return activityLayout.fragmentContainer(position);

@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.ui.control.LightNetwork;
@@ -11,24 +10,14 @@ import com.giganticsheep.wifilight.util.Constants;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.MockRestAdapter;
-import retrofit.RestAdapter;
 
 /**
- * Created by anne on 26/06/15.
+ * DESCRIPTION HERE ANNE <p>
+ * Created by anne on 29/07/15. <p>
  * (*_*)
  */
-
-@Module( includes = { BaseNetworkModule.class} )
-public class NetworkModule {
-
-    @Provides
-    @ApplicationScope
-    LightService provideService(RestAdapter restAdapter, LightNetwork lightNetwork) {
-        MockRestAdapter mockRestAdapter = MockRestAdapter.from(restAdapter);
-        mockRestAdapter.setErrorPercentage(20);
-        return mockRestAdapter.create(LightService.class, new MockLightService(lightNetwork));
-    }
+@Module
+public class TestLightNetworkModule {
 
     @NonNull
     @Provides

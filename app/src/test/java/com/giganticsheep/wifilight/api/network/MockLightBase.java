@@ -25,7 +25,7 @@ public class MockLightBase implements WifiLightData {
 
     @NonNull
     @Override
-    public String id() {
+    public String getId() {
         return id;
     }
 

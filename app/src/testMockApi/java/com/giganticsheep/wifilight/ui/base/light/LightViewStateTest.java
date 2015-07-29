@@ -173,7 +173,7 @@ public class LightViewStateTest {
             @Override
             public void showConnected(Light light) {
                 connectedCalled.set(true);
-                assertThat(light.id(), equalTo(Constants.TEST_ID));
+                assertThat(light.getId(), equalTo(Constants.TEST_ID));
             }
 
             @Override
@@ -222,7 +222,7 @@ public class LightViewStateTest {
             @Override
             public void showConnecting(Light light) {
                 connectingCalled.set(true);
-                assertThat(light.id(), equalTo(Constants.TEST_ID));
+                assertThat(light.getId(), equalTo(Constants.TEST_ID));
             }
 
             @Override
@@ -271,7 +271,7 @@ public class LightViewStateTest {
             @Override
             public void showDisconnected(Light light) {
                 disconnectedCalled.set(true);
-                assertThat(light.id(), equalTo(Constants.TEST_ID));
+                assertThat(light.getId(), equalTo(Constants.TEST_ID));
             }
         };
 

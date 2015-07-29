@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.api.network;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.ui.control.LightNetwork;
 import com.giganticsheep.wifilight.util.Constants;
 
 import java.util.ArrayList;
@@ -22,6 +23,12 @@ import rx.Subscriber;
  */
 class MockLightService implements LightService {
 
+    LightNetwork mockLightNetwork;
+
+    public MockLightService(LightNetwork lightNetwork) {
+        mockLightNetwork = lightNetwork;
+    }
+
     @NonNull
     @Override
     public Observable<List<LightResponse>> listLights(@Path("url1") String url1,
@@ -32,26 +39,16 @@ class MockLightService implements LightService {
             @Override
             public void call(Subscriber<? super List<LightResponse>> subscriber) {
                 List<LightResponse> lights = new ArrayList<>();
+                LightResponse light;
 
-                LightResponse light = new LightResponse(Constants.TEST_ID);
-                light.group.id = Constants.TEST_GROUP_ID;
-                light.location.id = Constants.TEST_LOCATION_ID;
-                lights.add(light);
-
-                light = new LightResponse(Constants.TEST_ID2);
-                light.group.id = Constants.TEST_GROUP_ID2;
-                light.location.id = Constants.TEST_LOCATION_ID;
-                lights.add(light);
-
-                light = new LightResponse(Constants.TEST_ID3);
-                light.group.id = Constants.TEST_GROUP_ID;
-                light.location.id = Constants.TEST_LOCATION_ID2;
-                lights.add(light);
-
-                light = new LightResponse(Constants.TEST_ID4);
-                light.group.id = Constants.TEST_GROUP_ID;
-                light.location.id = Constants.TEST_LOCATION_ID;
-                lights.add(light);
+                for(int i = 0; i < mockLightNetwork.groupCount(); i++) {
+                    for(int j = 0; j < mockLightNetwork.lightCount(i); j++) {
+                        light = new LightResponse(mockLightNetwork.get(i, j).getId());
+                        light.group.id = mockLightNetwork.get(i).getId();
+                        light.location.id = mockLightNetwork.getLocation().getId();
+                        lights.add(light);
+                    }
+                }
 
                 subscriber.onNext(lights);
                 subscriber.onCompleted();

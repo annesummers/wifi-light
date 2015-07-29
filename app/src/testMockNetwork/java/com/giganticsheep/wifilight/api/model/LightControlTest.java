@@ -3,23 +3,21 @@ package com.giganticsheep.wifilight.api.model;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.BuildConfig;
-import com.giganticsheep.wifilight.api.FetchGroupsEvent;
-import com.giganticsheep.wifilight.api.FetchLightsEvent;
-import com.giganticsheep.wifilight.api.FetchLocationsEvent;
-import com.giganticsheep.wifilight.api.FetchedGroupEvent;
-import com.giganticsheep.wifilight.api.FetchedLightEvent;
-import com.giganticsheep.wifilight.api.FetchedLocationEvent;
+import com.giganticsheep.wifilight.api.FetchedGroupsEvent;
+import com.giganticsheep.wifilight.api.FetchedLightsEvent;
+import com.giganticsheep.wifilight.api.FetchedLocationsEvent;
+import com.giganticsheep.wifilight.api.GroupFetchedEvent;
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.LightFetchedEvent;
+import com.giganticsheep.wifilight.api.LocationFetchedEvent;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.util.Constants;
-import com.giganticsheep.wifilight.util.TestEventBus;
 
 import org.junit.Test;
 
 import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -30,19 +28,50 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class LightControlTest extends ModelTest {
 
     @Test
-    public void testFetchLights() throws Exception {
+    public void testFetchLightNetwork() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
+        lightControl.fetchLightNetwork()
+                .subscribe(new Subscriber<Location>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Location location) {
+
+                    }
+                });
+    }
+
+    @Test
+    public void testFetchLights() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
         int[] lightsCount = new int[1];
-        lightNetwork.fetchLights(true)
+        lightControl.fetchLights(true)
                 .subscribe(new Subscriber<Light>() {
                     @Override
                     public void onCompleted() {
-                        Object lightChangedEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(lightChangedEvent, instanceOf(FetchLightsEvent.class));
-                        assertThat(((FetchLightsEvent)lightChangedEvent).getLightsFetchedCount(), equalTo(lightsCount[0]));
+                        int totalLightCount = 0;
+                        for(int i = 0; i < testLightNetwork.groupCount(); i++) {
+                            totalLightCount += testLightNetwork.lightCount(i);
+                        }
+
+                        assertThat(lightsCount[0], equalTo(totalLightCount));
+
+                        FetchedLightsEvent fetchedLightsEvent = getCheckedEvent(FetchedLightsEvent.class);
+                        assertThat(fetchedLightsEvent.getLightsFetchedCount(), equalTo(lightsCount[0]));
                     }
 
                     @Override
@@ -52,27 +81,27 @@ public class LightControlTest extends ModelTest {
                     public void onNext(Light light) {
                         lightsCount[0]++;
 
-                        Object fetchLightEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchLightEvent, instanceOf(FetchedLightEvent.class));
-                        assertThat(((FetchedLightEvent) fetchLightEvent).getLight(), equalTo(light));
+                        assertTrue(testLightNetwork.lightExists(light.getGroup().getId(), light.getId()));
+
+                        LightFetchedEvent lightFetchedEvent = getCheckedEvent(LightFetchedEvent.class);
+                        assertThat(lightFetchedEvent.getLight(), equalTo(light));
                     }
                 });
     }
 
     @Test
-    public void testFetchLocations() throws Exception {
+    public void testFetchLocations() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
         int[] locationsCount = new int[1];
-        lightNetwork.fetchLocations(true)
+        lightControl.fetchLocations(true)
                 .subscribe(new Subscriber<Location>() {
                     @Override
                     public void onCompleted() {
-                        Object fetchLocationEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchLocationEvent, instanceOf(FetchLocationsEvent.class));
-                        assertThat(((FetchLocationsEvent)fetchLocationEvent).getLocationsFetchedCount(), equalTo(locationsCount[0]));
+                        FetchedLocationsEvent fetchedLocationsEvent = getCheckedEvent(FetchedLocationsEvent.class);
+                        assertThat(fetchedLocationsEvent.getLocationsFetchedCount(), equalTo(locationsCount[0]));
                     }
 
                     @Override
@@ -82,27 +111,27 @@ public class LightControlTest extends ModelTest {
                     public void onNext(Location location) {
                         locationsCount[0]++;
 
-                        Object fetchLocationEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchLocationEvent, instanceOf(FetchedLocationEvent.class));
-                        assertThat(((FetchedLocationEvent)fetchLocationEvent).getLocation(), equalTo(location));
+                        LocationFetchedEvent locationFetchedEvent = getCheckedEvent(LocationFetchedEvent.class);
+                        assertThat(locationFetchedEvent.getLocation(), equalTo(location));
                     }
                 });
     }
 
     @Test
-    public void testFetchGroups() throws Exception {
+    public void testFetchGroups() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
         int[] groupsCount = new int[1];
-        lightNetwork.fetchGroups(true)
+        lightControl.fetchGroups(true)
                 .subscribe(new Subscriber<Group>() {
                     @Override
                     public void onCompleted() {
-                        Object fetchGroupEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchGroupEvent, instanceOf(FetchGroupsEvent.class));
-                        assertThat(((FetchGroupsEvent)fetchGroupEvent).getGroupsFetchedCount(), equalTo(groupsCount[0]));
+                        assertThat(groupsCount[0], equalTo(testLightNetwork.groupCount()));
+
+                        FetchedGroupsEvent fetchedGroupsEvent = getCheckedEvent(FetchedGroupsEvent.class);
+                        assertThat(fetchedGroupsEvent.getGroupsFetchedCount(), equalTo(groupsCount[0]));
                     }
 
                     @Override
@@ -112,21 +141,21 @@ public class LightControlTest extends ModelTest {
                     public void onNext(Group group) {
                         groupsCount[0]++;
 
-                        Object fetchGroupEvent = ((TestEventBus)eventBus).popLastMessage();
-                        assertThat(fetchGroupEvent, instanceOf(FetchedGroupEvent.class));
-                        assertThat(((FetchedGroupEvent)fetchGroupEvent).getGroup(), equalTo(group));
+                        assertTrue(testLightNetwork.groupExists(group.getId()));
+
+                        GroupFetchedEvent groupFetchedEvent = getCheckedEvent(GroupFetchedEvent.class);
+                        assertThat(groupFetchedEvent.getGroup(), equalTo(group));
                     }
                 });
     }
 
     @Test
-    public void testFetchLight() throws Exception {
+    public void testFetchLight() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        lightNetwork.fetchLight(Constants.TEST_ID)
-                .subscribeOn(Schedulers.immediate())
+        lightControl.fetchLight(Constants.TEST_ID)
                 .subscribe(new Subscriber<Light>() {
                     @Override
                     public void onCompleted() { }
@@ -136,18 +165,18 @@ public class LightControlTest extends ModelTest {
 
                     @Override
                     public void onNext(@NonNull Light light) {
-                        assertThat(light.id(), equalTo(Constants.TEST_ID));
+                        assertThat(light.getId(), equalTo(Constants.TEST_ID));
                     }
                 });
     }
 
     @Test
-    public void testSetHue() throws Exception {
+    public void testSetHue() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        lightNetwork.setHue(300, TestConstants.TEST_DURATION)
+        lightControl.setHue(300, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
                     public void onCompleted() { }
@@ -161,12 +190,12 @@ public class LightControlTest extends ModelTest {
     }
 
     @Test
-    public void testSetSaturation() throws Exception {
+    public void testSetSaturation() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        lightNetwork.setSaturation(100, TestConstants.TEST_DURATION)
+        lightControl.setSaturation(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
                     public void onCompleted() { }
@@ -180,12 +209,12 @@ public class LightControlTest extends ModelTest {
     }
 
     @Test
-    public void testSetBrightness() throws Exception {
+    public void testSetBrightness() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        lightNetwork.setBrightness(100, TestConstants.TEST_DURATION)
+        lightControl.setBrightness(100, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
                     public void onCompleted() { }
@@ -199,12 +228,12 @@ public class LightControlTest extends ModelTest {
     }
 
     @Test
-    public void testSetKelvin() throws Exception {
+    public void testSetKelvin() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        lightNetwork.setKelvin(3000, TestConstants.TEST_DURATION)
+        lightControl.setKelvin(3000, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
                     public void onCompleted() { }
@@ -218,12 +247,12 @@ public class LightControlTest extends ModelTest {
     }
 
     @Test
-    public void testToggleLights() throws Exception {
+    public void testToggleLights() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        lightNetwork.togglePower()
+        lightControl.togglePower()
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
                     public void onCompleted() { }
@@ -237,12 +266,12 @@ public class LightControlTest extends ModelTest {
     }
 
     @Test
-    public void testSetPower() throws Exception {
+    public void testSetPower() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        lightNetwork.setPower(LightControl.Power.ON, TestConstants.TEST_DURATION)
+        lightControl.setPower(LightControl.Power.ON, TestConstants.TEST_DURATION)
                 .subscribe(new Subscriber<LightStatus>() {
                     @Override
                     public void onCompleted() { }

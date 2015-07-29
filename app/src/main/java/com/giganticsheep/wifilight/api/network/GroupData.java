@@ -15,7 +15,7 @@ public class GroupData implements Group, Location {
     public String name;
 
     @Override
-    public String id() {
+    public String getId() {
         return id;
     }
 

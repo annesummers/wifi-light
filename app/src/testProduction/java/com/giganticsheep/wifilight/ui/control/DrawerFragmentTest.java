@@ -31,18 +31,22 @@ public class DrawerFragmentTest extends UITestBase {
     private DrawerFragment fragment;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         if (BuildConfig.DEBUG) {
             return;
         }
 
-        fragment = (DrawerFragment) fragmentFactory.createFragment("Drawer");
+        try {
+            fragment = (DrawerFragment) fragmentFactory.createFragment("Drawer");
+        } catch(Exception e) {
+            Assert.fail("Drawer fragment does not exist");
+        }
 
         SupportFragmentTestUtil.startFragment(fragment, LightControlActivity.class);
     }
 
     @Test
-    public void testShowLoading() throws Exception {
+    public void testShowLoading() {
         if(BuildConfig.DEBUG) {
             return;
         }
@@ -53,7 +57,7 @@ public class DrawerFragmentTest extends UITestBase {
 
         View loadingView = fragment.getView().findViewById(R.id.loading_layout);
         View errorView = fragment.getView().findViewById(R.id.error_layout);
-        View mainView = fragment.getView().findViewById(R.id.left_drawer);
+        View mainView = fragment.getView().findViewById(R.id.drawer_layout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
@@ -61,18 +65,16 @@ public class DrawerFragmentTest extends UITestBase {
     }
 
     @Test
-    public void testShowLightNetwork() throws Exception {
+    public void testShowLightNetwork() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        LightNetwork lightNetwork = new LightNetwork();
-
-        fragment.showLightNetwork(lightNetwork, 0, 0);
+        fragment.showLightNetwork(testLightNetwork, 0, 0);
 
         View loadingView = fragment.getView().findViewById(R.id.loading_layout);
         View errorView = fragment.getView().findViewById(R.id.error_layout);
-        View mainView = fragment.getView().findViewById(R.id.left_drawer);
+        View mainView = fragment.getView().findViewById(R.id.drawer_layout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.GONE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
@@ -80,7 +82,7 @@ public class DrawerFragmentTest extends UITestBase {
     }
 
     @Test
-    public void testShowError() throws Exception {
+    public void testShowError() {
         if(BuildConfig.DEBUG) {
             return;
         }
@@ -91,16 +93,15 @@ public class DrawerFragmentTest extends UITestBase {
 
         View loadingView = fragment.getView().findViewById(R.id.loading_layout);
         View errorView = fragment.getView().findViewById(R.id.error_layout);
-        View mainView = fragment.getView().findViewById(R.id.left_drawer);
+        View mainView = fragment.getView().findViewById(R.id.drawer_layout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.GONE));
         assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(mainView.getVisibility(), equalTo(View.GONE));
-
     }
 
     @Test
-    public void testShowErrorException() throws Exception {
+    public void testShowErrorException() {
         if(BuildConfig.DEBUG) {
             return;
         }
@@ -111,7 +112,7 @@ public class DrawerFragmentTest extends UITestBase {
 
         View loadingView = fragment.getView().findViewById(R.id.loading_layout);
         View errorView = fragment.getView().findViewById(R.id.error_layout);
-        View mainView = fragment.getView().findViewById(R.id.left_drawer);
+        View mainView = fragment.getView().findViewById(R.id.drawer_layout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.GONE));
         assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));

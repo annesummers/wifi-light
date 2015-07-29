@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
@@ -30,11 +31,12 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
     @Inject EventBus eventBus;
 
-    @InjectView(R.id.left_drawer) ExpandableListView drawerListView;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
 
     @InjectView(R.id.drawer_textview) TextView drawerTextView;
+    @InjectView(R.id.left_drawer) ExpandableListView drawerListView;
+    @InjectView(R.id.drawer_layout) RelativeLayout drawerLayout;
 
     private DrawerAdapter adapter;
 
@@ -140,7 +142,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.VISIBLE);
-        drawerListView.setVisibility(View.GONE);
+        drawerLayout.setVisibility(View.GONE);
     }
 
     @DebugLog
@@ -152,7 +154,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
-        drawerListView.setVisibility(View.VISIBLE);
+        drawerLayout.setVisibility(View.VISIBLE);
 
         adapter.setLightNetwork(lightNetwork, groupPosition, childPosition);
         adapter.notifyDataSetChanged();
@@ -171,7 +173,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
         errorLayout.setVisibility(View.VISIBLE);
         loadingLayout.setVisibility(View.GONE);
-        drawerListView.setVisibility(View.GONE);
+        drawerLayout.setVisibility(View.GONE);
     }
 
     @DebugLog
@@ -181,7 +183,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
         errorLayout.setVisibility(View.VISIBLE);
         loadingLayout.setVisibility(View.GONE);
-        drawerListView.setVisibility(View.GONE);
+        drawerLayout.setVisibility(View.GONE);
     }
 
     // Dagger

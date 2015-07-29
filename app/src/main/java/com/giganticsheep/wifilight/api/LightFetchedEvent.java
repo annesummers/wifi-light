@@ -7,10 +7,10 @@ import com.giganticsheep.wifilight.api.model.Light;
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class FetchedLightEvent {
+public class LightFetchedEvent {
     private final Light light;
 
-    public FetchedLightEvent(Light light) {
+    public LightFetchedEvent(Light light) {
         this.light = light;
     }
 

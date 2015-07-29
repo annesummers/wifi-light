@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.base;
 
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.ui.control.LightNetwork;
 import com.giganticsheep.wifilight.util.TestEventBus;
 
 import javax.inject.Inject;
@@ -16,9 +17,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public abstract class WifiLightTestBase {
 
-    @Inject protected LightControl lightNetwork;
+    @Inject protected LightControl lightControl;
     @Inject protected EventBus eventBus;
     @Inject protected FragmentFactory fragmentFactory;
+
+    @Inject protected LightNetwork testLightNetwork;
 
     private boolean signal = false;
 

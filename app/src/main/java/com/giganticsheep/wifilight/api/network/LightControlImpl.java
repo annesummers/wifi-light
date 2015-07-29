@@ -4,13 +4,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.giganticsheep.wifilight.ApplicationScope;
-import com.giganticsheep.wifilight.api.FetchGroupsEvent;
+import com.giganticsheep.wifilight.api.FetchedGroupsEvent;
 import com.giganticsheep.wifilight.api.FetchLightNetworkEvent;
-import com.giganticsheep.wifilight.api.FetchLightsEvent;
-import com.giganticsheep.wifilight.api.FetchLocationsEvent;
-import com.giganticsheep.wifilight.api.FetchedGroupEvent;
-import com.giganticsheep.wifilight.api.FetchedLightEvent;
-import com.giganticsheep.wifilight.api.FetchedLocationEvent;
+import com.giganticsheep.wifilight.api.FetchedLightsEvent;
+import com.giganticsheep.wifilight.api.FetchedLocationsEvent;
+import com.giganticsheep.wifilight.api.GroupFetchedEvent;
+import com.giganticsheep.wifilight.api.LightFetchedEvent;
+import com.giganticsheep.wifilight.api.LocationFetchedEvent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
@@ -47,15 +47,6 @@ class LightControlImpl implements LightControl {
     @SuppressWarnings("FieldNotUsedInToString")
     private final EventBus eventBus;
 
-    @Nullable
-    @SuppressWarnings("FieldNotUsedInToString")
-    private Observable<Light> lightsObservable = null;
-    @Nullable
-    @SuppressWarnings("FieldNotUsedInToString")
-    private Observable<Location> locationsObservable = null;
-    @Nullable
-    @SuppressWarnings("FieldNotUsedInToString")
-    private Observable<Group> groupsObservable = null;
     @Nullable
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<List<LightResponse>> lightResponsesObservable = null;
@@ -123,8 +114,8 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-                .doOnCompleted(() -> fetchLights(true)
-                        .subscribe(new ErrorSubscriber<>()))
+                .doOnCompleted(() -> fetchLightNetwork()
+                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
@@ -156,8 +147,8 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-                .doOnCompleted(() -> fetchLights(true)
-                        .subscribe(new ErrorSubscriber<>()))
+                .doOnCompleted(() -> fetchLightNetwork()
+                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
@@ -178,19 +169,19 @@ class LightControlImpl implements LightControl {
                         Timber.d(lightResponse.toString());
 
                         Location location = lightResponse.getLocation();
-                        if (!locations.containsKey(location.id())) {
-                            locations.put(location.id(), location);
+                        if (!locations.containsKey(location.getId())) {
+                            locations.put(location.getId(), location);
                             observables.add(Observable.just(location));
                             locationCount[0]++;
 
-                            eventBus.postMessage(new FetchedLocationEvent(location))
+                            eventBus.postMessage(new LocationFetchedEvent(location))
                                     .subscribe(new ErrorSubscriber<>());
                         }
                     }
 
                     return Observable.merge(observables);
                 })
-                .doOnCompleted(() -> eventBus.postMessage(new FetchLocationsEvent(locationCount[0]))
+                .doOnCompleted(() -> eventBus.postMessage(new FetchedLocationsEvent(locationCount[0]))
                         .subscribe(new ErrorSubscriber<>()));
     }
 
@@ -208,13 +199,13 @@ class LightControlImpl implements LightControl {
 
                     for (Light lightResponse : lightResponses) {
                         Group group = lightResponse.getGroup();
-                        if (!groups.containsKey(group.id())) {
-                            groups.put(group.id(), group);
+                        if (!groups.containsKey(group.getId())) {
+                            groups.put(group.getId(), group);
                             observables.add(Observable.just(group));
                             groupCount[0]++;
 
                             if(fetchFromServer) {
-                                eventBus.postMessage(new FetchedGroupEvent(group))
+                                eventBus.postMessage(new GroupFetchedEvent(group))
                                         .subscribe(new ErrorSubscriber<>());
                             }
                         }
@@ -224,7 +215,7 @@ class LightControlImpl implements LightControl {
                 })
                 .doOnCompleted(() -> {
                     if(fetchFromServer) {
-                        eventBus.postMessage(new FetchGroupsEvent(groupCount[0]))
+                        eventBus.postMessage(new FetchedGroupsEvent(groupCount[0]))
                                 .subscribe(new ErrorSubscriber<>());
                     }
                 });
@@ -243,7 +234,7 @@ class LightControlImpl implements LightControl {
 
                     for (Light lightResponse : lightResponses) {
                         if(fetchFromServer) {
-                            eventBus.postMessage(new FetchedLightEvent(lightResponse))
+                            eventBus.postMessage(new LightFetchedEvent(lightResponse))
                                     .subscribe(new ErrorSubscriber<>());
                         }
 
@@ -255,7 +246,7 @@ class LightControlImpl implements LightControl {
                 })
                 .doOnCompleted(() -> {
                     if (fetchFromServer) {
-                        eventBus.postMessage(new FetchLightsEvent(lightsCount[0]))
+                        eventBus.postMessage(new FetchedLightsEvent(lightsCount[0]))
                                 .subscribe(new ErrorSubscriber<>());
                     }
                 });
@@ -277,21 +268,6 @@ class LightControlImpl implements LightControl {
                         .subscribe(new ErrorSubscriber<>()));
     }
 
-    private Observable<List<LightResponse>> fetchLightResponses(final boolean fetchFromServer) {
-        if(fetchFromServer || lightResponsesObservable == null) {
-            lightResponsesObservable = lightService.listLights(
-                    networkDetails.getBaseURL1(),
-                    networkDetails.getBaseURL2(),
-                    NetworkConstants.URL_ALL,
-                    authorisation())
-                    .subscribeOn(ioScheduler)
-                    .observeOn(uiScheduler)
-                    .cache();
-        }
-
-        return lightResponsesObservable;
-    }
-
     @DebugLog
     @NonNull
     @Override
@@ -300,7 +276,7 @@ class LightControlImpl implements LightControl {
             return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
         }
 
-        return fetchLights(false).filter(light -> light.id().equals(id))
+        return fetchLights(false).filter(light -> light.getId().equals(id))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
     }
@@ -330,10 +306,26 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-                .doOnCompleted(() -> fetchLights(true)
-                        .subscribe(new ErrorSubscriber<Light>()))
+                .doOnCompleted(() -> fetchLightNetwork()
+                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)))
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler);
+    }
+
+    @NonNull
+    private Observable<List<LightResponse>> fetchLightResponses(final boolean fetchFromServer) {
+        if(fetchFromServer || lightResponsesObservable == null) {
+            lightResponsesObservable = lightService.listLights(
+                    networkDetails.getBaseURL1(),
+                    networkDetails.getBaseURL2(),
+                    NetworkConstants.URL_ALL,
+                    authorisation())
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler)
+                    .cache();
+        }
+
+        return lightResponsesObservable;
     }
 
     @NonNull

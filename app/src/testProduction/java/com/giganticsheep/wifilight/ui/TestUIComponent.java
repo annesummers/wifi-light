@@ -1,6 +1,8 @@
 package com.giganticsheep.wifilight.ui;
 
 import com.giganticsheep.wifilight.WifiLightAppComponent;
+import com.giganticsheep.wifilight.api.network.TestLightNetworkGraph;
+import com.giganticsheep.wifilight.api.network.TestLightNetworkModule;
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
 
 import dagger.Component;
@@ -13,8 +15,9 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {WifiLightAppComponent.class},
-        modules = { TestUIModule.class } )
-public interface TestUIComponent {
+        modules = { TestUIModule.class,
+                    TestLightNetworkModule.class} )
+public interface TestUIComponent extends TestLightNetworkGraph {
 
     void inject(UITestBase UITest);
 }

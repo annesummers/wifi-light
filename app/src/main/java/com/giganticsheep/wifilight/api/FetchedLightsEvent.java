@@ -5,10 +5,10 @@ package com.giganticsheep.wifilight.api;
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class FetchLightsEvent {
+public class FetchedLightsEvent {
     private final int lightsFetchedCount;
 
-    public FetchLightsEvent(final int lightsFetchedCount) {
+    public FetchedLightsEvent(final int lightsFetchedCount) {
         this.lightsFetchedCount = lightsFetchedCount;
     }
 

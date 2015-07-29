@@ -27,12 +27,12 @@ public class LightNetwork {
     }
 
     public void add(@NonNull final Group group) throws IllegalArgumentException {
-        if(groupsDataMap.containsKey(group.id())) {
+        if(groupsDataMap.containsKey(group.getId())) {
             throw new IllegalArgumentException("A group with that id already exists");
         }
 
         groupDataList.add(group);
-        groupsDataMap.put(group.id(), new ArrayList<>());
+        groupsDataMap.put(group.getId(), new ArrayList<>());
     }
 
     public void add(@NonNull final LightViewData light) throws IllegalArgumentException {
@@ -63,13 +63,13 @@ public class LightNetwork {
     }
 
     public LightViewData get(int groupPosition, int childPosition) throws IndexOutOfBoundsException {
-        String groupId = get(groupPosition).id();
+        String groupId = get(groupPosition).getId();
         List<LightViewData> lightList = groupsDataMap.get(groupId);
         return lightList.get(childPosition);
     }
 
     public int lightCount(int groupPosition)  throws IndexOutOfBoundsException {
-        String groupId = get(groupPosition).id();
+        String groupId = get(groupPosition).getId();
         List<LightViewData> lightList = groupsDataMap.get(groupId);
         return lightList.size();
     }
@@ -91,6 +91,10 @@ public class LightNetwork {
         }
 
         return false;
+    }
+
+    public boolean groupExists(String groupId) {
+        return groupsDataMap.containsKey(groupId);
     }
 
     public final void remove(String groupId, String lightId) {

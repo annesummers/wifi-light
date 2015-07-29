@@ -135,9 +135,9 @@ public interface LightControl {
     Observable<Light> fetchLights(boolean fetchFromServer);
 
     /**
-     * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the specified id.
+     * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the specified getId.
      *
-     * @param id a String representing the id of the {@link com.giganticsheep.wifilight.api.model.Light} to fetch.
+     * @param id a String representing the getId of the {@link com.giganticsheep.wifilight.api.model.Light} to fetch.
      * @return the Observable to subscribe to.
      */
     @NonNull

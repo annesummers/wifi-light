@@ -21,7 +21,7 @@ class Response implements WifiLightData {
     public Response() { }
 
     @Override
-    public final String id() {
+    public final String getId() {
         return id;
     }
 

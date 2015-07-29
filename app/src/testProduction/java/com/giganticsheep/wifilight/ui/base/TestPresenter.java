@@ -46,7 +46,7 @@ public class TestPresenter extends LightPresenterBase {
             getView().showLoading();
         }
 
-        if (light.id().equals(id)) {
+        if (light.getId().equals(id)) {
             fragment.getPresenter().handleLightChanged(light);
         }
     }

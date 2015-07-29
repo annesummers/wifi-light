@@ -5,6 +5,7 @@ import com.giganticsheep.wifilight.ui.UITestBase;
 import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.robolectric.util.SupportFragmentTestUtil;
 
@@ -24,12 +25,16 @@ public abstract class LightFragmentTestBase extends UITestBase {
     protected TestPresenter presenter;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         if(BuildConfig.DEBUG) {
             return;
         }
 
-        fragment = (LightFragmentBase) fragmentFactory.createFragment(getFragmentName());
+        try {
+            fragment = (LightFragmentBase) fragmentFactory.createFragment(getFragmentName());
+        } catch (Exception e) {
+            Assert.fail("Fragment " + getFragmentName() + "does not exist");
+        }
 
         SupportFragmentTestUtil.startFragment(fragment, LightControlActivity.class);
 

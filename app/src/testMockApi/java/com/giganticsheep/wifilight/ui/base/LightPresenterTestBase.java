@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.ui.base;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.BuildConfig;
-import com.giganticsheep.wifilight.WifiLightTestsComponent;
+import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
 import com.giganticsheep.wifilight.base.MockedTestBase;
@@ -40,7 +40,7 @@ public abstract class LightPresenterTestBase extends MockedTestBase {
     protected TestLightView view;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         presenter = createPresenter(component);
 
         view = new TestLightView(this);

@@ -5,10 +5,10 @@ package com.giganticsheep.wifilight.api;
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class FetchLocationsEvent {
+public class FetchedLocationsEvent {
     private final int locationsFetchedCount;
 
-    public FetchLocationsEvent(final int count) {
+    public FetchedLocationsEvent(final int count) {
         locationsFetchedCount = count;
     }
 

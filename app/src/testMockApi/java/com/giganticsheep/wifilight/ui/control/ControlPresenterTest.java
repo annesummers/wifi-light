@@ -48,7 +48,7 @@ public class ControlPresenterTest extends LightPresenterTestBase {
         setTestStatus(LightControl.Status.OK);
         testFetchLight();
 
-        assertThat(view.getLight().id(), equalTo(Constants.TEST_ID));
+        assertThat(view.getLight().getId(), equalTo(Constants.TEST_ID));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_CONNECTED));
     }
 
@@ -61,7 +61,7 @@ public class ControlPresenterTest extends LightPresenterTestBase {
         setTestStatus(LightControl.Status.OFF);
         testFetchLight();
 
-        assertThat(view.getLight().id(), equalTo(Constants.TEST_ID));
+        assertThat(view.getLight().getId(), equalTo(Constants.TEST_ID));
         assertThat(view.getState(), equalTo(TestLightView.STATE_SHOW_LIGHT_DISCONNECTED));
     }
 

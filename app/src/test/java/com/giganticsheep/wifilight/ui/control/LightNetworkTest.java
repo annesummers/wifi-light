@@ -1,5 +1,8 @@
 package com.giganticsheep.wifilight.ui.control;
 
+import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.api.network.GroupData;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Before;
@@ -22,13 +25,27 @@ public class LightNetworkTest {
     private LightNetwork lightNetwork;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         lightNetwork = new LightNetwork();
     }
 
     @Test
-    public void testClear() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testAddLocation() {
+        GroupData location = new GroupData();
+        location.name = Constants.TEST_LOCATION_LABEL;
+        location.id = Constants.TEST_LOCATION_ID;
+        lightNetwork.add((Location) location);
+
+        assertThat(lightNetwork.getLocation().getId(), equalTo(Constants.TEST_LOCATION_ID));
+    }
+
+    @Test
+    public void testClear() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         lightNetwork.add(new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID));
         lightNetwork.clear();
 
@@ -54,8 +71,12 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testAddAndGetLightWithGroup() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testAddAndGetLightWithGroup() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
@@ -63,12 +84,20 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testAddAndGetLightDifferentGroups() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testAddAndGetLightDifferentGroups() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID2, Constants.TEST_GROUP_LABEL2));
+        GroupData group2 = new GroupData();
+        group2.name = Constants.TEST_GROUP_LABEL2;
+        group2.id = Constants.TEST_GROUP_ID2;
+        lightNetwork.add((Group) group2);
+
         LightViewData light2 = new LightViewData(Constants.TEST_ID2, Constants.TEST_LABEL2, true, Constants.TEST_GROUP_ID2);
         lightNetwork.add(light2);
 
@@ -77,7 +106,7 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testAddAndGetLightNoGroup() throws Exception {
+    public void testAddAndGetLightNoGroup() {
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
 
         boolean exceptionThrown = false;
@@ -93,8 +122,12 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testAddDuplicateLight() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testAddDuplicateLight() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
 
         lightNetwork.add(light);
@@ -112,12 +145,20 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testLightCount() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testLightCount() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID2, Constants.TEST_GROUP_LABEL2));
+        GroupData group2 = new GroupData();
+        group2.name = Constants.TEST_GROUP_LABEL2;
+        group2.id = Constants.TEST_GROUP_ID2;
+        lightNetwork.add((Group) group2);
+
         LightViewData light2 = new LightViewData(Constants.TEST_ID2, Constants.TEST_LABEL2, true, Constants.TEST_GROUP_ID2);
         lightNetwork.add(light2);
 
@@ -129,22 +170,26 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testAddAndGetGroup() throws Exception {
-        GroupViewData group = new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL);
-        lightNetwork.add(group);
+    public void testAddAndGetGroup() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
 
         assertThat(lightNetwork.get(0), equalTo(group));
     }
 
     @Test
-    public void testAddDuplicateGroup() throws Exception {
-        GroupViewData group = new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL);
-        lightNetwork.add(group);
+    public void testAddDuplicateGroup() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
 
         boolean exceptionThrown = false;
 
         try {
-            lightNetwork.add(group);
+            lightNetwork.add((Group) group);
         } catch (IllegalArgumentException e) {
             Timber.e("testAddDuplicateGroup", e);
 
@@ -155,16 +200,27 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testGroupCount() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID2, Constants.TEST_GROUP_LABEL2));
+    public void testGroupCount() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
+        GroupData group2 = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL2;
+        group.id = Constants.TEST_GROUP_ID2;
+        lightNetwork.add((Group) group2);
 
         assertThat(lightNetwork.groupCount(), equalTo(2));
     }
 
     @Test
-    public void testLightExistsTrue() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testLightExistsTrue() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
@@ -172,8 +228,12 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testLightExistsFalseWrongGroup() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testLightExistsFalseWrongGroup() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID2);
 
         boolean exceptionThrown = false;
@@ -190,8 +250,12 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testLightExistsFalseWrongLight() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testLightExistsFalseWrongLight() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
@@ -199,8 +263,12 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testRemoveExists() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testRemoveExists() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
@@ -208,8 +276,12 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testRemoveWrongGroup() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testRemoveWrongGroup() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
@@ -227,11 +299,36 @@ public class LightNetworkTest {
     }
 
     @Test
-    public void testRemoveWrongLight() throws Exception {
-        lightNetwork.add(new GroupViewData(Constants.TEST_GROUP_ID, Constants.TEST_GROUP_LABEL));
+    public void testRemoveWrongLight() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
         LightViewData light = new LightViewData(Constants.TEST_ID, Constants.TEST_LABEL, true, Constants.TEST_GROUP_ID);
         lightNetwork.add(light);
 
         lightNetwork.remove(Constants.TEST_GROUP_ID, Constants.TEST_ID2);
+    }
+
+    @Test
+    public void testGroupExistsTrue() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
+        assertTrue(lightNetwork.groupExists(Constants.TEST_GROUP_ID));
+    }
+
+    @Test
+    public void testGroupExistsFalse() {
+        GroupData group = new GroupData();
+        group.name = Constants.TEST_GROUP_LABEL;
+        group.id = Constants.TEST_GROUP_ID;
+        lightNetwork.add((Group) group);
+
+        assertFalse(lightNetwork.groupExists(Constants.TEST_GROUP_ID2));
+
     }
 }
