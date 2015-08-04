@@ -3,18 +3,13 @@ package com.giganticsheep.wifilight.ui.control;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.FetchLightNetworkEvent;
-import com.giganticsheep.wifilight.api.GroupFetchedEvent;
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.LightFetchedEvent;
-import com.giganticsheep.wifilight.api.LocationFetchedEvent;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.ui.ErrorEvent;
 import com.giganticsheep.wifilight.ui.LightChangedEvent;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
-import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 
@@ -36,18 +31,13 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     @Inject EventBus eventBus;
     @Inject LightControl lightControl;
 
-    @Nullable
-    private LightNetwork lightNetwork = null;
-
     private int groupPosition;
     private int childPosition;
 
-    private LightNetwork network;
+   // private LightNetwork network;
 
     public LightNetworkPresenter(@NonNull final Injector injector) {
         injector.inject(this);
-
-        lightNetwork = null;
 
         eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
@@ -63,7 +53,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      * Fetches the Light with the given getId.  Subscribes to the model's method using
      * the Subscriber given.
      *
-     * @param id the getId of the Light to fetch.
+     * @param id the id of the Light to fetch.
      */
     @DebugLog
     public void fetchLight(final String id) {
@@ -85,45 +75,6 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         });
     }
 
-    @DebugLog
-     public synchronized void onEvent(@NonNull LocationFetchedEvent event) {
-        lightNetwork = new LightNetwork();
-        lightNetwork.add(event.getLocation());
-    }
-
-    /**
-     * Called every time a {@link com.giganticsheep.wifilight.api.model.Light} has been fetched from the network.
-     *
-     * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
-     */
-  //  @DebugLog
-    public synchronized void onEvent(@NonNull GroupFetchedEvent event) {
-        if(lightNetwork != null) {
-            lightNetwork.add(event.getGroup());
-        }
-    }
-
-    /**
-     * Called every time a {@link com.giganticsheep.wifilight.api.model.Light} has been fetched from the network.
-     *
-     * @param event contains the fetched {@link com.giganticsheep.wifilight.api.model.Light}.
-     */
-    @DebugLog
-    public synchronized void onEvent(@NonNull LightFetchedEvent event) {
-        if(lightNetwork != null) {
-            Light light = event.getLight();
-
-            if(lightNetwork.lightExists(light.getGroup().getId(), light.getId())) {
-                lightNetwork.remove(light.getGroup().getId(), light.getId());
-            }
-
-            lightNetwork.add(new LightViewData(light.getId(),
-                    light.getLabel(),
-                    light.isConnected(),
-                    light.getGroup().getId()));
-        }
-    }
-
     /**
      * Called when all the available {@link com.giganticsheep.wifilight.api.model.Light}s have been fetched from the network.
      *
@@ -131,11 +82,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      */
     @DebugLog
     public synchronized void onEvent(@NonNull FetchLightNetworkEvent event) {
-        if(lightNetwork != null) {
-            getView().showLightNetwork(lightNetwork, groupPosition, childPosition);
-        }
-
-        lightNetwork = null;
+            getView().showLightNetwork(event.lightNetwork(), groupPosition, childPosition);
     }
 
     @DebugLog

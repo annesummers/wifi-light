@@ -26,7 +26,7 @@ public class BaseNetworkModule {
     @ApplicationScope
     RestAdapter provideRestAdapter(@NonNull Endpoint endpoint,
                                    @NonNull OkHttpClient client,
-                                   Gson gson) {
+                                   @NonNull Gson gson) {
         return new RestAdapter.Builder()
                 .setClient(new OkClient(client))
                 .setEndpoint(endpoint)

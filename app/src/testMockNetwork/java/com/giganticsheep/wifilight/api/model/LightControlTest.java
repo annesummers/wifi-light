@@ -10,6 +10,7 @@ import com.giganticsheep.wifilight.api.GroupFetchedEvent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.LightFetchedEvent;
 import com.giganticsheep.wifilight.api.LocationFetchedEvent;
+import com.giganticsheep.wifilight.api.network.error.WifiLightException;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.util.Constants;
 
@@ -18,6 +19,7 @@ import org.junit.Test;
 import rx.Subscriber;
 
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -42,7 +44,7 @@ public class LightControlTest extends ModelTest {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        assertThat(e, instanceOf(WifiLightException.class));
                     }
 
                     @Override
@@ -75,7 +77,9 @@ public class LightControlTest extends ModelTest {
                     }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e){
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(Light light) {
@@ -105,7 +109,9 @@ public class LightControlTest extends ModelTest {
                     }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(Location location) {
@@ -135,7 +141,9 @@ public class LightControlTest extends ModelTest {
                     }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(Group group) {
@@ -161,7 +169,9 @@ public class LightControlTest extends ModelTest {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(@NonNull Light light) {
@@ -182,7 +192,9 @@ public class LightControlTest extends ModelTest {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(LightStatus statusResponse) { }
@@ -201,7 +213,9 @@ public class LightControlTest extends ModelTest {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(LightStatus statusResponse) { }
@@ -220,7 +234,9 @@ public class LightControlTest extends ModelTest {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(LightStatus statusResponse) { }
@@ -239,7 +255,9 @@ public class LightControlTest extends ModelTest {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(LightStatus statusResponse) { }
@@ -258,7 +276,9 @@ public class LightControlTest extends ModelTest {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(LightStatus statusResponse) { }
@@ -277,7 +297,9 @@ public class LightControlTest extends ModelTest {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+                        assertThat(e, instanceOf(WifiLightException.class));
+                    }
 
                     @Override
                     public void onNext(LightStatus statusResponse) { }

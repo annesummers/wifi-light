@@ -6,6 +6,7 @@ import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.ui.control.LightNetwork;
 
 import rx.Observable;
 
@@ -137,7 +138,7 @@ public interface LightControl {
     /**
      * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the specified getId.
      *
-     * @param id a String representing the getId of the {@link com.giganticsheep.wifilight.api.model.Light} to fetch.
+     * @param id a String representing the id of the {@link com.giganticsheep.wifilight.api.model.Light} to fetch.
      * @return the Observable to subscribe to.
      */
     @NonNull
@@ -169,6 +170,6 @@ public interface LightControl {
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<Location> fetchLightNetwork();
+    Observable<LightNetwork> fetchLightNetwork();
 
 }

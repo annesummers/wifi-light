@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.api.model.Light;
 
 import javax.inject.Inject;
 
@@ -25,8 +26,8 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
 
     @Inject Activity activity;
 
-    private int groupPosition;
-    private int childPosition;
+   // private int groupPosition;
+   // private int childPosition;
     private LightNetwork lightNetwork = new LightNetwork();
 
     @DebugLog
@@ -122,12 +123,10 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void setLightNetwork(@NonNull final LightNetwork lightNetwork,
-                                final int groupPosition,
-                                final int childPosition) {
+    public void setLightNetwork(@NonNull final LightNetwork lightNetwork) {
         this.lightNetwork = lightNetwork;
-        this.groupPosition = groupPosition;
-        this.childPosition = childPosition;
+       // this.groupPosition = groupPosition;
+       // this.childPosition = childPosition;
     }
 
     /**
@@ -153,7 +152,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
      * The data for the entry is set via setViewData(ViewData viewData).
      */
     public class LightViewHolder {
-        private LightViewData viewData;
+        private Light viewData;
 
         private final TextView lightNameTextView;
         private final ImageView lightStatusImageView;
@@ -163,7 +162,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
             lightStatusImageView = (ImageView) view.findViewById(R.id.light_status);
         }
 
-        public void setViewData(@NonNull final LightViewData viewData) {
+        public void setViewData(@NonNull final Light viewData) {
             this.viewData = viewData;
 
             lightNameTextView.setText(viewData.getLabel());

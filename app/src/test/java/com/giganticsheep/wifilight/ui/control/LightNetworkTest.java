@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.ui.control;
 
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.api.network.GroupData;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Before;

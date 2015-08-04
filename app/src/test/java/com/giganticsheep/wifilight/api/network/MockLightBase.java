@@ -2,14 +2,14 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.model.WifiLightData;
+import com.giganticsheep.wifilight.api.model.GroupData;
 
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-public class MockLightBase implements WifiLightData {
+public class MockLightBase implements GroupData {
 
     @NonNull
     public final String id;

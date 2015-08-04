@@ -1,0 +1,6 @@
+{
+  "message": "color is missing",
+  "errors": {
+    "color": ["is missing"]
+  }
+}

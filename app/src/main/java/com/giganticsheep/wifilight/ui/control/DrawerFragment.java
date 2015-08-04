@@ -72,17 +72,6 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         });
     }
 
-    public void clickDrawerItem(final int groupPosition, final int childPosition) {
-        long packedPos = ExpandableListView.getPackedPositionForChild(groupPosition, childPosition);
-        int flatPos = drawerListView.getFlatListPosition(packedPos);
-        int adjustedPos = flatPos - drawerListView.getFirstVisiblePosition();
-
-        View childToClick = drawerListView.getChildAt(adjustedPos);
-        long id = adapter.getChildId(groupPosition, childPosition);
-
-        drawerListView.performItemClick(childToClick, adjustedPos, id);
-    }
-
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_drawer;
@@ -104,6 +93,17 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @Override
     protected boolean reinitialiseOnRotate() {
         return false;
+    }
+
+    private void clickDrawerItem(final int groupPosition, final int childPosition) {
+        long packedPos = ExpandableListView.getPackedPositionForChild(groupPosition, childPosition);
+        int flatPos = drawerListView.getFlatListPosition(packedPos);
+        int adjustedPos = flatPos - drawerListView.getFirstVisiblePosition();
+
+        View childToClick = drawerListView.getChildAt(adjustedPos);
+        long id = adapter.getChildId(groupPosition, childPosition);
+
+        drawerListView.performItemClick(childToClick, adjustedPos, id);
     }
 
     // MVP
@@ -156,7 +156,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         loadingLayout.setVisibility(View.GONE);
         drawerLayout.setVisibility(View.VISIBLE);
 
-        adapter.setLightNetwork(lightNetwork, groupPosition, childPosition);
+        adapter.setLightNetwork(lightNetwork);//, groupPosition, childPosition);
         adapter.notifyDataSetChanged();
 
         drawerTextView.setText(lightNetwork.getLocation().getName());

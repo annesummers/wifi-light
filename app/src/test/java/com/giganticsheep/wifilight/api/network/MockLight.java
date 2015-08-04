@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.api.network;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.model.ColourData;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;

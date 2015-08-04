@@ -26,10 +26,11 @@ public class NetworkModule {
     @ApplicationScope
     LightService provideService(RestAdapter restAdapter, LightNetwork lightNetwork) {
         MockRestAdapter mockRestAdapter = MockRestAdapter.from(restAdapter);
-        mockRestAdapter.setErrorPercentage(20);
+        mockRestAdapter.setErrorPercentage(100);
         return mockRestAdapter.create(LightService.class, new MockLightService(lightNetwork));
     }
 
+    // TODO sort out code duplication with provideLightNetwork()
     @NonNull
     @Provides
     LightNetwork provideLightNetwork() {

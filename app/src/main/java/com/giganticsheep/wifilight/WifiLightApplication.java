@@ -33,6 +33,7 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
 
         buildComponentAndInject();
 
+        //TODO sort out logging
         if(BuildConfig.DEBUG ||
                 BuildConfig.APPLICATION_ID.equals("com.giganticsheep.wifilight.mocknetwork") ||
                         BuildConfig.APPLICATION_ID.equals("com.giganticsheep.wifilight.mockapi")) {
