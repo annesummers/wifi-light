@@ -9,10 +9,9 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
-import com.giganticsheep.wifilight.api.model.LightData;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.api.model.GroupData;
+import com.giganticsheep.wifilight.api.model.WifiLightData;
 import com.giganticsheep.wifilight.api.network.error.WifiLightAPIException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightServerException;
 import com.giganticsheep.wifilight.base.EventBus;
@@ -175,16 +174,11 @@ class LightControlImpl implements LightControl {
                             locations.put(location.getId(), location);
                             observables.add(Observable.just(location));
                             locationCount[0]++;
-
-                           // eventBus.postMessage(new LocationFetchedEvent(location))
-                            //        .subscribe(new ErrorSubscriber<>());
                         }
                     }
 
                     return Observable.merge(observables);
                 });
-               // .doOnCompleted(() -> eventBus.postMessage(new FetchedLocationsEvent(locationCount[0]))
-                       // .subscribe(new ErrorSubscriber<>()));
     }
 
     @DebugLog
@@ -204,22 +198,11 @@ class LightControlImpl implements LightControl {
                             groups.put(group.getId(), group);
                             observables.add(Observable.just(group));
                             groupCount[0]++;
-
-                            /*if(fetchFromServer) {
-                                eventBus.postMessage(new GroupFetchedEvent(group))
-                                        .subscribe(new ErrorSubscriber<>());
-                            }*/
                         }
                     }
 
                     return Observable.merge(observables);
                 });
-              /*  .doOnCompleted(() -> {
-                    if(fetchFromServer) {
-                        eventBus.postMessage(new FetchedGroupsEvent(groupCount[0]))
-                                .subscribe(new ErrorSubscriber<>());
-                    }
-                });*/
     }
 
     @DebugLog
@@ -233,23 +216,12 @@ class LightControlImpl implements LightControl {
                     List<Observable<Light>> observables = new ArrayList<>();
 
                     for (LightResponse lightResponse : lightResponses) {
-                       /* if(fetchFromServer) {
-                            eventBus.postMessage(new LightFetchedEvent(lightResponse))
-                                    .subscribe(new ErrorSubscriber<>());
-                        }*/
-
                         observables.add(Observable.just(lightResponse));
                         lightsCount[0]++;
                     }
 
                     return Observable.merge(observables);
                 });
-              /*  .doOnCompleted(() -> {
-                    if (fetchFromServer) {
-                        eventBus.postMessage(new FetchedLightsEvent(lightsCount[0]))
-                                .subscribe(new ErrorSubscriber<>());
-                    }
-                });*/
 
     }
 
@@ -257,7 +229,7 @@ class LightControlImpl implements LightControl {
     @NonNull
     @Override
     public Observable<LightNetwork> fetchLightNetwork() {
-        List<Observable<? extends LightData>> observables = new ArrayList<>();
+        List<Observable<? extends WifiLightData>> observables = new ArrayList<>();
 
         observables.add(fetchLocations(true));
         observables.add(fetchGroups(true));

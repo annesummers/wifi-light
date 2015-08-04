@@ -33,7 +33,7 @@ public class LightResponse extends Response
     public double seconds_since_seen;
 
     public ColourData color;
-    public GroupData location;
+    public LocationData location;
     public GroupData group;
     public CapabilitiesData capabilities;
 
@@ -43,7 +43,7 @@ public class LightResponse extends Response
         super(id);
 
         color = new ColourData();
-        location = new GroupData();
+        location = new LocationData();
         group = new GroupData();
         capabilities = new CapabilitiesData();
     }

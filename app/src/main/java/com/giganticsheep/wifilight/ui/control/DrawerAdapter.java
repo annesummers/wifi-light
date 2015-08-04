@@ -26,8 +26,6 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
 
     @Inject Activity activity;
 
-   // private int groupPosition;
-   // private int childPosition;
     private LightNetwork lightNetwork = new LightNetwork();
 
     @DebugLog
@@ -125,8 +123,6 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
 
     public void setLightNetwork(@NonNull final LightNetwork lightNetwork) {
         this.lightNetwork = lightNetwork;
-       // this.groupPosition = groupPosition;
-       // this.childPosition = childPosition;
     }
 
     /**

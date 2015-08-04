@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.api.model.Location;
 
 import org.parceler.Parcel;
 
@@ -9,7 +9,7 @@ import org.parceler.Parcel;
  * (*_*)
  */
 @Parcel
-public class GroupData implements Group {
+public class LocationData implements Location {
     public String id;
     public String name;
 

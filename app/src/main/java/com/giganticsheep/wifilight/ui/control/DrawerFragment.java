@@ -156,7 +156,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         loadingLayout.setVisibility(View.GONE);
         drawerLayout.setVisibility(View.VISIBLE);
 
-        adapter.setLightNetwork(lightNetwork);//, groupPosition, childPosition);
+        adapter.setLightNetwork(lightNetwork);
         adapter.notifyDataSetChanged();
 
         drawerTextView.setText(lightNetwork.getLocation().getName());
