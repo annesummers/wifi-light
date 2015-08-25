@@ -2,12 +2,14 @@ package com.giganticsheep.wifilight.ui.control;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.FetchLightNetworkEvent;
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.base.ErrorEvent;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.ui.ErrorEvent;
-import com.giganticsheep.wifilight.ui.LightChangedEvent;
+import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
+import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -31,10 +33,9 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     @Inject EventBus eventBus;
     @Inject LightControl lightControl;
 
+    private int locationPosition;
     private int groupPosition;
-    private int childPosition;
-
-   // private LightNetwork network;
+    private int lightPosition;
 
     public LightNetworkPresenter(@NonNull final Injector injector) {
         injector.inject(this);
@@ -50,7 +51,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     }
 
     /**
-     * Fetches the Light with the given getId.  Subscribes to the model's method using
+     * Fetches the Light with the given id.  Subscribes to the model's method using
      * the Subscriber given.
      *
      * @param id the id of the Light to fetch.
@@ -76,13 +77,69 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
     }
 
     /**
+     * Fetches the Group with the given id.  Subscribes to the model's method using
+     * the Subscriber given.
+     *
+     * @param groupId the id of the group to fetch.
+     */
+    public void fetchGroup(final String groupId) {
+        subscribe(lightControl.fetchGroup(groupId), new Subscriber<Group>() {
+
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(Throwable e) {
+                subscribe(eventBus.postMessage(new ErrorEvent(e)));
+            }
+
+            @Override
+            public void onNext(Group group) {
+                subscribe(eventBus.postMessage(new GroupChangedEvent(group)));
+            }
+        });
+    }
+
+    /**
+     * Fetches the Location with the given id.  Subscribes to the model's method using
+     * the Subscriber given.
+     *
+     * @param locationId the id of the group to fetch.
+     */
+    public void fetchLocation(final String locationId) {
+        subscribe(lightControl.fetchLocation(locationId), new Subscriber<Location>() {
+
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(Throwable e) {
+                subscribe(eventBus.postMessage(new ErrorEvent(e)));
+            }
+
+            @Override
+            public void onNext(Location location) {
+                subscribe(eventBus.postMessage(new LocationChangedEvent(location)));
+            }
+        });
+    }
+
+    public void setPosition(final int locationPosition,
+                            final int groupPosition,
+                            final int lightPosition) {
+        this.locationPosition = locationPosition;
+        this.groupPosition = groupPosition;
+        this.lightPosition = lightPosition;
+    }
+
+    /**
      * Called when all the available {@link com.giganticsheep.wifilight.api.model.Light}s have been fetched from the network.
      *
      * @param event a FetchLightsEvent
      */
     @DebugLog
-    public synchronized void onEvent(@NonNull FetchLightNetworkEvent event) {
-            getView().showLightNetwork(event.lightNetwork(), groupPosition, childPosition);
+    public synchronized void onEvent(@NonNull LightControl.FetchLightNetworkEvent event) {
+        getView().showLightNetwork(event.lightNetwork(), locationPosition, groupPosition, lightPosition);
     }
 
     @DebugLog
@@ -112,11 +169,6 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      */
     private <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber<T>());
-    }
-
-    public void setPosition(int groupPosition, int childPosition) {
-        this.groupPosition = groupPosition;
-        this.childPosition = childPosition;
     }
 
     /**

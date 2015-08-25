@@ -70,7 +70,7 @@ public class DrawerFragmentTest extends UITestBase {
             return;
         }
 
-        fragment.showLightNetwork(testLightNetwork, 0, 0);
+        fragment.showLightNetwork(testLightNetwork, 0, 0, 0);
 
         View loadingView = fragment.getView().findViewById(R.id.loading_layout);
         View errorView = fragment.getView().findViewById(R.id.error_layout);

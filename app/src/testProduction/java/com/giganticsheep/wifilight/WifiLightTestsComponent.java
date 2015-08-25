@@ -1,10 +1,9 @@
 package com.giganticsheep.wifilight;
 
-import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.network.LightControlGraph;
 import com.giganticsheep.wifilight.api.network.LightControlModule;
 import com.giganticsheep.wifilight.api.network.TestLightNetworkGraph;
-import com.giganticsheep.wifilight.api.network.TestLightNetworkModule;
+import com.giganticsheep.wifilight.api.network.test.TestLightNetworkModule;
 import com.giganticsheep.wifilight.base.dagger.SchedulersGraph;
 import com.giganticsheep.wifilight.base.dagger.WifiLightGraph;
 

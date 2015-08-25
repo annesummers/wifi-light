@@ -2,26 +2,18 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.FetchedGroupsEvent;
-import com.giganticsheep.wifilight.api.FetchedLightsEvent;
-import com.giganticsheep.wifilight.api.FetchedLocationsEvent;
-import com.giganticsheep.wifilight.api.GroupFetchedEvent;
-import com.giganticsheep.wifilight.api.LightFetchedEvent;
-import com.giganticsheep.wifilight.api.LocationFetchedEvent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
+import com.giganticsheep.wifilight.ui.control.LightNetwork;
 import com.giganticsheep.wifilight.util.Constants;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.Observable;
 import rx.Scheduler;
@@ -42,271 +34,327 @@ public class MockLightControlImpl implements LightControl {
     private final Scheduler ioScheduler;
     private final Scheduler uiScheduler;
 
-    private final List<LightResponse> lights = new ArrayList<>();
-    private final List<GroupData> groups = new ArrayList<>();
-    private final List<GroupData> locations = new ArrayList<>();
+    private final LightNetwork testLightNetwork;
+
+    // private final List<LightResponse> lights = new ArrayList<>();
+   // private final List<GroupData> groups = new ArrayList<>();
+   // private final List<GroupData> locations = new ArrayList<>();
 
     private Status status;
     private long timeout = 0L;
 
-    public MockLightControlImpl(final EventBus eventBus,
+    public MockLightControlImpl(@NonNull final EventBus eventBus,
                                 @IOScheduler final Scheduler ioScheduler,
-                                @UIScheduler final Scheduler uiScheduler) {
+                                @UIScheduler final Scheduler uiScheduler,
+                                @NonNull final LightNetwork testLightNetwork) {
         this.eventBus = eventBus;
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
 
-        LightResponse light = new LightResponse(Constants.TEST_ID);
+      /*  LightResponse light = new LightResponse(Constants.TEST_ID);
         light.label = Constants.TEST_LABEL;
         light.power = INITIAL_POWER;
-        lights.add(light);
+        lights.addLightLocation(light);
 
         light = new LightResponse(Constants.TEST_ID2);
         light.label = Constants.TEST_LABEL2;
         light.power = INITIAL_POWER;
-        lights.add(light);
+        lights.addLightLocation(light);
 
         GroupData group = new GroupData();
         group.id = Constants.TEST_GROUP_ID;
         group.name = Constants.TEST_GROUP_LABEL;
-        groups.add(group);
+        groups.addLightLocation(group);
 
         group = new GroupData();
         group.id = Constants.TEST_GROUP_ID2;
         group.name = Constants.TEST_GROUP_LABEL2;
-        groups.add(group);
+        groups.addLightLocation(group);
 
         GroupData location = new GroupData();
         location.id = Constants.TEST_LOCATION_ID;
         location.name = Constants.TEST_LOCATION_LABEL;
-        groups.add(location);
+        groups.addLightLocation(location);
 
         location.id = Constants.TEST_LOCATION_ID2;
         location.name = Constants.TEST_LOCATION_LABEL2;
-        groups.add(location);
+        groups.addLightLocation(location);*/
+
+        this.testLightNetwork = testLightNetwork;
     }
 
     @NonNull
     @Override
     public Observable<LightStatus> setHue(final int hue, final float duration) {
-        if (status == Status.OK) {
+        switch (status) {
+            case OK:
             return Observable.create(new Observable.OnSubscribe<LightStatus>() {
 
                 @Override
                 public void call(Subscriber<? super LightStatus> subscriber) {
-                    for(LightResponse light : lights) {
-                        light.color.hue = hue;
+                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                            for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                        StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.getId();
-                        statusResponse.label = light.getLabel();
-                        statusResponse.status = Status.OK.getStatusString();
+                                light.color.hue = hue;
 
-                        subscriber.onNext(statusResponse);
+                                StatusResponse statusResponse = new StatusResponse();
+                                statusResponse.id = light.getId();
+                                statusResponse.label = light.getLabel();
+                                statusResponse.status = Status.OK.getStatusString();
+
+                                subscriber.onNext(statusResponse);
+                            }
+                        }
                     }
 
                     subscriber.onCompleted();
                 }});
-        } else if (status == Status.OFF) {
-            return offObservable();
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
+            case OFF:
+                return offObservable();
+            case ERROR:
+                return Observable.error(new Throwable("Error from server"));
+            default:
+                return Observable.error(new Throwable("Status unknown"));
         }
     }
 
     @NonNull
     @Override
     public Observable<LightStatus> setSaturation(final int saturation, float duration) {
-        if (status == Status.OK) {
+        switch (status) {
+            case OK:
             return Observable.create(new Observable.OnSubscribe<LightStatus>() {
 
                 @Override
                 public void call(Subscriber<? super LightStatus> subscriber) {
-                    for(LightResponse light : lights) {
-                        light.color.saturation = LightConstants.convertSaturation(saturation);
+                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                            for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                        StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.getId();
-                        statusResponse.label = light.getLabel();
-                        statusResponse.status = Status.OK.getStatusString();
+                                light.color.saturation = LightConstants.convertSaturation(saturation);
 
-                        subscriber.onNext(statusResponse);
+                                StatusResponse statusResponse = new StatusResponse();
+                                statusResponse.id = light.getId();
+                                statusResponse.label = light.getLabel();
+                                statusResponse.status = Status.OK.getStatusString();
+
+                                subscriber.onNext(statusResponse);
+                            }
+                        }
                     }
 
                     subscriber.onCompleted();
                 }});
-        } else if (status == Status.OFF) {
-            return offObservable();
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
+            case OFF:
+                return offObservable();
+            case ERROR:
+                return Observable.error(new Throwable("Error from server"));
+            default:
+                return Observable.error(new Throwable("Status unknown"));
         }
     }
 
     @NonNull
     @Override
     public Observable<LightStatus> setBrightness(final int brightness, float duration) {
-        if (status == Status.OK) {
+        switch (status) {
+            case OK:
             return Observable.create(new Observable.OnSubscribe<LightStatus>() {
 
                 @Override
                 public void call(Subscriber<? super LightStatus> subscriber) {
-                    for(LightResponse light : lights) {
-                        light.brightness = LightConstants.convertBrightness(brightness);
+                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                            for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                        StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.getId();
-                        statusResponse.label = light.getLabel();
-                        statusResponse.status = Status.OK.getStatusString();
+                                light.brightness = LightConstants.convertBrightness(brightness);
 
-                        subscriber.onNext(statusResponse);
+                                StatusResponse statusResponse = new StatusResponse();
+                                statusResponse.id = light.getId();
+                                statusResponse.label = light.getLabel();
+                                statusResponse.status = Status.OK.getStatusString();
+
+                                subscriber.onNext(statusResponse);
+                            }
+                        }
                     }
 
                     subscriber.onCompleted();
                 }});
-        } else if (status == Status.OFF) {
-            return offObservable();
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
+            case OFF:
+                return offObservable();
+            case ERROR:
+                return Observable.error(new Throwable("Error from server"));
+            default:
+                return Observable.error(new Throwable("Status unknown"));
         }
     }
 
     @NonNull
     @Override
     public Observable<LightStatus> setKelvin(final int kelvin, float duration) {
-        if (status == Status.OK) {
+        switch (status) {
+            case OK:
             return Observable.create(new Observable.OnSubscribe<LightStatus>() {
 
                 @Override
                 public void call(Subscriber<? super LightStatus> subscriber) {
-                    for(LightResponse light : lights) {
-                        light.color.kelvin = kelvin;
+                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                            for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                        StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.getId();
-                        statusResponse.label = light.getLabel();
-                        statusResponse.status = Status.OK.getStatusString();
+                                light.color.kelvin = kelvin;
 
-                        subscriber.onNext(statusResponse);
+                                StatusResponse statusResponse = new StatusResponse();
+                                statusResponse.id = light.getId();
+                                statusResponse.label = light.getLabel();
+                                statusResponse.status = Status.OK.getStatusString();
+
+                                subscriber.onNext(statusResponse);
+                            }
+                        }
                     }
 
                     subscriber.onCompleted();
                 }});
-        } else if (status == Status.OFF){
-            return offObservable();
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
+            case OFF:
+                return offObservable();
+            case ERROR:
+                return Observable.error(new Throwable("Error from server"));
+            default:
+                return Observable.error(new Throwable("Status unknown"));
         }
     }
 
     @NonNull
     @Override
     public Observable<LightStatus> togglePower() {
-        if (status == Status.OK) {
+        switch (status) {
+            case OK:
             return Observable.create(new Observable.OnSubscribe<LightStatus>() {
 
                 @Override
                 public void call(Subscriber<? super LightStatus> subscriber) {
-                    for(LightResponse light : lights) {
-                        light.power = (light.getPower() == Power.ON) ? Power.OFF.getPowerString() : Power.ON.getPowerString();
+                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                            for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                        StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.getId();
-                        statusResponse.label = light.getLabel();
-                        statusResponse.status = Status.OK.getStatusString();
+                                light.power = (light.getPower() == Power.ON) ? Power.OFF.getPowerString() : Power.ON.getPowerString();
 
-                        subscriber.onNext(statusResponse);
+                                StatusResponse statusResponse = new StatusResponse();
+                                statusResponse.id = light.getId();
+                                statusResponse.label = light.getLabel();
+                                statusResponse.status = Status.OK.getStatusString();
+
+                                subscriber.onNext(statusResponse);
+                            }
+                        }
                     }
 
                     subscriber.onCompleted();
                 }});
-        } else if (status == Status.OFF) {
-            return offObservable();
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
+            case OFF:
+                return offObservable();
+            case ERROR:
+                return Observable.error(new Throwable("Error from server"));
+            default:
+                return Observable.error(new Throwable("Status unknown"));
         }
     }
 
     @NonNull
     @Override
     public Observable<LightStatus> setPower(final Power power, float duration) {
-        if (status == Status.OK) {
-            return Observable.create(new Observable.OnSubscribe<LightStatus>() {
+        switch (status) {
+            case OK:
+                return Observable.create(new Observable.OnSubscribe<LightStatus>() {
 
-                @Override
-                public void call(Subscriber<? super LightStatus> subscriber) {
-                    for(LightResponse light : lights) {
-                        light.power = power.getPowerString();
+                    @Override
+                    public void call(Subscriber<? super LightStatus> subscriber) {
+                        for (int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                            for (int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                                for (int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                    MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                        StatusResponse statusResponse = new StatusResponse();
-                        statusResponse.id = light.getId();
-                        statusResponse.label = light.getLabel();
-                        statusResponse.status = Status.OK.getStatusString();
+                                    light.power = power.getPowerString();
 
-                        subscriber.onNext(statusResponse);
+                                    StatusResponse statusResponse = new StatusResponse();
+                                    statusResponse.id = light.getId();
+                                    statusResponse.label = light.getLabel();
+                                    statusResponse.status = Status.OK.getStatusString();
+
+                                    subscriber.onNext(statusResponse);
+                                }
+                            }
+                        }
+
+                        subscriber.onCompleted();
                     }
-
-                    subscriber.onCompleted();
-                }});
-        } else if (status == Status.OFF) {
-            return offObservable();
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
+                });
+            case OFF:
+                return offObservable();
+            case ERROR:
+                return Observable.error(new Throwable("Error from server"));
+            default:
+                return Observable.error(new Throwable("Status unknown"));
         }
     }
 
     @NonNull
-    @Override
-    public Observable<Light> fetchLights(boolean fetchFromServer) {
-        if (status == Status.OK) {
-            return Observable.create(new Observable.OnSubscribe<Light>() {
+    private Observable<Light> fetchLights(boolean fetchFromServer) {
+        switch (status) {
+            case OK:
+                return Observable.create(new Observable.OnSubscribe<Light>() {
 
-                @Override
-                public void call(Subscriber<? super Light> subscriber) {
-                    for (LightResponse light : lights) {
-                        light.connected = true;
-                        light.seconds_since_seen = timeout;
+                    @Override
+                    public void call(Subscriber<? super Light> subscriber) {
+                        for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                            for (int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                                for (int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                    MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                        eventBus.postMessage(new LightFetchedEvent(light));
-                        subscriber.onNext(light);
+                                    light.connected = true;
+                                    light.seconds_since_seen = timeout;
+
+                                    subscriber.onNext(light);
+                                }
+                            }
+                        }
+
+                        subscriber.onCompleted();
                     }
+                });
+            case OFF:
+                return Observable.create(new Observable.OnSubscribe<Light>() {
 
-                    eventBus.postMessage(new FetchedLightsEvent(lights.size()));
-                    subscriber.onCompleted();
-                }
-            });
-        } else if (status == Status.OFF) {
-            return Observable.create(new Observable.OnSubscribe<Light>() {
+                    @Override
+                    public void call(Subscriber<? super Light> subscriber) {
+                        for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                            for (int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                                for (int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                                    MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                @Override
-                public void call(Subscriber<? super Light> subscriber) {
-                    for (LightResponse light : lights) {
-                        light.connected = false;
-                        light.seconds_since_seen = timeout;
+                                    light.connected = false;
+                                    light.seconds_since_seen = timeout;
 
-                        eventBus.postMessage(new LightFetchedEvent(light));
-                        subscriber.onNext(light);
+                                    subscriber.onNext(light);
+                                }
+                            }
+                        }
+
+                        subscriber.onCompleted();
                     }
-
-                    eventBus.postMessage(new FetchedLightsEvent(lights.size()));
-                    subscriber.onCompleted();
-                }
-            });
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
+                });
+            case ERROR:
+                return Observable.error(new Throwable("Error from server"));
+            default:
+                return Observable.error(new Throwable("Status unknown"));
         }
     }
 
@@ -318,6 +366,18 @@ public class MockLightControlImpl implements LightControl {
     }
 
     @NonNull
+    @Override
+    public Observable<Group> fetchGroup(String groupId) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Observable<Location> fetchLocation(String locationId) {
+        return null;
+    }
+
+   /* @NonNull
     @Override
     public Observable<Group> fetchGroups(boolean fetchFromServer) {
         if (status == Status.OK) {
@@ -380,35 +440,18 @@ public class MockLightControlImpl implements LightControl {
         } else {
             return Observable.error(new Throwable("Status unknown"));
         }
-    }
+    }*/
 
     @NonNull
     @Override
-    public Observable<Location> fetchLightNetwork() {
+    public Observable<LightNetwork> fetchLightNetwork() {
         if (status == Status.OK || status == Status.OFF) {
-            return Observable.create(new Observable.OnSubscribe<Location>() {
+            return Observable.create(new Observable.OnSubscribe<LightNetwork>() {
 
                 @Override
-                public void call(Subscriber<? super Location> subscriber) {
-                    fetchLocations(true).subscribe(new Subscriber<Location>() {
-                        @Override
-                        public void onCompleted() {
-                            subscriber.onCompleted();
-
-                            fetchGroups(true).subscribe(new ErrorSubscriber<>());
-                            fetchLights(true).subscribe(new ErrorSubscriber<>());
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            subscriber.onError(e);
-                        }
-
-                        @Override
-                        public void onNext(Location location) {
-                            subscriber.onNext(location);
-                        }
-                    });
+                public void call(Subscriber<? super LightNetwork> subscriber) {
+                    subscriber.onNext(testLightNetwork);
+                    subscriber.onCompleted();
                 }
             });
         } else if (status == Status.ERROR) {
@@ -423,13 +466,19 @@ public class MockLightControlImpl implements LightControl {
 
             @Override
             public void call(Subscriber<? super LightStatus> subscriber) {
-                for (LightResponse light : lights) {
-                    StatusResponse statusResponse = new StatusResponse();
-                    statusResponse.id = light.getId();
-                    statusResponse.label = light.getLabel();
-                    statusResponse.status = Status.OFF.getStatusString();
+                for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                    for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                        for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                            MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
 
-                    subscriber.onNext(statusResponse);
+                            StatusResponse statusResponse = new StatusResponse();
+                            statusResponse.id = light.getId();
+                            statusResponse.label = light.getLabel();
+                            statusResponse.status = Status.OFF.getStatusString();
+
+                            subscriber.onNext(statusResponse);
+                        }
+                    }
                 }
 
                 subscriber.onCompleted();

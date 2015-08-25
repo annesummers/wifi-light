@@ -41,12 +41,14 @@ class MockLightService implements LightService {
                 List<LightResponse> lights = new ArrayList<>();
                 LightResponse light;
 
-                for(int i = 0; i < mockLightNetwork.groupCount(); i++) {
-                    for(int j = 0; j < mockLightNetwork.lightCount(i); j++) {
-                        light = new LightResponse(mockLightNetwork.get(i, j).getId());
-                        light.group.id = mockLightNetwork.get(i).getId();
-                        light.location.id = mockLightNetwork.getLocation().getId();
-                        lights.add(light);
+                for(int i = 0; i < mockLightNetwork.lightLocationCount(); i++){
+                    for (int j = 0; j < mockLightNetwork.lightGroupCount(i); j++) {
+                        for (int k = 0; k < mockLightNetwork.lightCount(i, j); k++) {
+                            light = new LightResponse(mockLightNetwork.getLight(i, j, k).getId());
+                            light.group.id = mockLightNetwork.getLightGroup(i, j).getId();
+                            light.location.id = mockLightNetwork.getLightLocation(i).getId();
+                            lights.add(light);
+                        }
                     }
                 }
 

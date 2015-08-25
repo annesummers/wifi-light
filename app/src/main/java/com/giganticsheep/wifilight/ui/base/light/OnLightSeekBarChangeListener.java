@@ -1,9 +1,9 @@
 package com.giganticsheep.wifilight.ui.base.light;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.widget.SeekBar;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +15,7 @@ public class OnLightSeekBarChangeListener implements SeekBar.OnSeekBarChangeList
 
     private boolean tracking = false;
 
-    private final Map<SeekBar, Integer> values = new HashMap<>();
+    private final Map<SeekBar, Integer> values = new ArrayMap<>();
 
     private final LightSeekBarWrapper lightSeekBarWrapper;
 

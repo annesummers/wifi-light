@@ -37,7 +37,7 @@
         android:background="@color/text_primary"/>
 
     <ExpandableListView
-        android:id="@+id/left_drawer"
+        android:id="@+id/location_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"

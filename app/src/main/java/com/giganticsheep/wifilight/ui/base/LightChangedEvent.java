@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui;
+package com.giganticsheep.wifilight.ui.base;
 
 import com.giganticsheep.wifilight.api.model.Light;
 

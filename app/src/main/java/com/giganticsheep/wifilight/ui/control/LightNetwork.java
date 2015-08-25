@@ -7,112 +7,98 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.Location;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * DESCRIPTION HERE ANNE <p>
+ * Represents a network of lights. <p>
  * Created by anne on 24/07/15. <p>
  * (*_*)
  */
 public class LightNetwork {
+    private final List<Location> locationList = new ArrayList<>();
 
-    private final List<Group> groupDataList = new ArrayList<>();
-    private final HashMap<String, List<Light>> groupsDataMap = new HashMap<>();
-
-    private Location location;
-
-    public void clear() {
-        groupDataList.clear();
-        groupsDataMap.clear();
+    /**
+     * @param locationPosition
+     * @return the number of light groups in this network.
+     */
+    public int lightGroupCount(final int locationPosition) {
+        return locationList.get(locationPosition).groupCount();
     }
 
-    public void add(@NonNull final Group group) throws IllegalArgumentException {
-        if(groupsDataMap.containsKey(group.getId())) {
-            throw new IllegalArgumentException("A group with that id already exists");
+    /**
+     * @param locationPosition
+     * @param groupPosition
+     * @return the Group at the position groupPosition at the location at locationPosition.
+     */
+    public final Group getLightGroup(final int locationPosition,
+                                     final int groupPosition) {
+        return locationList.get(locationPosition).getGroup(groupPosition);
+    }
+
+    /**
+     * @param locationPosition
+     * @return the Location at the given position in this network.
+     */
+    public final Location getLightLocation(final int locationPosition) {
+        return locationList.get(locationPosition);
+    }
+
+    /**
+     * @return the number of light locations in this network.
+     */
+    public int lightLocationCount() {
+        return locationList.size();
+    }
+
+    /**
+     * @param locationPosition
+     * @param groupPosition
+     * @return the number of lights in the group at position groupPosition in the location at
+     *          locationPosition.
+     */
+    public int lightCount(final int locationPosition,
+                          final int groupPosition) {
+        return locationList.get(locationPosition).getGroup(groupPosition).lightCount();
+    }
+
+    /**
+     * @param locationPosition
+     * @param groupPosition
+     * @param lightPosition
+     * @return the light at the given position in the group at the given position in the location
+     *          at the given position.
+     */
+    public Light getLight(final int locationPosition,
+                          final int groupPosition,
+                          final int lightPosition) {
+        return locationList.get(locationPosition).getGroup(groupPosition).getLight(lightPosition);
+    }
+
+    /**
+     * @param location
+     */
+    public void addLightLocation(@NonNull final Location location) {
+        locationList.add(location);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if(!(object instanceof LightNetwork)) {
+            return false;
         }
 
-        groupDataList.add(group);
-        groupsDataMap.put(group.getId(), new ArrayList<>());
-    }
+        LightNetwork lightNetwork = (LightNetwork) object;
 
-    public void add(@NonNull final Light light) throws IllegalArgumentException {
-        List<Light> subList;
-
-        if(groupsDataMap.containsKey(light.getGroup().getId())) {
-            subList = groupsDataMap.get(light.getGroup().getId());
-
-            for(Light l : subList) {
-                if(l.getId().equals(light.getId())) {
-                    throw new IllegalArgumentException("A light with that id already exists");
+        for(int i = 0; i < lightLocationCount(); i++) {
+            for(int j = 0; i < lightGroupCount(i); j++) {
+                for(int k = 0; k < lightCount(i, j); k++) {
+                    if(!getLight(i, j, k).getId().equals(lightNetwork.getLight(i, j, k).getId())) {
+                        return false;
+                    }
                 }
             }
-
-            subList.add(light);
-            groupsDataMap.put(light.getGroup().getId(), subList);
-        } else {
-            throw new IllegalArgumentException("Light's group does not exist");
-        }
-    }
-
-    public void add(@NonNull final Location location) {
-        this.location = location;
-    }
-
-    public int groupCount() {
-        return groupDataList.size();
-    }
-
-    public Light get(int groupPosition, int childPosition) throws IndexOutOfBoundsException {
-        String groupId = get(groupPosition).getId();
-        List<Light> lightList = groupsDataMap.get(groupId);
-        return lightList.get(childPosition);
-    }
-
-    public int lightCount(int groupPosition)  throws IndexOutOfBoundsException {
-        String groupId = get(groupPosition).getId();
-        List<Light> lightList = groupsDataMap.get(groupId);
-        return lightList.size();
-    }
-
-    public Group get(int groupPosition) throws IndexOutOfBoundsException {
-        return groupDataList.get(groupPosition);
-    }
-
-    public boolean lightExists(String groupId, String lightId) throws IllegalArgumentException {
-        if(!groupsDataMap.containsKey(groupId)) {
-            throw new IllegalArgumentException("Group does not exist");
         }
 
-        List<Light> lights = groupsDataMap.get(groupId);
-        for(Light light : lights) {
-            if(light.getId().equals(lightId)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean groupExists(String groupId) {
-        return groupsDataMap.containsKey(groupId);
-    }
-
-    public final void remove(String groupId, String lightId) {
-        if(!groupsDataMap.containsKey(groupId)) {
-            throw new IllegalArgumentException("Group does not exist");
-        }
-
-        List<Light> lights = groupsDataMap.get(groupId);
-        for(Light light : lights) {
-            if(light.getId().equals(lightId)) {
-                lights.remove(light);
-                break;
-            }
-        }
-    }
-
-    public Location getLocation() {
-        return location;
+        return true;
     }
 }

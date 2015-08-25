@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.ui.ErrorEvent;
+import com.giganticsheep.wifilight.base.ErrorEvent;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 
 import retrofit.RetrofitError;

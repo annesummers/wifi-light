@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.ui.base.light;
 
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.MockLight;
+import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.util.Constants;
 
 import junit.framework.Assert;

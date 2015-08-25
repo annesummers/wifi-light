@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
+import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -35,10 +36,10 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
 
     @InjectView(R.id.drawer_textview) TextView drawerTextView;
-    @InjectView(R.id.left_drawer) ExpandableListView drawerListView;
+    @InjectView(R.id.location_list) ExpandableListView locationsListView;
     @InjectView(R.id.drawer_layout) RelativeLayout drawerLayout;
 
-    private DrawerAdapter adapter;
+    private LightLocationAdapter adapter;
 
     @DebugLog
     @Override
@@ -55,21 +56,11 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @DebugLog
     @Override
     protected void initialiseViews(View view) {
-        adapter = new DrawerAdapter(getLightControlActivity().getComponent());
-        drawerListView.setAdapter(adapter);
+        adapter = new LightLocationAdapter(getLightControlActivity().getComponent());
+        locationsListView.setAdapter(adapter);
 
-        drawerListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
-
-            getPresenter().setPosition(groupPosition, childPosition);
-            getPresenter().fetchLight(adapter.getChild(groupPosition, childPosition));
-
-            drawerListView.expandGroup(groupPosition);
-            drawerListView.setSelectedChild(groupPosition, childPosition, true);
-
-            getLightControlActivity().closeDrawer();
-
-            return true;
-        });
+        locationsListView.setOnChildClickListener(new OnGroupClickListener(eventBus, getPresenter(), getLightControlActivity()));
+        locationsListView.setOnGroupClickListener(new OnLocationClickListener(eventBus, getPresenter(), getLightControlActivity()));
     }
 
     @Override
@@ -95,15 +86,27 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         return false;
     }
 
-    private void clickDrawerItem(final int groupPosition, final int childPosition) {
-        long packedPos = ExpandableListView.getPackedPositionForChild(groupPosition, childPosition);
-        int flatPos = drawerListView.getFlatListPosition(packedPos);
-        int adjustedPos = flatPos - drawerListView.getFirstVisiblePosition();
+    private void clickDrawerItem(final int lightLocationPosition,
+                                 final int lightGroupPosition,
+                                 final int lightPosition) {
+        if(lightGroupPosition == Constants.INVALID) {
+            // selected the location at lightLocationPosition
+        } else if (lightPosition == Constants.INVALID) {
+            locationsListView.expandGroup(lightLocationPosition);
 
-        View childToClick = drawerListView.getChildAt(adjustedPos);
-        long id = adapter.getChildId(groupPosition, childPosition);
+            long packedPos = ExpandableListView.getPackedPositionForChild(lightLocationPosition, lightGroupPosition);
+            int flatPos = locationsListView.getFlatListPosition(packedPos);
+            int adjustedPos = flatPos - locationsListView.getFirstVisiblePosition();
 
-        drawerListView.performItemClick(childToClick, adjustedPos, id);
+            View childToClick = locationsListView.getChildAt(adjustedPos);
+            long id = adapter.getChildId(lightLocationPosition, lightGroupPosition);
+
+            locationsListView.performItemClick(childToClick, adjustedPos, id);
+        } else {
+            locationsListView.expandGroup(lightLocationPosition);
+
+            adapter.clickDrawerItem(lightGroupPosition, lightPosition);
+        }
     }
 
     // MVP
@@ -148,9 +151,11 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @DebugLog
     @Override
     public void showLightNetwork(@NonNull final LightNetwork lightNetwork,
+                                 final int locationPosition,
                                  final int groupPosition,
-                                 final int childPosition) {
-        getViewState().setShowLightNetwork(lightNetwork, groupPosition, childPosition);
+                                 final int lightPosition) {
+
+        getViewState().setShowLightNetwork(lightNetwork, locationPosition, groupPosition, lightPosition);
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
@@ -159,11 +164,9 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         adapter.setLightNetwork(lightNetwork);
         adapter.notifyDataSetChanged();
 
-        drawerTextView.setText(lightNetwork.getLocation().getName());
+        locationsListView.expandGroup(0);
 
-        drawerListView.expandGroup(0);
-
-        clickDrawerItem(childPosition, groupPosition);
+        clickDrawerItem(locationPosition, groupPosition, lightPosition);
     }
 
     @DebugLog

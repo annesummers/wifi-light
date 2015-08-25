@@ -20,25 +20,29 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
 
     private static final String KEY_LIGHT_NETWORK = "key_light_network";
     private static final String KEY_GROUP_POSITION = "key_group_position";
-    private static final String KEY_CHILD_POSITION = "key_child_position";
+    private static final String KEY_LIGHT_POSITION = "key_child_position";
+    private static final String KEY_LOCATION_POSITION = "key_location_position";
 
     private final int STATE_SHOW_LIGHT_NETWORK = STATE_MAX + 1;
 
     private LightNetwork lightNetwork;
+    private int locationPosition;
     private int groupPosition;
-    private int childPosition;
+    private int lightPosition;
 
     /**
      * Sets the state to STATE_SHOW_LIGHT_NETWORK.
      */
     public void setShowLightNetwork(@NonNull final LightNetwork lightNetwork,
+                                    final int locationPosition,
                                     final int groupPosition,
-                                    final int childPosition) {
+                                    final int lightPosition) {
         state = STATE_SHOW_LIGHT_NETWORK;
 
         this.lightNetwork = lightNetwork;
+        this.locationPosition = locationPosition;
         this.groupPosition = groupPosition;
-        this.childPosition = childPosition;
+        this.lightPosition = lightPosition;
     }
 
     @DebugLog
@@ -47,7 +51,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
                       final boolean retained) {
         switch (state) {
             case STATE_SHOW_LIGHT_NETWORK:
-                lightView.showLightNetwork(lightNetwork, groupPosition, childPosition);
+                lightView.showLightNetwork(lightNetwork, locationPosition, groupPosition, lightPosition);
                 break;
 
             default:
@@ -62,8 +66,9 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
         super.saveInstanceState(bundle);
 
         bundle.putParcelable(KEY_LIGHT_NETWORK, Parcels.wrap(lightNetwork));
+        bundle.putInt(KEY_LOCATION_POSITION, locationPosition);
         bundle.putInt(KEY_GROUP_POSITION, groupPosition);
-        bundle.putInt(KEY_CHILD_POSITION, childPosition);
+        bundle.putInt(KEY_LIGHT_POSITION, lightPosition);
     }
 
     @DebugLog
@@ -77,8 +82,9 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
         super.restoreInstanceState(bundle);
 
         lightNetwork = Parcels.unwrap(bundle.getParcelable(KEY_LIGHT_NETWORK));
+        locationPosition = bundle.getInt(KEY_LOCATION_POSITION);
         groupPosition = bundle.getInt(KEY_GROUP_POSITION);
-        childPosition = bundle.getInt(KEY_CHILD_POSITION);
+        lightPosition = bundle.getInt(KEY_LIGHT_POSITION);
 
         return this;
     }

@@ -1,12 +1,13 @@
-package com.giganticsheep.wifilight.api.network;
+package com.giganticsheep.wifilight.api.network.test;
 
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.api.model.ColourData;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
-import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.api.network.GroupData;
+import com.giganticsheep.wifilight.api.network.LocationData;
 
 import java.util.Date;
 
@@ -20,7 +21,7 @@ public class MockLight extends MockLightBase
     public boolean connected;
 
     @NonNull
-    public LightControl.Power power;
+    public String power;
 
     public double brightness;
 
@@ -28,16 +29,29 @@ public class MockLight extends MockLightBase
     public ColourData color;
 
     public GroupData group;
-    public GroupData location;
+    public LocationData location;
+    public long seconds_since_seen;
 
     public MockLight(@NonNull final String id,
                      @NonNull final String label) {
         super(id, label);
 
         this.color = new ColourData();
-        this.power = LightControl.Power.OFF;
-        this.group = new GroupData();
-        this.location = new GroupData();
+        this.power = LightControl.Power.OFF.getPowerString();
+        this.group = new GroupData(null, null);
+        this.location = new LocationData(null, null);
+    }
+
+    public MockLight(@NonNull final String id,
+                     @NonNull final String label,
+                     @NonNull final String locationId,
+                     @NonNull final String groupId) {
+        super(id, label);
+
+        this.color = new ColourData();
+        this.power = LightControl.Power.OFF.getPowerString();
+        this.group = new GroupData(groupId, null);
+        this.location = new LocationData(locationId, null);
     }
 
     @Override
@@ -68,7 +82,7 @@ public class MockLight extends MockLightBase
     @NonNull
     @Override
     public LightControl.Power getPower() {
-        return power;
+        return LightControl.Power.parse(power);
     }
 
     @NonNull
@@ -79,7 +93,7 @@ public class MockLight extends MockLightBase
 
     @Override
     public double getSecondsSinceLastSeen() {
-        return 0;
+        return seconds_since_seen;
     }
 
     @NonNull
@@ -99,12 +113,12 @@ public class MockLight extends MockLightBase
     }
 
     @Override
-    public Location getLocation() {
-        return location;
+    public String getLocationId() {
+        return location.getId();
     }
 
     @Override
-    public Group getGroup() {
-        return group;
+    public String getGroupId() {
+        return group.getId();
     }
 }

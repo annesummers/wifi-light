@@ -28,9 +28,9 @@ public class LightControlModule {
     @NonNull
     @Provides
     @ApplicationScope
-    LightControl provideLightControl(NetworkDetails networkDetails,
-                                     LightService lightService,
-                                     EventBus eventBus,
+    LightControl provideLightControl(@NonNull NetworkDetails networkDetails,
+                                     @NonNull LightService lightService,
+                                     @NonNull EventBus eventBus,
                                      @IOScheduler Scheduler ioScheduler,
                                      @UIScheduler Scheduler uiScheduler) {
         return new LightControlImpl(networkDetails,

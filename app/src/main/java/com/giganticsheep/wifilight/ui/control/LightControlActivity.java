@@ -298,7 +298,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         lightLayout.setVisibility(View.VISIBLE);
         loadingLayout.setVisibility(View.VISIBLE);
 
-        setDrawerState(false);
+        //setDrawerState(false);
     }
 
     public void setDrawerState(boolean isEnabled) {

@@ -114,11 +114,21 @@ public class LightResponse extends Response
     }
 
     @Override
+    public String getLocationId() {
+        return location.getId();
+    }
+
+    @Override
+    public String getGroupId() {
+        return group.getId();
+    }
+
+   // @Override
     public Location getLocation() {
         return location;
     }
 
-    @Override
+   // @Override
     public Group getGroup() {
         return group;
     }

@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.ui.status;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 

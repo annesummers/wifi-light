@@ -1,17 +1,13 @@
 package com.giganticsheep.wifilight.ui.control;
 
 import com.giganticsheep.wifilight.BuildConfig;
-import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
-import com.giganticsheep.wifilight.api.FetchLightNetworkEvent;
-import com.giganticsheep.wifilight.api.GroupFetchedEvent;
-import com.giganticsheep.wifilight.api.LightFetchedEvent;
-import com.giganticsheep.wifilight.api.LocationFetchedEvent;
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.network.MockLight;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
+import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.base.MockedTestBase;
-import com.giganticsheep.wifilight.ui.LightChangedEvent;
+import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.ui.base.DaggerTestPresenterComponent;
+import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.TestLightNetworkView;
 import com.giganticsheep.wifilight.ui.base.TestPresenterComponent;
 import com.giganticsheep.wifilight.util.Constants;
@@ -61,7 +57,7 @@ public class LightNetworkPresenterTest extends MockedTestBase {
             return;
         }
 
-        view.showLightNetwork(new LightNetwork(), 0, 0);
+        view.showLightNetwork(new LightNetwork(), 0, 0, 0);
 
         int oldViewState = view.getState();
 
@@ -86,38 +82,22 @@ public class LightNetworkPresenterTest extends MockedTestBase {
             return;
         }
 
-        presenter.onEvent(new LocationFetchedEvent(testLightNetwork.getLocation()));
-
-        for(int i = 0; i < testLightNetwork.groupCount(); i++) {
-            presenter.onEvent(new GroupFetchedEvent(testLightNetwork.get(i)));
-        }
-
-        for(int i = 0; i < testLightNetwork.groupCount(); i++) {
-            for(int j = 0; j < testLightNetwork.lightCount(i); j++) {
-                LightViewData lightViewData = testLightNetwork.get(i, j);
-
-                MockLight light = new MockLight(lightViewData.getId(), lightViewData.getLabel());
-                light.group.id = lightViewData.getGroupId();
-                light.connected = lightViewData.isConnected();
-
-                presenter.onEvent(new LightFetchedEvent(light));
-            }
-        }
-
-        presenter.onEvent(new FetchLightNetworkEvent());
+        presenter.onEvent(new LightControl.FetchLightNetworkEvent(testLightNetwork));
 
         LightNetwork lightNetwork = view.getLightNetwork();
 
-        assertThat(lightNetwork.groupCount(), equalTo(testLightNetwork.groupCount()));
+        assertThat(lightNetwork.locationCount(), equalTo(testLightNetwork.locationCount()));
+        for(int i = 0; i < testLightNetwork.locationCount(); i++) {
+            assertThat(lightNetwork.getLocation(i).getId(), equalTo(testLightNetwork.getLocation(i).getId()));
+            assertThat(lightNetwork.groupCount(i), equalTo(testLightNetwork.groupCount(i)));
 
-        for(int i = 0; i < testLightNetwork.groupCount(); i++) {
-            assertThat(lightNetwork.get(i).getId(), equalTo(testLightNetwork.get(i).getId()));
-            assertThat(lightNetwork.lightCount(i), equalTo(testLightNetwork.lightCount(i)));
-        }
+            for(int j = 0; j < testLightNetwork.groupCount(i); j++) {
+                assertThat(lightNetwork.getGroup(i, j).getId(), equalTo(testLightNetwork.getGroup(i, j).getId()));
+                assertThat(lightNetwork.lightCount(i, j), equalTo(testLightNetwork.lightCount(i, j)));
 
-        for(int i = 0; i < testLightNetwork.groupCount(); i++) {
-            for (int j = 0; j < testLightNetwork.lightCount(i); j++) {
-                assertThat(lightNetwork.get(i, j).getId(), equalTo(testLightNetwork.get(i, j).getId()));
+                for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
+                    assertThat(lightNetwork.getLight(i, j, k), equalTo(testLightNetwork.getLight(i, j, k)));
+                }
             }
         }
     }

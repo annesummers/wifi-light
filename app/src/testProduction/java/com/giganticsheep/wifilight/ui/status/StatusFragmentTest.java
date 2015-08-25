@@ -45,6 +45,6 @@ public class StatusFragmentTest extends LightFragmentTestBase {
         TextView statusTextView = (TextView) fragment.getView().findViewById(R.id.status_textview);
 
         assertThat(powerToggle.isChecked(), equalTo(TestConstants.TEST_POWER));
-        assertThat(((String)statusTextView.getText()), equalTo(TestConstants.TEST_DISCONNECTED_STRING));
+        assertThat(statusTextView.getText(), equalTo(TestConstants.TEST_DISCONNECTED_STRING));
     }
 }

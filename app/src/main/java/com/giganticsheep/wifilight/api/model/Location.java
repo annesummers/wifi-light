@@ -6,8 +6,19 @@ package com.giganticsheep.wifilight.api.model;
  */
 public interface Location extends WifiLightData {
     /**
+     * Get the name of the Location
      *
-     * @return the name of this data object
+     * @return the name
      */
     String getName();
+
+    void addGroup(Group group);
+
+    Group getGroup(String groupId);
+
+    Group getGroup(int groupPosition);
+
+    boolean containsGroup(String groupId);
+
+    int groupCount();
 }

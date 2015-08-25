@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.ArrayMap;
 import android.widget.Toast;
 
 import com.giganticsheep.wifilight.WifiLightApplication;
@@ -16,7 +17,6 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -35,9 +35,9 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
-    @Icicle private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new HashMap<>();
+    @Icicle private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new ArrayMap<>();
 
-    private final Map<FragmentBase, FragmentAttachmentDetails> fragmentAttachmentQueue = new HashMap<>();
+    private final Map<FragmentBase, FragmentAttachmentDetails> fragmentAttachmentQueue = new ArrayMap<>();
 
     protected ActivityLayout activityLayout;
     private boolean fragmentsResumed = true;
@@ -57,7 +57,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         setContentView(activityLayout.layoutId());
 
         if(savedInstanceState != null) {
-            // TODO can we get Icepick to handle this?
+            // TODO can we getLight Icepick to handle this?
             Parcelable[] fragments = savedInstanceState.getParcelableArray(ATTACHED_FRAGMENTS_EXTRA);
 
             if(fragments != null) {
@@ -172,7 +172,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     /**
-     * First looks for an existing Fragment and if it exists, attaches that to this Activity.
+     * First looks for an existing Fragment and if it lightExists, attaches that to this Activity.
      * If one is not found, calls attachNewFragment to attach a new Fragment.
      *
      * @param attachmentDetails the details of the fragment to attach

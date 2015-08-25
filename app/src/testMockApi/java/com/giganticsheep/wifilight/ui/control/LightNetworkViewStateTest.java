@@ -32,7 +32,10 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
+            public void showLightNetwork(LightNetwork lightNetwork,
+                                         int locationPosition,
+                                         int groupPosition,
+                                         int lightPosition) {
                 Assert.fail("showLightNetwork() instead of showLoading()");
             }
 
@@ -69,7 +72,10 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
+            public void showLightNetwork(LightNetwork lightNetwork,
+                                         int locationPosition,
+                                         int groupPosition,
+                                         int lightPosition) {
                 Assert.fail("showLightNetwork() instead of showError()");
             }
 
@@ -106,7 +112,10 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
+            public void showLightNetwork(LightNetwork lightNetwork,
+                                         int locationPosition,
+                                         int groupPosition,
+                                         int lightPosition) {
                 Assert.fail("showLightNetwork() instead of showError(Throwable)");
             }
 
@@ -143,7 +152,10 @@ public class LightNetworkViewStateTest {
             }
 
             @Override
-            public void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition) {
+            public void showLightNetwork(LightNetwork lightNetwork,
+                                         int locationPosition,
+                                         int groupPosition,
+                                         int lightPosition) {
                 showNetworkCalled.set(true);
             }
 
@@ -159,7 +171,7 @@ public class LightNetworkViewStateTest {
         };
 
         LightNetworkViewState viewState = new LightNetworkViewState();
-        viewState.setShowLightNetwork(new LightNetwork(), 0, 0);
+        viewState.setShowLightNetwork(new LightNetwork(), 0, 0, 0);
         viewState.apply(view, false);
 
         assertTrue(showNetworkCalled.get());

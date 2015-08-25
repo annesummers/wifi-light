@@ -76,10 +76,14 @@ public interface Light extends WifiLightData  {
     /**
      * @return the {@link com.giganticsheep.wifilight.api.model.Location} this Light belongs to.
      */
-    Location getLocation();
+   // Location getLightLocation();
 
     /**
      * @return the {@link com.giganticsheep.wifilight.api.model.Group} this Light belongs to.
      */
-    Group getGroup();
+   // Group getLightGroup();
+
+    String getLocationId();
+
+    String getGroupId();
 }

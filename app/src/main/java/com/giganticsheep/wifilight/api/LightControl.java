@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.ui.control.LightNetwork;
@@ -22,7 +23,7 @@ public interface LightControl {
 
         private final String name;
 
-        public static Power parse(Power power) {
+        public static Power parse(String power) {
             if (power.equals(ON.name)) {
                 return ON;
             } else if (power.equals(OFF.name)) {
@@ -126,17 +127,7 @@ public interface LightControl {
     Observable<LightStatus> setPower(final Power power, final float duration);
 
     /**
-     * Fetch all the {@link com.giganticsheep.wifilight.api.model.Light}s from the network.
-     *
-     * @param fetchFromServer whether to fetch the information from the server or to use the
-     *                        cached information if we have it.
-     * @return the Observable to subscribe to.
-     */
-    @NonNull
-    Observable<Light> fetchLights(boolean fetchFromServer);
-
-    /**
-     * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the specified getId.
+     * Fetches the {@link com.giganticsheep.wifilight.api.model.Light} with the specified id.
      *
      * @param id a String representing the id of the {@link com.giganticsheep.wifilight.api.model.Light} to fetch.
      * @return the Observable to subscribe to.
@@ -145,24 +136,22 @@ public interface LightControl {
     Observable<Light> fetchLight(final String id);
 
     /**
-     * Fetch all the {@link com.giganticsheep.wifilight.api.model.Group}s from the network.
+     * Fetches the {@link com.giganticsheep.wifilight.api.model.Group} with the specified id.
      *
-     * @param fetchFromServer whether to fetch the information from the server or to use the
-     *                        cached information if we have it.
+     * @param groupId a String representing the id of the {@link com.giganticsheep.wifilight.api.model.Group} to fetch.
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<Group> fetchGroups(final boolean fetchFromServer);
+    Observable<Group> fetchGroup(String groupId);
 
     /**
-     * Fetch all the {@link com.giganticsheep.wifilight.api.model.Location}s from the network.
+     * Fetches the {@link com.giganticsheep.wifilight.api.model.Location} with the specified id.
      *
-     * @param fetchFromServer whether to fetch the information from the server or to use the
-     *                        cached information if we have it.
+     * @param locationId a String representing the id of the {@link com.giganticsheep.wifilight.api.model.Location} to fetch.
      * @return the Observable to subscribe to.
      */
     @NonNull
-    Observable<Location> fetchLocations(final boolean fetchFromServer);
+    Observable<Location> fetchLocation(String locationId);
 
     /**
      * Fetches all the Locations, Groups and Lights from the network.
@@ -171,5 +160,29 @@ public interface LightControl {
      */
     @NonNull
     Observable<LightNetwork> fetchLightNetwork();
+
+    class LightSelectorChangedEvent {
+        private final LightSelector selector;
+
+        public LightSelectorChangedEvent(final LightSelector selector) {
+            this.selector = selector;
+        }
+
+        public final LightSelector selector() {
+            return selector;
+        }
+    }
+
+    class FetchLightNetworkEvent {
+        private final LightNetwork lightNetwork;
+
+        public FetchLightNetworkEvent(final LightNetwork lightNetwork) {
+            this.lightNetwork = lightNetwork;
+        }
+
+        public final LightNetwork lightNetwork() {
+            return lightNetwork;
+        }
+    }
 
 }

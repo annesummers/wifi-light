@@ -19,7 +19,7 @@ import dagger.Component;
 public interface LightControlActivityComponent extends LightFragmentBase.Injector,
                                                         LightPresenterBase.Injector,
                                                         DrawerFragment.Injector,
-                                                        DrawerAdapter.Injector,
+                                                        LightLocationAdapter.Injector,
                                                         LightNetworkPresenter.Injector {
 
     //Activity activity();

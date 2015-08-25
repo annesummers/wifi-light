@@ -14,5 +14,8 @@ public interface LightNetworkView extends ViewBase {
     /**
      * Show the getLight network view.
      */
-    void showLightNetwork(LightNetwork lightNetwork, int groupPosition, int childPosition);
+    void showLightNetwork(LightNetwork lightNetwork,
+                          int locationPosition,
+                          int groupPosition,
+                          int lightPosition);
 }

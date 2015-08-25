@@ -2,13 +2,14 @@ package com.giganticsheep.wifilight.api.network;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 
 import com.giganticsheep.wifilight.ApplicationScope;
-import com.giganticsheep.wifilight.api.FetchLightNetworkEvent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
+import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.api.model.WifiLightData;
@@ -17,12 +18,11 @@ import com.giganticsheep.wifilight.api.network.error.WifiLightServerException;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
-import com.giganticsheep.wifilight.ui.ErrorEvent;
+import com.giganticsheep.wifilight.base.ErrorEvent;
 import com.giganticsheep.wifilight.ui.control.LightNetwork;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,14 +43,24 @@ import timber.log.Timber;
 @ApplicationScope
 class LightControlImpl implements LightControl {
 
-    @SuppressWarnings("FieldNotUsedInToString")
-    private final EventBus eventBus;
-
     @Nullable
     @SuppressWarnings("FieldNotUsedInToString")
     private Observable<List<LightResponse>> lightResponsesObservable = null;
 
-    // TODO selectors
+    @Nullable
+    @SuppressWarnings("FieldNotUsedInToString")
+    private Observable<Light> fetchLightsObservable = null;
+
+    @Nullable
+    @SuppressWarnings("FieldNotUsedInToString")
+    private Observable<Group> fetchGroupsObservable = null;
+
+    @Nullable
+    @SuppressWarnings("FieldNotUsedInToString")
+    private Observable<Location> fetchLocationsObservable = null;
+
+    @SuppressWarnings("FieldNotUsedInToString")
+    private final EventBus eventBus;
 
     private final NetworkDetails networkDetails;
     private final LightService lightService;
@@ -58,9 +68,11 @@ class LightControlImpl implements LightControl {
     private final Scheduler ioScheduler;
     private final Scheduler uiScheduler;
 
-    public LightControlImpl(final NetworkDetails networkDetails,
-                            final LightService lightService,
-                            final EventBus eventBus,
+    private LightSelector currentSelector = new LightSelector(LightSelector.SelectorType.ALL, null);
+
+    public LightControlImpl(@NonNull final NetworkDetails networkDetails,
+                            @NonNull final LightService lightService,
+                            @NonNull final EventBus eventBus,
                             @IOScheduler final Scheduler ioScheduler,
                             @UIScheduler final Scheduler uiScheduler) {
         this.lightService = lightService;
@@ -73,25 +85,25 @@ class LightControlImpl implements LightControl {
     @NonNull
     @Override
     public final Observable<LightStatus> setHue(final int hue, float duration) {
-        return doSetColour(makeHueQuery(LightConstants.convertHue(hue)), makeDurationQuery(duration));
+        return doSetColour(makeHueQuery(LightConstants.convertHue(hue)), makeDurationQuery(duration), currentSelector);
     }
 
     @NonNull
     @Override
     public final Observable<LightStatus> setSaturation(final int saturation, float duration) {
-        return doSetColour(makeSaturationQuery(LightConstants.convertSaturation(saturation)), makeDurationQuery(duration));
+        return doSetColour(makeSaturationQuery(LightConstants.convertSaturation(saturation)), makeDurationQuery(duration), currentSelector);
     }
 
     @NonNull
     @Override
     public final Observable<LightStatus> setBrightness(final int brightness, float duration) {
-        return doSetColour(makeBrightnessQuery(LightConstants.convertBrightness(brightness)), makeDurationQuery(duration));
+        return doSetColour(makeBrightnessQuery(LightConstants.convertBrightness(brightness)), makeDurationQuery(duration), currentSelector);
     }
 
     @NonNull
     @Override
     public final Observable<LightStatus> setKelvin(final int kelvin, float duration) {
-        return doSetColour(makeKelvinQuery(kelvin + LightConstants.KELVIN_BASE), makeDurationQuery(duration));
+        return doSetColour(makeKelvinQuery(kelvin + LightConstants.KELVIN_BASE), makeDurationQuery(duration), currentSelector);
     }
 
     @DebugLog
@@ -115,9 +127,7 @@ class LightControlImpl implements LightControl {
                     return handleNetworkError(throwable);
                 })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)))
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler);
+                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
     }
 
     @DebugLog
@@ -128,7 +138,7 @@ class LightControlImpl implements LightControl {
         String powerQuery = power.getPowerString();
         String durationQuery =  makeDurationQuery(duration);
 
-        Map<String, String> queryMap = new HashMap<>();
+        Map<String, String> queryMap = new ArrayMap<>();
         queryMap.put(NetworkConstants.URL_STATE, powerQuery);
         queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
 
@@ -150,101 +160,107 @@ class LightControlImpl implements LightControl {
                     return handleNetworkError(throwable);
                 })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)))
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler);
+                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
     }
 
     @DebugLog
     @NonNull
-    @Override
-    public final Observable<Location> fetchLocations(final boolean fetchFromServer) {
-        final int[] locationCount = new int[1];
+    private synchronized Observable<Location> fetchLocations(final boolean fetchFromServer) {
+        if(fetchLocationsObservable == null) {
+            fetchLocationsObservable = fetchLightResponses(fetchFromServer)
+                    .flatMap(lightResponses -> {
+                        List<Observable<Location>> observables = new ArrayList<>();
+                        Map<String, Location> locations = new ArrayMap<>();
 
-        return fetchLightResponses(fetchFromServer)
-                .flatMap(lightResponses -> {
-                    List<Observable<Location>> observables = new ArrayList<>();
-                    Map<String, Location> locations = new HashMap<>();
+                        for (LightResponse light : lightResponses) {
+                            Timber.d(light.toString());
 
-                    for (Light lightResponse : lightResponses) {
-                        Timber.d(lightResponse.toString());
+                            Location location = light.getLocation();
+                            if (!locations.containsKey(location.getId())) {
+                                locations.put(location.getId(), location);
 
-                        Location location = lightResponse.getLocation();
-                        if (!locations.containsKey(location.getId())) {
-                            locations.put(location.getId(), location);
-                            observables.add(Observable.just(location));
-                            locationCount[0]++;
+                                if (!location.containsGroup(light.getGroup().getId())) {
+                                    location.addGroup(light.getGroup());
+                                }
+
+                                location.getGroup(light.getGroup().getId()).addLight(light);
+
+                                observables.add(Observable.just(location));
+                            }
                         }
-                    }
 
-                    return Observable.merge(observables);
-                });
+                        return Observable.merge(observables);
+                    });
+        }
+
+        return fetchLocationsObservable;
     }
 
     @DebugLog
     @NonNull
-    @Override
-    public final Observable<Group> fetchGroups(final boolean fetchFromServer) {
-        final int[] groupCount = new int[1];
+    private synchronized Observable<Group> fetchGroups() {
+        if(fetchGroupsObservable == null) {
+            fetchGroupsObservable = fetchLightResponses(false)
+                    .flatMap(lightResponses -> {
+                        List<Observable<Group>> observables = new ArrayList<>();
+                        Map<String, Group> groups = new ArrayMap<>();
 
-        return fetchLightResponses(false)
-                .flatMap(lightResponses -> {
-                    List<Observable<Group>> observables = new ArrayList<>();
-                    Map<String, Group> groups = new HashMap<>();
+                        for (LightResponse light : lightResponses) {
+                            Group group = light.getGroup();
+                            if (!groups.containsKey(group.getId())) {
+                                group.addLight(light);
+                                groups.put(group.getId(), group);
 
-                    for (Light lightResponse : lightResponses) {
-                        Group group = lightResponse.getGroup();
-                        if (!groups.containsKey(group.getId())) {
-                            groups.put(group.getId(), group);
-                            observables.add(Observable.just(group));
-                            groupCount[0]++;
+                                observables.add(Observable.just(group));
+                            } else {
+                                groups.get(group.getId()).addLight(light);
+                            }
                         }
-                    }
 
-                    return Observable.merge(observables);
-                });
+                        return Observable.merge(observables);
+                    });
+        }
+
+        return fetchGroupsObservable;
+    }
+
+    @DebugLog
+    @NonNull
+    private synchronized Observable<Light> fetchLights() {
+        if (fetchLightsObservable == null) {
+            fetchLightsObservable = fetchLightResponses(false)
+                    .flatMap(lightResponses -> {
+                        List<Observable<Light>> observables = new ArrayList<>();
+
+                        for (LightResponse lightResponse : lightResponses) {
+                            observables.add(Observable.just(lightResponse));
+                        }
+
+                        return Observable.merge(observables);
+                    });
+        }
+
+        return fetchLightsObservable;
     }
 
     @DebugLog
     @NonNull
     @Override
-    public final Observable<Light> fetchLights(final boolean fetchFromServer) {
-        final int[] lightsCount = new int[1];
+    public synchronized Observable<LightNetwork> fetchLightNetwork() {
+        fetchLightsObservable = null;
+        fetchGroupsObservable = null;
+        fetchLocationsObservable = null;
 
-        return fetchLightResponses(false)
-                .flatMap(lightResponses -> {
-                    List<Observable<Light>> observables = new ArrayList<>();
-
-                    for (LightResponse lightResponse : lightResponses) {
-                        observables.add(Observable.just(lightResponse));
-                        lightsCount[0]++;
-                    }
-
-                    return Observable.merge(observables);
-                });
-
-    }
-
-    @DebugLog
-    @NonNull
-    @Override
-    public Observable<LightNetwork> fetchLightNetwork() {
         List<Observable<? extends WifiLightData>> observables = new ArrayList<>();
 
         observables.add(fetchLocations(true));
-        observables.add(fetchGroups(true));
-        observables.add(fetchLights(true));
 
         LightNetwork lightNetwork = new LightNetwork();
 
         return Observable.zip(observables, args -> {
-            for(Object object : args) {
-                if(object instanceof Location) {
-                    lightNetwork.add((Location) object);
-                } else if(object instanceof Group) {
-                    lightNetwork.add((Group) object);
-                } else if(object instanceof Light) {
-                    lightNetwork.add((Light)object);
+            for (Object object : args) {
+                if (object instanceof Location) {
+                    lightNetwork.addLightLocation((Location) object);
                 }
             }
             return lightNetwork;
@@ -261,24 +277,51 @@ class LightControlImpl implements LightControl {
             return Observable.error(new IllegalArgumentException("fetchLight() id cannot be null"));
         }
 
-        return fetchLights(false).filter(light -> light.getId().equals(id))
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler);
+        return fetchLights()
+                .filter(light -> light.getId().equals(id));
+    }
+
+    @NonNull
+    @Override
+    public Observable<Group> fetchGroup(String groupId) {
+        if(groupId == null) {
+            return Observable.error(new IllegalArgumentException("fetchGroup() groupId cannot be null"));
+        }
+
+        return fetchGroups()
+                .filter(group -> group.getId().equals(groupId));
+
+    }
+
+    @NonNull
+    @Override
+    public Observable<Location> fetchLocation(String locationId) {
+        if(locationId == null) {
+            return Observable.error(new IllegalArgumentException("fetchLocation() locationId cannot be null"));
+        }
+
+        return fetchLocations(false)
+                .filter(location -> location.getId().equals(locationId));
+    }
+
+    public void onEvent(LightSelectorChangedEvent event) {
+        currentSelector = event.selector();
     }
 
     @DebugLog
     @NonNull
-    private Observable<LightStatus> doSetColour(@Nullable final String colourQuery,
-                                                @Nullable final String durationQuery) {
+    private Observable<LightStatus> doSetColour(@NonNull final String colourQuery,
+                                                @NonNull final String durationQuery,
+                                                @NonNull final LightSelector selector) {
         // TODO colour set power on
-        Map<String, String> queryMap = new HashMap<>();
+        Map<String, String> queryMap = new ArrayMap<>();
         queryMap.put(NetworkConstants.URL_COLOUR, colourQuery);
         queryMap.put(NetworkConstants.URL_DURATION, durationQuery);
         queryMap.put(NetworkConstants.URL_POWER_ON, "true");
 
         return lightService.setColour(networkDetails.getBaseURL1(),
                 networkDetails.getBaseURL2(),
-                NetworkConstants.URL_ALL,
+                selector.toString(),
                 authorisation(),
                 queryMap)
                 .doOnError(throwable -> Timber.e(throwable, "setColour"))
@@ -292,9 +335,7 @@ class LightControlImpl implements LightControl {
                     return Observable.merge(observables);
                 })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)))
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler);
+                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
     }
 
     @NonNull
@@ -313,12 +354,14 @@ class LightControlImpl implements LightControl {
                     .cache();
         }
 
-        return lightResponsesObservable;
+        return lightResponsesObservable
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     @NonNull
     private Observable handleNetworkError(Throwable throwable) {
-        // get the response parsing
+        // getLight the response parsing
         if (throwable instanceof RetrofitError) {
             RetrofitError error = (RetrofitError) throwable;
             ErrorResponse response = (ErrorResponse) error.getBody();
@@ -390,5 +433,4 @@ class LightControlImpl implements LightControl {
                 ", uiScheduler=" + uiScheduler +
                 '}';
     }
-
 }
