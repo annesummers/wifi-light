@@ -6,9 +6,12 @@ import android.support.v4.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.api.model.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,5 +144,42 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
     public void clickDrawerItem(final int lightGroupPosition,
                                 final int lightPosition) {
 
+    }
+
+    private class GroupListViewHolder {
+        private LightGroupAdapter viewData;
+
+        private final ExpandableListView groupListView;
+
+        public GroupListViewHolder(@NonNull final View view,
+                                   @NonNull final OnLightGroupClickListener onLightGroupClickListener,
+                                   @NonNull final OnLightClickListener onLightClickListener) {
+            groupListView = (ExpandableListView) view.findViewById(R.id.group_list);
+
+            groupListView.setOnGroupClickListener(onLightGroupClickListener);
+            groupListView.setOnChildClickListener(onLightClickListener);
+        }
+
+        public void setViewData(@NonNull final LightGroupAdapter viewData) {
+            this.viewData = viewData;
+
+            groupListView.setAdapter(viewData);
+        }
+    }
+
+    private class LocationViewHolder {
+        private Location viewData;
+
+        private final TextView locationNameTextView;
+
+        public LocationViewHolder(View view) {
+            locationNameTextView = (TextView) view.findViewById(R.id.location_name);
+        }
+
+        public void setViewData(@NonNull final Location viewData) {
+            this.viewData = viewData;
+
+            locationNameTextView.setText(viewData.getName());
+        }
     }
 }

@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
-
-import hugo.weaving.DebugLog;
+import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.api.model.Light;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -19,8 +21,6 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
 
     private final int locationPosition;
 
-
-    @DebugLog
     public LightGroupAdapter(@NonNull final Injector injector,
                              final int locationPosition) {
         super(injector);
@@ -30,7 +30,8 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
 
     @Override
     public int getChildrenCount(final int groupPosition) {
-        return lightNetwork.lightCount(locationPosition, groupPosition);
+        //return lightNetwork.lightCount(locationPosition, groupPosition);
+        return 1;
     }
 
     @Nullable
@@ -70,13 +71,13 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
     }
 
     @Override
-    public String getGroup(int groupPosition) {
-        return lightNetwork.getLightLocation(groupPosition).getId();
+    public String getGroup(final int groupPosition) {
+        return lightNetwork.getLightGroup(locationPosition, groupPosition).getId();
     }
 
     @Override
     public int getGroupCount() {
-        return lightNetwork.lightLocationCount();
+        return lightNetwork.lightGroupCount(locationPosition);
     }
 
     @Override
@@ -115,5 +116,50 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
     public boolean isChildSelectable(final int groupPosition,
                                      final int childPosition) {
         return true;
+    }
+
+    /**
+     * Holds the views for an entry in the list.  Once an instance of this class has been created
+     * for an entry and the views inflated it is stored in the tag for the View for that list groupPosition.
+     * This enables the views to be recycled quickly when the elements change or the list is scrolled
+     * off the screen. <p>
+     *
+     * The data for the entry is set via setViewData(ViewData viewData).
+     */
+    private class LightViewHolder {
+        private Light viewData;
+
+        private final TextView lightNameTextView;
+        private final ImageView lightStatusImageView;
+
+        public LightViewHolder(@NonNull View view) {
+            lightNameTextView = (TextView) view.findViewById(R.id.light_name);
+            lightStatusImageView = (ImageView) view.findViewById(R.id.light_status);
+        }
+
+        public void setViewData(@NonNull final Light viewData) {
+            this.viewData = viewData;
+
+            lightNameTextView.setText(viewData.getLabel());
+            lightStatusImageView.setImageResource(viewData.isConnected() ?
+                    R.drawable.ic_status_tick :
+                    R.drawable.ic_status_warning);
+        }
+    }
+
+    private class GroupViewHolder {
+        private Group viewData;
+
+        private final TextView groupNameTextView;
+
+        public GroupViewHolder(View view) {
+            groupNameTextView = (TextView) view.findViewById(R.id.group_name);
+        }
+
+        public void setViewData(@NonNull final Group viewData) {
+            this.viewData = viewData;
+
+            groupNameTextView.setText(viewData.getName());
+        }
     }
 }

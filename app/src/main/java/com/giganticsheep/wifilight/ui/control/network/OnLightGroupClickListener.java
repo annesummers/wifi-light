@@ -16,7 +16,7 @@ import javax.inject.Inject;
  */
 class OnLightGroupClickListener extends OnNetworkItemClickListener
                                 implements ExpandableListView.OnChildClickListener,
-                                ExpandableListView.OnGroupClickListener {
+                                            ExpandableListView.OnGroupClickListener {
 
     private int locationPosition;
 
@@ -26,24 +26,24 @@ class OnLightGroupClickListener extends OnNetworkItemClickListener
     }
 
     @Override
-    public boolean onChildClick(ExpandableListView listView,
-                                View v,
-                                int groupPosition,
-                                int childPosition,
-                                long id) {
+    public boolean onChildClick(@NonNull final ExpandableListView listView,
+                                @NonNull final View v,
+                                final int groupPosition,
+                                final int childPosition,
+                                final long id) {
         locationPosition = groupPosition;
 
         listView.expandGroup(groupPosition);
         listView.setSelectedChild(groupPosition, childPosition, true);
 
-        return true;
+        return false;
     }
 
     @Override
-    public boolean onGroupClick(ExpandableListView listView,
-                                View v,
-                                int groupPosition,
-                                long id) {
+    public boolean onGroupClick(@NonNull final ExpandableListView listView,
+                                @NonNull final View v,
+                                final int groupPosition,
+                                final long id) {
 
         String groupId = ((LightGroupAdapter) listView.getExpandableListAdapter()).getGroup(groupPosition);
 
@@ -54,14 +54,14 @@ class OnLightGroupClickListener extends OnNetworkItemClickListener
 
         listView.setSelectedGroup(groupPosition);
 
-        if(listView.isGroupExpanded(groupPosition)) {
+        /*if(listView.isGroupExpanded(groupPosition)) {
             listView.collapseGroup(groupPosition);
         } else {
             listView.expandGroup(groupPosition);
-        }
+        }*/
 
         closeDrawer();
 
-        return true;
+        return false;
     }
 }
