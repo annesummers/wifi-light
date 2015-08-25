@@ -1,6 +1,5 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -12,6 +11,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 
 import javax.inject.Inject;
 
@@ -28,18 +28,18 @@ public abstract class LightNetworkAdapterBase extends BaseExpandableListAdapter 
     protected final Injector injector;
 
     @Inject
-    Activity activity;
+    LightNetworkDrawerFragment fragment;
 
     protected LightNetwork lightNetwork = new LightNetwork();
 
     @DebugLog
-    public LightNetworkAdapterBase(@NonNull final Injector injector) {
+    LightNetworkAdapterBase(@NonNull final Injector injector) {
         this.injector = injector;
 
         injector.inject(this);
     }
 
-    public void setLightNetwork(@NonNull final LightNetwork lightNetwork) {
+    void setLightNetwork(@NonNull final LightNetwork lightNetwork) {
         this.lightNetwork = lightNetwork;
     }
 
@@ -56,6 +56,7 @@ public abstract class LightNetworkAdapterBase extends BaseExpandableListAdapter 
          */
         void inject(final LightNetworkAdapterBase adapter);
     }
+
     /**
      * Holds the views for an entry in the list.  Once an instance of this class has been created
      * for an entry and the views inflated it is stored in the tag for the View for that list groupPosition.
@@ -90,8 +91,13 @@ public abstract class LightNetworkAdapterBase extends BaseExpandableListAdapter 
 
         private final ExpandableListView groupListView;
 
-        public GroupListViewHolder(View view) {
+        public GroupListViewHolder(@NonNull final View view,
+                                   @NonNull final OnLightGroupClickListener onLightGroupClickListener,
+                                   @NonNull final OnLightClickListener onLightClickListener) {
             groupListView = (ExpandableListView) view.findViewById(R.id.group_list);
+
+            groupListView.setOnGroupClickListener(onLightGroupClickListener);
+            groupListView.setOnChildClickListener(onLightClickListener);
         }
 
         public void setViewData(@NonNull final LightGroupAdapter viewData) {

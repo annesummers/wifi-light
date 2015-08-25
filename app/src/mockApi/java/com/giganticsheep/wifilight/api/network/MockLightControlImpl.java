@@ -12,7 +12,7 @@ import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.util.Constants;
 
 import rx.Observable;
@@ -28,17 +28,7 @@ public class MockLightControlImpl implements LightControl {
 
     private static final String INITIAL_POWER = "off";
 
-    @SuppressWarnings("FieldNotUsedInToString")
-    private final EventBus eventBus;
-
-    private final Scheduler ioScheduler;
-    private final Scheduler uiScheduler;
-
     private final LightNetwork testLightNetwork;
-
-    // private final List<LightResponse> lights = new ArrayList<>();
-   // private final List<GroupData> groups = new ArrayList<>();
-   // private final List<GroupData> locations = new ArrayList<>();
 
     private Status status;
     private long timeout = 0L;
@@ -47,39 +37,6 @@ public class MockLightControlImpl implements LightControl {
                                 @IOScheduler final Scheduler ioScheduler,
                                 @UIScheduler final Scheduler uiScheduler,
                                 @NonNull final LightNetwork testLightNetwork) {
-        this.eventBus = eventBus;
-        this.ioScheduler = ioScheduler;
-        this.uiScheduler = uiScheduler;
-
-      /*  LightResponse light = new LightResponse(Constants.TEST_ID);
-        light.label = Constants.TEST_LABEL;
-        light.power = INITIAL_POWER;
-        lights.addLightLocation(light);
-
-        light = new LightResponse(Constants.TEST_ID2);
-        light.label = Constants.TEST_LABEL2;
-        light.power = INITIAL_POWER;
-        lights.addLightLocation(light);
-
-        GroupData group = new GroupData();
-        group.id = Constants.TEST_GROUP_ID;
-        group.name = Constants.TEST_GROUP_LABEL;
-        groups.addLightLocation(group);
-
-        group = new GroupData();
-        group.id = Constants.TEST_GROUP_ID2;
-        group.name = Constants.TEST_GROUP_LABEL2;
-        groups.addLightLocation(group);
-
-        GroupData location = new GroupData();
-        location.id = Constants.TEST_LOCATION_ID;
-        location.name = Constants.TEST_LOCATION_LABEL;
-        groups.addLightLocation(location);
-
-        location.id = Constants.TEST_LOCATION_ID2;
-        location.name = Constants.TEST_LOCATION_LABEL2;
-        groups.addLightLocation(location);*/
-
         this.testLightNetwork = testLightNetwork;
     }
 
@@ -376,71 +333,6 @@ public class MockLightControlImpl implements LightControl {
     public Observable<Location> fetchLocation(String locationId) {
         return null;
     }
-
-   /* @NonNull
-    @Override
-    public Observable<Group> fetchGroups(boolean fetchFromServer) {
-        if (status == Status.OK) {
-            return Observable.create(new Observable.OnSubscribe<Group>() {
-
-                @Override
-                public void call(Subscriber<? super Group> subscriber) {
-                    for (GroupData group : groups) {
-
-                        eventBus.postMessage(new GroupFetchedEvent(group));
-                        subscriber.onNext(group);
-                    }
-
-                    eventBus.postMessage(new FetchedGroupsEvent(lights.size()));
-                    subscriber.onCompleted();
-                }
-            });
-        } else if (status == Status.OFF) {
-            return Observable.create(new Observable.OnSubscribe<Group>() {
-
-                @Override
-                public void call(Subscriber<? super Group> subscriber) {
-                    for (GroupData group : groups) {
-
-                        eventBus.postMessage(new GroupFetchedEvent(group));
-                        subscriber.onNext(group);
-                    }
-
-                    eventBus.postMessage(new FetchedGroupsEvent(lights.size()));
-                    subscriber.onCompleted();
-                }
-            });
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
-        }
-    }
-
-    @NonNull
-    @Override
-    public Observable<Location> fetchLocations(boolean fetchFromServer) {
-        if (status == Status.OK || status == Status.OFF) {
-            return Observable.create(new Observable.OnSubscribe<Location>() {
-
-                @Override
-                public void call(Subscriber<? super Location> subscriber) {
-                    for (Location location : locations) {
-
-                        eventBus.postMessage(new LocationFetchedEvent(location));
-                        subscriber.onNext(location);
-                    }
-
-                    eventBus.postMessage(new FetchedLocationsEvent(lights.size()));
-                    subscriber.onCompleted();
-                }
-            });
-        } else if (status == Status.ERROR) {
-            return Observable.error(new Throwable("Error from server"));
-        } else {
-            return Observable.error(new Throwable("Status unknown"));
-        }
-    }*/
 
     @NonNull
     @Override

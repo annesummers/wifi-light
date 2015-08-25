@@ -5,6 +5,7 @@ import android.view.View;
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.ui.UITestBase;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkDrawerFragment;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,9 +27,9 @@ import static org.hamcrest.core.IsNull.nullValue;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 19)
-public class DrawerFragmentTest extends UITestBase {
+public class LightNetworkDrawerFragmentTest extends UITestBase {
 
-    private DrawerFragment fragment;
+    private LightNetworkDrawerFragment fragment;
 
     @Before
     public void setUp() {
@@ -37,7 +38,7 @@ public class DrawerFragmentTest extends UITestBase {
         }
 
         try {
-            fragment = (DrawerFragment) fragmentFactory.createFragment("Drawer");
+            fragment = (LightNetworkDrawerFragment) fragmentFactory.createFragment("Drawer");
         } catch(Exception e) {
             Assert.fail("Drawer fragment does not exist");
         }

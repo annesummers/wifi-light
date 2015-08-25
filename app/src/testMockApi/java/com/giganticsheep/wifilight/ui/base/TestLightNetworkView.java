@@ -2,9 +2,8 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
-import com.giganticsheep.wifilight.ui.control.LightNetworkPresenterTest;
-import com.giganticsheep.wifilight.ui.control.LightNetworkView;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkView;
 
 /**
  * DESCRIPTION HERE ANNE <p>

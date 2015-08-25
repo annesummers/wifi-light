@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.base;
 
 import com.giganticsheep.wifilight.api.model.Location;
 

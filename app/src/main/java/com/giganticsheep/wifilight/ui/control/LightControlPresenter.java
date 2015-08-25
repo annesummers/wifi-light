@@ -14,9 +14,9 @@ import hugo.weaving.DebugLog;
  *
  * (*_*)
  */
-public class ControlPresenter extends LightPresenterBase {
+public class LightControlPresenter extends LightPresenterBase {
 
-    public ControlPresenter(@NonNull final Injector injector) {
+    public LightControlPresenter(@NonNull final Injector injector) {
         super(injector);
     }
 

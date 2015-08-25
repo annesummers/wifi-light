@@ -7,7 +7,7 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 
 import rx.Observable;
 

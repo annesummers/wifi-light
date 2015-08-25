@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.api.network;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.util.Constants;
 
 import java.util.ArrayList;

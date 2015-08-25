@@ -1,10 +1,7 @@
 package com.giganticsheep.wifilight.ui.base;
 
-import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
-import com.giganticsheep.wifilight.base.TestModule;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.control.LightNetworkPresenter;
-import com.giganticsheep.wifilight.ui.control.LightNetworkPresenterTest;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkPresenter;
 
 import dagger.Component;
 

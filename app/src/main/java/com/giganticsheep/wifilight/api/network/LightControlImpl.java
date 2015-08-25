@@ -19,7 +19,7 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.base.ErrorEvent;
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 
 import java.util.ArrayList;
@@ -80,6 +80,8 @@ class LightControlImpl implements LightControl {
         this.eventBus = eventBus;
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
+
+        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
     @NonNull
@@ -304,7 +306,7 @@ class LightControlImpl implements LightControl {
                 .filter(location -> location.getId().equals(locationId));
     }
 
-    public void onEvent(LightSelectorChangedEvent event) {
+    public void onEvent(final LightSelectorChangedEvent event) {
         currentSelector = event.selector();
     }
 

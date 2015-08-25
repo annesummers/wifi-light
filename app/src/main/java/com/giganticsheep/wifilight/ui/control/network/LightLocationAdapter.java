@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,14 @@ import hugo.weaving.DebugLog;
 public class LightLocationAdapter extends LightNetworkAdapterBase {
 
     private final Map<Integer, List<LightGroupAdapter>> lightGroupAdapters = new ArrayMap<>();
+    private final OnLightGroupClickListener onLightGroupClickListener;
 
     @DebugLog
-    public LightLocationAdapter(@NonNull final Injector injector) {
+    public LightLocationAdapter(@NonNull final Injector injector,
+                                @NonNull final OnLightGroupClickListener onLightGroupClickListener) {
         super(injector);
+
+        this.onLightGroupClickListener = onLightGroupClickListener;
     }
 
     @Override
@@ -57,8 +62,10 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         GroupListViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_group_list, null);
-            holder = new GroupListViewHolder(convertView);
+            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_group_list, null);
+            holder = new GroupListViewHolder(convertView,
+                                            onLightGroupClickListener,
+                                            new OnLightClickListener(fragment.getComponent(), groupPosition));
             convertView.setTag(holder);
         } else {
             holder = (GroupListViewHolder) convertView.getTag();
@@ -94,7 +101,7 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         LocationViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_location_item, null);
+            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_location_item, null);
             holder = new LocationViewHolder(convertView);
             convertView.setTag(holder);
         } else {

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.network.test.TestLightNetworkModule;
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 
 import dagger.Module;
 import dagger.Provides;

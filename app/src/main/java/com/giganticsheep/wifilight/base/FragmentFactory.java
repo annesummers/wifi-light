@@ -6,7 +6,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.colour.ColourFragmentBuilder;
-import com.giganticsheep.wifilight.ui.control.DrawerFragmentBuilder;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkDrawerFragmentBuilder;
 import com.giganticsheep.wifilight.ui.details.DetailsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.effects.EffectsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.status.StatusFragmentBuilder;
@@ -73,7 +73,7 @@ public class FragmentFactory {
         }
 
         if (name.equals(application.getString(R.string.fragment_name_drawer))) {
-            return new DrawerFragmentBuilder(name).build();
+            return new LightNetworkDrawerFragmentBuilder(name).build();
         }
 
         throw new Exception("Fragment does not exist");

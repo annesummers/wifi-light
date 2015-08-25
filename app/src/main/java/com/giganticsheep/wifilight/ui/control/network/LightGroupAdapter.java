@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -57,7 +57,7 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
         LightViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_list_item, null);
+            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_list_item, null);
             holder = new LightViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -94,7 +94,7 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
         GroupViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(activity).inflate(R.layout.drawer_group_item, null);
+            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_group_item, null);
             holder = new GroupViewHolder(convertView);
             convertView.setTag(holder);
         } else {

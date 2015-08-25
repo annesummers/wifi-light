@@ -1,10 +1,11 @@
 package com.giganticsheep.wifilight.ui.control;
 
 import com.giganticsheep.wifilight.BuildConfig;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkView;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkViewState;
 
 import junit.framework.Assert;
-
-import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

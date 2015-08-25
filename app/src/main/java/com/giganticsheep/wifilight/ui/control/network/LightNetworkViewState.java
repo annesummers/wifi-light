@@ -1,9 +1,10 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.ui.base.ViewStateBase;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 

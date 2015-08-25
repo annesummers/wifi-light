@@ -32,6 +32,7 @@ import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.ui.base.light.LightViewState;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
@@ -53,7 +54,7 @@ import timber.log.Timber;
  *
  * (*_*)
  */
-public class LightControlActivity extends ActivityBase<LightView, ControlPresenter>
+public class LightControlActivity extends ActivityBase<LightView, LightControlPresenter>
                             implements LightView,
                             HasComponent<LightControlActivityComponent> {
 
@@ -250,7 +251,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         return true;
     }
 
-    void closeDrawer() {
+    public void onEvent(final CloseDrawerEvent event) {
         drawerLayout.closeDrawer(drawerContainerLayout);
     }
 
@@ -258,8 +259,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
 
     @NonNull
     @Override
-    public ControlPresenter createPresenter() {
-        return new ControlPresenter(getComponent());
+    public LightControlPresenter createPresenter() {
+        return new LightControlPresenter(getComponent());
     }
 
     @NonNull
@@ -301,7 +302,7 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         //setDrawerState(false);
     }
 
-    public void setDrawerState(boolean isEnabled) {
+    private void setDrawerState(boolean isEnabled) {
         if ( isEnabled ) {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             drawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
@@ -428,6 +429,8 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
         return drawerViewState;
     }
 
+    public static class CloseDrawerEvent { }
+
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {
         final int PAGE_COUNT = 2;
 
@@ -482,5 +485,14 @@ public class LightControlActivity extends ActivityBase<LightView, ControlPresent
                     return null;
             }
         }
+    }
+
+    /**
+     * The Injector interface is implemented by a Component that provides the injected
+     * class members, enabling a LightFragmentBase derived class to inject itself
+     * into the Component.
+     */
+    public interface Injector {
+        void inject(LightControlActivity lightControlActivity);
     }
 }

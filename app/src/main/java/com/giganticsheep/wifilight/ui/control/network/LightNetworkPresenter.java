@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
 import android.support.annotation.NonNull;
 
@@ -10,6 +10,7 @@ import com.giganticsheep.wifilight.base.ErrorEvent;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
+import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -185,7 +186,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
         void inject(final LightNetworkPresenter presenter);
     }
 
-    protected static class ListItemData {
+    static class ListItemData {
         private final String id;
         private final String label;
 

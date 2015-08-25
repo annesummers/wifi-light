@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,13 +9,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.WifiLightApplication;
+import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
+import com.giganticsheep.wifilight.ui.control.LightControlActivity;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
-
-import javax.inject.Inject;
 
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
@@ -27,10 +28,11 @@ import timber.log.Timber;
  * (*_*)
  */
 @FragmentArgsInherited
-public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkPresenter>
-                            implements LightNetworkView  {
+public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, LightNetworkPresenter>
+                                         implements LightNetworkView,
+                                                HasComponent<LightNetworkDrawerFragmentComponent> {
 
-    @Inject EventBus eventBus;
+    private LightNetworkDrawerFragmentComponent component;
 
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
@@ -56,11 +58,13 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
     @DebugLog
     @Override
     protected void initialiseViews(View view) {
-        adapter = new LightLocationAdapter(getLightControlActivity().getComponent());
+        OnLightGroupClickListener onLightGroupClickListener = new OnLightGroupClickListener(component);
+
+        adapter = new LightLocationAdapter(component, onLightGroupClickListener);
         locationsListView.setAdapter(adapter);
 
-        locationsListView.setOnChildClickListener(new OnGroupClickListener(eventBus, getPresenter(), getLightControlActivity()));
-        locationsListView.setOnGroupClickListener(new OnLocationClickListener(eventBus, getPresenter(), getLightControlActivity()));
+        locationsListView.setOnGroupClickListener(new OnLocationClickListener(component));
+        locationsListView.setOnChildClickListener(onLightGroupClickListener);
     }
 
     @Override
@@ -135,7 +139,7 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
     @Override
     public LightNetworkPresenter createPresenter() {
-        return new LightNetworkPresenter(getLightControlActivity().getComponent());
+        return new LightNetworkPresenter(component);
     }
 
     @DebugLog
@@ -164,9 +168,9 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
         adapter.setLightNetwork(lightNetwork);
         adapter.notifyDataSetChanged();
 
-        locationsListView.expandGroup(0);
+        //locationsListView.expandGroup(0);
 
-        clickDrawerItem(locationPosition, groupPosition, lightPosition);
+        //clickDrawerItem(locationPosition, groupPosition, lightPosition);
     }
 
     @DebugLog
@@ -193,7 +197,21 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
 
     @Override
     protected final void injectDependencies() {
-        getLightControlActivity().getComponent().inject(this);
+        super.injectDependencies();
+
+        WifiLightApplication application = ((WifiLightApplication)getActivity().getApplication());
+
+        component = DaggerLightNetworkDrawerFragmentComponent.builder()
+                .wifiLightAppComponent(application.getComponent())
+                .lightNetworkDrawerFragmentModule(new LightNetworkDrawerFragmentModule(this))
+                .build();
+
+        component.inject(this);
+    }
+
+    @Override
+    public LightNetworkDrawerFragmentComponent getComponent() {
+        return component;
     }
 
     /**
@@ -202,6 +220,6 @@ public class DrawerFragment extends FragmentBase<LightNetworkView, LightNetworkP
      * into the Component.
      */
     public interface Injector {
-        void inject(DrawerFragment drawerFragment);
+        void inject(LightNetworkDrawerFragment lightNetworkDrawerFragment);
     }
 }

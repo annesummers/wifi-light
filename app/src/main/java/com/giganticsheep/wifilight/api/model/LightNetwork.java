@@ -1,10 +1,6 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.api.model;
 
 import android.support.annotation.NonNull;
-
-import com.giganticsheep.wifilight.api.model.Group;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.model.Location;
 
 import java.util.ArrayList;
 import java.util.List;

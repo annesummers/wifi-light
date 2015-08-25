@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.network.GroupData;
 import com.giganticsheep.wifilight.api.network.LocationData;
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.util.Constants;
 
 import dagger.Module;

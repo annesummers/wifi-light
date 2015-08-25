@@ -1,5 +1,6 @@
 package com.giganticsheep.wifilight.ui.control;
 
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.network.LocationData;
 import com.giganticsheep.wifilight.util.Constants;
 
