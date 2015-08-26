@@ -19,6 +19,6 @@ import dagger.Component;
         modules = { TestModule.class,
                     TestLightNetworkModule.class } )
 public interface TestModelComponent extends TestLightNetworkGraph {
-
     void inject(ModelTest wifiLightTest);
+    void inject(LightNetworkTest lightNetworkTest);
 }

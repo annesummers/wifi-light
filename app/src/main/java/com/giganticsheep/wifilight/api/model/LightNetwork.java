@@ -2,6 +2,8 @@ package com.giganticsheep.wifilight.api.model;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.util.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,11 @@ public class LightNetwork {
      * @return the number of light groups in this network.
      */
     public int lightGroupCount(final int locationPosition) {
+        if(locationPosition == Constants.INVALID ||
+                locationPosition > lightLocationCount()) {
+            return 0;
+        }
+
         return locationList.get(locationPosition).groupCount();
     }
 
@@ -28,6 +35,13 @@ public class LightNetwork {
      */
     public final Group getLightGroup(final int locationPosition,
                                      final int groupPosition) {
+        if(locationPosition == Constants.INVALID ||
+                locationPosition > lightLocationCount() - 1 ||
+                groupPosition == Constants.INVALID ||
+                groupPosition > lightGroupCount(locationPosition) - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+
         return locationList.get(locationPosition).getGroup(groupPosition);
     }
 
@@ -36,6 +50,12 @@ public class LightNetwork {
      * @return the Location at the given position in this network.
      */
     public final Location getLightLocation(final int locationPosition) {
+        if(locationPosition == Constants.INVALID ||
+                locationPosition > lightLocationCount()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+
         return locationList.get(locationPosition);
     }
 
@@ -54,6 +74,13 @@ public class LightNetwork {
      */
     public int lightCount(final int locationPosition,
                           final int groupPosition) {
+        if(locationPosition == Constants.INVALID ||
+                locationPosition > lightLocationCount() - 1 ||
+                groupPosition == Constants.INVALID ||
+                groupPosition > lightGroupCount(locationPosition) - 1) {
+            return 0;
+        }
+
         return locationList.get(locationPosition).getGroup(groupPosition).lightCount();
     }
 
@@ -67,6 +94,15 @@ public class LightNetwork {
     public Light getLight(final int locationPosition,
                           final int groupPosition,
                           final int lightPosition) {
+        if(locationPosition == Constants.INVALID ||
+                locationPosition > lightLocationCount() - 1 ||
+                groupPosition == Constants.INVALID ||
+                groupPosition > lightGroupCount(locationPosition) - 1 ||
+                lightPosition == Constants.INVALID ||
+                lightPosition > lightCount(locationPosition, groupPosition) - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+
         return locationList.get(locationPosition).getGroup(groupPosition).getLight(lightPosition);
     }
 

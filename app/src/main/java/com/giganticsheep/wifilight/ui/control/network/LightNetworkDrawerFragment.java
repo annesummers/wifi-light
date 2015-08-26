@@ -41,7 +41,8 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     @InjectView(R.id.location_list) ExpandableListView locationsListView;
     @InjectView(R.id.drawer_layout) RelativeLayout drawerLayout;
 
-    private LightLocationAdapter adapter;
+    //private LightLocationAdapter adapter;
+    private LightGroupAdapter adapter;
 
     @DebugLog
     @Override
@@ -60,11 +61,14 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     protected void initialiseViews(View view) {
         OnLightGroupClickListener onLightGroupClickListener = new OnLightGroupClickListener(component);
 
-        adapter = new LightLocationAdapter(component, onLightGroupClickListener);
+        //adapter = new LightLocationAdapter(component, onLightGroupClickListener);
+        adapter = new LightGroupAdapter(component);
         locationsListView.setAdapter(adapter);
 
-        locationsListView.setOnGroupClickListener(new OnLocationClickListener(component));
-        locationsListView.setOnChildClickListener(onLightGroupClickListener);
+        //locationsListView.setOnGroupClickListener(new OnLocationClickListener(component));
+        //locationsListView.setOnChildClickListener(onLightGroupClickListener);
+        locationsListView.setOnGroupClickListener(onLightGroupClickListener);
+        locationsListView.setOnChildClickListener(new OnLightClickListener(component, 0));
     }
 
     @Override
@@ -96,21 +100,31 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
         if(lightGroupPosition == Constants.INVALID) {
             // selected the location at lightLocationPosition
         } else if (lightPosition == Constants.INVALID) {
-            locationsListView.expandGroup(lightLocationPosition);
+            int adjustedPos = getAdjustedPositionFromPackedPosition(
+                    ExpandableListView.getPackedPositionForGroup(lightGroupPosition));
 
-            long packedPos = ExpandableListView.getPackedPositionForChild(lightLocationPosition, lightGroupPosition);
-            int flatPos = locationsListView.getFlatListPosition(packedPos);
-            int adjustedPos = flatPos - locationsListView.getFirstVisiblePosition();
+            View groupToClick = locationsListView.getChildAt(adjustedPos);
+            long id = adapter.getGroupId(lightGroupPosition);
+
+            locationsListView.performItemClick(groupToClick, adjustedPos, id);
+        } else {
+            locationsListView.expandGroup(lightGroupPosition);
+
+            int adjustedPos = getAdjustedPositionFromPackedPosition(
+                    ExpandableListView.getPackedPositionForChild(
+                            lightGroupPosition,
+                            lightPosition));
 
             View childToClick = locationsListView.getChildAt(adjustedPos);
-            long id = adapter.getChildId(lightLocationPosition, lightGroupPosition);
+            long id = adapter.getChildId(lightGroupPosition, lightPosition);
 
             locationsListView.performItemClick(childToClick, adjustedPos, id);
-        } else {
-            locationsListView.expandGroup(lightLocationPosition);
-
-            adapter.clickDrawerItem(lightGroupPosition, lightPosition);
         }
+    }
+
+    private int getAdjustedPositionFromPackedPosition(final long packedPos) {
+        int flatPost = locationsListView.getFlatListPosition(packedPos);
+        return flatPost - locationsListView.getFirstVisiblePosition();
     }
 
     // MVP
@@ -166,11 +180,13 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
         drawerLayout.setVisibility(View.VISIBLE);
 
         adapter.setLightNetwork(lightNetwork);
+        adapter.setLocationPosition(locationPosition);
         adapter.notifyDataSetChanged();
 
-        //locationsListView.expandGroup(0);
+        drawerTextView.setText(lightNetwork.getLightLocation(locationPosition).getName());
+        locationsListView.expandGroup(groupPosition);
 
-        //clickDrawerItem(locationPosition, groupPosition, lightPosition);
+        clickDrawerItem(locationPosition, groupPosition, lightPosition);
     }
 
     @DebugLog
@@ -216,7 +232,7 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
 
     /**
      * The Injector interface is implemented by a Component that provides the injected
-     * class members, enabling a LightFragmentBase derived class to inject itself
+     * class members, enabling a LightNetworkDrawerFragment derived class to inject itself
      * into the Component.
      */
     public interface Injector {

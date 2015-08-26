@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
+import com.giganticsheep.wifilight.util.Constants;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -19,7 +20,7 @@ import com.giganticsheep.wifilight.api.model.Light;
  */
 public class LightGroupAdapter extends LightNetworkAdapterBase {
 
-    private final int locationPosition;
+    private int locationPosition = Constants.INVALID;
 
     public LightGroupAdapter(@NonNull final Injector injector,
                              final int locationPosition) {
@@ -28,10 +29,13 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
         this.locationPosition = locationPosition;
     }
 
+    public LightGroupAdapter(@NonNull final Injector injector) {
+        super(injector);
+    }
+
     @Override
     public int getChildrenCount(final int groupPosition) {
-        //return lightNetwork.lightCount(locationPosition, groupPosition);
-        return 1;
+        return lightNetwork.lightCount(locationPosition, groupPosition);
     }
 
     @Nullable
@@ -116,6 +120,10 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
     public boolean isChildSelectable(final int groupPosition,
                                      final int childPosition) {
         return true;
+    }
+
+    void setLocationPosition(final int locationPosition) {
+        this.locationPosition = locationPosition;
     }
 
     /**
