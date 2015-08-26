@@ -10,6 +10,7 @@ import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.base.light.LightSeekBarWrapper;
+import com.giganticsheep.wifilight.ui.base.light.OnLightSeekBarChangeListener;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
@@ -26,6 +27,12 @@ public class WhiteFragment extends LightFragmentBase {
 
     @InjectView(R.id.brightness_seekbar) SeekBar valueSeekBar;
     @InjectView(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
+
+    public WhiteFragment() {
+        super();
+
+        seekBarChangeListener = new OnLightSeekBarChangeListener(new WhiteSeekBarWrapper());
+    }
 
     @NonNull
     @Override
