@@ -18,6 +18,7 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import hugo.weaving.DebugLog;
+import timber.log.Timber;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -31,6 +32,7 @@ public class StatusFragment extends LightFragmentBase {
     @InjectView(R.id.status_textview) TextView statusTextView;
 
     private boolean firstSetPower = false;
+    private boolean viewsEnabled = false;
 
     public StatusFragment() {
         super();
@@ -42,11 +44,14 @@ public class StatusFragment extends LightFragmentBase {
     @OnCheckedChanged(R.id.power_toggle)
     public synchronized void onPowerToggle(@NonNull final CompoundButton compoundButton,
                                            final boolean isChecked) {
-        if(!firstSetPower) {
-            getLightStatusPresenter().setPower(isChecked);
-        }
+        if(viewsEnabled){
+            Timber.d("onPowerToggle() views enabled and firstSetPower is %s", firstSetPower ? "true" : "false");
+            if(!firstSetPower) {
+                getLightStatusPresenter().setPower(isChecked);
+            }
 
-        firstSetPower = false;
+            firstSetPower = false;
+        }
     }
 
     // MVP
@@ -84,8 +89,10 @@ public class StatusFragment extends LightFragmentBase {
         }
     }
 
+    @DebugLog
     @Override
-    protected void enableViews(final boolean enable) {
+    protected synchronized void enableViews(final boolean enable) {
+        viewsEnabled = false;
         powerToggle.setEnabled(enable);
     }
 
