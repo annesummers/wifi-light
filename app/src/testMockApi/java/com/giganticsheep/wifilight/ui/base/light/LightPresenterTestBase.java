@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.base;
+package com.giganticsheep.wifilight.ui.base.light;
 
 import android.support.annotation.NonNull;
 
@@ -8,8 +8,8 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
 import com.giganticsheep.wifilight.base.MockedTestBase;
 import com.giganticsheep.wifilight.base.ErrorEvent;
-import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.base.light.TestLightView;
+import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
+import com.giganticsheep.wifilight.ui.base.TestPresenterComponent;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Before;

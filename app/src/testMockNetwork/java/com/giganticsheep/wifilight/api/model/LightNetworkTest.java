@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.api.model;
 
-import com.giganticsheep.wifilight.api.network.LocationData;
+import com.giganticsheep.wifilight.api.network.LocationImpl;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Test;
@@ -19,9 +19,8 @@ public class LightNetworkTest extends ModelTest {
     public void testAddLocation() {
         LightNetwork lightNetwork = new LightNetwork();
 
-        LocationData location = new LocationData();
-        location.name = Constants.TEST_LOCATION_LABEL;
-        location.id = Constants.TEST_LOCATION_ID;
+        LocationImpl location = new LocationImpl(Constants.TEST_LOCATION_ID,
+                                                Constants.TEST_LOCATION_LABEL);
         lightNetwork.addLightLocation(location);
 
         int locationCount = lightNetwork.lightLocationCount();
@@ -32,7 +31,7 @@ public class LightNetworkTest extends ModelTest {
 
     @Test
     public void testLocationCount() {
-        assertThat(testLightNetwork.lightLocationCount(), equalTo(1));
+        assertThat(testLightNetwork.lightLocationCount(), equalTo(2));
     }
 
     @Test
@@ -73,10 +72,20 @@ public class LightNetworkTest extends ModelTest {
 
     @Test
     public void testGroupCountLocationInvalid() {
+        assertThat(testLightNetwork.lightGroupCount(Constants.INVALID), equalTo(0));
+    }
+
+    @Test
+    public void testGroupCountLocationOutOfBounds() {
+        assertThat(testLightNetwork.lightGroupCount(2), equalTo(0));
+    }
+
+    @Test
+    public void testGetGroupLocationOutOfBounds() {
         boolean exceptionThrown = false;
 
         try {
-            testLightNetwork.lightGroupCount(Constants.INVALID);
+            testLightNetwork.getLightGroup(2, 0);
         } catch(IndexOutOfBoundsException e) {
             exceptionThrown = true;
         }
@@ -98,50 +107,11 @@ public class LightNetworkTest extends ModelTest {
     }
 
     @Test
-    public void testGroupCountGroupInvalid() {
-        boolean exceptionThrown = false;
-
-        try {
-            testLightNetwork.getLightGroup(0, Constants.INVALID);
-        } catch(IndexOutOfBoundsException e) {
-            exceptionThrown = true;
-        }
-
-        assertThat(exceptionThrown, equalTo(true));
-    }
-
-    @Test
     public void testGetGroupGroupInvalid() {
         boolean exceptionThrown = false;
 
         try {
             testLightNetwork.getLightGroup(0, Constants.INVALID);
-        } catch(IndexOutOfBoundsException e) {
-            exceptionThrown = true;
-        }
-
-        assertThat(exceptionThrown, equalTo(true));
-    }
-
-    @Test
-    public void testGroupCountLocationOutOfBounds() {
-        boolean exceptionThrown = false;
-
-        try {
-            testLightNetwork.lightGroupCount(2);
-        } catch(IndexOutOfBoundsException e) {
-            exceptionThrown = true;
-        }
-
-        assertThat(exceptionThrown, equalTo(true));
-    }
-
-    @Test
-    public void testGetGroupLocationOutOfBounds() {
-        boolean exceptionThrown = false;
-
-        try {
-            testLightNetwork.getLightGroup(2, 0);
         } catch(IndexOutOfBoundsException e) {
             exceptionThrown = true;
         }
@@ -169,54 +139,22 @@ public class LightNetworkTest extends ModelTest {
 
     @Test
     public void testLightCountLocationInvalid() {
-        boolean exceptionThrown = false;
-
-        try {
-            testLightNetwork.lightCount(Constants.INVALID, 0);
-        } catch(IndexOutOfBoundsException e) {
-            exceptionThrown = true;
-        }
-
-        assertThat(exceptionThrown, equalTo(true));
+        assertThat(testLightNetwork.lightCount(Constants.INVALID, 0), equalTo(0));
     }
 
     @Test
     public void testLightCountGroupInvalid() {
-        boolean exceptionThrown = false;
-
-        try {
-            testLightNetwork.lightCount(0, Constants.INVALID);
-        } catch(IndexOutOfBoundsException e) {
-            exceptionThrown = true;
-        }
-
-        assertThat(exceptionThrown, equalTo(true));
+        assertThat(testLightNetwork.lightCount(0, Constants.INVALID), equalTo(0));
     }
 
     @Test
     public void testLightCountLocationOutOfBounds() {
-        boolean exceptionThrown = false;
-
-        try {
-            testLightNetwork.lightCount(2, 0);
-        } catch(IndexOutOfBoundsException e) {
-            exceptionThrown = true;
-        }
-
-        assertThat(exceptionThrown, equalTo(true));
+        assertThat(testLightNetwork.lightCount(2, 0), equalTo(0));
     }
 
     @Test
     public void testLightCountGroupOutOfBounds() {
-        boolean exceptionThrown = false;
-
-        try {
-            testLightNetwork.lightCount(0, 2);
-        } catch(IndexOutOfBoundsException e) {
-            exceptionThrown = true;
-        }
-
-        assertThat(exceptionThrown, equalTo(true));
+        assertThat(testLightNetwork.lightCount(0, 2), equalTo(0));
     }
 
     @Test

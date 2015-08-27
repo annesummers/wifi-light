@@ -13,6 +13,8 @@ import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.util.Constants;
 
+import hugo.weaving.DebugLog;
+
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 23/08/15. <p>
@@ -51,7 +53,7 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
         return lightPosition;
     }
 
-    //@DebugLog
+    @DebugLog
     @NonNull
     @Override
     public View getChildView(final int groupPosition,

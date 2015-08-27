@@ -8,8 +8,6 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.ui.base.ViewStateBase;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
-import org.parceler.Parcels;
-
 /**
  * Handles the different states the LightView can be in. <p>
  *
@@ -80,7 +78,7 @@ public class LightViewState extends ViewStateBase<LightView> {
     public void saveInstanceState(@NonNull final Bundle bundle) {
         super.saveInstanceState(bundle);
 
-        bundle.putParcelable(KEY_LIGHT, Parcels.wrap(light));
+        bundle.putParcelable(KEY_LIGHT, light);
     }
 
     @Nullable
@@ -92,7 +90,7 @@ public class LightViewState extends ViewStateBase<LightView> {
 
         super.restoreInstanceState(bundle);
 
-        light = Parcels.unwrap(bundle.getParcelable(KEY_LIGHT));
+        light = bundle.getParcelable(KEY_LIGHT);
 
         return this;
     }

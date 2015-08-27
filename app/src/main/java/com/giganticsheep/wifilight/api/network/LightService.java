@@ -35,10 +35,26 @@ public interface LightService {
                                                  @Path("selector") String selector,
                                                  @Header("Authorization") String authorisation,
                                                  @Body Object empty);
+
+    @NonNull
+    @POST("/{url}/{url2}/{selector}/toggle")
+    Observable<StatusResponse> togglePowerSingleLight(@Path("url") String url,
+                                                             @Path("url2") String url2,
+                                                             @Path("selector") String selector,
+                                                             @Header("Authorization") String authorisation,
+                                                             @Body Object empty);
     @NonNull
     @FormUrlEncoded
     @PUT("/{url}/{url2}/{selector}/power")
     Observable<List<StatusResponse>> setPower(@Path("url") String url,
+                                              @Path("url2") String url2,
+                                              @Path("selector") String selector,
+                                              @Header("Authorization") String authorization,
+                                              @FieldMap Map<String, String> options);
+    @NonNull
+    @FormUrlEncoded
+    @PUT("/{url}/{url2}/{selector}/power")
+    Observable<StatusResponse> setPowerSingleLight(@Path("url") String url,
                                               @Path("url2") String url2,
                                               @Path("selector") String selector,
                                               @Header("Authorization") String authorization,
@@ -55,8 +71,25 @@ public interface LightService {
 
     @NonNull
     @FormUrlEncoded
+    @PUT("/{url}/{url2}/{selector}/color")
+    Observable<StatusResponse> setColourSingleLight(@Path("url") String url,
+                                                    @Path("url2") String url2,
+                                                    @Path("selector") String selector,
+                                                    @Header("Authorization") String authorization,
+                                                    @FieldMap Map<String, String> options);
+
+    @NonNull
+    @FormUrlEncoded
     @POST("/{url}/{url2}/{selector}/effects/breathe")
     Observable<List<StatusResponse>> breathe(@Path("url") String url,
+                                             @Path("url2") String url2,
+                                             @Path("selector") String selector,
+                                             @Header("Authorization") String authorization,
+                                             @FieldMap Map<String, String> options);
+    @NonNull
+    @FormUrlEncoded
+    @POST("/{url}/{url2}/{selector}/effects/breathe")
+    Observable<StatusResponse> breatheSingleLight(@Path("url") String url,
                                              @Path("url2") String url2,
                                              @Path("selector") String selector,
                                              @Header("Authorization") String authorization,
@@ -66,6 +99,14 @@ public interface LightService {
     @FormUrlEncoded
     @POST("/{url}/{url2}/{selector}/effects/pulse")
     Observable<List<StatusResponse>> pulse(@Path("url") String url,
+                                           @Path("url2") String url2,
+                                           @Path("selector") String selector,
+                                           @Header("Authorization") String authorization,
+                                           @FieldMap Map<String, String> options);
+    @NonNull
+    @FormUrlEncoded
+    @POST("/{url}/{url2}/{selector}/effects/pulse")
+    Observable<StatusResponse> pulseSingleLight(@Path("url") String url,
                                            @Path("url2") String url2,
                                            @Path("selector") String selector,
                                            @Header("Authorization") String authorization,

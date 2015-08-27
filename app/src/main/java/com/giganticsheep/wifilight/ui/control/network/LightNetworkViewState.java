@@ -8,8 +8,6 @@ import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.ui.base.ViewStateBase;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
-import org.parceler.Parcels;
-
 import hugo.weaving.DebugLog;
 
 /**
@@ -66,7 +64,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
     public void saveInstanceState(final Bundle bundle) {
         super.saveInstanceState(bundle);
 
-        bundle.putParcelable(KEY_LIGHT_NETWORK, Parcels.wrap(lightNetwork));
+        bundle.putParcelable(KEY_LIGHT_NETWORK, lightNetwork);
         bundle.putInt(KEY_LOCATION_POSITION, locationPosition);
         bundle.putInt(KEY_GROUP_POSITION, groupPosition);
         bundle.putInt(KEY_LIGHT_POSITION, lightPosition);
@@ -82,7 +80,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
 
         super.restoreInstanceState(bundle);
 
-        lightNetwork = Parcels.unwrap(bundle.getParcelable(KEY_LIGHT_NETWORK));
+        lightNetwork = bundle.getParcelable(KEY_LIGHT_NETWORK);
         locationPosition = bundle.getInt(KEY_LOCATION_POSITION);
         groupPosition = bundle.getInt(KEY_GROUP_POSITION);
         lightPosition = bundle.getInt(KEY_LIGHT_POSITION);

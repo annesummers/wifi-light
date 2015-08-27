@@ -1,10 +1,14 @@
 package com.giganticsheep.wifilight.api.model;
 
+import android.os.Parcelable;
+
 /**
  * Created by anne on 13/07/15.
  * (*_*)
  */
-public interface Location extends WifiLightData {
+public interface Location extends Parcelable {
+
+    String getId();
     /**
      * Get the name of the Location
      *

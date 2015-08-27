@@ -1,12 +1,11 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
-import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.base.MockedTestBase;
 import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
-import com.giganticsheep.wifilight.ui.base.DaggerTestPresenterComponent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.TestLightNetworkView;
 import com.giganticsheep.wifilight.ui.base.TestPresenterComponent;
@@ -53,10 +52,6 @@ public class LightNetworkPresenterTest extends MockedTestBase {
 
     @Test
     public void testTestFetchLightOk() {
-        if(BuildConfig.DEBUG) {
-            return;
-        }
-
         view.showLightNetwork(new LightNetwork(), 0, 0, 0);
 
         int oldViewState = view.getState();
@@ -86,13 +81,13 @@ public class LightNetworkPresenterTest extends MockedTestBase {
 
         LightNetwork lightNetwork = view.getLightNetwork();
 
-        assertThat(lightNetwork.locationCount(), equalTo(testLightNetwork.locationCount()));
-        for(int i = 0; i < testLightNetwork.locationCount(); i++) {
-            assertThat(lightNetwork.getLocation(i).getId(), equalTo(testLightNetwork.getLocation(i).getId()));
-            assertThat(lightNetwork.groupCount(i), equalTo(testLightNetwork.groupCount(i)));
+        assertThat(lightNetwork.lightLocationCount(), equalTo(testLightNetwork.lightLocationCount()));
+        for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+            assertThat(lightNetwork.getLightLocation(i).getId(), equalTo(testLightNetwork.getLightLocation(i).getId()));
+            assertThat(lightNetwork.lightGroupCount(i), equalTo(testLightNetwork.lightGroupCount(i)));
 
-            for(int j = 0; j < testLightNetwork.groupCount(i); j++) {
-                assertThat(lightNetwork.getGroup(i, j).getId(), equalTo(testLightNetwork.getGroup(i, j).getId()));
+            for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                assertThat(lightNetwork.getLightGroup(i, j).getId(), equalTo(testLightNetwork.getLightGroup(i, j).getId()));
                 assertThat(lightNetwork.lightCount(i, j), equalTo(testLightNetwork.lightCount(i, j)));
 
                 for(int k = 0; k < testLightNetwork.lightCount(i, j); k++) {

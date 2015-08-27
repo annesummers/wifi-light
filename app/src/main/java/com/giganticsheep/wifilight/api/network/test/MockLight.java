@@ -1,13 +1,16 @@
 package com.giganticsheep.wifilight.api.network.test;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.ColourData;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
-import com.giganticsheep.wifilight.api.network.GroupData;
-import com.giganticsheep.wifilight.api.network.LocationData;
+import com.giganticsheep.wifilight.api.network.GroupImpl;
+import com.giganticsheep.wifilight.api.network.LocationImpl;
+import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
 
 import java.util.Date;
 
@@ -15,8 +18,9 @@ import java.util.Date;
  * Created by anne on 13/07/15.
  * (*_*)
  */
+@ParcelablePlease
 public class MockLight extends MockLightBase
-                        implements Light {
+                        implements Light, Parcelable {
 
     public boolean connected;
 
@@ -28,9 +32,13 @@ public class MockLight extends MockLightBase
     @NonNull
     public ColourData color;
 
-    public GroupData group;
-    public LocationData location;
+    public GroupImpl group;
+    public LocationImpl location;
     public long seconds_since_seen;
+
+    public MockLight() {
+        super();
+    }
 
     public MockLight(@NonNull final String id,
                      @NonNull final String label) {
@@ -38,8 +46,8 @@ public class MockLight extends MockLightBase
 
         this.color = new ColourData();
         this.power = LightControl.Power.OFF.getPowerString();
-        this.group = new GroupData(null, null);
-        this.location = new LocationData(null, null);
+        this.group = new GroupImpl(null, null);
+        this.location = new LocationImpl(null, null);
     }
 
     public MockLight(@NonNull final String id,
@@ -50,8 +58,8 @@ public class MockLight extends MockLightBase
 
         this.color = new ColourData();
         this.power = LightControl.Power.OFF.getPowerString();
-        this.group = new GroupData(groupId, null);
-        this.location = new LocationData(locationId, null);
+        this.group = new GroupImpl(groupId, null);
+        this.location = new LocationImpl(locationId, null);
     }
 
     @Override
@@ -121,4 +129,26 @@ public class MockLight extends MockLightBase
     public String getGroupId() {
         return group.getId();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        MockLightParcelablePlease.writeToParcel(this, dest, flags);
+    }
+
+    public static final Creator<MockLight> CREATOR = new Creator<MockLight>() {
+        public MockLight createFromParcel(Parcel source) {
+            MockLight target = new MockLight();
+            MockLightParcelablePlease.readFromParcel(target, source);
+            return target;
+        }
+
+        public MockLight[] newArray(int size) {
+            return new MockLight[size];
+        }
+    };
 }

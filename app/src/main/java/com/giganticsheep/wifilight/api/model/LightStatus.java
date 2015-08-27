@@ -9,6 +9,9 @@ import com.giganticsheep.wifilight.api.LightControl;
  *
  * (*_*)
  */
-public interface LightStatus extends WifiLightData {
+public interface LightStatus {
+
+    String getId();
+
     LightControl.Status getStatus();
 }

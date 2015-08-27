@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.ui.details;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.ui.base.LightPresenterTestBase;
+import com.giganticsheep.wifilight.ui.base.light.LightPresenterTestBase;
 
 /**
  * Created by anne on 10/07/15.

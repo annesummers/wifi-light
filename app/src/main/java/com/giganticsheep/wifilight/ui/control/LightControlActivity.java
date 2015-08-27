@@ -35,6 +35,7 @@ import com.giganticsheep.wifilight.ui.base.light.LightViewState;
 import com.giganticsheep.wifilight.ui.control.network.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.giganticsheep.wifilight.util.Constants;
+import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -103,6 +104,9 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         } else {
             Timber.d("here");
         }
+
+        eventBus.registerForEvents(this)
+                .subscribe(new ErrorSubscriber<>());
     }
 
     @DebugLog
@@ -207,7 +211,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     protected void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this);
+        eventBus.unregisterForEvents(this)
+                .subscribe(new ErrorSubscriber<>());
 
         if(errorDialog != null) {
             errorDialog.dismiss();

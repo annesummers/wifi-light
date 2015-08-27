@@ -34,14 +34,6 @@ class OnLocationClickListener extends OnNetworkItemClickListener
 
         listView.setSelectedGroup(groupPosition);
 
-        /*if(listView.isGroupExpanded(groupPosition)) {
-            listView.collapseGroup(groupPosition);
-        } else {
-            listView.expandGroup(groupPosition);
-        }*/
-
-        closeDrawer();
-
         return false;
     }
 }

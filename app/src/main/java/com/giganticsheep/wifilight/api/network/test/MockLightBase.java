@@ -2,20 +2,18 @@ package com.giganticsheep.wifilight.api.network.test;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.model.WifiLightData;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-public class MockLightBase implements WifiLightData {
+public class MockLightBase {
 
     @NonNull
-    public final String id;
+    public String id;
 
     @NonNull
-    public final String label;
+    public String label;
 
     public MockLightBase(@NonNull final String id,
                          @NonNull final String label) {
@@ -23,8 +21,9 @@ public class MockLightBase implements WifiLightData {
         this.label = label;
     }
 
+    public MockLightBase() { }
+
     @NonNull
-    @Override
     public String getId() {
         return id;
     }

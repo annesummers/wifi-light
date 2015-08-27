@@ -1,8 +1,11 @@
 package com.giganticsheep.wifilight.api.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.util.Constants;
+import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +15,9 @@ import java.util.List;
  * Created by anne on 24/07/15. <p>
  * (*_*)
  */
-public class LightNetwork {
-    private final List<Location> locationList = new ArrayList<>();
+@ParcelablePlease
+public class LightNetwork implements Parcelable {
+     List<Location> locationList = new ArrayList<>();
 
     /**
      * @param locationPosition
@@ -21,7 +25,7 @@ public class LightNetwork {
      */
     public int lightGroupCount(final int locationPosition) {
         if(locationPosition == Constants.INVALID ||
-                locationPosition > lightLocationCount()) {
+                locationPosition > lightLocationCount() - 1) {
             return 0;
         }
 
@@ -133,4 +137,26 @@ public class LightNetwork {
 
         return true;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        LightNetworkParcelablePlease.writeToParcel(this, dest, flags);
+    }
+
+    public static final Creator<LightNetwork> CREATOR = new Creator<LightNetwork>() {
+        public LightNetwork createFromParcel(Parcel source) {
+            LightNetwork target = new LightNetwork();
+            LightNetworkParcelablePlease.readFromParcel(target, source);
+            return target;
+        }
+
+        public LightNetwork[] newArray(int size) {
+            return new LightNetwork[size];
+        }
+    };
 }

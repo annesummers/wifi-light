@@ -30,11 +30,10 @@ public class LightSelector {
     @Nullable
     private final String id;
 
-  /*  public void setSelection(@NonNull final SelectorType type,
-                             @Nullable final String id) {
-        this.type = type;
-        this.id = id;
-    }*/
+
+    public final SelectorType getType() {
+        return type;
+    }
 
     @Override
     public String toString() {
@@ -55,7 +54,7 @@ public class LightSelector {
         }
 
         if(type != SelectorType.ALL) {
-            string += ":[" + id + "]";
+            string += ":" + id;
         }
 
         return string;

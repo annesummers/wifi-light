@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.ui.base.LightPresenterTestBase;
+import com.giganticsheep.wifilight.ui.base.light.LightPresenterTestBase;
 import com.giganticsheep.wifilight.ui.base.light.TestLightView;
 
 import org.junit.Test;
