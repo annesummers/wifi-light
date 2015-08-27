@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.network.MockLight;
+import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
@@ -32,7 +32,9 @@ public class TestPresenter extends LightPresenterBase {
         this.fragment = fragment;
 
         light.connected = TestConstants.TEST_CONNECTED.equals(TestConstants.TEST_CONNECTED_STRING) ? true : false;
-        light.power = TestConstants.TEST_POWER ? LightControl.Power.ON : LightControl.Power.OFF;
+        light.power = TestConstants.TEST_POWER ?
+                LightControl.Power.ON.getPowerString() :
+                LightControl.Power.OFF.getPowerString();
 
         light.brightness = TestConstants.TEST_BRIGHTNESS_DOUBLE;
         light.color.hue = TestConstants.TEST_HUE_DOUBLE;

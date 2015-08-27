@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ExpandableListView
+        android:id="@+id/group_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginRight="@dimen/default_margin"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:choiceMode="singleChoice"
+        android:childDivider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:descendantFocusability="blocksDescendants"
+        android:clickable="true"
+        android:listSelector="@drawable/drawer_list_selector"/>
+</FrameLayout>

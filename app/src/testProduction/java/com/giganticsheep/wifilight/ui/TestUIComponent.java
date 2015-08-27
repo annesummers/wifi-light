@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.ui;
 
 import com.giganticsheep.wifilight.WifiLightAppComponent;
 import com.giganticsheep.wifilight.api.network.TestLightNetworkGraph;
-import com.giganticsheep.wifilight.api.network.TestLightNetworkModule;
+import com.giganticsheep.wifilight.api.network.test.TestLightNetworkModule;
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
 
 import dagger.Component;

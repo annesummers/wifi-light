@@ -2,9 +2,9 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
-import com.giganticsheep.wifilight.ui.control.LightNetworkPresenterTest;
-import com.giganticsheep.wifilight.ui.control.LightNetworkView;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkPresenterTest;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkView;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -20,8 +20,9 @@ public class TestLightNetworkView implements LightNetworkView {
     private final LightNetworkPresenterTest lightNetworkPresenterTest;
 
     private LightNetwork lightNetwork;
-    private int childPosition;
+    private int locationPosition;
     private int groupPosition;
+    private int lightPosition;
 
     private int state;
 
@@ -30,14 +31,16 @@ public class TestLightNetworkView implements LightNetworkView {
     }
 
     @Override
-    public void showLightNetwork(LightNetwork lightNetwork,
-                                 int groupPosition,
-                                 int childPosition) {
+    public void showLightNetwork(final LightNetwork lightNetwork,
+                                 final int locationPosition,
+                                 final int groupPosition,
+                                 final int lightPosition) {
         state = STATE_SHOW_LIGHT_NETWORK;
 
         this.lightNetwork = lightNetwork;
+        this.locationPosition = locationPosition;
         this.groupPosition = groupPosition;
-        this.childPosition = childPosition;
+        this.lightPosition = lightPosition;
     }
 
     @Override
@@ -63,11 +66,15 @@ public class TestLightNetworkView implements LightNetworkView {
         return lightNetwork;
     }
 
-    public int getChildPosition() {
-        return childPosition;
+    public int getLightPosition() {
+        return lightPosition;
     }
 
     public int getGroupPosition() {
         return groupPosition;
+    }
+
+    public int getLocationPosition() {
+        return locationPosition;
     }
 }

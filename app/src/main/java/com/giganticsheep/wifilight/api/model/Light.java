@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.api.model;
 
+import android.os.Parcelable;
+
 import com.giganticsheep.wifilight.api.LightControl;
 
 import java.util.Date;
@@ -8,7 +10,9 @@ import java.util.Date;
  * Created by anne on 13/07/15.
  * (*_*)
  */
-public interface Light extends WifiLightData  {
+public interface Light extends Parcelable {
+
+    String getId();
 
     /**
      *
@@ -76,10 +80,14 @@ public interface Light extends WifiLightData  {
     /**
      * @return the {@link com.giganticsheep.wifilight.api.model.Location} this Light belongs to.
      */
-    Location getLocation();
+   // Location getLightLocation();
 
     /**
      * @return the {@link com.giganticsheep.wifilight.api.model.Group} this Light belongs to.
      */
-    Group getGroup();
+   // Group getLightGroup();
+
+    String getLocationId();
+
+    String getGroupId();
 }

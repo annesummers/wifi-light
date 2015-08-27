@@ -1,10 +1,11 @@
 package com.giganticsheep.wifilight.ui.base;
 
-import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.base.TestModule;
+import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.control.LightNetworkPresenter;
-import com.giganticsheep.wifilight.ui.control.LightNetworkPresenterTest;
+import com.giganticsheep.wifilight.ui.base.light.LightPresenterTestBase;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkPresenter;
+import com.giganticsheep.wifilight.ui.control.network.LightNetworkPresenterTest;
 
 import dagger.Component;
 
@@ -21,5 +22,5 @@ public interface TestPresenterComponent extends LightPresenterBase.Injector,
                                                 LightNetworkPresenter.Injector {
 
     void inject(LightPresenterTestBase presenterTest);
-    void inject(LightNetworkPresenterTest presenterTest);
+    void inject(LightNetworkPresenterTest networkPresenterTest);
 }

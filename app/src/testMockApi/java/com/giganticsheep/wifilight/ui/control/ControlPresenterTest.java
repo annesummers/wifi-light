@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.ui.base.LightPresenterTestBase;
+import com.giganticsheep.wifilight.ui.base.light.LightPresenterTestBase;
 import com.giganticsheep.wifilight.ui.base.light.TestLightView;
 import com.giganticsheep.wifilight.util.Constants;
 
@@ -21,8 +21,8 @@ public class ControlPresenterTest extends LightPresenterTestBase {
 
     @NonNull
     @Override
-    protected ControlPresenter createPresenter(@NonNull final ControlPresenter.Injector injector) {
-        return new ControlPresenter(injector);
+    protected LightControlPresenter createPresenter(@NonNull final LightControlPresenter.Injector injector) {
+        return new LightControlPresenter(injector);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class ControlPresenterTest extends LightPresenterTestBase {
 
     @NonNull
     @Override
-    protected ControlPresenter getPresenter() {
-        return (ControlPresenter) presenter;
+    protected LightControlPresenter getPresenter() {
+        return (LightControlPresenter) presenter;
     }
 }

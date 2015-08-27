@@ -7,7 +7,7 @@ import com.giganticsheep.wifilight.base.MockedTestBase;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public class ModelTest extends MockedTestBase {
+abstract class ModelTest extends MockedTestBase {
     private TestModelComponent component;
 
     @Override

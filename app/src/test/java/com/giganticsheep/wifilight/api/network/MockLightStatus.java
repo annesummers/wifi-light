@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.api.network;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.LightStatus;
+import com.giganticsheep.wifilight.api.network.test.MockLightBase;
 
 /**
  * DESCRIPTION HERE ANNE <p>

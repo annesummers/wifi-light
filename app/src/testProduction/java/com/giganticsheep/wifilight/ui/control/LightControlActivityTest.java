@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.network.MockLight;
+import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.ui.colour.ColourFragment;
 import com.giganticsheep.wifilight.ui.details.DetailsFragment;
 import com.giganticsheep.wifilight.ui.status.StatusFragment;

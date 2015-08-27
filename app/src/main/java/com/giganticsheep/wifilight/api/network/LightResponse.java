@@ -1,15 +1,14 @@
 package com.giganticsheep.wifilight.api.network;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.ColourData;
-import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
-import com.giganticsheep.wifilight.api.model.Location;
-
-import org.parceler.Parcel;
+import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,9 +19,9 @@ import java.util.Locale;
  * Created by anne on 26/06/15.
  * (*_*)
  */
-@Parcel
+@ParcelablePlease
 public class LightResponse extends Response
-                            implements Light {
+                            implements Light, Parcelable {
 
     public String uuid;
     public boolean connected;
@@ -33,8 +32,8 @@ public class LightResponse extends Response
     public double seconds_since_seen;
 
     public ColourData color;
-    public LocationData location;
-    public GroupData group;
+    public LightCollectionData location;
+    public LightCollectionData group;
     public CapabilitiesData capabilities;
 
     public LightResponse() {}
@@ -43,8 +42,8 @@ public class LightResponse extends Response
         super(id);
 
         color = new ColourData();
-        location = new LocationData();
-        group = new GroupData();
+        location = new LightCollectionData();
+        group = new LightCollectionData();
         capabilities = new CapabilitiesData();
     }
 
@@ -114,30 +113,21 @@ public class LightResponse extends Response
     }
 
     @Override
-    public Location getLocation() {
-        return location;
+    public String getLocationId() {
+        return location.id;
     }
 
     @Override
-    public Group getGroup() {
-        return group;
+    public String getGroupId() {
+        return group.id;
     }
 
-    @Parcel
-    public static class CapabilitiesData {
-        public boolean has_color;
-        public boolean has_variable_color_temp;
+    LightCollectionData getLocation() {
+        return location;
+    }
 
-        public CapabilitiesData() { }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return "CapabilitiesData{" +
-                    "has_color=" + has_color +
-                    ", has_variable_color_temp=" + has_variable_color_temp +
-                    '}';
-        }
+    LightCollectionData getGroup() {
+        return group;
     }
 
     @NonNull
@@ -157,4 +147,26 @@ public class LightResponse extends Response
                 ", capabilities=" + capabilities +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        LightResponseParcelablePlease.writeToParcel(this, dest, flags);
+    }
+
+    public static final Creator<LightResponse> CREATOR = new Creator<LightResponse>() {
+        public LightResponse createFromParcel(Parcel source) {
+            LightResponse target = new LightResponse();
+            LightResponseParcelablePlease.readFromParcel(target, source);
+            return target;
+        }
+
+        public LightResponse[] newArray(int size) {
+            return new LightResponse[size];
+        }
+    };
 }

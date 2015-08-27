@@ -2,6 +2,8 @@ package com.giganticsheep.wifilight.ui.base.light;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.model.LightSelector;
+
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 23/07/15. <p>

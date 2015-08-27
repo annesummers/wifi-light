@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.colour;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenterBase;
 
 import hugo.weaving.DebugLog;

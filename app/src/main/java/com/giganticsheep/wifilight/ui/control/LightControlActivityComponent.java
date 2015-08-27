@@ -15,14 +15,10 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {WifiLightAppComponent.class},
-        modules = { LightControlActivityModule.class })
+        modules = { LightControlActivityModule.class})//,
+                   // LightControlDrawerFragmentModule.class})
 public interface LightControlActivityComponent extends LightFragmentBase.Injector,
                                                         LightPresenterBase.Injector,
-                                                        DrawerFragment.Injector,
-                                                        DrawerAdapter.Injector,
-                                                        LightNetworkPresenter.Injector {
-
-    //Activity activity();
-
-    void inject(LightControlActivity activity);
+                                                        LightControlActivity.Injector {
+   // void inject(LightControlActivity activity);
 }

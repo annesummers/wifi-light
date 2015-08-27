@@ -18,6 +18,7 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import hugo.weaving.DebugLog;
+import timber.log.Timber;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -30,6 +31,9 @@ public class StatusFragment extends LightFragmentBase {
     @InjectView(R.id.power_toggle) ToggleButton powerToggle;
     @InjectView(R.id.status_textview) TextView statusTextView;
 
+    private boolean firstSetPower = false;
+    private boolean viewsEnabled = false;
+
     public StatusFragment() {
         super();
     }
@@ -38,8 +42,16 @@ public class StatusFragment extends LightFragmentBase {
 
     @DebugLog
     @OnCheckedChanged(R.id.power_toggle)
-    public void onPowerToggle(CompoundButton compoundButton, boolean isChecked) {
-        getLightStatusPresenter().setPower(isChecked);
+    public synchronized void onPowerToggle(@NonNull final CompoundButton compoundButton,
+                                           final boolean isChecked) {
+        if(viewsEnabled){
+            Timber.d("onPowerToggle() views enabled and firstSetPower is %s", firstSetPower ? "true" : "false");
+            if(!firstSetPower) {
+                getLightStatusPresenter().setPower(isChecked);
+            }
+
+            firstSetPower = false;
+        }
     }
 
     // MVP
@@ -62,7 +74,8 @@ public class StatusFragment extends LightFragmentBase {
 
     @DebugLog
     @Override
-    public void showLight(Light light) {
+    public synchronized void showLight(@NonNull final Light light) {
+        firstSetPower = true;
         powerToggle.setChecked(light.getPower() == LightControl.Power.ON);
 
         String oldStatus = (String) statusTextView.getText();
@@ -76,8 +89,10 @@ public class StatusFragment extends LightFragmentBase {
         }
     }
 
+    @DebugLog
     @Override
-    protected void enableViews(boolean enable) {
+    protected synchronized void enableViews(final boolean enable) {
+        viewsEnabled = false;
         powerToggle.setEnabled(enable);
     }
 

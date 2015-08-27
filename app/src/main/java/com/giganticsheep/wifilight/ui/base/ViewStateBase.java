@@ -6,14 +6,12 @@ import android.support.annotation.Nullable;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
-import java.io.Serializable;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class ViewStateBase<T extends ViewBase> implements RestoreableViewState<T>, Serializable {
+public class ViewStateBase<T extends ViewBase> implements RestoreableViewState<T> {
 
     static final String KEY_STATE = "key_state";
     static final String KEY_ERROR = "key_error";

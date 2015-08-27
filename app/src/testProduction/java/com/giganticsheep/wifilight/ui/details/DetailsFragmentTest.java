@@ -49,12 +49,12 @@ public class DetailsFragmentTest extends LightFragmentTestBase {
         TextView kelvinTextView = (TextView) fragment.getView().findViewById(R.id.kelvin_textview);
         TextView saturationTextView = (TextView) fragment.getView().findViewById(R.id.saturation_textview);
 
-        assertThat((String)(idTextView.getText()), equalTo(Constants.TEST_ID));
-        assertThat((String)(labelTextView.getText()), equalTo(Constants.TEST_LABEL));
+        assertThat(idTextView.getText(), equalTo(Constants.TEST_ID));
+        assertThat(labelTextView.getText(), equalTo(Constants.TEST_LABEL));
 
-        assertThat((String)(brightnessTextView.getText()), equalTo(Integer.toString(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE))));
-        assertThat((String)(hueTextView.getText()), equalTo(Integer.toString(LightConstants.convertHue(TestConstants.TEST_HUE_DOUBLE))));
-        assertThat((String)(kelvinTextView.getText()), equalTo(Integer.toString(TestConstants.TEST_KELVIN)));
-        assertThat((String)(saturationTextView.getText()), equalTo(Integer.toString(LightConstants.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE))));
+        assertThat(brightnessTextView.getText(), equalTo(Integer.toString(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE))));
+        assertThat(hueTextView.getText(), equalTo(Integer.toString(LightConstants.convertHue(TestConstants.TEST_HUE_DOUBLE))));
+        assertThat(kelvinTextView.getText(), equalTo(Integer.toString(TestConstants.TEST_KELVIN)));
+        assertThat(saturationTextView.getText(), equalTo(Integer.toString(LightConstants.convertSaturation(TestConstants.TEST_SATURATION_DOUBLE))));
     }
 }

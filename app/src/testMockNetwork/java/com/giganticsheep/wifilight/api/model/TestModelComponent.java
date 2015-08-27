@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.api.model;
 
-import com.giganticsheep.wifilight.api.network.TestLightNetworkModule;
+import com.giganticsheep.wifilight.api.network.test.TestLightNetworkModule;
 import com.giganticsheep.wifilight.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.network.TestLightNetworkGraph;
 import com.giganticsheep.wifilight.base.TestModule;
@@ -17,8 +17,8 @@ import dagger.Component;
 @Component(
         dependencies = {WifiLightTestsComponent.class},
         modules = { TestModule.class,
-                TestLightNetworkModule.class } )
+                    TestLightNetworkModule.class } )
 public interface TestModelComponent extends TestLightNetworkGraph {
-
     void inject(ModelTest wifiLightTest);
+    void inject(LightNetworkTest lightNetworkTest);
 }

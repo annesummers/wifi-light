@@ -1,7 +1,7 @@
 package com.giganticsheep.wifilight.base;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.ui.control.LightNetwork;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.util.TestEventBus;
 
 import javax.inject.Inject;
