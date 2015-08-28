@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.ui.white;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenterBase;
+import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenter;
 
 import hugo.weaving.DebugLog;
 
@@ -11,7 +11,7 @@ import hugo.weaving.DebugLog;
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-class WhitePresenter extends BrightnessPresenterBase {
+class WhitePresenter extends BrightnessPresenter {
 
     public WhitePresenter(@NonNull final Injector injector) {
         super(injector);

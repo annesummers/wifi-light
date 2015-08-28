@@ -2,16 +2,14 @@ package com.giganticsheep.wifilight.ui.base.light;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.model.LightSelector;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 23/07/15. <p>
  * (*_*)
  */
-public abstract class BrightnessPresenterBase extends LightPresenterBase {
+public class BrightnessPresenter extends LightPresenterBase {
 
-    protected BrightnessPresenterBase(@NonNull final Injector injector) {
+    protected BrightnessPresenter(@NonNull final Injector injector) {
         super(injector);
     }
 

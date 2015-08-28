@@ -4,11 +4,8 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
-import com.giganticsheep.wifilight.base.MockedTestBase;
-import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
-import com.giganticsheep.wifilight.ui.base.TestLightNetworkView;
-import com.giganticsheep.wifilight.ui.base.TestPresenterComponent;
+import com.giganticsheep.wifilight.ui.control.PresenterTestBase;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Before;
@@ -22,18 +19,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 26/07/15. <p>
  * (*_*)
  */
-public class LightNetworkPresenterTest extends MockedTestBase {
-
-    private TestPresenterComponent component;
-
-    @Override
-    protected void createComponentAndInjectDependencies() {
-        component = DaggerTestPresenterComponent.builder()
-                .wifiLightTestsComponent(WifiLightTestsComponent.Initializer.init())
-                .build();
-
-        component.inject(this);
-    }
+public class LightNetworkPresenterTest extends PresenterTestBase {
 
     private LightNetworkPresenter presenter;
     private TestLightNetworkView view;
@@ -51,7 +37,11 @@ public class LightNetworkPresenterTest extends MockedTestBase {
     }
 
     @Test
-    public void testTestFetchLightOk() {
+    public void testFetchLightOk() {
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
         view.showLightNetwork(new LightNetwork(), 0, 0, 0);
 
         int oldViewState = view.getState();
@@ -60,15 +50,6 @@ public class LightNetworkPresenterTest extends MockedTestBase {
         fetchLightAndHandleEvent();
 
         assertThat(view.getState(), equalTo(oldViewState));
-    }
-
-    private void setTestStatus(LightControl.Status status) {
-        ((MockLightControlImpl)presenter.lightControl).setStatus(status);
-    }
-
-    private void fetchLightAndHandleEvent() {
-        presenter.fetchLight(Constants.TEST_ID);
-        LightChangedEvent event = getCheckedEvent(LightChangedEvent.class);
     }
 
     @Test
@@ -95,5 +76,14 @@ public class LightNetworkPresenterTest extends MockedTestBase {
                 }
             }
         }
+    }
+
+    private void setTestStatus(LightControl.Status status) {
+        ((MockLightControlImpl)presenter.lightControl).setStatus(status);
+    }
+
+    private void fetchLightAndHandleEvent() {
+        presenter.fetchLight(Constants.TEST_ID);
+        LightChangedEvent event = getCheckedEvent(LightChangedEvent.class);
     }
 }

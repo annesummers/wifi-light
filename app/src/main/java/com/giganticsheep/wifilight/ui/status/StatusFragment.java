@@ -92,7 +92,7 @@ public class StatusFragment extends LightFragmentBase {
     @DebugLog
     @Override
     protected synchronized void enableViews(final boolean enable) {
-        viewsEnabled = false;
+        viewsEnabled = enable;
         powerToggle.setEnabled(enable);
     }
 

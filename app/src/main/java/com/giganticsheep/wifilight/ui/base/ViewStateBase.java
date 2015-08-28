@@ -16,14 +16,14 @@ public class ViewStateBase<T extends ViewBase> implements RestoreableViewState<T
     static final String KEY_STATE = "key_state";
     static final String KEY_ERROR = "key_error";
 
-    final static int STATE_SHOW_LOADING = 0;
-    final static int STATE_SHOW_ERROR = 1;
+    final public static int STATE_SHOW_LOADING = 0;
+    final public static int STATE_SHOW_ERROR = 1;
 
     protected static final int STATE_MAX = STATE_SHOW_ERROR;
 
     protected int state = STATE_SHOW_LOADING;
 
-    Throwable error;
+    private Throwable error;
 
     /**
      * Sets the state to STATE_SHOW_LOADING.

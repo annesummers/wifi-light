@@ -25,7 +25,7 @@ import hugo.weaving.DebugLog;
 @FragmentArgsInherited
 public class WhiteFragment extends LightFragmentBase {
 
-    @InjectView(R.id.brightness_seekbar) SeekBar valueSeekBar;
+    @InjectView(R.id.brightness_seekbar) SeekBar brightnessSeekbar;
     @InjectView(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
 
     public WhiteFragment() {
@@ -53,20 +53,20 @@ public class WhiteFragment extends LightFragmentBase {
     @DebugLog
     @Override
     protected void initialiseViews(@NonNull final View view) {
-        valueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        brightnessSeekbar.setOnSeekBarChangeListener(seekBarChangeListener);
         kelvinSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
     @DebugLog
     @Override
     public void showLight(@NonNull final Light light) {
-        valueSeekBar.setProgress(light.getBrightness());
+        brightnessSeekbar.setProgress(light.getBrightness());
         kelvinSeekBar.setProgress(light.getKelvin() - LightConstants.KELVIN_BASE);
     }
 
     @Override
     protected void enableViews(boolean enable) {
-        valueSeekBar.setEnabled(enable);
+        brightnessSeekbar.setEnabled(enable);
         kelvinSeekBar.setEnabled(enable);
     }
 
@@ -81,7 +81,7 @@ public class WhiteFragment extends LightFragmentBase {
         public void setLightValue(@NonNull final SeekBar seekBar,
                                   final int value) {
 
-            if (seekBar.equals(valueSeekBar)) {
+            if (seekBar.equals(brightnessSeekbar)) {
                 getLightWhitePresenter().setBrightness(value, LightControlActivity.DEFAULT_DURATION);
             } else if (seekBar.equals(kelvinSeekBar)) {
                 getLightWhitePresenter().setKelvin(value, LightControlActivity.DEFAULT_DURATION);

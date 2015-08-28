@@ -2,8 +2,7 @@ package com.giganticsheep.wifilight.ui.colour;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.model.LightSelector;
-import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenterBase;
+import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenter;
 
 import hugo.weaving.DebugLog;
 
@@ -14,7 +13,7 @@ import hugo.weaving.DebugLog;
  *
  * (*_*)
  */
-class ColourPresenter extends BrightnessPresenterBase {
+class ColourPresenter extends BrightnessPresenter {
 
     public ColourPresenter(@NonNull final Injector injector) {
         super(injector);

@@ -9,6 +9,7 @@ import com.giganticsheep.wifilight.api.model.LightConstants;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.LightFragmentTestBase;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
@@ -26,23 +27,44 @@ import static org.junit.Assert.assertThat;
 @Config(constants = BuildConfig.class, sdk = 19)
 public class ColourFragmentTest extends LightFragmentTestBase {
 
+    private SeekBar brightnessSeekbar;
+    private SeekBar hueSeekbar;
+    private SeekBar saturationSeekbar;
+
+    @Before
+    public void setUp() {
+        super.setUp();
+
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
+        brightnessSeekbar = ((ColourFragment) fragment).brightnessSeekBar;
+        hueSeekbar = ((ColourFragment) fragment).hueSeekBar;
+        saturationSeekbar = ((ColourFragment) fragment).saturationSeekBar;
+    }
+
     @NonNull
     @Override
     protected String getFragmentName() {
         return RuntimeEnvironment.application.getString(R.string.fragment_name_light_colour);
     }
 
+    @Override
+    protected void assertViewsEnabled(final boolean enabled) {
+        //assertThat(brightnessSeekbar.isEnabled(), equalTo(enabled));
+        //assertThat(hueSeekbar.isEnabled(), equalTo(enabled));
+        //assertThat(saturationSeekbar.isEnabled(), equalTo(enabled));
+    }
+
     @Test
+    @Override
     public void testSetLightDetails() {
+        super.testSetLightDetails();
+
         if(BuildConfig.DEBUG) {
             return;
         }
-
-        super.testSetLightDetails();
-
-        SeekBar brightnessSeekbar = (SeekBar) fragment.getView().findViewById(R.id.brightness_seekbar);
-        SeekBar hueSeekbar = (SeekBar) fragment.getView().findViewById(R.id.hue_seekbar);
-        SeekBar saturationSeekbar = (SeekBar) fragment.getView().findViewById(R.id.saturation_seekbar);
 
         assertThat(brightnessSeekbar.getProgress(), equalTo(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE)));
         assertThat(hueSeekbar.getProgress(), equalTo(LightConstants.convertHue(TestConstants.TEST_HUE_DOUBLE)));

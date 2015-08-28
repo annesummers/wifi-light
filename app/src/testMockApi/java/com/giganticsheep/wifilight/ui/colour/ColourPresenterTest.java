@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.base.TestConstants;
-import com.giganticsheep.wifilight.ui.base.light.BrightnessPresenterTestBase;
+import com.giganticsheep.wifilight.ui.base.light.LightPresenterTestBase;
 import com.giganticsheep.wifilight.ui.base.light.TestLightView;
 
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 30/06/15.
  * (*_*)
  */
-public class ColourPresenterTest extends BrightnessPresenterTestBase {
+public class ColourPresenterTest extends LightPresenterTestBase {
 
     @NonNull
     @Override

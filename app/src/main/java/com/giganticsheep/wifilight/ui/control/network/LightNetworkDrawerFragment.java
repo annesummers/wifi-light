@@ -193,20 +193,12 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     @Override
     public void showError() {
         getViewState().setShowError();
-
-        errorLayout.setVisibility(View.VISIBLE);
-        loadingLayout.setVisibility(View.GONE);
-        drawerLayout.setVisibility(View.GONE);
     }
 
     @DebugLog
     @Override
     public void showError(Throwable throwable) {
         getViewState().setShowError(throwable);
-
-        errorLayout.setVisibility(View.VISIBLE);
-        loadingLayout.setVisibility(View.GONE);
-        drawerLayout.setVisibility(View.GONE);
     }
 
     // Dagger

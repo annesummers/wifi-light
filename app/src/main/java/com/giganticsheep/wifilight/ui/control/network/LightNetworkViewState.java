@@ -22,7 +22,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
     private static final String KEY_LIGHT_POSITION = "key_child_position";
     private static final String KEY_LOCATION_POSITION = "key_location_position";
 
-    private final int STATE_SHOW_LIGHT_NETWORK = STATE_MAX + 1;
+    final public static int STATE_SHOW_LIGHT_NETWORK = STATE_MAX + 1;
 
     private LightNetwork lightNetwork;
     private int locationPosition;
@@ -86,5 +86,9 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
         lightPosition = bundle.getInt(KEY_LIGHT_POSITION);
 
         return this;
+    }
+
+    int state() {
+        return state;
     }
 }

@@ -25,7 +25,7 @@ public class ColourFragment extends LightFragmentBase {
 
     @InjectView(R.id.hue_seekbar) SeekBar hueSeekBar;
     @InjectView(R.id.saturation_seekbar) SeekBar saturationSeekBar;
-    @InjectView(R.id.brightness_seekbar) SeekBar valueSeekBar;
+    @InjectView(R.id.brightness_seekbar) SeekBar brightnessSeekBar;
 
     public ColourFragment() {
         super();
@@ -54,7 +54,7 @@ public class ColourFragment extends LightFragmentBase {
     protected void initialiseViews(View view) {
         hueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         saturationSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
-        valueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        brightnessSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
     @DebugLog
@@ -62,14 +62,14 @@ public class ColourFragment extends LightFragmentBase {
     public void showLight(@NonNull final Light light) {
         hueSeekBar.setProgress(light.getHue());
         saturationSeekBar.setProgress(light.getSaturation());
-        valueSeekBar.setProgress(light.getBrightness());
+        brightnessSeekBar.setProgress(light.getBrightness());
     }
 
     @Override
     protected void enableViews(final boolean enable) {
         hueSeekBar.setEnabled(enable);
         saturationSeekBar.setEnabled(enable);
-        valueSeekBar.setEnabled(enable);
+        brightnessSeekBar.setEnabled(enable);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ColourFragment extends LightFragmentBase {
                 getLightColourPresenter().setHue(value, LightControlActivity.DEFAULT_DURATION);
             } else if (seekBar.equals(saturationSeekBar)) {
                 getLightColourPresenter().setSaturation(value, LightControlActivity.DEFAULT_DURATION);
-            } else if (seekBar.equals(valueSeekBar)) {
+            } else if (seekBar.equals(brightnessSeekBar)) {
                 getLightColourPresenter().setBrightness(value, LightControlActivity.DEFAULT_DURATION);
             }
         }

@@ -19,9 +19,9 @@ public class LightViewState extends ViewStateBase<LightView> {
 
     private static final String KEY_LIGHT = "key_light";
 
-    private static final int STATE_SHOW_LIGHT_CONNECTED = STATE_MAX + 1;
-    private static final int STATE_SHOW_LIGHT_CONNECTING = STATE_MAX + 2;
-    private static final int STATE_SHOW_LIGHT_DISCONNECTED = STATE_MAX + 3;
+    public static final int STATE_SHOW_LIGHT_CONNECTED = STATE_MAX + 1;
+    public static final int STATE_SHOW_LIGHT_CONNECTING = STATE_MAX + 2;
+    public static final int STATE_SHOW_LIGHT_DISCONNECTED = STATE_MAX + 3;
 
     private Light light;
 
@@ -93,5 +93,9 @@ public class LightViewState extends ViewStateBase<LightView> {
         light = bundle.getParcelable(KEY_LIGHT);
 
         return this;
+    }
+
+    public int state() {
+        return state;
     }
 }

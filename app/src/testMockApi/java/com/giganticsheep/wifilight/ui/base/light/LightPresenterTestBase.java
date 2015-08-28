@@ -3,13 +3,11 @@ package com.giganticsheep.wifilight.ui.base.light;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.BuildConfig;
-import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
-import com.giganticsheep.wifilight.base.MockedTestBase;
 import com.giganticsheep.wifilight.base.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
-import com.giganticsheep.wifilight.ui.base.TestPresenterComponent;
+import com.giganticsheep.wifilight.ui.control.PresenterTestBase;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.Before;
@@ -22,18 +20,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by anne on 10/07/15.
  * (*_*)
  */
-public abstract class LightPresenterTestBase extends MockedTestBase {
-
-    private TestPresenterComponent component;
-
-    @Override
-    protected void createComponentAndInjectDependencies() {
-        component = DaggerTestPresenterComponent.builder()
-                .wifiLightTestsComponent(WifiLightTestsComponent.Initializer.init())
-                .build();
-
-        component.inject(this);
-    }
+public abstract class LightPresenterTestBase extends PresenterTestBase {
 
     protected LightPresenterBase presenter;
     protected TestLightView view;

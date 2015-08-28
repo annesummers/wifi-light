@@ -26,7 +26,8 @@ public class TestPresenter extends LightPresenterBase {
      * @param injector an Injector used to inject this object into a Component that will
      *                 provide the injected class members.
      */
-    public TestPresenter(@NonNull final Injector injector, final LightFragmentBase fragment) {
+    public TestPresenter(@NonNull final Injector injector,
+                         @NonNull final LightFragmentBase fragment) {
         super(injector);
 
         this.fragment = fragment;

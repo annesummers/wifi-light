@@ -1,11 +1,11 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.control.network;
 
 import android.view.View;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.ui.UITestBase;
-import com.giganticsheep.wifilight.ui.control.network.LightNetworkDrawerFragment;
+import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,6 +56,8 @@ public class LightNetworkDrawerFragmentTest extends UITestBase {
 
         fragment.showLoading();
 
+        assertThat(fragment.getViewState().state(), equalTo(LightNetworkViewState.STATE_SHOW_LOADING));
+
         View loadingView = fragment.getView().findViewById(R.id.loading_layout);
         View errorView = fragment.getView().findViewById(R.id.error_layout);
         View mainView = fragment.getView().findViewById(R.id.drawer_layout);
@@ -73,6 +75,8 @@ public class LightNetworkDrawerFragmentTest extends UITestBase {
 
         fragment.showLightNetwork(testLightNetwork, 0, 0, 0);
 
+        assertThat(fragment.getViewState().state(), equalTo(LightNetworkViewState.STATE_SHOW_LIGHT_NETWORK));
+
         View loadingView = fragment.getView().findViewById(R.id.loading_layout);
         View errorView = fragment.getView().findViewById(R.id.error_layout);
         View mainView = fragment.getView().findViewById(R.id.drawer_layout);
@@ -88,17 +92,11 @@ public class LightNetworkDrawerFragmentTest extends UITestBase {
             return;
         }
 
-        Assert.assertThat(fragment.getView(), not(nullValue()));
+        assertThat(fragment.getView(), not(nullValue()));
 
         fragment.showError();
 
-        View loadingView = fragment.getView().findViewById(R.id.loading_layout);
-        View errorView = fragment.getView().findViewById(R.id.error_layout);
-        View mainView = fragment.getView().findViewById(R.id.drawer_layout);
-
-        assertThat(loadingView.getVisibility(), equalTo(View.GONE));
-        assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));
-        assertThat(mainView.getVisibility(), equalTo(View.GONE));
+        assertThat(fragment.getViewState().state(), equalTo(LightNetworkViewState.STATE_SHOW_ERROR));
     }
 
     @Test
@@ -107,16 +105,10 @@ public class LightNetworkDrawerFragmentTest extends UITestBase {
             return;
         }
 
-        Assert.assertThat(fragment.getView(), not(nullValue()));
+        assertThat(fragment.getView(), not(nullValue()));
 
         fragment.showError(new Exception("Test"));
 
-        View loadingView = fragment.getView().findViewById(R.id.loading_layout);
-        View errorView = fragment.getView().findViewById(R.id.error_layout);
-        View mainView = fragment.getView().findViewById(R.id.drawer_layout);
-
-        assertThat(loadingView.getVisibility(), equalTo(View.GONE));
-        assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));
-        assertThat(mainView.getVisibility(), equalTo(View.GONE));
+        assertThat(fragment.getViewState().state(), equalTo(LightNetworkViewState.STATE_SHOW_ERROR));
     }
 }

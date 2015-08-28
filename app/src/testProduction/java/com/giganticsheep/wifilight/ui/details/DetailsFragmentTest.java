@@ -10,6 +10,7 @@ import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.LightFragmentTestBase;
 import com.giganticsheep.wifilight.util.Constants;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
@@ -27,27 +28,50 @@ import static org.junit.Assert.assertThat;
 @Config(constants = BuildConfig.class, sdk = 19)
 public class DetailsFragmentTest extends LightFragmentTestBase {
 
+    private TextView idTextView;
+    private TextView labelTextView;
+    private TextView brightnessTextView;
+    private TextView hueTextView;
+    private TextView kelvinTextView;
+    private TextView saturationTextView;
+
+    @Before
+    public void setUp() {
+        super.setUp();
+
+        if(BuildConfig.DEBUG) {
+            return;
+        }
+
+        idTextView = ((DetailsFragment)fragment).idTextView;
+
+        labelTextView = ((DetailsFragment)fragment).nameTextView;
+
+        brightnessTextView = ((DetailsFragment)fragment).brightnessTextView;
+        hueTextView = ((DetailsFragment)fragment).hueTextView;
+        kelvinTextView = ((DetailsFragment)fragment).kelvinTextView;
+        saturationTextView = ((DetailsFragment)fragment).saturationTextView;
+    }
+
     @NonNull
     @Override
     protected String getFragmentName() {
         return RuntimeEnvironment.application.getString(R.string.fragment_name_light_details);
     }
 
+    @Override
+    protected void assertViewsEnabled(final boolean enabled) {
+        // views are read only so there is nothing to check
+    }
+
     @Test
+    @Override
     public void testSetLightDetails() {
+        super.testSetLightDetails();
+
         if(BuildConfig.DEBUG) {
             return;
         }
-
-        super.testSetLightDetails();
-
-        TextView idTextView = (TextView) fragment.getView().findViewById(R.id.id_textview);
-        TextView labelTextView = (TextView) fragment.getView().findViewById(R.id.name_textview);
-
-        TextView brightnessTextView = (TextView) fragment.getView().findViewById(R.id.brightness_textview);
-        TextView hueTextView = (TextView) fragment.getView().findViewById(R.id.hue_textview);
-        TextView kelvinTextView = (TextView) fragment.getView().findViewById(R.id.kelvin_textview);
-        TextView saturationTextView = (TextView) fragment.getView().findViewById(R.id.saturation_textview);
 
         assertThat(idTextView.getText(), equalTo(Constants.TEST_ID));
         assertThat(labelTextView.getText(), equalTo(Constants.TEST_LABEL));
