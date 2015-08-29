@@ -38,10 +38,7 @@
                     android:id="@+id/sliding_tabs"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/tab_height"
-                    android:background="@color/tab_background"
-                    app:tabIndicatorHeight="@dimen/tab_height"
-                    app:tabIndicatorColor="@color/tab_selected"
-                    android:textColor="@color/tab_text"/>
+                    style="@style/Theme.WifiLight.TabLayout"/>
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/pager"
