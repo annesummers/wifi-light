@@ -16,7 +16,7 @@ import dagger.Component;
         dependencies = {WifiLightAppComponent.class},
         modules = { LightNetworkDrawerFragmentModule.class})
 public interface LightNetworkDrawerFragmentComponent extends LightNetworkDrawerFragment.Injector,
-                                                            OnNetworkItemClickListener.Injector,
+                                                            LightNetworkClickListener.Injector,
                                                             LightNetworkPresenter.Injector,
                                                             LightNetworkAdapterBase.Injector {
 }

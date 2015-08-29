@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.control.network;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
@@ -17,6 +18,8 @@ import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
+
+import java.util.Map;
 
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
@@ -44,6 +47,8 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     //private LightLocationAdapter adapter;
     private LightGroupAdapter adapter;
 
+    private final Map<Integer, Boolean> groupCheckedMap = new ArrayMap<>();
+
     @DebugLog
     @Override
     public final void onCreate(Bundle savedInstanceState) {
@@ -58,17 +63,13 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
 
     @DebugLog
     @Override
-    protected void initialiseViews(View view) {
-        OnLightGroupClickListener onLightGroupClickListener = new OnLightGroupClickListener(component);
+    protected void initialiseViews(final View view) {
+        LightNetworkClickListener lightNetworkClickListener = new LightNetworkClickListener(component,
+                                                                                            locationsListView);
 
-        //adapter = new LightLocationAdapter(component, onLightGroupClickListener);
+        //adapter = new LightLocationAdapter(component, lightNetworkClickListener);
         adapter = new LightGroupAdapter(component);
         locationsListView.setAdapter(adapter);
-
-        //locationsListView.setOnGroupClickListener(new OnLocationClickListener(component));
-        //locationsListView.setOnChildClickListener(onLightGroupClickListener);
-        locationsListView.setOnGroupClickListener(onLightGroupClickListener);
-        locationsListView.setOnChildClickListener(new OnLightClickListener(component, 0));
     }
 
     @Override

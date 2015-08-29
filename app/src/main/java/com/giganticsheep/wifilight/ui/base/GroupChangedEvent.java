@@ -13,4 +13,8 @@ public class GroupChangedEvent {
     public GroupChangedEvent(Group group) {
         this.group = group;
     }
+
+    public Group getGroup() {
+        return group;
+    }
 }

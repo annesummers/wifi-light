@@ -26,14 +26,15 @@ import hugo.weaving.DebugLog;
 public class LightLocationAdapter extends LightNetworkAdapterBase {
 
     private final Map<Integer, List<LightGroupAdapter>> lightGroupAdapters = new ArrayMap<>();
-    private final OnLightGroupClickListener onLightGroupClickListener;
+
+    private final LightNetworkClickListener lightNetworkClickListener;
 
     @DebugLog
     public LightLocationAdapter(@NonNull final Injector injector,
-                                @NonNull final OnLightGroupClickListener onLightGroupClickListener) {
+                                @NonNull final LightNetworkClickListener lightNetworkClickListener) {
         super(injector);
 
-        this.onLightGroupClickListener = onLightGroupClickListener;
+        this.lightNetworkClickListener = lightNetworkClickListener;
     }
 
     @Override
@@ -67,8 +68,8 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         if (convertView == null) {
             convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_group_list, null);
             holder = new GroupListViewHolder(convertView,
-                                            onLightGroupClickListener,
-                                            new OnLightClickListener(fragment.getComponent(), groupPosition));
+                    lightNetworkClickListener,
+                    childPosition);
             convertView.setTag(holder);
         } else {
             holder = (GroupListViewHolder) convertView.getTag();
@@ -152,12 +153,12 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         private final ExpandableListView groupListView;
 
         public GroupListViewHolder(@NonNull final View view,
-                                   @NonNull final OnLightGroupClickListener onLightGroupClickListener,
-                                   @NonNull final OnLightClickListener onLightClickListener) {
+                                   @NonNull final LightNetworkClickListener lightNetworkClickListener,
+                                   final int lightLocationPosition) {
             groupListView = (ExpandableListView) view.findViewById(R.id.group_list);
 
-            groupListView.setOnGroupClickListener(onLightGroupClickListener);
-            groupListView.setOnChildClickListener(onLightClickListener);
+            groupListView.setOnGroupClickListener(lightNetworkClickListener.createLightGroupClickListener());
+            groupListView.setOnChildClickListener(lightNetworkClickListener.createLightClickListener(lightLocationPosition));
         }
 
         public void setViewData(@NonNull final LightGroupAdapter viewData) {

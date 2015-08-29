@@ -13,4 +13,8 @@ public class LocationChangedEvent {
     public LocationChangedEvent(Location location) {
         this.location = location;
     }
+
+    public Location getLocation() {
+        return location;
+    }
 }

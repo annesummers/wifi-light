@@ -21,6 +21,8 @@
         android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
         android:layout_centerVertical="true"
+        android:clickable="false"
+        android:focusable="false"
         style="@style/Theme.WifiLight.TextView.DrawerLabel"/>
 
     <ImageView
@@ -33,6 +35,8 @@
         android:layout_gravity="center_vertical"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_status_tick"
-        android:contentDescription="@string/description_light_status"/>
+        android:contentDescription="@string/description_light_status"
+        android:clickable="false"
+        android:focusable="false"/>
 
 </RelativeLayout>

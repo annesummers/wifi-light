@@ -3,12 +3,16 @@ package com.giganticsheep.wifilight.ui.base.light;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
+import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.api.network.ServerErrorEventSubscriber;
-import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.ErrorEvent;
+import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
+import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.util.Constants;
 import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -74,7 +78,8 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
             @Override
-            public void onCompleted() { }
+            public void onCompleted() {
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -111,6 +116,16 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     }
 
     @DebugLog
+    public void handleGroupChanged(@NonNull final Group group) {
+        // TODO show group
+    }
+
+    @DebugLog
+    public void handleLocationChanged(@NonNull final Location location) {
+        // TODO show location
+    }
+
+    @DebugLog
     public void handleError(Throwable error) {
         if (isViewAttached()) {
             getView().showError(error);
@@ -122,8 +137,26 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
      */
-    public void onEvent(@NonNull LightChangedEvent event) {
+    public void onEvent(@NonNull final LightChangedEvent event) {
         handleLightChanged(event.getLight());
+    }
+
+    /**
+     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Light} to display.
+     *
+     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
+     */
+    public void onEvent(@NonNull final GroupChangedEvent event) {
+        handleGroupChanged(event.getGroup());
+    }
+
+    /**
+     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Light} to display.
+     *
+     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
+     */
+    public void onEvent(@NonNull final LocationChangedEvent event) {
+        handleLocationChanged(event.getLocation());
     }
 
     @DebugLog

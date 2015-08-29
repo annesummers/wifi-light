@@ -37,7 +37,8 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
 
     @Override
     public int getChildrenCount(final int groupPosition) {
-        return lightNetwork.lightCount(locationPosition, groupPosition);
+        int lightCount = lightNetwork.lightCount(locationPosition, groupPosition);
+        return lightCount;
     }
 
     @Nullable
