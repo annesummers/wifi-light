@@ -38,8 +38,8 @@ public class LightControlModule {
         return new LightControlImpl(networkDetails,
                 lightService,
                 eventBus,
+                errorStrings,
                 ioScheduler,
-                uiScheduler,
-                errorStrings);
+                uiScheduler);
     }
 }
