@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight.base.dagger;
 
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.ApplicationScope;
@@ -56,14 +55,7 @@ public class WifiLightModule {
     @NonNull
     @Provides
     @ApplicationScope
-    Resources provideResources() {
-        return application.getResources();
-    }
-
-    @NonNull
-    @Provides
-    @ApplicationScope
-    ErrorStrings provideErrorStrings(Resources resources) {
-        return new AndroidErrorStrings(resources);
+    ErrorStrings provideErrorStrings() {
+        return new AndroidErrorStrings(application.getResources());
     }
 }

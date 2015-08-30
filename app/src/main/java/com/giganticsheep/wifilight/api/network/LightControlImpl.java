@@ -15,6 +15,7 @@ import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.api.network.error.WifiLightAPIException;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
+import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.base.error.WifiLightException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightNetworkException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightServerException;
@@ -42,7 +43,8 @@ import timber.log.Timber;
  */
 
 @ApplicationScope
-class LightControlImpl implements LightControl {
+public class LightControlImpl extends LightControlEventCatcher
+                                implements LightControl {
 
     private final ErrorSubscriber errorSubscriber;
 
@@ -87,7 +89,7 @@ class LightControlImpl implements LightControl {
 
         this.errorSubscriber = new ErrorSubscriber(eventBus, errorStrings);
 
-        eventBus.registerForEvents(this).subscribe(errorSubscriber);
+        eventBus.registerForEvents(this).subscribe(new SilentErrorSubscriber());
     }
 
     @NonNull
@@ -129,7 +131,9 @@ class LightControlImpl implements LightControl {
                         return handleNetworkError(throwable);
                     })
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(errorSubscriber));
+                            .subscribe(errorSubscriber))
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
         }
 
         return lightService.togglePower(
@@ -150,7 +154,9 @@ class LightControlImpl implements LightControl {
                     return handleNetworkError(throwable);
                 })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(errorSubscriber));
+                        .subscribe(errorSubscriber))
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     @DebugLog
@@ -177,7 +183,9 @@ class LightControlImpl implements LightControl {
                         return handleNetworkError(throwable);
                     })
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(errorSubscriber));
+                            .subscribe(errorSubscriber))
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
         }
 
         return lightService.setPower(
@@ -199,7 +207,9 @@ class LightControlImpl implements LightControl {
                     return handleNetworkError(throwable);
                 })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(errorSubscriber));
+                        .subscribe(errorSubscriber))
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     @DebugLog
@@ -357,8 +367,9 @@ class LightControlImpl implements LightControl {
                 .filter(location -> location.getId().equals(locationId));
     }
 
-    public void onEvent(final LightSelectorChangedEvent event) {
-        currentSelector = event.selector();
+    @Override
+    void setCurrentSelector(final LightSelector selector) {
+        currentSelector = selector;
     }
 
     @DebugLog
@@ -383,7 +394,9 @@ class LightControlImpl implements LightControl {
                         return handleNetworkError(throwable);
                     })
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(errorSubscriber));
+                            .subscribe(errorSubscriber))
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
         }
 
         return lightService.setColour(networkDetails.getBaseURL1(),
@@ -404,7 +417,9 @@ class LightControlImpl implements LightControl {
                     return handleNetworkError(throwable);
                 })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(errorSubscriber));
+                        .subscribe(errorSubscriber))
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
     }
 
     @NonNull
@@ -423,9 +438,7 @@ class LightControlImpl implements LightControl {
                     .cache();
         }
 
-        return lightResponsesObservable
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler);
+        return lightResponsesObservable;
     }
 
     @NonNull

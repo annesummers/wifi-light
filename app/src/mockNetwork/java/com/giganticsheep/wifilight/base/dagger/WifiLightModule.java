@@ -4,7 +4,10 @@ import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
+import com.giganticsheep.wifilight.util.AndroidErrorStrings;
 import com.giganticsheep.wifilight.util.AndroidEventBus;
+import com.giganticsheep.wifilight.util.TestErrorStrings;
 import com.giganticsheep.wifilight.util.TestEventBus;
 import com.giganticsheep.wifilight.util.TestTree;
 
@@ -59,6 +62,16 @@ public class WifiLightModule {
             return new Timber.DebugTree();
         } else {
             return new TestTree();
+        }
+    }
+
+    @Provides
+    @ApplicationScope
+    ErrorStrings provideErrorStrings() {
+        if(application != null) {
+            return new AndroidErrorStrings(application.getResources());
+        } else {
+            return new TestErrorStrings();
         }
     }
 }
