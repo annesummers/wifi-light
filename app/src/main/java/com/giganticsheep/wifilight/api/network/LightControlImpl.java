@@ -14,8 +14,9 @@ import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.api.network.error.WifiLightAPIException;
+import com.giganticsheep.wifilight.api.network.error.WifiLightException;
+import com.giganticsheep.wifilight.api.network.error.WifiLightNetworkException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightServerException;
-import com.giganticsheep.wifilight.base.ErrorEvent;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
@@ -118,11 +119,12 @@ class LightControlImpl implements LightControl {
                     currentSelector.toString(),
                     authorisation(), "")
                     .map(statusResponse -> (LightStatus) statusResponse)
-                    .onErrorResumeNext(throwable -> {
-                        return handleNetworkError(throwable);
-                    })
+              //      .onErrorResumeNext(throwable -> {
+                //        return handleNetworkError(throwable);
+                //    })
+                    .doOnError(throwable -> handleNetworkError(throwable))
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
+                            .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
         }
 
         return lightService.togglePower(
@@ -139,11 +141,12 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-                .onErrorResumeNext(throwable -> {
-                    return handleNetworkError(throwable);
-                })
+              //  .onErrorResumeNext(throwable -> {
+              //      return handleNetworkError(throwable);
+              //  })
+                .doOnError(throwable -> handleNetworkError(throwable))
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
+                        .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
     }
 
     @DebugLog
@@ -166,11 +169,12 @@ class LightControlImpl implements LightControl {
                     authorisation(),
                     queryMap)
                     .map(statusResponse -> (LightStatus) statusResponse)
-                    .onErrorResumeNext(throwable -> {
-                        return handleNetworkError(throwable);
-                    })
+                  //  .onErrorResumeNext(throwable -> {
+                 //       return handleNetworkError(throwable);
+                  //  })
+                    .doOnError(throwable -> handleNetworkError(throwable))
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
+                            .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
         }
 
         return lightService.setPower(
@@ -188,11 +192,12 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-                .onErrorResumeNext(throwable -> {
-                    return handleNetworkError(throwable);
-                })
+              //  .onErrorResumeNext(throwable -> {
+             //       return handleNetworkError(throwable);
+             //   })
+                .doOnError(throwable -> handleNetworkError(throwable))
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
+                        .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
     }
 
     @DebugLog
@@ -372,11 +377,12 @@ class LightControlImpl implements LightControl {
                     authorisation(),
                     queryMap)
                     .map(statusResponse -> (LightStatus) statusResponse)
-                    .onErrorResumeNext(throwable -> {
-                        return handleNetworkError(throwable);
-                    })
+             //       .onErrorResumeNext(throwable -> {
+             //           return handleNetworkError(throwable);
+             //       })
+                    .doOnError(throwable -> handleNetworkError(throwable))
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
+                            .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
         }
 
         return lightService.setColour(networkDetails.getBaseURL1(),
@@ -393,11 +399,12 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-                .onErrorResumeNext(throwable -> {
-                    return handleNetworkError(throwable);
-                })
+              //  .onErrorResumeNext(throwable -> {
+            //        return handleNetworkError(throwable);
+            //    })
+                .doOnError(throwable -> handleNetworkError(throwable))
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new ServerErrorEventSubscriber<>(eventBus)));
+                        .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
     }
 
     @NonNull
@@ -408,8 +415,9 @@ class LightControlImpl implements LightControl {
                     networkDetails.getBaseURL2(),
                     NetworkConstants.URL_ALL,
                     authorisation())
+                   // .doOnError(throwable -> handleNetworkError(throwable))
                     .onErrorResumeNext(throwable -> {
-                        return handleNetworkError(throwable);
+                       return handleNetworkError(throwable);
                     })
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)
@@ -426,30 +434,38 @@ class LightControlImpl implements LightControl {
         // getLight the response parsing
         if (throwable instanceof RetrofitError) {
             RetrofitError error = (RetrofitError) throwable;
-            ErrorResponse response = (ErrorResponse) error.getBody();
 
-            Exception exception;
-
-            switch (error.getResponse().getStatus()) {
-                case 401:
-                case 404:
-                case 408:
-                case 422:
-                case 426:
-                case 429:
-                    exception = new WifiLightServerException();
+            Exception exception = null;
+            switch(error.getKind()) {
+                case NETWORK:
+                    exception = new WifiLightNetworkException();
                     break;
-                case 500:
-                case 502:
-                case 503:
-                case 523:
+                case HTTP:
+                    ErrorResponse response = (ErrorResponse) error.getBodyAs(ErrorResponse.class);
+                    switch (error.getResponse().getStatus()) {
+                        case 401:
+                        case 404:
+                        case 408:
+                        case 422:
+                        case 426:
+                        case 429:
+                            exception = new WifiLightAPIException(error.getResponse().getReason(), response);
+                            break;
+                        case 500:
+                        case 502:
+                        case 503:
+                        case 523:
+                        default:
+                            exception = new WifiLightServerException(error.getResponse().getReason(), response);
+                            break;
+                    }
+                    break;
+                case CONVERSION:
+                case UNEXPECTED:
                 default:
-                    exception = new WifiLightAPIException();
+                    exception = new WifiLightException();
                     break;
             }
-
-            eventBus.postMessage((new ErrorEvent(exception)))
-                    .subscribe(new ErrorSubscriber<>());
 
             return Observable.error(exception);
         } else {

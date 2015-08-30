@@ -6,8 +6,9 @@ package com.giganticsheep.wifilight.api.network.error;
  * (*_*)
  */
 public class WifiLightAPIException extends WifiLightException {
-    public WifiLightAPIException(final WifiLightError error) {
-        super(error);
+    public WifiLightAPIException(final String reason,
+                                 final WifiLightError error) {
+        super(reason, error);
     }
 
     public WifiLightAPIException() {

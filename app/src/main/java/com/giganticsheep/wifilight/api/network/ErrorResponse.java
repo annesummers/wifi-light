@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.api.network;
 import com.giganticsheep.wifilight.api.network.error.WifiLightError;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +36,10 @@ public class ErrorResponse implements
 
     @Override
     public List<String> getErrors() {
-        return errors.color;
+        if(errors != null) {
+            return errors.color;
+        }
+
+        return new ArrayList<>();
     }
 }

@@ -7,7 +7,7 @@ import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.api.network.ServerErrorEventSubscriber;
+import com.giganticsheep.wifilight.api.network.NetworkErrorEventSubscriber;
 import com.giganticsheep.wifilight.base.ErrorEvent;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
@@ -210,7 +210,7 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         void inject(final LightPresenterBase lightPresenter);
     }
 
-    public class SetLightSubscriber extends ServerErrorEventSubscriber<LightStatus> {
+    public class SetLightSubscriber extends NetworkErrorEventSubscriber<LightStatus> {
 
         public SetLightSubscriber() {
             super(eventBus);

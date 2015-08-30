@@ -2,7 +2,7 @@ package com.giganticsheep.wifilight.ui.control;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.network.ServerErrorEventSubscriber;
+import com.giganticsheep.wifilight.api.network.NetworkErrorEventSubscriber;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 
 import hugo.weaving.DebugLog;
@@ -26,6 +26,6 @@ public class LightControlPresenter extends LightPresenterBase {
             getView().showLoading();
         }
 
-        subscribe(lightControl.fetchLightNetwork(), new ServerErrorEventSubscriber<>(eventBus));
+        subscribe(lightControl.fetchLightNetwork(), new NetworkErrorEventSubscriber<>(eventBus));
     }
 }
