@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.base.dagger;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
 
 import timber.log.Timber;
 
@@ -14,4 +15,5 @@ public interface WifiLightGraph {
     EventBus eventBus();
     FragmentFactory fragmentFactory();
     Timber.Tree tree();
+    ErrorStrings errorStrings();
 }

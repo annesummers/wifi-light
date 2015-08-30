@@ -1,4 +1,6 @@
-package com.giganticsheep.wifilight.api.network.error;
+package com.giganticsheep.wifilight.base.error;
+
+import hugo.weaving.DebugLog;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -6,6 +8,7 @@ package com.giganticsheep.wifilight.api.network.error;
  * (*_*)
  */
 public class WifiLightException extends Exception {
+
     private String errorString = "";
     private WifiLightError error;
 
@@ -17,19 +20,22 @@ public class WifiLightException extends Exception {
 
     public WifiLightException() { }
 
+    @DebugLog
     @Override
     public String getMessage() {
-        String errors = "";
+        StringBuilder stringErrors = new StringBuilder();
 
         if(error != null) {
             for (String s : error.getErrors()) {
-                errors += " ";
-                errors += s;
+                stringErrors.append(" ");
+                stringErrors.append(s);
             }
 
-            return errorString + " " + error.getMessage() + errors;
+            stringErrors.insert(0, error.getMessage());
+            stringErrors.insert(0, ": ");
+            stringErrors.insert(0, errorString);
         }
 
-        return errors;
+        return stringErrors.toString();
     }
 }

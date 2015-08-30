@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.base;
+package com.giganticsheep.wifilight.base.error;
 
 /**
  * DESCRIPTION HERE ANNE <p>

@@ -1,5 +1,8 @@
 package com.giganticsheep.wifilight.api.network.error;
 
+import com.giganticsheep.wifilight.base.error.WifiLightError;
+import com.giganticsheep.wifilight.base.error.WifiLightException;
+
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 30/07/15. <p>

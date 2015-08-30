@@ -60,4 +60,9 @@
     <string name="preference_key_show_details">preference_show_details</string>
     <string name="preference_summary_show_details">Show light details.</string>
 
+    <string name="error_api_error">A bug needs fixing.</string>
+    <string name="error_server_error">A server error has occurred.  Pleas try again later.</string>
+    <string name="error_network_error">A network error has occurred.  Please check your network connection and try again.</string>
+    <string name="error_general_error">An error has occurred.</string>
+
 </resources>

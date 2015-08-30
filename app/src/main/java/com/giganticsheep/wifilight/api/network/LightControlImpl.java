@@ -14,13 +14,14 @@ import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.api.network.error.WifiLightAPIException;
-import com.giganticsheep.wifilight.api.network.error.WifiLightException;
+import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
+import com.giganticsheep.wifilight.base.error.WifiLightException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightNetworkException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightServerException;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,8 @@ import timber.log.Timber;
 
 @ApplicationScope
 class LightControlImpl implements LightControl {
+
+    private final ErrorSubscriber errorSubscriber;
 
     @Nullable
     @SuppressWarnings("FieldNotUsedInToString")
@@ -73,6 +76,7 @@ class LightControlImpl implements LightControl {
     public LightControlImpl(@NonNull final NetworkDetails networkDetails,
                             @NonNull final LightService lightService,
                             @NonNull final EventBus eventBus,
+                            @NonNull final ErrorStrings errorStrings,
                             @IOScheduler final Scheduler ioScheduler,
                             @UIScheduler final Scheduler uiScheduler) {
         this.lightService = lightService;
@@ -81,7 +85,9 @@ class LightControlImpl implements LightControl {
         this.ioScheduler = ioScheduler;
         this.uiScheduler = uiScheduler;
 
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
+        this.errorSubscriber = new ErrorSubscriber(eventBus, errorStrings);
+
+        eventBus.registerForEvents(this).subscribe(errorSubscriber);
     }
 
     @NonNull
@@ -119,12 +125,11 @@ class LightControlImpl implements LightControl {
                     currentSelector.toString(),
                     authorisation(), "")
                     .map(statusResponse -> (LightStatus) statusResponse)
-              //      .onErrorResumeNext(throwable -> {
-                //        return handleNetworkError(throwable);
-                //    })
-                    .doOnError(throwable -> handleNetworkError(throwable))
+                    .onErrorResumeNext(throwable -> {
+                        return handleNetworkError(throwable);
+                    })
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
+                            .subscribe(errorSubscriber));
         }
 
         return lightService.togglePower(
@@ -141,12 +146,11 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-              //  .onErrorResumeNext(throwable -> {
-              //      return handleNetworkError(throwable);
-              //  })
-                .doOnError(throwable -> handleNetworkError(throwable))
+                .onErrorResumeNext(throwable -> {
+                    return handleNetworkError(throwable);
+                })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
+                        .subscribe(errorSubscriber));
     }
 
     @DebugLog
@@ -169,12 +173,11 @@ class LightControlImpl implements LightControl {
                     authorisation(),
                     queryMap)
                     .map(statusResponse -> (LightStatus) statusResponse)
-                  //  .onErrorResumeNext(throwable -> {
-                 //       return handleNetworkError(throwable);
-                  //  })
-                    .doOnError(throwable -> handleNetworkError(throwable))
+                    .onErrorResumeNext(throwable -> {
+                        return handleNetworkError(throwable);
+                    })
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
+                            .subscribe(errorSubscriber));
         }
 
         return lightService.setPower(
@@ -192,12 +195,11 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-              //  .onErrorResumeNext(throwable -> {
-             //       return handleNetworkError(throwable);
-             //   })
-                .doOnError(throwable -> handleNetworkError(throwable))
+                .onErrorResumeNext(throwable -> {
+                    return handleNetworkError(throwable);
+                })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
+                        .subscribe(errorSubscriber));
     }
 
     @DebugLog
@@ -317,7 +319,7 @@ class LightControlImpl implements LightControl {
             return lightNetwork;
         })
         .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(lightNetwork))
-                .subscribe(new ErrorSubscriber<>()));
+                .subscribe(errorSubscriber));
     }
 
     @DebugLog
@@ -377,12 +379,11 @@ class LightControlImpl implements LightControl {
                     authorisation(),
                     queryMap)
                     .map(statusResponse -> (LightStatus) statusResponse)
-             //       .onErrorResumeNext(throwable -> {
-             //           return handleNetworkError(throwable);
-             //       })
-                    .doOnError(throwable -> handleNetworkError(throwable))
+                    .onErrorResumeNext(throwable -> {
+                        return handleNetworkError(throwable);
+                    })
                     .doOnCompleted(() -> fetchLightNetwork()
-                            .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
+                            .subscribe(errorSubscriber));
         }
 
         return lightService.setColour(networkDetails.getBaseURL1(),
@@ -399,12 +400,11 @@ class LightControlImpl implements LightControl {
 
                     return Observable.merge(observables);
                 })
-              //  .onErrorResumeNext(throwable -> {
-            //        return handleNetworkError(throwable);
-            //    })
-                .doOnError(throwable -> handleNetworkError(throwable))
+                .onErrorResumeNext(throwable -> {
+                    return handleNetworkError(throwable);
+                })
                 .doOnCompleted(() -> fetchLightNetwork()
-                        .subscribe(new NetworkErrorEventSubscriber<>(eventBus)));
+                        .subscribe(errorSubscriber));
     }
 
     @NonNull
@@ -415,7 +415,6 @@ class LightControlImpl implements LightControl {
                     networkDetails.getBaseURL2(),
                     NetworkConstants.URL_ALL,
                     authorisation())
-                   // .doOnError(throwable -> handleNetworkError(throwable))
                     .onErrorResumeNext(throwable -> {
                        return handleNetworkError(throwable);
                     })
@@ -431,7 +430,6 @@ class LightControlImpl implements LightControl {
 
     @NonNull
     private Observable handleNetworkError(Throwable throwable) {
-        // getLight the response parsing
         if (throwable instanceof RetrofitError) {
             RetrofitError error = (RetrofitError) throwable;
 

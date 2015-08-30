@@ -2,27 +2,20 @@ package com.giganticsheep.wifilight.ui.base.light;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.api.network.NetworkErrorEventSubscriber;
-import com.giganticsheep.wifilight.base.ErrorEvent;
-import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.error.ErrorEvent;
+import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
+import com.giganticsheep.wifilight.ui.base.PresenterBase;
 import com.giganticsheep.wifilight.util.Constants;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
-import javax.inject.Inject;
 
 import hugo.weaving.DebugLog;
-import rx.Observable;
 import rx.Subscriber;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Base class for all the Presenters that show information about a Light.<p>
@@ -31,13 +24,7 @@ import rx.subscriptions.CompositeSubscription;
  *
  * (*_*)
  */
-public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
-
-    @NonNull
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-    @Inject protected EventBus eventBus;
-    @Inject public LightControl lightControl;
+public abstract class LightPresenterBase extends PresenterBase<LightView> {
 
     /**
      * Constructs the LightPresenterBase object.  Injects itself into the supplied Injector.
@@ -47,20 +34,6 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      */
     protected LightPresenterBase(@NonNull final Injector injector) {
         injector.inject(this);
-    }
-
-    @Override
-    public void attachView(LightView view) {
-        super.attachView(view);
-
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
-    }
-
-    @Override
-    public void detachView(boolean retainInstance) {
-        super.detachView(retainInstance);
-
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
     /**
@@ -94,9 +67,10 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
     }
 
     /**
-     * Called to provide common functionality for when the Light has changed.  Sets the Light
+     * Called to provide common functionality for when the {@link com.giganticsheep.wifilight.api.model.Light}
+     * has changed.  Sets the {@link com.giganticsheep.wifilight.api.model.Light}
      * in the associated view and calls to the view to show the correct screen depending on the
-     * status of the Light.
+     * status of the {@link com.giganticsheep.wifilight.api.model.Light}.
      *
      * @param light the new Light.
      */
@@ -115,11 +89,27 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         }
     }
 
+    /**
+     * Called to provide common functionality for when the {@link com.giganticsheep.wifilight.api.model.Group}
+     * has changed.  Sets the {@link com.giganticsheep.wifilight.api.model.Group}
+     * in the associated view and calls to the view to show the correct screen depending on the
+     * status of the {@link com.giganticsheep.wifilight.api.model.Group}.
+     *
+     * @param group the new group.
+     */
     @DebugLog
     public void handleGroupChanged(@NonNull final Group group) {
         // TODO show group
     }
 
+    /**
+     * Called to provide common functionality for when the {@link com.giganticsheep.wifilight.api.model.Location}
+     * has changed.  Sets the @link com.giganticsheep.wifilight.api.model.Location}
+     * in the associated view and calls to the view to show the correct screen depending on the
+     * status of the @link com.giganticsheep.wifilight.api.model.Location}.
+     *
+     * @param location the new location.
+     */
     @DebugLog
     public void handleLocationChanged(@NonNull final Location location) {
         // TODO show location
@@ -137,63 +127,29 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
      */
+    @DebugLog
     public void onEvent(@NonNull final LightChangedEvent event) {
         handleLightChanged(event.getLight());
     }
 
     /**
-     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Light} to display.
+     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Group} to display.
      *
-     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
+     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Group}.
      */
+    @DebugLog
     public void onEvent(@NonNull final GroupChangedEvent event) {
         handleGroupChanged(event.getGroup());
     }
 
     /**
-     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Light} to display.
+     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Location} to display.
      *
-     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
+     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
+    @DebugLog
     public void onEvent(@NonNull final LocationChangedEvent event) {
         handleLocationChanged(event.getLocation());
-    }
-
-    @DebugLog
-    public synchronized void onEvent(@NonNull ErrorEvent event) {
-        getView().showError(event.getError());
-    }
-
-    /**
-     * Called when the Presenter is destroyed; overridden to cleanup members and
-     * to unsubscribe from any services or events the Presenter may be subscribed to
-     */
-    public void onDestroy() {
-        compositeSubscription.unsubscribe();
-    }
-
-    /**
-     * Subscribes to observable with subscriber, retaining the resulting Subscription so
-     * when the Presenter is destroyed the Observable can be unsubscribed from.
-     *
-     * @param observable the Observable to subscribe to
-     * @param subscriber the Subscriber to subscribe with
-     * @param <T> the type the Observable is observing
-     */
-    protected <T> void subscribe(@NonNull final Observable<T> observable,
-                                 @NonNull final Subscriber<T> subscriber) {
-        compositeSubscription.add(observable.subscribe(subscriber));
-    }
-
-    /**
-     * Subscribes to observable with ErrorSubscriber, retaining the resulting Subscription so
-     * when the Presenter is destroyed the Observable can be unsubscribed from.
-     *
-     * @param observable the Observable to subscribe to
-     * @param <T> the type the Observable is observing
-     */
-    private <T> void subscribe(@NonNull final Observable<T> observable) {
-        subscribe(observable, new ErrorSubscriber<T>());
     }
 
     /**
@@ -210,10 +166,10 @@ public abstract class LightPresenterBase extends MvpBasePresenter<LightView> {
         void inject(final LightPresenterBase lightPresenter);
     }
 
-    public class SetLightSubscriber extends NetworkErrorEventSubscriber<LightStatus> {
+    public class SetLightSubscriber extends ErrorSubscriber<LightStatus> {
 
         public SetLightSubscriber() {
-            super(eventBus);
+            super(eventBus, errorStrings);
         }
 
         @Override

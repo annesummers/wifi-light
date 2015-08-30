@@ -10,12 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
+import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
+
+import javax.inject.Inject;
 
 import hugo.weaving.DebugLog;
 import icepick.Icicle;
@@ -51,6 +55,9 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
 
     private LayoutInflater layoutInflater;
     private FragmentAttachmentDetails attachmentDetails;
+
+    @Inject protected EventBus eventBus;
+    @Inject protected ErrorStrings errorStrings;
 
     /**
      * Creates the named Fragment.
@@ -242,7 +249,7 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
-        subscribe(observable, new ErrorSubscriber<T>());
+        subscribe(observable, new ErrorSubscriber<T>(eventBus, errorStrings));
     }
 
     private void doAttachToActivity(@NonNull final ActivityBase activity) {

@@ -6,49 +6,29 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.base.ErrorEvent;
-import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
-import javax.inject.Inject;
+import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
 import hugo.weaving.DebugLog;
-import rx.Observable;
 import rx.Subscriber;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 24/07/15. <p>
  * (*_*)
  */
-public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
-
-    @NonNull
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-    @Inject EventBus eventBus;
-    @Inject LightControl lightControl;
+public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
 
     private int locationPosition;
     private int groupPosition;
     private int lightPosition;
 
+    @DebugLog
     public LightNetworkPresenter(@NonNull final Injector injector) {
         injector.inject(this);
-
-        eventBus.registerForEvents(this).subscribe(new ErrorSubscriber<>());
-    }
-
-    @DebugLog
-    public void onDestroy() {
-        compositeSubscription.unsubscribe();
-
-        eventBus.unregisterForEvents(this).subscribe(new ErrorSubscriber<>());
     }
 
     /**
@@ -66,12 +46,12 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(@NonNull final Throwable e) {
                 subscribe(eventBus.postMessage(new ErrorEvent(e)));
             }
 
             @Override
-            public void onNext(Light light) {
+            public void onNext(@NonNull final Light light) {
                 subscribe(eventBus.postMessage(new LightChangedEvent(light)));
             }
         });
@@ -83,6 +63,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param groupId the id of the group to fetch.
      */
+    @DebugLog
     public void fetchGroup(final String groupId) {
         subscribe(lightControl.fetchGroup(groupId), new Subscriber<Group>() {
 
@@ -90,12 +71,12 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
             public void onCompleted() { }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(@NonNull final Throwable e) {
                 subscribe(eventBus.postMessage(new ErrorEvent(e)));
             }
 
             @Override
-            public void onNext(Group group) {
+            public void onNext(@NonNull final Group group) {
                 subscribe(eventBus.postMessage(new GroupChangedEvent(group)));
             }
         });
@@ -107,6 +88,7 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      *
      * @param locationId the id of the group to fetch.
      */
+    @DebugLog
     public void fetchLocation(final String locationId) {
         subscribe(lightControl.fetchLocation(locationId), new Subscriber<Location>() {
 
@@ -114,17 +96,18 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
             public void onCompleted() { }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(@NonNull final Throwable e) {
                 subscribe(eventBus.postMessage(new ErrorEvent(e)));
             }
 
             @Override
-            public void onNext(Location location) {
+            public void onNext(@NonNull final Location location) {
                 subscribe(eventBus.postMessage(new LocationChangedEvent(location)));
             }
         });
     }
 
+    @DebugLog
     public void setPosition(final int locationPosition,
                             final int groupPosition,
                             final int lightPosition) {
@@ -139,37 +122,8 @@ public class LightNetworkPresenter extends MvpBasePresenter<LightNetworkView> {
      * @param event a FetchLightsEvent
      */
     @DebugLog
-    public synchronized void onEvent(@NonNull LightControl.FetchLightNetworkEvent event) {
+    public synchronized void onEvent(@NonNull final LightControl.FetchLightNetworkEvent event) {
         getView().showLightNetwork(event.lightNetwork(), locationPosition, groupPosition, lightPosition);
-    }
-
-    @DebugLog
-    public synchronized void onEvent(@NonNull ErrorEvent event) {
-        getView().showError(event.getError());
-    }
-
-    /**
-     * Subscribes to observable with subscriber, retaining the resulting Subscription so
-     * when the Presenter is destroyed the Observable can be unsubscribed from.
-     *
-     * @param observable the Observable to subscribe to
-     * @param subscriber the Subscriber to subscribe with
-     * @param <T> the type the Observable is observing
-     */
-    private <T> void subscribe(@NonNull final Observable<T> observable,
-                               @NonNull final Subscriber<T> subscriber) {
-        compositeSubscription.add(observable.subscribe(subscriber));
-    }
-
-    /**
-     * Subscribes to observable with ErrorSubscriber, retaining the resulting Subscription so
-     * when the Presenter is destroyed the Observable can be unsubscribed from.
-     *
-     * @param observable the Observable to subscribe to
-     * @param <T> the type the Observable is observing
-     */
-    private <T> void subscribe(@NonNull final Observable<T> observable) {
-        subscribe(observable, new ErrorSubscriber<T>());
     }
 
     /**

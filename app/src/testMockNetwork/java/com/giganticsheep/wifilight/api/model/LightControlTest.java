@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.network.error.WifiLightException;
+import com.giganticsheep.wifilight.base.error.WifiLightException;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.util.Constants;
 
