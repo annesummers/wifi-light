@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.api.network.error;
+package com.giganticsheep.wifilight.base.error;
 
 import java.util.List;
 
@@ -9,7 +9,6 @@ import java.util.List;
  */
 public interface WifiLightError {
 
-    int getHttpCode();
     String getMessage();
     List<String> getErrors();
 }

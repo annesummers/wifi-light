@@ -27,6 +27,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
+import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
@@ -35,7 +36,6 @@ import com.giganticsheep.wifilight.ui.base.light.LightViewState;
 import com.giganticsheep.wifilight.ui.control.network.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.giganticsheep.wifilight.util.Constants;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -105,8 +105,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             Timber.d("here");
         }
 
-        eventBus.registerForEvents(this)
-                .subscribe(new ErrorSubscriber<>());
+        subscribe(eventBus.registerForEvents(this), new SilentErrorSubscriber());
     }
 
     @DebugLog
@@ -211,8 +210,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     protected void onDestroy() {
         super.onDestroy();
 
-        eventBus.unregisterForEvents(this)
-                .subscribe(new ErrorSubscriber<>());
+        subscribe(eventBus.unregisterForEvents(this), new SilentErrorSubscriber());
 
         if(errorDialog != null) {
             errorDialog.dismiss();

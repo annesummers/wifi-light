@@ -26,6 +26,7 @@ public class NetworkModule {
                                 @NonNull MockLightService lightService) {
         MockRestAdapter mockRestAdapter = MockRestAdapter.from(restAdapter);
         mockRestAdapter.setErrorPercentage(100);
+        mockRestAdapter.setVariancePercentage(100);
         return mockRestAdapter.create(LightService.class, lightService);
     }
 

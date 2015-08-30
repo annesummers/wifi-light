@@ -9,6 +9,7 @@ import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.SchedulersModule;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.base.dagger.WifiLightModule;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
 
 import dagger.Module;
 import dagger.Provides;
@@ -32,10 +33,12 @@ public class LightControlModule {
                                      LightService lightService,
                                      EventBus eventBus,
                                      @IOScheduler Scheduler ioScheduler,
-                                     @UIScheduler Scheduler uiScheduler) {
+                                     @UIScheduler Scheduler uiScheduler,
+                                     ErrorStrings errorStrings) {
         return new LightControlImpl(networkDetails,
                 lightService,
                 eventBus,
+                errorStrings,
                 ioScheduler,
                 uiScheduler);
     }

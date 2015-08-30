@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
-import com.giganticsheep.wifilight.base.ErrorEvent;
+import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.control.PresenterTestBase;
 import com.giganticsheep.wifilight.util.Constants;

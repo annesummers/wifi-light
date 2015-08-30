@@ -33,10 +33,10 @@ class StatusPresenter extends LightPresenterBase {
      */
     @DebugLog
     public void setPower(boolean isOn) {
-        if(isOn /*&& light != null && light.getPower() != LightControl.Power.ON*/) {
+        if(isOn) {
             subscribe(lightControl.setPower(LightControl.Power.ON, LightControlActivity.DEFAULT_DURATION),
                     new SetLightSubscriber());
-        } else if(!isOn /*&& light != null && light.getPower() != LightControl.Power.OFF*/){
+        } else if(!isOn){
             subscribe(lightControl.setPower(LightControl.Power.OFF, LightControlActivity.DEFAULT_DURATION),
                     new SetLightSubscriber());
         }

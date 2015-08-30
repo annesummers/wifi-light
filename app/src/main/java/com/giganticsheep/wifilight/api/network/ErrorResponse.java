@@ -1,8 +1,8 @@
 package com.giganticsheep.wifilight.api.network;
 
-import com.giganticsheep.wifilight.api.network.error.WifiLightError;
-import com.google.gson.annotations.SerializedName;
+import com.giganticsheep.wifilight.base.error.WifiLightError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,22 +10,13 @@ import java.util.List;
  * Created by anne on 30/07/15. <p>
  * (*_*)
  */
-public class ErrorResponse implements
-        WifiLightError {
-    @SerializedName("cod")
-    int httpCode;
+public class ErrorResponse implements WifiLightError {
 
-    // error fields
     String message;
     Errors errors;
 
     class Errors {
         List<String> color;
-    }
-
-    @Override
-    public int getHttpCode() {
-        return httpCode;
     }
 
     @Override
@@ -35,6 +26,10 @@ public class ErrorResponse implements
 
     @Override
     public List<String> getErrors() {
-        return errors.color;
+        if(errors != null) {
+            return errors.color;
+        }
+
+        return new ArrayList<>();
     }
 }

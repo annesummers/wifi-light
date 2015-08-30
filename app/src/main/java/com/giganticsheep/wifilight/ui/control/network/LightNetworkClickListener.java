@@ -7,9 +7,9 @@ import android.widget.ExpandableListView;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.util.Constants;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -70,14 +70,14 @@ class LightNetworkClickListener {
     }
 
     private void closeDrawer() {
-        eventBus.postMessage(new LightControlActivity.CloseDrawerEvent())
-                .subscribe(new ErrorSubscriber<>());
+        presenter.subscribe(eventBus.postMessage(
+                new LightControlActivity.CloseDrawerEvent()));
     }
 
     private void selectorChanged(@NonNull final LightSelector.SelectorType type,
                                    @Nullable final String id) {
-        eventBus.postMessage(new LightControl.LightSelectorChangedEvent(new LightSelector(type, id)))
-                .subscribe(new ErrorSubscriber<>());
+        presenter.subscribe(eventBus.postMessage(
+                new LightControl.LightSelectorChangedEvent(new LightSelector(type, id))));
     }
 
     /**

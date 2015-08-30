@@ -12,7 +12,8 @@ import android.widget.Toast;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
-import com.giganticsheep.wifilight.util.ErrorSubscriber;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
+import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
@@ -47,6 +48,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
     @Inject protected FragmentFactory fragmentFactory;
     @Inject protected EventBus eventBus;
+    @Inject protected ErrorStrings errorStrings;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -258,8 +260,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param subscriber the Subscriber to subscribe with
      * @param <T> the type the Observable is observing
      */
-    private <T> void subscribe(@NonNull final Observable<T> observable,
-                               @NonNull final Subscriber<T> subscriber) {
+    protected <T> void subscribe(@NonNull final Observable<T> observable,
+                                 @NonNull final Subscriber<T> subscriber) {
         compositeSubscription.add(observable.subscribe(subscriber));
     }
 
@@ -271,7 +273,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param <T> the type the Observable is observing
      */
     protected <T> void subscribe(@NonNull final Observable<T> observable) {
-        subscribe(observable, new ErrorSubscriber<T>());
+        subscribe(observable, new ErrorSubscriber(eventBus, errorStrings));
     }
 
     private ActivityLayout activityLayout() {
