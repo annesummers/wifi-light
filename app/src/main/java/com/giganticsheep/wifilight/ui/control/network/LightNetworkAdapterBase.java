@@ -16,11 +16,9 @@ import hugo.weaving.DebugLog;
  */
 public abstract class LightNetworkAdapterBase extends BaseExpandableListAdapter {
 
-    // TODO test adapters
     protected final Injector injector;
 
-    @Inject
-    LightNetworkDrawerFragment fragment;
+    @Inject LightNetworkDrawerFragment fragment;
 
     protected LightNetwork lightNetwork = new LightNetwork();
 
