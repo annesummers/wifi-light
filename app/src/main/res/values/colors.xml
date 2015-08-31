@@ -3,8 +3,6 @@
 
     <color name="tab_background">@color/primary_dark</color>
     <color name="tab_selected">@color/primary</color>
-    <color name="tab_text">@color/text_secondary</color>
-    <color name="tab_text_selected">@color/text_primary</color>
 
     <color name="background_primary">#DEDEDE</color>
     <color name="background_secondary">#767676</color>
@@ -14,7 +12,8 @@
 
     <color name="text_primary">#454545</color>
     <color name="text_primary_selected">@color/text_secondary</color>
-    <color name="text_secondary">#EFEFEF</color>
+    <color name="text_secondary">#757474</color>
+    <color name="text_tertiary">#EFEFEF</color>
 
     <color name="text_hint">@color/text_primary</color>
     <color name="text_hint_inverse">@color/text_secondary</color>

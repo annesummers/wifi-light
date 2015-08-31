@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/drawer_textview"
-        android:background="@color/text_secondary"/>
+        android:background="@color/background_title"/>
 
     <ImageView
         android:id="@+id/divider2"

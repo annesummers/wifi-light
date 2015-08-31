@@ -17,6 +17,7 @@
 
         <item name="android:textAppearance">@style/Theme.WifiLight.Text</item>
         <item name="android:colorBackground">@color/background_primary</item>
+
     </style>
 
 </resources>

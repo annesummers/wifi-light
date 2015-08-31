@@ -47,9 +47,9 @@
     <string name="preferences_header_title_server">Server Preferences</string>
     <string name="preferences_header_summary_server">Set the server that controls the lights.</string>
     <string name="preference_title_api_key">API key</string>
-    <string name="preference_summary_api_key">The API key.</string>
+    <string name="preference_summary_api_key">Set the API key for the light network you want to control.</string>
     <string name="preference_title_server">Server Name</string>
-    <string name="preference_summary_server">The light server to connect to.</string>
+    <string name="preference_summary_server">The LIFX light server to connect to.</string>
 
     <string name="default_server">https://api.lifx.co</string>
     <string name="default_url1">v1beta1</string>
@@ -58,7 +58,7 @@
     <string name="preferences_header_title_app">App Preferences</string>
     <string name="preference_title_show_details">Show Light Details</string>
     <string name="preference_key_show_details">preference_show_details</string>
-    <string name="preference_summary_show_details">Show light details.</string>
+    <string name="preference_summary_show_details">Show details of the lights.</string>
 
     <string name="error_api_error">A bug needs fixing.</string>
     <string name="error_server_error">A server error has occurred.  Pleas try again later.</string>

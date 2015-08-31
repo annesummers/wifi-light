@@ -150,16 +150,6 @@ public class WifiPreferenceActivity extends PreferenceActivity {
         return delegate;
     }
 
-    /**
-     * Populate the activity with the top-level headers.
-     *
-     * @param target
-     */
-  //  @Override
-  //  public void onBuildHeaders(List<Header> target) {
-   //     loadHeadersFromResource(R.xml.preference_headers, target);
-  //  }
-
     public WifiPreferenceActivityComponent getComponent() {
         return component;
     }
@@ -183,7 +173,7 @@ public class WifiPreferenceActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            addPreferencesFromResource(R.xml.preferences_server);
+            addPreferencesFromResource(R.xml.preferences_main);
         }
 
         @Override
@@ -191,14 +181,6 @@ public class WifiPreferenceActivity extends PreferenceActivity {
             super.onAttach(activity);
 
             getPreferenceActivity().getComponent().inject(this);
-
-         //   String preference_api_key = getString(R.string.preference_key_api_key);
-
-            //EditTextPreference editTextPreference = (EditTextPreference) findPreference(preference_api_key);
-          //  if(editTextPreference.getEditText() == null) {
-          //      String key = preferences.getString(preference_api_key, getString(R.string.default_api_key));
-          //      editTextPreference.setText(key);
-          //  }
         }
 
         private WifiPreferenceActivity getPreferenceActivity() {

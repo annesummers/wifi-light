@@ -1,5 +1,7 @@
 package com.giganticsheep.wifilight.ui.base;
 
+import android.support.v4.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -49,6 +51,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     @Inject protected FragmentFactory fragmentFactory;
     @Inject protected EventBus eventBus;
     @Inject protected ErrorStrings errorStrings;
+    @Inject protected SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -173,6 +176,16 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         }
     }
 
+    @DebugLog
+    protected final void detachFragment(@NonNull String name) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(name);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.detach(fragment);
+        transaction.commit();
+    }
+
     /**
      * First looks for an existing Fragment and if it lightExists, attaches that to this Activity.
      * If one is not found, calls attachNewFragment to attach a new Fragment.
@@ -188,7 +201,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
             attachNewFragment(attachmentDetails);
         } else {
             if (fragmentsResumed()) {
-                fragment.attachToActivity(ActivityBase.this, attachmentDetails);
+                fragment.attachToActivity(this, attachmentDetails);
             } else {
                 queueFragmentForAttachment(fragment, attachmentDetails);
             }

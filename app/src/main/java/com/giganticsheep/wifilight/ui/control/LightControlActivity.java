@@ -87,6 +87,8 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     private TextView title;
 
+    private boolean showDetailsFragment;
+
     // Views
 
     @DebugLog
@@ -99,7 +101,13 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
         if (savedInstanceState == null) {
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0, false));
-            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1, false));
+
+            showDetailsFragment = sharedPreferences.getBoolean(getString(R.string.preference_key_show_details), false);
+
+            if(showDetailsFragment) {
+                attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1, false));
+            }
+
             attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 2, false));
         } else {
             Timber.d("here");
@@ -117,6 +125,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         title = (TextView) toolbar.findViewById(R.id.title_textview);
 
@@ -169,6 +178,15 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         super.onPostCreate(savedInstanceState);
 
         getPresenter().fetchLightNetwork();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(showDetailsFragment && !sharedPreferences.getBoolean(getString(R.string.preference_key_show_details), false)) {
+            detachFragment(getString(R.string.fragment_name_light_details));
+        }
     }
 
     @Override
@@ -302,7 +320,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         lightLayout.setVisibility(View.VISIBLE);
         loadingLayout.setVisibility(View.VISIBLE);
 
-        //setDrawerState(false);
+        setDrawerState(false);
     }
 
     private void setDrawerState(boolean isEnabled) {
