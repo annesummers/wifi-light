@@ -45,6 +45,8 @@ public class WifiPreferenceActivity extends PreferenceActivity {
 
         super.onCreate(savedInstanceState);
 
+        overridePendingTransition(R.anim.pull_in_from_left, R.anim.hold);
+
         WifiLightApplication application = ((WifiLightApplication)getApplication());
 
         component = DaggerWifiPreferenceActivityComponent.builder()
@@ -115,6 +117,12 @@ public class WifiPreferenceActivity extends PreferenceActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         getDelegate().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(R.anim.hold, R.anim.push_out_to_left);
     }
 
     @Override
