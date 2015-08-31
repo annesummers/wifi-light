@@ -11,7 +11,7 @@
     <color name="half_grey">#88898989</color>
 
     <color name="text_primary">#454545</color>
-    <color name="text_primary_selected">@color/text_secondary</color>
+    <color name="text_primary_selected">@color/text_tertiary</color>
     <color name="text_secondary">#757474</color>
     <color name="text_tertiary">#EFEFEF</color>
 

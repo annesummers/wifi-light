@@ -2,7 +2,9 @@
 <resources>
     <style name="Theme.WifiLight" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/background_primary</item>
-        <item name="actionBarStyle">@style/Theme.WifiLight.ActionBar</item>
+
+        <item name="android:actionMenuTextAppearance">@style/Theme.WifiLight.Toolbar.PopupTextAppearance</item>
+        <item name="actionMenuTextAppearance">@style/Theme.WifiLight.Toolbar.PopupTextAppearance</item>
 
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
