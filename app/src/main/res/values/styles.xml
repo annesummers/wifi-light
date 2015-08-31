@@ -1,5 +1,4 @@
 <resources>
-
     <style name="Theme.WifiLight.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:background">?attr/colorPrimary</item>
@@ -10,6 +9,7 @@
         <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
         <item name="android:background">@color/tab_background</item>
         <item name="tabTextAppearance">@style/Theme.WifiLight.TabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/tab_text</item>
     </style>
 
     <style name="Theme.WifiLight.TabTextAppearance" parent="TextAppearance.Design.Tab">
@@ -41,4 +41,11 @@
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">50sp</item>
     </style>
+
+    <style name="Theme.WifiLight.Text" parent="TextAppearance.AppCompat">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="Theme.Wifilight.Settings" parent="@style/Theme.WifiLight" />
 </resources>
