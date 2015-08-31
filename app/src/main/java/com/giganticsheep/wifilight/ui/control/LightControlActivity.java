@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.control;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -147,21 +148,25 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                 toolbar,
                 R.string.action_drawer_open,
                 R.string.action_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
 
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                        super.onDrawerClosed(drawerView);
+                drawerToggle.setDrawerIndicatorEnabled(true);
+                drawerToggle.syncState();
 
-                        supportInvalidateOptionsMenu();
-                    }
+                supportInvalidateOptionsMenu();
+            }
 
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-                        super.onDrawerOpened(drawerView);
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
 
-                        supportInvalidateOptionsMenu();
-                    }
-                };
+                supportInvalidateOptionsMenu();
+            }
+        };
+
+        drawerLayout.setDrawerListener(drawerToggle);
 
         drawerLayout.post(() -> drawerToggle.syncState());
     }
@@ -223,6 +228,13 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         return true;
     }
 
+    @Override
+    public final void onConfigurationChanged(@NonNull final Configuration config) {
+        super.onConfigurationChanged(config);
+
+        drawerToggle.onConfigurationChanged(config);
+    }
+
     @DebugLog
     @Override
     protected void onDestroy() {
@@ -273,7 +285,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     public void onEvent(final CloseDrawerEvent event) {
-        drawerLayout.closeDrawer(drawerContainerLayout);
+        drawerLayout.closeDrawers();
     }
 
     // MVP

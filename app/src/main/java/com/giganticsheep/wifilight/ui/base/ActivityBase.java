@@ -89,7 +89,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     @Override
-    public final void onConfigurationChanged(@NonNull final Configuration config) {
+    public void onConfigurationChanged(@NonNull final Configuration config) {
         super.onConfigurationChanged(config);
 
         if(reinitialiseOnRotate() && config.orientation != orientation) {
