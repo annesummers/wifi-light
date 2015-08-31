@@ -137,18 +137,18 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
      *
      * The data for the entry is set via setViewData(ViewData viewData).
      */
-    private class LightViewHolder {
+    class LightViewHolder {
         private Light viewData;
 
-        private final TextView lightNameTextView;
-        private final ImageView lightStatusImageView;
+        final TextView lightNameTextView;
+        final ImageView lightStatusImageView;
 
-        public LightViewHolder(@NonNull View view) {
+        private LightViewHolder(@NonNull View view) {
             lightNameTextView = (TextView) view.findViewById(R.id.light_name);
             lightStatusImageView = (ImageView) view.findViewById(R.id.light_status);
         }
 
-        public void setViewData(@NonNull final Light viewData) {
+        private void setViewData(@NonNull final Light viewData) {
             this.viewData = viewData;
 
             lightNameTextView.setText(viewData.getLabel());
@@ -158,16 +158,16 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
         }
     }
 
-    private class GroupViewHolder {
+    class GroupViewHolder {
         private Group viewData;
 
-        private final TextView groupNameTextView;
+        final TextView groupNameTextView;
 
-        public GroupViewHolder(View view) {
+        private GroupViewHolder(View view) {
             groupNameTextView = (TextView) view.findViewById(R.id.group_name);
         }
 
-        public void setViewData(@NonNull final Group viewData) {
+        private void setViewData(@NonNull final Group viewData) {
             this.viewData = viewData;
 
             groupNameTextView.setText(viewData.getName());

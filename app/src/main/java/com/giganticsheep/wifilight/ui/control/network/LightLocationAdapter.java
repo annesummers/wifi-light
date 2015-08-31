@@ -147,10 +147,10 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
 
     }
 
-    private class GroupListViewHolder {
+    class GroupListViewHolder {
         private LightGroupAdapter viewData;
 
-        private final ExpandableListView groupListView;
+        final ExpandableListView groupListView;
 
         public GroupListViewHolder(@NonNull final View view,
                                    @NonNull final LightNetworkClickListener lightNetworkClickListener,
@@ -168,10 +168,10 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         }
     }
 
-    private class LocationViewHolder {
+    class LocationViewHolder {
         private Location viewData;
 
-        private final TextView locationNameTextView;
+        final TextView locationNameTextView;
 
         public LocationViewHolder(View view) {
             locationNameTextView = (TextView) view.findViewById(R.id.location_name);
