@@ -127,6 +127,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setElevation(2);
 
         title = (TextView) toolbar.findViewById(R.id.title_textview);
 

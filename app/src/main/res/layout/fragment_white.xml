@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-   <!-- <android.support.v7.widget.GridLayout
+   <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
@@ -31,9 +31,9 @@
             grid:layout_columnSpan="1"
             grid:layout_columnWeight="1"
             grid:layout_gravity="center_vertical"
-            android:max="@integer/light_slider_brightness_max" />-->
+            android:max="@integer/light_slider_brightness_max" />
 
-     <!--   <TextView
+     <TextView
             android:layout_width="wrap_content"
             grid:layout_row="1"
             grid:layout_rowSpan="1"
@@ -41,9 +41,9 @@
             grid:layout_columnSpan="1"
             grid:layout_gravity="center_vertical"
             android:text="@string/label_light_kelvin"
-            style="@style/Theme.WifiLight.TextView.Label1" />-->
+            style="@style/Theme.WifiLight.TextView.Label1" />
 
-        <!--<SeekBar
+      <SeekBar
             android:id="@+id/kelvin_seekbar"
             grid:layout_row="1"
             grid:layout_rowSpan="1"
@@ -51,9 +51,9 @@
             grid:layout_columnSpan="1"
             grid:layout_columnWeight="1"
             grid:layout_gravity="center_vertical"
-            android:max="@integer/light_slider_kelvin_max" />-->
-   <!-- </android.support.v7.widget.GridLayout>-->
-    <com.giganticsheep.wifilight.ui.base.light.BrightnessSeekBar
+            android:max="@integer/light_slider_kelvin_max" />
+</android.support.v7.widget.GridLayout>
+  <!--  <com.giganticsheep.wifilight.ui.base.light.BrightnessSeekBar
         android:id="@+id/brightness_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,5 +65,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/brightness_seekbar"
         android:layout_centerHorizontal="true"
-        android:padding="@dimen/default_padding" />
+        android:padding="@dimen/default_padding" /-->
 </RelativeLayout>

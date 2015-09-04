@@ -7,8 +7,6 @@ import android.widget.SeekBar;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
-import com.giganticsheep.wifilight.ui.base.light.BrightnessSeekBar;
-import com.giganticsheep.wifilight.ui.base.light.KelvinSeekBar;
 import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.base.light.LightSeekBarWrapper;
@@ -27,10 +25,8 @@ import hugo.weaving.DebugLog;
 @FragmentArgsInherited
 public class WhiteFragment extends LightFragmentBase {
 
-    @InjectView(R.id.brightness_seekbar)
-    BrightnessSeekBar brightnessSeekbar;
-    @InjectView(R.id.kelvin_seekbar)
-    KelvinSeekBar kelvinSeekBar;
+    @InjectView(R.id.brightness_seekbar) SeekBar brightnessSeekbar;
+    @InjectView(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
 
     public WhiteFragment() {
         super();
@@ -57,8 +53,8 @@ public class WhiteFragment extends LightFragmentBase {
     @DebugLog
     @Override
     protected void initialiseViews(@NonNull final View view) {
-        //brightnessSeekbar.setOnSeekBarChangeListener(seekBarChangeListener);
-       // kelvinSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        brightnessSeekbar.setOnSeekBarChangeListener(seekBarChangeListener);
+        kelvinSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
     @DebugLog

@@ -5,7 +5,7 @@
 
     <integer name="light_sliders_column_count">2</integer>
     <integer name="colour_sliders_row_count">3</integer>
-    <integer name="white_sliders_row_count">1</integer>
+    <integer name="white_sliders_row_count">2</integer>
 
     <integer name="light_slider_hue_max">360</integer>
     <integer name="light_slider_saturation_max">100</integer>
