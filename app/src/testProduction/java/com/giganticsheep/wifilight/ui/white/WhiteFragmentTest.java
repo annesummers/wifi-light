@@ -6,7 +6,6 @@ import android.widget.SeekBar;
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightConstants;
-import com.giganticsheep.wifilight.base.LightSeekBar;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.LightFragmentTestBase;
 
@@ -30,7 +29,7 @@ import static org.junit.Assert.assertThat;
 public class WhiteFragmentTest extends LightFragmentTestBase {
 
     private SeekBar brightnessSeekbar;
-    private LightSeekBar kelvinSeekbar;
+    private SeekBar kelvinSeekbar;
 
     @Before
     public void setUp() {
@@ -52,8 +51,8 @@ public class WhiteFragmentTest extends LightFragmentTestBase {
 
     @Override
     protected void assertViewsEnabled(final boolean enabled) {
-        //assertThat(brightnessSeekbar.isEnabled(), equalTo(enabled));
-        //assertThat(kelvinSeekbar.isEnabled(), equalTo(enabled));
+        assertThat(brightnessSeekbar.isEnabled(), equalTo(enabled));
+        assertThat(kelvinSeekbar.isEnabled(), equalTo(enabled));
     }
 
     @Test
@@ -66,6 +65,6 @@ public class WhiteFragmentTest extends LightFragmentTestBase {
         }
 
         assertThat(brightnessSeekbar.getProgress(), equalTo(LightConstants.convertBrightness(TestConstants.TEST_BRIGHTNESS_DOUBLE)));
-        //assertThat(kelvinSeekbar.getProgress(), equalTo(TestConstants.TEST_KELVIN - LightConstants.KELVIN_BASE));
+        assertThat(kelvinSeekbar.getProgress(), equalTo(TestConstants.TEST_KELVIN - LightConstants.KELVIN_BASE));
     }
 }

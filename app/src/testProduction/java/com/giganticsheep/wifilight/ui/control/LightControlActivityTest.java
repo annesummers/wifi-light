@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.network.test.MockLight;
+import com.giganticsheep.wifilight.ui.UITestBase;
 import com.giganticsheep.wifilight.ui.colour.ColourFragment;
 import com.giganticsheep.wifilight.ui.details.DetailsFragment;
 import com.giganticsheep.wifilight.ui.status.StatusFragment;
@@ -42,7 +43,11 @@ import static org.hamcrest.core.IsNull.nullValue;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 19)
-public class LightControlActivityTest {
+public class LightControlActivityTest extends UITestBase {
+
+    public LightControlActivityTest() {
+        super();
+    }
 
     private ActivityController<LightControlActivity> activityController;
 
@@ -189,7 +194,11 @@ public class LightControlActivityTest {
 
         FragmentManager fragmentManager  = activity.getSupportFragmentManager();
 
-        assertThat(fragmentManager.findFragmentById(R.id.container2), instanceOf(DetailsFragment.class));
+        if(sharedPreferences.getBoolean(activity.getString(R.string.preference_key_show_details), false)) {
+            assertThat(fragmentManager.findFragmentById(R.id.container2), instanceOf(DetailsFragment.class));
+        } else {
+            assertThat(fragmentManager.findFragmentById(R.id.container2), equalTo(null));
+        }
     }
 
     @Test

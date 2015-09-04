@@ -15,8 +15,7 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {WifiLightAppComponent.class},
-        modules = { TestUIModule.class,
-                    TestLightNetworkModule.class } )
+        modules = { TestLightNetworkModule.class } )
 public interface TestUIComponent extends TestLightNetworkGraph {
 
     void inject(UITestBase UITest);

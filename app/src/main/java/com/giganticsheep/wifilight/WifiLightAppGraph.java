@@ -9,6 +9,5 @@ import android.content.SharedPreferences;
 public interface WifiLightAppGraph {
     void inject(WifiLightApplication application);
 
-    WifiLightApplication application();
     SharedPreferences preferences();
 }

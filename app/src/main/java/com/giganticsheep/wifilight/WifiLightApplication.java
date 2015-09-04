@@ -73,7 +73,7 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
 
     @NonNull
     public String getServerURL() {
-        return preferences.getString(getString(R.string.preference_key_server), getResources().getString(R.string.default_server));
+        return preferences.getString(getString(R.string.preference_key_server), getString(R.string.default_server));
     }
 
     @NonNull
