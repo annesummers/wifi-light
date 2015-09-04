@@ -1,21 +1,25 @@
 package com.giganticsheep.wifilight.ui.base;
 
-import android.support.v4.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.ArrayMap;
 import android.widget.Toast;
 
+import com.avast.android.dialogs.fragment.SimpleDialogFragment;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
+import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
@@ -46,6 +50,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     private boolean fragmentsResumed = true;
     private int orientation;
 
+    private DialogFragment errorDialog;
+
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected FragmentFactory fragmentFactory;
@@ -68,7 +74,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
             if(fragments != null) {
                 for (Parcelable fragment : fragments) {
                     FragmentAttachmentDetails fragmentDetails = ((FragmentAttachmentDetails) fragment);
-                    attachedFragments.put(fragmentDetails.position(), fragmentDetails);
+                    attachedFragments.put(fragmentDetails.position, fragmentDetails);
                 }
             }
         }
@@ -119,6 +125,13 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     protected void onDestroy() {
         super.onDestroy();
 
+        if(errorDialog != null) {
+            new Handler().post(() -> {
+                errorDialog.dismiss();
+                errorDialog = null;
+            });
+        }
+
         compositeSubscription.unsubscribe();
     }
 
@@ -127,6 +140,17 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      */
     public final void showToast(final String message) {
         Toast.makeText(ActivityBase.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    public final void showErrorDialog(final Throwable throwable) {
+        if (errorDialog != null) {
+            errorDialog.dismiss();
+        }
+
+        errorDialog = SimpleDialogFragment.createBuilder(this, getSupportFragmentManager())
+                .setMessage(throwable.getMessage())
+                .setPositiveButtonText(android.R.string.ok)
+                .show();
     }
 
     /**
@@ -162,7 +186,11 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
         FragmentBase fragment;
 
         try {
-            fragment = FragmentBase.create(details.name(), fragmentFactory);
+            if(details.extra == Constants.INVALID) {
+                fragment = FragmentBase.create(details.name, fragmentFactory);
+            } else {
+                fragment = FragmentBase.create(details.name, details.extra, fragmentFactory);
+            }
 
             addFragment(details);
 
@@ -195,7 +223,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     private void attachFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(attachmentDetails.name());
+        FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(attachmentDetails.name);
 
         if(fragment == null) {
             attachNewFragment(attachmentDetails);
@@ -214,16 +242,16 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      * @param details the attachment details of the fragment
      */
     private void addFragment(@NonNull final FragmentAttachmentDetails details) {
-        if(attachedFragments.containsKey(details.position())) {
-            final String oldName = attachedFragments.get(details.position()).name();
-            if(oldName.equals(details.name())) {
+        if(attachedFragments.containsKey(details.position)) {
+            final String oldName = attachedFragments.get(details.position).name;
+            if(oldName.equals(details.name)) {
                 return;
             } else {
-                attachedFragments.remove(details.position());
+                attachedFragments.remove(details.position);
             }
         }
 
-        attachedFragments.put(details.position(), details);
+        attachedFragments.put(details.position, details);
     }
 
     /**
@@ -262,7 +290,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      */
     @NonNull
     protected FragmentBase findFragment(@NonNull final FragmentAttachmentDetails fragmentDetails) {
-        return findFragment(fragmentDetails.position());
+        return findFragment(fragmentDetails.position);
     }
 
     /**

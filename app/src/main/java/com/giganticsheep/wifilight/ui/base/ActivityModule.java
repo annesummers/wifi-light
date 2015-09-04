@@ -1,8 +1,6 @@
-package com.giganticsheep.wifilight.ui.control;
+package com.giganticsheep.wifilight.ui.base;
 
 import android.app.Activity;
-
-import com.giganticsheep.wifilight.ui.base.ActivityScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,11 +11,11 @@ import dagger.Provides;
  */
 
 @Module
-class LightControlActivityModule {
+public class ActivityModule {
 
     private final Activity activity;
 
-    LightControlActivityModule(Activity activity) {
+    public ActivityModule(Activity activity) {
         this.activity = activity;
     }
 

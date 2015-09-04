@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.control;
 
 import com.giganticsheep.wifilight.WifiLightAppComponent;
+import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
 import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
@@ -15,10 +16,7 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {WifiLightAppComponent.class},
-        modules = { LightControlActivityModule.class})//,
-                   // LightControlDrawerFragmentModule.class})
+        modules = { ActivityModule.class})
 public interface LightControlActivityComponent extends LightFragmentBase.Injector,
                                                         LightPresenterBase.Injector,
-                                                        LightControlActivity.Injector {
-   // void inject(LightControlActivity activity);
-}
+                                                        LightControlActivity.Injector { }

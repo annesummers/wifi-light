@@ -30,7 +30,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
     private int lightPosition;
 
     /**
-     * Sets the state to STATE_SHOW_LIGHT_NETWORK.
+     * Sets the state to STATE_SHOW_GROUP.
      */
     public void setShowLightNetwork(@NonNull final LightNetwork lightNetwork,
                                     final int locationPosition,

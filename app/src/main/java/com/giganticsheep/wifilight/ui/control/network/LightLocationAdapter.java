@@ -2,20 +2,14 @@ package com.giganticsheep.wifilight.ui.control.network;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.model.Location;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import hugo.weaving.DebugLog;
 
@@ -25,34 +19,36 @@ import hugo.weaving.DebugLog;
  */
 public class LightLocationAdapter extends LightNetworkAdapterBase {
 
-    private final Map<Integer, List<LightGroupAdapter>> lightGroupAdapters = new ArrayMap<>();
+  //  private final Map<Integer, List<LightGroupAdapter>> lightGroupAdapters = new ArrayMap<>();
 
-    private final LightNetworkClickListener lightNetworkClickListener;
+    //private final LightNetworkClickListener lightNetworkClickListener;
 
     @DebugLog
-    public LightLocationAdapter(@NonNull final Injector injector,
-                                @NonNull final LightNetworkClickListener lightNetworkClickListener) {
+    public LightLocationAdapter(@NonNull final Injector injector/*,
+                                @NonNull final LightNetworkClickListener lightNetworkClickListener*/) {
         super(injector);
 
-        this.lightNetworkClickListener = lightNetworkClickListener;
+        //this.lightNetworkClickListener = lightNetworkClickListener;
     }
 
     @Override
     public int getChildrenCount(final int groupPosition) {
-        return lightNetwork.lightGroupCount(groupPosition);
+       // return lightNetwork.lightGroupCount(groupPosition);
+        return lightNetwork.lightLocationCount();
     }
 
     @Nullable
     @Override
     public String getChild(final int groupPosition,
                            final int childPosition) {
-        return lightNetwork.getLightGroup(groupPosition, groupPosition).getId();
+        return lightNetwork.getLightLocation(childPosition).getId();
+        //return lightNetwork.getLightGroup(groupPosition, groupPosition).getId();
     }
 
     @Override
-    public long getChildId(final int locationPosition,
-                           final int groupPosition) {
-        return groupPosition;
+    public long getChildId(final int groupPosition,
+                           final int childPosition) {
+        return childPosition;
     }
 
     //@DebugLog
@@ -63,7 +59,7 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
                              boolean isLastChild,
                             @Nullable View convertView,
                             final ViewGroup parent) {
-        GroupListViewHolder holder;
+        /*GroupListViewHolder holder;
 
         if (convertView == null) {
             convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_group_list, null);
@@ -75,19 +71,30 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
             holder = (GroupListViewHolder) convertView.getTag();
         }
 
-        holder.setViewData(lightGroupAdapters.get(groupPosition).get(childPosition));
+        holder.setViewData(lightGroupAdapters.get(groupPosition).get(childPosition));*/
+        LocationViewHolder holder;
+
+        if (convertView == null) {
+            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_location_item, null);
+            holder = new LocationViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (LocationViewHolder) convertView.getTag();
+        }
+
+        holder.setViewData(lightNetwork.getLightLocation(groupPosition));
 
         return convertView;
     }
 
     @Override
     public String getGroup(final int groupPosition) {
-        return lightNetwork.getLightLocation(groupPosition).getId();
+        return "Locations";//lightNetwork.getLightLocation(groupPosition).getId();
     }
 
     @Override
     public int getGroupCount() {
-        return lightNetwork.lightLocationCount();
+        return 1;//lightNetwork.lightLocationCount();
     }
 
     @Override
@@ -102,7 +109,7 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
                              boolean isExpanded,
                              @Nullable View convertView,
                              final ViewGroup parent) {
-        LocationViewHolder holder;
+        /*LocationViewHolder holder;
 
         if (convertView == null) {
             convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_location_item, null);
@@ -112,7 +119,19 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
             holder = (LocationViewHolder) convertView.getTag();
         }
 
-        holder.setViewData(lightNetwork.getLightLocation(groupPosition));
+        holder.setViewData(lightNetwork.getLightLocation(groupPosition));*/
+
+        LocationsViewHolder holder;
+
+        if (convertView == null) {
+            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_locations_item, null);
+            holder = new LocationsViewHolder(convertView);
+            convertView.setTag(holder);
+        }// else {
+         //   holder = (LocationsViewHolder) convertView.getTag();
+       // }
+
+        //holder.setViewData(lightNetwork.getLightLocation(groupPosition));
 
         return convertView;
     }
@@ -132,14 +151,14 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
     public void setLightNetwork(@NonNull final LightNetwork lightNetwork) {
         super.setLightNetwork(lightNetwork);
 
-        for(int i = 0; i < lightNetwork.lightLocationCount(); i++) {
+       /* for(int i = 0; i < lightNetwork.lightLocationCount(); i++) {
             lightGroupAdapters.put(i, new ArrayList<>(lightNetwork.lightGroupCount(i)));
             for(int j = 0; j < lightNetwork.lightGroupCount(i); j++) {
                 LightGroupAdapter lightGroupAdapter = new LightGroupAdapter(injector, i);
                 lightGroupAdapter.setLightNetwork(lightNetwork);
                 lightGroupAdapters.get(i).add(lightGroupAdapter);
             }
-        }
+        }*/
     }
 
     public void clickDrawerItem(final int lightGroupPosition,
@@ -147,7 +166,7 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
 
     }
 
-    class GroupListViewHolder {
+    /*class GroupListViewHolder {
         private LightGroupAdapter viewData;
 
         final ExpandableListView groupListView;
@@ -166,7 +185,7 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
 
             groupListView.setAdapter(viewData);
         }
-    }
+    }*/
 
     class LocationViewHolder {
         private Location viewData;
@@ -174,7 +193,7 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         final TextView locationNameTextView;
 
         public LocationViewHolder(View view) {
-            locationNameTextView = (TextView) view.findViewById(R.id.location_name);
+            locationNameTextView = (TextView) view.findViewById(R.id.location_name_textview);
         }
 
         public void setViewData(@NonNull final Location viewData) {
@@ -182,5 +201,19 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
 
             locationNameTextView.setText(viewData.getName());
         }
+    }
+
+    class LocationsViewHolder {
+        final TextView locationsTextView;
+
+        public LocationsViewHolder(View view) {
+            locationsTextView = (TextView) view.findViewById(R.id.locations_textview);
+        }
+
+       // public void setViewData(@NonNull final Location viewData) {
+      //      this.viewData = viewData;
+
+       //     locationsTextView.setText(viewData.getName());
+       // }
     }
 }

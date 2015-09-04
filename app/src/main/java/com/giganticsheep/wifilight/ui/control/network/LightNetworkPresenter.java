@@ -126,6 +126,10 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
         getView().showLightNetwork(event.lightNetwork(), locationPosition, groupPosition, lightPosition);
     }
 
+    public void setPosition(final int locationPosition) {
+        this.locationPosition = locationPosition;
+    }
+
     /**
      * The Injector interface is implemented by a Component that provides the injected
      * class members, enabling a LightPresenterBase derived class to inject itself

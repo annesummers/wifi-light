@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/location_name_textview"
+        android:id="@+id/locations_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
+        android:layout_margin="@dimen/default_margin"
         style="@style/Theme.WifiLight.TextView.DrawerLabel"
-        android:textStyle="bold"/>
-</FrameLayout>
+        android:textStyle="bold"
+        android:text="@string/label_drawer_locations"/>
+
+</LinearLayout>

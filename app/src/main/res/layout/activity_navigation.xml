@@ -17,8 +17,8 @@
             layout="@layout/layout_support_actionbar"
             android:id="@+id/action_toolbar"/>
 
-        <LinearLayout
-            android:id="@+id/light_layout"
+        <FrameLayout
+            android:id="@+id/light_network_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/action_toolbar"
@@ -28,39 +28,12 @@
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
 
-                <FrameLayout
-                    android:id="@+id/container"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginBottom="@dimen/default_margin"/>
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/sliding_tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/tab_height"
-                    android:layout_below="@+id/container"
-                    style="@style/Theme.WifiLight.TabLayout"/>
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin"
-                    android:layout_below="@+id/sliding_tabs"
-                    android:layout_above="@+id/container2" />
-
-                <FrameLayout
-                    android:id="@+id/container2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin"
-                    android:layout_alignParentBottom="true" />
-            </RelativeLayout>
-        </LinearLayout>
+        </FrameLayout>
 
         <include layout="@layout/layout_error"
             android:layout_height="match_parent"

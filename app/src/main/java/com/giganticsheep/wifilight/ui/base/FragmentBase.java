@@ -15,8 +15,6 @@ import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
 
 import javax.inject.Inject;
@@ -31,7 +29,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
+public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V>>
                                                         extends MvpViewStateFragment<V, P> {
 
     private static final int INVALID = -1;
@@ -70,6 +68,21 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     public static FragmentBase create(@NonNull final String name,
                                       @NonNull final FragmentFactory fragmentFactory) throws Exception {
         return fragmentFactory.createFragment(name);
+    }
+
+    /**
+     * Creates the named Fragment.
+     *
+     * @param name the name of the Fragment to create
+     * @param fragmentFactory the FragmentFactory used to create the Fragment
+     * @param extra the extra argument for the Fragment
+     * @return the created Fragment
+     * @throws Exception if the name of the fragment doesn't match any in the application
+     */
+    public static FragmentBase create(@NonNull final String name,
+                                      int extra,
+                                      @NonNull final FragmentFactory fragmentFactory) throws Exception {
+        return fragmentFactory.createFragment(name, extra);
     }
 
     /**
@@ -144,6 +157,8 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
         super.onDestroy();
 
         compositeSubscription.unsubscribe();
+
+        getPresenter().onDestroy();
     }
 
     /**
@@ -253,9 +268,9 @@ public abstract class FragmentBase<V extends MvpView, P extends MvpPresenter<V>>
     }
 
     private void doAttachToActivity(@NonNull final ActivityBase activity) {
-        final String name = attachmentDetails.name();
-        final int position = attachmentDetails.position();
-        final boolean addToBackStack = attachmentDetails.addToBackStack();
+        final String name = attachmentDetails.name;
+        final int position = attachmentDetails.position;
+        final boolean addToBackStack = attachmentDetails.addToBackStack;
 
         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="@dimen/default_margin"
     android:layout_marginLeft="@dimen/default_margin"
-    android:layout_marginRight="@dimen/default_margin"
-    android:orientation="horizontal">
+    android:layout_marginRight="@dimen/default_margin">
 
     <ToggleButton
         android:id="@+id/power_toggle"

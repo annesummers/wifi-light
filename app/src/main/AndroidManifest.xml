@@ -18,7 +18,7 @@
         android:launchMode="singleTop"
         android:theme="@style/Theme.WifiLight" >
         <activity
-            android:name=".ui.control.LightControlActivity"
+            android:name=".ui.navigation.NavigationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
@@ -27,6 +27,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.control.LightControlActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.preferences.WifiPreferenceActivity"
