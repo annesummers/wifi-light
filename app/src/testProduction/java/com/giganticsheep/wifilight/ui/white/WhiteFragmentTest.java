@@ -6,7 +6,7 @@ import android.widget.SeekBar;
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightConstants;
-import com.giganticsheep.wifilight.base.ColourSeekBar;
+import com.giganticsheep.wifilight.base.LightSeekBar;
 import com.giganticsheep.wifilight.base.TestConstants;
 import com.giganticsheep.wifilight.ui.base.LightFragmentTestBase;
 
@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThat;
 public class WhiteFragmentTest extends LightFragmentTestBase {
 
     private SeekBar brightnessSeekbar;
-    private ColourSeekBar kelvinSeekbar;
+    private LightSeekBar kelvinSeekbar;
 
     @Before
     public void setUp() {
