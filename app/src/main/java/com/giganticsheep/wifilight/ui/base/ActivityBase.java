@@ -17,6 +17,7 @@ import com.avast.android.dialogs.fragment.SimpleDialogFragment;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
+import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.giganticsheep.wifilight.util.Constants;
@@ -38,7 +39,8 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>> extends MvpViewStateActivity<V, P> {
+public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>, C> extends MvpViewStateActivity<V, P>
+                                                                                    implements HasComponent<C> {
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
 
@@ -326,6 +328,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
     private WifiLightApplication getWifiLightApplication() {
         return (WifiLightApplication)getApplication();
     }
+
+    public static class FragmentShownEvent { }
 
     // abstract methods
 

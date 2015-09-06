@@ -44,7 +44,6 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     @InjectView(R.id.drawer_layout) RelativeLayout drawerLayout;
 
     private LightLocationAdapter adapter;
-    //private LightGroupAdapter adapter;
 
     private final Map<Integer, Boolean> groupCheckedMap = new ArrayMap<>();
 
@@ -88,6 +87,11 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
 
     @Override
     protected boolean reinitialiseOnRotate() {
+        return false;
+    }
+
+    @Override
+    protected boolean animateOnShow() {
         return false;
     }
 

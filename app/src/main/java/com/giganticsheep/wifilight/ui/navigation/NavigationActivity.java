@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
@@ -44,9 +43,8 @@ import hugo.weaving.DebugLog;
  * Created by anne on 04/09/15. <p>
  * (*_*)
  */
-public class NavigationActivity extends ActivityBase<LocationView, LocationPresenter>
-                                implements LocationView,
-                                            HasComponent<NavigationActivityComponent> {
+public class NavigationActivity extends ActivityBase<LocationView, LocationPresenter, NavigationActivityComponent>
+                                implements LocationView {
 
     private NavigationActivityComponent component;
 
@@ -146,7 +144,7 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        if(!drawStateEnabled && !drawerToggle.onOptionsItemSelected(item)) {
+        if(!drawStateEnabled || !drawerToggle.onOptionsItemSelected(item)) {
             final int id = item.getItemId();
 
             switch (id) {
@@ -230,10 +228,6 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
 
     public ViewState getDrawerViewState() {
         return drawerViewState;
-    }
-
-    public void onEvent(final CloseDrawerEvent event) {
-        drawerLayout.post(() -> drawerLayout.closeDrawers());
     }
 
     private void setDrawerState(boolean isEnabled) {
@@ -341,21 +335,16 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         return component;
     }
 
-    public void showGroupFragment(@NonNull final String groupId,
-                                  int locationX,
-                                  int locationY,
-                                  int width,
-                                  int height,
-                                  @NonNull final RelativeLayout groupLayout) {
+    private void zoomShowFragment(@NonNull final ZoomShowFragmentEvent event) {
         maskLayout.setVisibility(View.VISIBLE);
 
-        int marginRight = lightNetworkLayout.getWidth() -  width - locationX;
-        int marginBottom = lightNetworkLayout.getHeight() - height -  locationY;
+        int marginRight = lightNetworkLayout.getWidth() -  event.width - event.locationX;
+        int marginBottom = lightNetworkLayout.getHeight() - event.height -  event.locationY;
 
-        int left = locationX;
-        int right = lightNetworkLayout.getWidth() -  width - left;
-        int top = locationY - lightNetworkLayout.getPaddingTop() - 30;
-        int bottom = lightNetworkLayout.getHeight() - top - height + toolbar.getHeight();
+        int left = event.locationX;
+        int right = lightNetworkLayout.getWidth() -  event.width - left;
+        int top = event.locationY - lightNetworkLayout.getPaddingTop() - 30;
+        int bottom = lightNetworkLayout.getHeight() - top - event.height + toolbar.getHeight();
 
         DrawerLayout.LayoutParams layoutParams = new DrawerLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -366,9 +355,9 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         FrameLayout.LayoutParams groupLayoutParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT);
-        groupLayout.setLayoutParams(groupLayoutParams);
+        event.startLayout.setLayoutParams(groupLayoutParams);
 
-        maskLayout.addView(groupLayout);
+        maskLayout.addView(event.startLayout);
 
         int dLeft = left - lightNetworkLayout.getPaddingLeft();
         int dRight = right - lightNetworkLayout.getPaddingRight();
@@ -394,12 +383,11 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_group), 0));
+                attachFragment(new FragmentAttachmentDetails(event.fragmentName, 0));
 
                 setDrawerState(false);
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setDisplayHomeAsUpEnabled(true);
-                maskLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -409,7 +397,47 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
 
     }
 
+    public void onEvent(final ZoomShowFragmentEvent event) {
+        // TODO event on UI thread
+        runOnUiThread(() -> {
+            zoomShowFragment(event);
+        });
+    }
+
+    public void onEvent(final CloseDrawerEvent event) {
+        // TODO event on UI thread
+        runOnUiThread(() -> {
+            drawerLayout.post(() -> drawerLayout.closeDrawers());
+        });
+    }
+
+    public void onEvent(final FragmentShownEvent event) {
+        // TODO event on UI thread
+        runOnUiThread(() -> {
+            maskLayout.setVisibility(View.GONE);
+        });
+    }
+
     public static class CloseDrawerEvent { }
+
+    public static class ZoomShowFragmentEvent {
+        final int locationX;
+        final int locationY;
+        final int width;
+        final int height;
+        final RelativeLayout startLayout;
+        final String fragmentName;
+
+        public ZoomShowFragmentEvent(int x, int y, int width, int height, RelativeLayout startLayout, String fragmentName) {
+            this.locationX = x;
+            this.locationY = y;
+            this.width = width;
+            this.height = height;
+
+            this.startLayout = startLayout;
+            this.fragmentName = fragmentName;
+        }
+    }
 
     /**
      * The Injector interface is implemented by a Component that provides the injected

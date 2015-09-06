@@ -12,6 +12,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -48,9 +49,6 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     @DebugLog
     @Override
     protected void initialiseViews(final View view) {
-        //LightNetworkClickListener lightNetworkClickListener = new LightNetworkClickListener(component,
-       //         locationsListView);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         adapter = new LocationAdapter(getNavigationActivity().getComponent());
         groupsRecyclerView.setHasFixedSize(true);
@@ -72,6 +70,11 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     @Override
     protected boolean reinitialiseOnRotate() {
         return false;
+    }
+
+    @Override
+    protected boolean animateOnShow() {
+        return true;
     }
 
     @Override
@@ -118,6 +121,17 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     @Override
     public void showError(Throwable throwable) {
         getViewState().setShowError(throwable);
+    }
+
+    // Dagger
+
+    private NavigationActivityComponent getComponent() {
+        return ((NavigationActivity) getActivity()).getComponent();
+    }
+
+    @Override
+    protected void injectDependencies() {
+        getComponent().inject(this);
     }
 
     /**

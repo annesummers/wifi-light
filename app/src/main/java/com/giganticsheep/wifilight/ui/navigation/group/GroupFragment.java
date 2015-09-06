@@ -9,6 +9,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -43,11 +44,8 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter>
 
     @DebugLog
     @Override
-    protected void initialiseViews(final View view) {
-        //LightNetworkClickListener lightNetworkClickListener = new LightNetworkClickListener(component,
-       //         locationsListView);
-
-        adapter = new GroupAdapter(getNavigationActivity().getComponent());
+    protected void initialiseViews(@NonNull final View view) {
+        adapter = new GroupAdapter(getComponent());
         lightsRecyclerView.setAdapter(adapter);
     }
 
@@ -56,19 +54,21 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter>
         return R.layout.fragment_group;
     }
 
-    @NonNull
-    private NavigationActivity getNavigationActivity() {
-        return (NavigationActivity) getActivity();
-    }
-
     @Override
     protected boolean reinitialiseOnRotate() {
         return false;
     }
 
     @Override
+    protected boolean animateOnShow() {
+        return false;
+    }
+
+    // MVP
+
+    @Override
     public GroupPresenter createPresenter() {
-        return new GroupPresenter(getNavigationActivity().getComponent());
+        return new GroupPresenter(getComponent());
     }
 
     @Override
@@ -107,6 +107,17 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter>
     @Override
     public void showError(Throwable throwable) {
         getViewState().setShowError(throwable);
+    }
+
+    // Dagger
+
+    private NavigationActivityComponent getComponent() {
+        return ((NavigationActivity) getActivity()).getComponent();
+    }
+
+    @Override
+    protected void injectDependencies() {
+        getComponent().inject(this);
     }
 
     /**

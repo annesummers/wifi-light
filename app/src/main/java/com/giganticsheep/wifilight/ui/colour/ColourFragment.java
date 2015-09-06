@@ -72,11 +72,6 @@ public class ColourFragment extends LightFragmentBase {
         brightnessSeekBar.setEnabled(enable);
     }
 
-    @Override
-    protected boolean reinitialiseOnRotate() {
-        return false;
-    }
-
     private class ColourSeekBarWrapper implements LightSeekBarWrapper {
 
         @Override

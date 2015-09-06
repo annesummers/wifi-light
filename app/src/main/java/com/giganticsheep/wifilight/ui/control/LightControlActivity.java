@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
@@ -50,20 +49,16 @@ import timber.log.Timber;
  *
  * (*_*)
  */
-public class LightControlActivity extends ActivityBase<LightView, LightControlPresenter>
-                            implements LightView,
-                            HasComponent<LightControlActivityComponent> {
+public class LightControlActivity extends ActivityBase<LightView, LightControlPresenter, LightControlActivityComponent>
+                            implements LightView {
 
     public static final float DEFAULT_DURATION = 1.0F;
 
     private ViewPager viewPager;
-    //private ActionBarDrawerToggle drawerToggle;
 
     private LightControlActivityComponent component;
 
     private LightViewState fragmentViewState;
-
-    //private DialogFragment errorDialog;
 
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;

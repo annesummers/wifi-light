@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.base;
 
 import android.app.Activity;
+import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,9 +20,15 @@ public class ActivityModule {
         this.activity = activity;
     }
 
+   // @ActivityScope
+   // /@Provides
+   // Activity provideActivity() {
+       // return activity;
+  //  }
+
     @ActivityScope
     @Provides
-    Activity provideActivity() {
+    Context provideContext() {
         return activity;
     }
 }

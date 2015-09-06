@@ -46,6 +46,16 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
         return (LightControlActivity) getActivity();
     }
 
+    @Override
+    protected boolean reinitialiseOnRotate() {
+        return false;
+    }
+
+    @Override
+    protected boolean animateOnShow() {
+        return true;
+    }
+
     // MVP
 
     @NonNull

@@ -1,6 +1,6 @@
 package com.giganticsheep.wifilight.ui.navigation.location;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.base.EventBus;
+import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 
 import java.util.ArrayList;
@@ -30,14 +32,17 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
     private Location location = null;
     private boolean locationChanged = true;
 
-    @Inject Activity activity;
+    //@Inject Activity activity;
+    @Inject Context context;
+    @Inject EventBus eventBus;
+
     private final RelativeLayout placeholderGroupLayout;
     private final ViewGroup placeholderViewGroup;
 
     public LocationAdapter(@NonNull final Injector injector) {
         injector.inject(this);
 
-        this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(activity).inflate(R.layout.list_group_item, null);
+        this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.list_group_item, null);
         this.placeholderGroupLayout = (RelativeLayout) placeholderViewGroup.findViewById(R.id.group_layout);
     }
 
@@ -46,7 +51,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
                                                       final int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_group_item, null);
 
-        return new GroupViewHolder(view, (NavigationActivity)activity);
+        return new GroupViewHolder(view);
     }
 
     @Override
@@ -66,7 +71,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
             boolean firstSet = false;
 
             for (int i = 0; i < location.getGroup(position).lightCount(); i++) {
-                View lightView = LayoutInflater.from(activity).inflate(R.layout.layout_light, null);
+                View lightView = LayoutInflater.from(context).inflate(R.layout.layout_light, null);
                 LightViewHolder lightViewHolder = new LightViewHolder(lightView);
                 holder.lightViewHolders.add(lightViewHolder);
 
@@ -126,8 +131,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
 
         private List<LightViewHolder> lightViewHolders = new ArrayList();
 
-        public GroupViewHolder(final View view,
-                               @NonNull final NavigationActivity activity) {
+        public GroupViewHolder(final View view) {
             super(view);
 
             this.viewGroup = (ViewGroup) view;
@@ -143,14 +147,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
 
         @Override
         public void onClick(final View clickedOnView) {
-            // add a dummy view to the placeholder view to pad out the
-            // view to the size of the group layout.
-            View paddedView = new View(activity);
-            paddedView.setPadding(groupLayout.getWidth()/2 - groupLayout.getPaddingLeft(),
-                                    groupLayout.getHeight()/2 - groupLayout.getPaddingTop(),
-                                    groupLayout.getWidth()/2 -  - groupLayout.getPaddingRight(),
-                                    groupLayout.getHeight()/2 - groupLayout.getPaddingBottom());
-            placeholderGroupLayout.addView(paddedView);
+            placeholderGroupLayout.setPadding(
+                    groupLayout.getWidth()/2 - groupLayout.getPaddingLeft(),
+                    groupLayout.getHeight()/2 - groupLayout.getPaddingTop(),
+                    groupLayout.getWidth()/2 - groupLayout.getPaddingRight(),
+                    groupLayout.getHeight()/2 - groupLayout.getPaddingBottom() - 30);
 
             // get XY coordingates for the group layout
             int[] location = new int[2];
@@ -167,9 +168,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
                 lightLayout.removeView(holder.lightLayout);
             }
 
-            ((NavigationActivity) activity).showGroupFragment(groupId,
-                    location[0], location[1], width, height,
-                    groupLayout);
+            eventBus.postMessage(
+                    new NavigationActivity.ZoomShowFragmentEvent(location[0],
+                                                                location[1],
+                                                                width,
+                                                                height,
+                                                                groupLayout,
+                                                                context.getString(R.string.fragment_name_group)))
+                    .subscribe(new SilentErrorSubscriber());
         }
     }
 

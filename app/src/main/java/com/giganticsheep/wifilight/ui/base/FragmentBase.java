@@ -1,6 +1,8 @@
 package com.giganticsheep.wifilight.ui.base;
 
+import android.annotation.TargetApi;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
@@ -131,6 +134,26 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
             firstShow = false;
             populateViews();
         }
+
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        if(vto.isAlive()){
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    removeOnGlobalLayoutListener(view, this);
+                    subscribe(eventBus.postMessage(new ActivityBase.FragmentShownEvent()));
+                }
+            });
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener){
+        if (Build.VERSION.SDK_INT < 16) {
+            v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
+        } else {
+            v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
+        }
     }
 
     @Override
@@ -221,7 +244,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
      * @return the Activity associated with this Fragment
      */
     @NonNull
-    private ActivityBase getBaseActivity() {
+    protected ActivityBase getBaseActivity() {
         return (ActivityBase) getActivity();
     }
 
@@ -287,8 +310,10 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
                 fragmentTransaction.detach(existingFragment);
             }
 
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+           // fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            if(animateOnShow()) {
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
 
             FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(name);
             if (fragment != null && fragment.equals(this)) {
@@ -332,4 +357,6 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
      * @return boolean
      */
     protected abstract boolean reinitialiseOnRotate();
+
+    protected abstract boolean animateOnShow();
 }
