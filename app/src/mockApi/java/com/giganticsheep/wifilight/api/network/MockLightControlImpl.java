@@ -13,6 +13,8 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
+import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.giganticsheep.wifilight.util.Constants;
 
 import rx.Observable;
@@ -29,15 +31,23 @@ public class MockLightControlImpl implements LightControl {
     private static final String INITIAL_POWER = "off";
 
     private final LightNetwork testLightNetwork;
+    private final EventBus eventBus;
 
     private Status status;
     private long timeout = 0L;
 
+    private final ErrorSubscriber errorSubscriber;
+
     public MockLightControlImpl(@NonNull final EventBus eventBus,
+                                @NonNull final ErrorStrings errorStrings,
                                 @IOScheduler final Scheduler ioScheduler,
                                 @UIScheduler final Scheduler uiScheduler,
                                 @NonNull final LightNetwork testLightNetwork) {
+        this.eventBus = eventBus;
         this.testLightNetwork = testLightNetwork;
+
+        this.status = Status.OK;
+        this.errorSubscriber = new ErrorSubscriber(eventBus, errorStrings);
     }
 
     @NonNull
@@ -292,7 +302,7 @@ public class MockLightControlImpl implements LightControl {
 
                     @Override
                     public void call(Subscriber<? super Light> subscriber) {
-                        for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        for (int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
                             for (int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
                                 for (int k = 0; k < testLightNetwork.lightCount(i, j); k++) {
                                     MockLight light = (MockLight) testLightNetwork.getLight(i, j, k);
@@ -330,8 +340,28 @@ public class MockLightControlImpl implements LightControl {
 
     @NonNull
     @Override
-    public Observable<Location> fetchLocation(String locationId) {
-        return null;
+    public Observable<Location> fetchLocation(final String locationId) {
+        if (status == Status.OK || status == Status.OFF) {
+            return Observable.create(new Observable.OnSubscribe<Location>() {
+
+                @Override
+                public void call(Subscriber<? super Location> subscriber) {
+                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        Location location = testLightNetwork.getLightLocation(i);
+                        if(location.getId().equals(locationId)) {
+                            subscriber.onNext(location);
+                            subscriber.onCompleted();
+                        }
+                    }
+                }
+            })
+            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork))
+                    .subscribe(errorSubscriber));
+        } else if (status == Status.ERROR) {
+            return Observable.error(new Throwable("Error from server"));
+        } else {
+            return Observable.error(new Throwable("Status unknown"));
+        }
     }
 
     @NonNull
@@ -345,7 +375,9 @@ public class MockLightControlImpl implements LightControl {
                     subscriber.onNext(testLightNetwork);
                     subscriber.onCompleted();
                 }
-            });
+            })
+            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork))
+                    .subscribe(errorSubscriber));
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {

@@ -8,4 +8,7 @@ import com.giganticsheep.wifilight.base.error.WifiLightException;
  * (*_*)
  */
 public class WifiLightNetworkException extends WifiLightException {
+    public WifiLightNetworkException(String message) {
+
+    }
 }

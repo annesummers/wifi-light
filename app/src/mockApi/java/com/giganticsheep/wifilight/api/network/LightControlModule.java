@@ -4,13 +4,14 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.ApplicationScope;
 import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.network.test.TestLightNetworkModule;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.SchedulersModule;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.base.dagger.WifiLightModule;
-import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
 
 import dagger.Module;
 import dagger.Provides;
@@ -31,11 +32,13 @@ public class LightControlModule {
     @Provides
     @ApplicationScope
     LightControl provideLightControl(@NonNull EventBus eventBus,
+                                     @NonNull ErrorStrings errorStrings,
                                      @IOScheduler Scheduler ioScheduler,
                                      @UIScheduler Scheduler uiScheduler,
                                      @NonNull LightNetwork lightNetwork) {
         return new MockLightControlImpl(
                 eventBus,
+                errorStrings,
                 ioScheduler,
                 uiScheduler,
                 lightNetwork);

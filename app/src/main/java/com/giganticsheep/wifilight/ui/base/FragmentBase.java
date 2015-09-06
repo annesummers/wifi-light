@@ -287,6 +287,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
                 fragmentTransaction.detach(existingFragment);
             }
 
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
             FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(name);

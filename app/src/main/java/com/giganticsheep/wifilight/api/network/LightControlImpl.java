@@ -449,7 +449,7 @@ public class LightControlImpl extends LightControlEventCatcher
             Exception exception = null;
             switch(error.getKind()) {
                 case NETWORK:
-                    exception = new WifiLightNetworkException();
+                    exception = new WifiLightNetworkException(error.getMessage());
                     break;
                 case HTTP:
                     ErrorResponse response = (ErrorResponse) error.getBodyAs(ErrorResponse.class);

@@ -1,50 +1,88 @@
 package com.giganticsheep.wifilight.ui.navigation.location;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
+import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 04/09/15. <p>
  * (*_*)
  */
-public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder> {
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupViewHolder> {
 
     private Location location = null;
     private boolean locationChanged = true;
 
+    @Inject Activity activity;
+    private final RelativeLayout placeholderGroupLayout;
+    private final ViewGroup placeholderViewGroup;
+
     public LocationAdapter(@NonNull final Injector injector) {
         injector.inject(this);
+
+        this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(activity).inflate(R.layout.list_group_item, null);
+        this.placeholderGroupLayout = (RelativeLayout) placeholderViewGroup.findViewById(R.id.group_layout);
     }
 
     @Override
-    public LocationViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup,
+    public GroupViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup,
                                                       final int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.location_list_item, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_group_item, null);
 
-        return new LocationViewHolder(view);
+        return new GroupViewHolder(view, (NavigationActivity)activity);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final LocationViewHolder holder,
+    public void onBindViewHolder(@NonNull final GroupViewHolder holder,
                                  final int position) {
         if(location != null) {
-            holder.groupNameTextView.setText(location.getGroup(position).getName());
+            Group group = location.getGroup(position);
+            holder.groupNameTextView.setText(group.getName());
+            holder.groupId = group.getId();
 
-            if (locationChanged) {
-                for (int i = 0; i < location.groupCount(); i++) {
-                    holder.lightsTextView.add((TextView) holder.lightView.findViewById(R.id.light_name_textview));
+            for (int i = 0; i < holder.lightViewHolders.size(); i++) {
+                holder.lightViewHolders.get(i).setVisibility(View.GONE);
+            }
+
+            holder.lightViewHolders.clear();
+
+            boolean firstSet = false;
+
+            for (int i = 0; i < location.getGroup(position).lightCount(); i++) {
+                View lightView = LayoutInflater.from(activity).inflate(R.layout.layout_light, null);
+                LightViewHolder lightViewHolder = new LightViewHolder(lightView);
+                holder.lightViewHolders.add(lightViewHolder);
+
+                if(!firstSet) {
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    //layoutParams.setMarginEnd(5);
+                    layoutParams.setMargins(0, 0, 5, 0);
+                    lightViewHolder.lightLayout.setLayoutParams(layoutParams);
                 }
+
+                lightViewHolder.lightNameTextView.setText(location.getGroup(position).getLight(i).getLabel());
+
+                holder.lightLayout.addView(lightViewHolder.lightLayout);
+                firstSet = true;
             }
         }
     }
@@ -77,19 +115,78 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         void inject(final LocationAdapter adapter);
     }
 
-    static class LocationViewHolder extends RecyclerView.ViewHolder {
-        //private LinearLayout lightsLayout;
-        private TextView groupNameTextView;
-        private View lightView;
+    class GroupViewHolder extends RecyclerView.ViewHolder
+                                implements View.OnClickListener {
+        private final LinearLayout lightLayout;
+        private final RelativeLayout groupLayout;
+        private final TextView groupNameTextView;
+        private final ViewGroup viewGroup;
 
-        private List<TextView> lightsTextView = new ArrayList();
+        private String groupId;
 
-        public LocationViewHolder(@NonNull final View view) {
+        private List<LightViewHolder> lightViewHolders = new ArrayList();
+
+        public GroupViewHolder(final View view,
+                               @NonNull final NavigationActivity activity) {
             super(view);
 
-            //lightsLayout = (LinearLayout) view.findViewById(R.id.light_group_layout);
-            groupNameTextView = (TextView) view.findViewById(R.id.group_name_textview);
-            lightView = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_light, null);
+            this.viewGroup = (ViewGroup) view;
+
+            this.groupLayout = (RelativeLayout) view.findViewById(R.id.group_layout);
+
+            this.lightLayout = (LinearLayout) view.findViewById(R.id.light_group_layout);
+            this.groupNameTextView = (TextView) view.findViewById(R.id.group_name_textview);
+
+            lightLayout.setOnClickListener(this);
+            groupNameTextView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(final View clickedOnView) {
+            // add a dummy view to the placeholder view to pad out the
+            // view to the size of the group layout.
+            View paddedView = new View(activity);
+            paddedView.setPadding(groupLayout.getWidth()/2 - groupLayout.getPaddingLeft(),
+                                    groupLayout.getHeight()/2 - groupLayout.getPaddingTop(),
+                                    groupLayout.getWidth()/2 -  - groupLayout.getPaddingRight(),
+                                    groupLayout.getHeight()/2 - groupLayout.getPaddingBottom());
+            placeholderGroupLayout.addView(paddedView);
+
+            // get XY coordingates for the group layout
+            int[] location = new int[2];
+            groupLayout.getLocationOnScreen(location);
+
+            int width = groupLayout.getWidth();
+            int height = groupLayout.getHeight();
+
+            placeholderViewGroup.removeView(placeholderGroupLayout);
+            viewGroup.removeView(groupLayout);
+            viewGroup.addView(placeholderGroupLayout);
+
+            for(LightViewHolder holder : lightViewHolders) {
+                lightLayout.removeView(holder.lightLayout);
+            }
+
+            ((NavigationActivity) activity).showGroupFragment(groupId,
+                    location[0], location[1], width, height,
+                    groupLayout);
+        }
+    }
+
+    static class LightViewHolder {
+        private final View lightView;
+        private TextView lightNameTextView;
+        private LinearLayout lightLayout;
+
+        public LightViewHolder(@NonNull final View view) {
+            lightView = view;
+            lightLayout = (LinearLayout) view.findViewById(R.id.light_layout);
+            lightNameTextView = (TextView) view.findViewById(R.id.light_name_textview);
+
+        }
+
+        public void setVisibility(int visibility) {
+            lightView.setVisibility(visibility);
         }
     }
 }

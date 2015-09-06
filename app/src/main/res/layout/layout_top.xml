@@ -10,17 +10,23 @@
         android:id="@+id/power_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="@dimen/default_margin" />
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/all_lights_button" />
 
     <TextView
-        android:id="@+id/group_name_textview"
+        android:id="@+id/name_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        style="@style/Theme.WifiLight.TextView.Header" />
+        android:layout_centerInParent="true"
+        style="@style/Theme.WifiLight.TextView.ItemTitle"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="false" />
 
     <Button
         android:id="@+id/all_lights_button"
@@ -28,8 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/power_toggle"
-        android:layout_alignBottom="@+id/power_toggle"
+        android:layout_centerVertical="true"
         android:text="All Lights >"
         android:textColor="@drawable/button_text_selector"
         android:textAllCaps="false"

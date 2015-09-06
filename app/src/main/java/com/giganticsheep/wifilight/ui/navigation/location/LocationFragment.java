@@ -2,8 +2,11 @@ package com.giganticsheep.wifilight.ui.navigation.location;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Location;
@@ -28,6 +31,7 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     private LocationAdapter adapter;
 
     @InjectView(R.id.groups_recycler_view) RecyclerView groupsRecyclerView;
+    @InjectView(R.id.name_textview) TextView locationNameTextView;
 
     @DebugLog
     @Override
@@ -47,8 +51,12 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
         //LightNetworkClickListener lightNetworkClickListener = new LightNetworkClickListener(component,
        //         locationsListView);
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         adapter = new LocationAdapter(getNavigationActivity().getComponent());
+        groupsRecyclerView.setHasFixedSize(true);
+        groupsRecyclerView.setLayoutManager(layoutManager);
         groupsRecyclerView.setAdapter(adapter);
+        groupsRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
@@ -96,7 +104,10 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     public void showLocation(@NonNull final Location location) {
         getViewState().setShowLocation(location);
 
+        locationNameTextView.setText(location.getName());
+
         adapter.setLocation(location);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

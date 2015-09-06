@@ -10,6 +10,10 @@
     <color name="background_title">#BABABA</color>
     <color name="background_disabled">#99ABABAB</color>
 
+    <color name="background_location">#EEEEEE</color>
+    <color name="background_group">#EFEFEF</color>
+    <color name="background_light">#FEFEFE</color>
+
     <color name="text_primary">#454545</color>
     <color name="text_primary_selected">@color/text_tertiary</color>
     <color name="text_secondary">#757474</color>

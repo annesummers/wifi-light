@@ -210,6 +210,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
 
         FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(name);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         transaction.detach(fragment);
         transaction.commit();
     }
@@ -220,7 +221,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>>
      *
      * @param attachmentDetails the details of the fragment to attach
      */
-    private void attachFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
+    protected void attachFragment(@NonNull final FragmentAttachmentDetails attachmentDetails) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentBase fragment = (FragmentBase) fragmentManager.findFragmentByTag(attachmentDetails.name);

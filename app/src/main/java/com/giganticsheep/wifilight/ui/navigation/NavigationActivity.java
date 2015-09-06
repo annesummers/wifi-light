@@ -12,7 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
@@ -63,8 +66,10 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
     @InjectView(R.id.light_network_layout) FrameLayout lightNetworkLayout;
+    @InjectView(R.id.mask_layout) FrameLayout maskLayout;
 
     @InjectView(R.id.error_textview) TextView errorTextView;
+    private boolean drawStateEnabled;
 
     @DebugLog
     @Override
@@ -141,7 +146,7 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        if(!drawerToggle.onOptionsItemSelected(item)) {
+        if(!drawStateEnabled && !drawerToggle.onOptionsItemSelected(item)) {
             final int id = item.getItemId();
 
             switch (id) {
@@ -161,6 +166,12 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
                             .start(this);
                     return true;
 
+                case R.id.homeAsUp:
+                    attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
+
+                    ActionBar actionBar = getSupportActionBar();
+                    actionBar.setDisplayHomeAsUpEnabled(false);
+                    return true;
                 default:
                     return super.onOptionsItemSelected(item);
             }
@@ -227,6 +238,7 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
 
     private void setDrawerState(boolean isEnabled) {
         if ( isEnabled ) {
+            drawStateEnabled = true;
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             drawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
             drawerToggle.setDrawerIndicatorEnabled(true);
@@ -234,6 +246,7 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
             drawerLayout.post(() -> drawerToggle.syncState());
 
         } else {
+            drawStateEnabled = false;
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             drawerToggle.onDrawerStateChanged(DrawerLayout.STATE_IDLE);
             drawerToggle.setDrawerIndicatorEnabled(false);
@@ -298,6 +311,8 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     public void showError(Throwable throwable) {
         getViewState().setShowError(throwable);
 
+        errorTextView.setText(throwable.getMessage());
+
         loadingLayout.setVisibility(View.GONE);
         lightNetworkLayout.setVisibility(View.VISIBLE);
         errorLayout.setVisibility(View.VISIBLE);
@@ -324,6 +339,74 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     @Override
     public NavigationActivityComponent getComponent() {
         return component;
+    }
+
+    public void showGroupFragment(@NonNull final String groupId,
+                                  int locationX,
+                                  int locationY,
+                                  int width,
+                                  int height,
+                                  @NonNull final RelativeLayout groupLayout) {
+        maskLayout.setVisibility(View.VISIBLE);
+
+        int marginRight = lightNetworkLayout.getWidth() -  width - locationX;
+        int marginBottom = lightNetworkLayout.getHeight() - height -  locationY;
+
+        int left = locationX;
+        int right = lightNetworkLayout.getWidth() -  width - left;
+        int top = locationY - lightNetworkLayout.getPaddingTop() - 30;
+        int bottom = lightNetworkLayout.getHeight() - top - height + toolbar.getHeight();
+
+        DrawerLayout.LayoutParams layoutParams = new DrawerLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(left, top, right, bottom);
+        maskLayout.setLayoutParams(layoutParams);
+
+        FrameLayout.LayoutParams groupLayoutParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT);
+        groupLayout.setLayoutParams(groupLayoutParams);
+
+        maskLayout.addView(groupLayout);
+
+        int dLeft = left - lightNetworkLayout.getPaddingLeft();
+        int dRight = right - lightNetworkLayout.getPaddingRight();
+        int dTop = top - toolbar.getHeight() - lightNetworkLayout.getPaddingTop();
+        int dBottom = bottom - lightNetworkLayout.getPaddingBottom();
+
+        Animation a = new Animation() {
+
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) maskLayout.getLayoutParams();
+                params.leftMargin = (int) (left - dLeft * interpolatedTime);
+                params.topMargin = (int) (top - dTop * interpolatedTime);
+                params.rightMargin= (int) (right - dRight * interpolatedTime);
+                params.bottomMargin= (int) (bottom - dBottom * interpolatedTime);
+                maskLayout.setLayoutParams(params);
+            }
+        };
+        a.setDuration(500);
+        a.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_group), 0));
+
+                setDrawerState(false);
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                maskLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+        });
+        maskLayout.startAnimation(a);
+
     }
 
     public static class CloseDrawerEvent { }
