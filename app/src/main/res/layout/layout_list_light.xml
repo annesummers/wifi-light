@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/light_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_padding"
+    android:background="@drawable/background_light">
+
+    <ImageView
+        android:id="@+id/light_small_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/bulb_small"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/light_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/bulb"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/light_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/light_imageview"
+        style="@style/Theme.WifiLight.TextView.ItemTitle" />
+
+</RelativeLayout>

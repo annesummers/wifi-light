@@ -30,7 +30,7 @@ public class AndroidEventBus implements EventBus {
      * @param myClass the class to register
      */
     public void registerForEvents(@NonNull final Object myClass) {
-        bus.register(myClass);
+        bus.registerSticky(myClass);
     }
 
     /**

@@ -24,91 +24,6 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
         injector.inject(this);
     }
 
-    /**
-     * Fetches the Light with the given id.  Subscribes to the model's method using
-     * the Subscriber given.
-     *
-     * @param id the id of the Light to fetch.
-     */
-   /* @DebugLog
-    public void fetchLight(final String id) {
-        subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
-
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(@NonNull final Throwable e) {
-                subscribe(eventBus.postMessage(new ErrorEvent(e)));
-            }
-
-            @Override
-            public void onNext(@NonNull final Light light) {
-                subscribe(eventBus.postMessage(new LightChangedEvent(light)));
-            }
-        });
-    }*/
-
-    /**
-     * Fetches the Group with the given id.  Subscribes to the model's method using
-     * the Subscriber given.
-     *
-     * @param groupId the id of the group to fetch.
-     */
-  /*  @DebugLog
-    public void fetchGroup(final String groupId) {
-        subscribe(lightControl.fetchGroup(groupId), new Subscriber<Group>() {
-
-            @Override
-            public void onCompleted() { }
-
-            @Override
-            public void onError(@NonNull final Throwable e) {
-                subscribe(eventBus.postMessage(new ErrorEvent(e)));
-            }
-
-            @Override
-            public void onNext(@NonNull final Group group) {
-                subscribe(eventBus.postMessage(new GroupChangedEvent(group)));
-            }
-        });
-    }*/
-
-    /**
-     * Fetches the Location with the given id.  Subscribes to the model's method using
-     * the Subscriber given.
-     *
-     * @param locationId the id of the Location to fetch.
-     */
-   /* @DebugLog
-    public void fetchLocation(final String locationId) {
-        subscribe(lightControl.fetchLocation(locationId), new Subscriber<Location>() {
-
-            @Override
-            public void onCompleted() { }
-
-            @Override
-            public void onError(@NonNull final Throwable e) {
-                subscribe(eventBus.postMessage(new ErrorEvent(e)));
-            }
-
-            @Override
-            public void onNext(@NonNull final Location location) {
-                subscribe(eventBus.postMessage(new LocationChangedEvent(location)));
-            }
-        });
-    }*/
-
-    /*@DebugLog
-    public void setPosition(final int locationPosition,
-                            final int groupPosition,
-                            final int lightPosition) {
-        this.locationPosition = locationPosition;
-        this.groupPosition = groupPosition;
-        this.lightPosition = lightPosition;
-    }*/
-
     public void locationChanged(final String locationId) {
         eventBus.postMessage(new LocationChangedEvent(locationId));
     }
@@ -119,7 +34,7 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
      * @param event a FetchLightsEvent
      */
     @DebugLog
-    public synchronized void onEvent(@NonNull final LightControl.FetchLightNetworkEvent event) {
+    public synchronized void onEventMainThread(@NonNull final LightControl.FetchLightNetworkEvent event) {
         getView().showLightNetwork(event.lightNetwork(), locationPosition, groupPosition, lightPosition);
     }
 

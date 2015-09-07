@@ -61,11 +61,9 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     @DebugLog
     @Override
     protected void initialiseViews(final View view) {
-        lightNetworkClickListener = new LightNetworkClickListener(component,
-                                                                                            locationsListView);
+        lightNetworkClickListener = new LightNetworkClickListener(component, locationsListView);
 
         adapter = new LightLocationAdapter(component);
-        //adapter = new LightGroupAdapter(component);
         locationsListView.setAdapter(adapter);
     }
 
@@ -73,11 +71,6 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     protected int getLayoutRes() {
         return R.layout.fragment_drawer;
     }
-
-   // @NonNull
-   // private LightControlActivity getLightControlActivity() {
-    //    return (LightControlActivity) getActivity();
-   // }
 
     @NonNull
      private NavigationActivity getNavigationActivity() {
@@ -94,52 +87,18 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
         return false;
     }
 
-    private void clickDrawerItem(final int lightLocationPosition) {//,
-                                // final int lightGroupPosition,
-                               //  final int lightPosition) {
-       /* if(lightGroupPosition == Constants.INVALID) {
-            // selected the location at lightLocationPosition
-        } else if (lightPosition == Constants.INVALID) {
-            int adjustedPos = getAdjustedPositionFromPackedPosition(
-                    ExpandableListView.getPackedPositionForGroup(lightGroupPosition));
+    private void clickDrawerItem(final int lightLocationPosition) {
+        locationsListView.expandGroup(0);
 
-            View groupToClick = locationsListView.getChildAt(adjustedPos);
-            long id = adapter.getGroupId(lightGroupPosition);
+        int adjustedPos = getAdjustedPositionFromPackedPosition(
+                ExpandableListView.getPackedPositionForChild(
+                        0,
+                        lightLocationPosition));
 
-            locationsListView.performItemClick(groupToClick, adjustedPos, id);
-        } else {*/
-            locationsListView.expandGroup(0);
+        View childToClick = locationsListView.getChildAt(adjustedPos);
+        long id = adapter.getChildId(0, lightLocationPosition);
 
-            int adjustedPos = getAdjustedPositionFromPackedPosition(
-                    ExpandableListView.getPackedPositionForChild(
-                            0,
-                            lightLocationPosition));
-
-            View childToClick = locationsListView.getChildAt(adjustedPos);
-            long id = adapter.getChildId(0, lightLocationPosition);
-
-            locationsListView.performItemClick(childToClick, adjustedPos, id);
-      //  }
-    }
-
-    private void checkDrawerItem(final int lightLocationPosition) {//,
-        // final int lightGroupPosition,
-        //  final int lightPosition) {
-       /* if(lightGroupPosition == Constants.INVALID) {
-            // selected the location at lightLocationPosition
-        } else if (lightPosition == Constants.INVALID) {
-            int adjustedPos = getAdjustedPositionFromPackedPosition(
-                    ExpandableListView.getPackedPositionForGroup(lightGroupPosition));
-
-            View groupToClick = locationsListView.getChildAt(adjustedPos);
-            long id = adapter.getGroupId(lightGroupPosition);
-
-            locationsListView.performItemClick(groupToClick, adjustedPos, id);
-        } else {*/
-        lightNetworkClickListener.checkDrawerItem(lightLocationPosition);
-
-       // locationsListView.performItemClick(childToClick, adjustedPos, id);
-        //  }
+        locationsListView.performItemClick(childToClick, adjustedPos, id);
     }
 
     private int getAdjustedPositionFromPackedPosition(final long packedPos) {
@@ -200,13 +159,9 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
         drawerLayout.setVisibility(View.VISIBLE);
 
         adapter.setLightNetwork(lightNetwork);
-        //adapter.setLocationPosition(locationPosition);
         adapter.notifyDataSetChanged();
 
-        //drawerTextView.setText(lightNetwork.getLightLocation(locationPosition).getName());
-        //locationsListView.expandGroup(groupPosition);
-
-        clickDrawerItem(locationPosition);//, groupPosition, lightPosition);
+        clickDrawerItem(locationPosition);
     }
 
     @DebugLog

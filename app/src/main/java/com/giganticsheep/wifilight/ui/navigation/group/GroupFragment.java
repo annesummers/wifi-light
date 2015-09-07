@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.ui.navigation.group;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -52,14 +52,14 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter, Navig
     @DebugLog
     @Override
     protected void initialiseViews(@NonNull final View view) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        super.initialiseViews(view);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         adapter = new GroupAdapter(getComponent());
         lightsRecyclerView.setHasFixedSize(true);
         lightsRecyclerView.setLayoutManager(layoutManager);
         lightsRecyclerView.setAdapter(adapter);
         lightsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        //getPresenter().fetchGroup(groupId);
     }
 
     @Override

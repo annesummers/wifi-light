@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,6 +24,7 @@ import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
+import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.control.network.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
@@ -70,21 +70,11 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
     @DebugLog
     @Override
-    protected final void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if(savedInstanceState != null) {
-            //
-        }
-    }
-
-    @DebugLog
-    @Override
     protected void attachInitialFragments() {
         drawerViewState = new LightNetworkViewState();
 
-        attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
-        attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 1));
+        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
+        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 1));
     }
 
     @DebugLog
@@ -125,6 +115,12 @@ public class NavigationActivity extends ActivityBase<NavigationView,
         };
 
         drawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.setToolbarNavigationClickListener(v -> {
+            attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
+
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            setDrawerState(true);
+        });
 
         drawerLayout.post(() -> drawerToggle.syncState());
     }
@@ -149,7 +145,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        if(!drawStateEnabled || !drawerToggle.onOptionsItemSelected(item)) {
+        if(!drawerToggle.onOptionsItemSelected(item)) {
             final int id = item.getItemId();
 
             switch (id) {
@@ -169,7 +165,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                             .start(this);
                     return true;
 
-                case R.id.homeAsUp:
+                case android.R.id.home:
                     attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
 
                     ActionBar actionBar = getSupportActionBar();
@@ -349,6 +345,32 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                 setDrawerState(false);
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setDisplayHomeAsUpEnabled(true);
+
+                supportInvalidateOptionsMenu();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        maskLayout.startAnimation(zoomInAnimation);
+    }
+
+    public void onEventMainThread(final ShowLightControlActivityEvent event) {
+        maskLayout.setVisibility(View.VISIBLE);
+
+        Animation zoomInAnimation = zoomInAnimation(event, 500);
+        zoomInAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent();
+                intent.setClass(NavigationActivity.this, LightControlActivity.class);
+
+                startActivity(intent);
             }
 
             @Override
@@ -383,7 +405,8 @@ public class NavigationActivity extends ActivityBase<NavigationView,
         return component;
     }
 
-    private Animation zoomInAnimation(@NonNull final ShowGroupFragmentEvent event, final int zoomDuration) {
+    private Animation zoomInAnimation(@NonNull final AnimateEvent event,
+                                      final int zoomDuration) {
         int marginRight = lightNetworkLayout.getWidth() -  event.width - event.locationX;
         int marginBottom = lightNetworkLayout.getHeight() - event.height -  event.locationY;
 
@@ -419,6 +442,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                 params.topMargin = (int) (top - dTop * interpolatedTime);
                 params.rightMargin= (int) (right - dRight * interpolatedTime);
                 params.bottomMargin= (int) (bottom - dBottom * interpolatedTime);
+
                 maskLayout.setLayoutParams(params);
             }
         };
@@ -430,25 +454,46 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
     public static class CloseDrawerEvent { }
 
-    public static class ShowGroupFragmentEvent {
+    public static class ShowGroupFragmentEvent extends AnimateEvent {
+        final String groupId;
+
+        public ShowGroupFragmentEvent(final Rect startRect,
+                                      final RelativeLayout startLayout,
+                                      final String groupId) {
+            super(startRect, startLayout);
+
+            this.groupId = groupId;
+        }
+    }
+
+    public static class ShowLightControlActivityEvent extends AnimateEvent{
+
+        final String lightId;
+
+        public ShowLightControlActivityEvent(final Rect startRect,
+                                             final RelativeLayout startLayout,
+                                             final String lightId) {
+            super(startRect, startLayout);
+
+            this.lightId = lightId;
+        }
+    }
+
+    private static class AnimateEvent {
         final int locationX;
         final int locationY;
         final int width;
         final int height;
         final RelativeLayout startLayout;
 
-        final String groupId;
-
-        public ShowGroupFragmentEvent(final Rect startRect,
-                                      final RelativeLayout startLayout,
-                                      final String groupId) {
+        public AnimateEvent(final Rect startRect,
+                            final RelativeLayout startLayout) {
             this.locationX = startRect.left;
             this.locationY = startRect.top;
             this.width = startRect.width();
             this.height = startRect.height();
 
             this.startLayout = startLayout;
-            this.groupId = groupId;
         }
     }
 

@@ -20,6 +20,10 @@ public class WifiLightException extends Exception {
 
     public WifiLightException() { }
 
+    public WifiLightException(String reason) {
+        this.errorString = reason != null ? reason : "";
+    }
+
     @DebugLog
     @Override
     public String getMessage() {
@@ -32,7 +36,12 @@ public class WifiLightException extends Exception {
             }
 
             stringErrors.insert(0, error.getMessage());
-            stringErrors.insert(0, ": ");
+            if(errorString != null) {
+                stringErrors.insert(0, ": ");
+            }
+        }
+
+        if(errorString != null){
             stringErrors.insert(0, errorString);
         }
 

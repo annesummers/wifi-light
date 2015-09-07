@@ -56,7 +56,7 @@ public class LightNetworkPresenterTest extends PresenterTestBase {
             return;
         }
 
-        presenter.onEvent(new LightControl.FetchLightNetworkEvent(testLightNetwork));
+       // presenter.onEvent(new LightControl.FetchLightNetworkEvent(testLightNetwork));
 
         LightNetwork lightNetwork = view.getLightNetwork();
 

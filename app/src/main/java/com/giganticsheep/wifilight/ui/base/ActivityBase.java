@@ -249,7 +249,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
      *
      * @param details the attachment details of the fragment
      */
-    private void addFragment(@NonNull final FragmentAttachmentDetails details) {
+    protected void addFragment(@NonNull final FragmentAttachmentDetails details) {
         if(attachedFragments.containsKey(details.position)) {
             final String oldName = attachedFragments.get(details.position).name;
             if(oldName.equals(details.name)) {

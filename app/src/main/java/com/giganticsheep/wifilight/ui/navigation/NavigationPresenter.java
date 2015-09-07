@@ -2,11 +2,15 @@ package com.giganticsheep.wifilight.ui.navigation;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.LightControl;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
 import hugo.weaving.DebugLog;
+import rx.Subscriber;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -25,7 +29,20 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
             getView().showLoading();
         }
 
-        subscribe(lightControl.fetchLightNetwork());
+        subscribe(lightControl.fetchLightNetwork(), new Subscriber<LightNetwork>() {
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(Throwable e) {
+                eventBus.postMessage(new ErrorEvent(e));
+            }
+
+            @Override
+            public void onNext(LightNetwork lightNetwork) {
+                eventBus.postMessage(new LightControl.FetchLightNetworkEvent(lightNetwork));
+            }
+        });
     }
 
     /**
@@ -49,7 +66,7 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
     }
 
     public void groupChanged(String groupId) {
-        eventBus.postMessageSticky(new LocationChangedEvent(groupId));
+        eventBus.postMessageSticky(new GroupChangedEvent(groupId));
     }
 
     /**

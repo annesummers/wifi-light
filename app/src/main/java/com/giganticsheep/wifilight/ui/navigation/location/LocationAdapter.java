@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,7 +71,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
             boolean firstSet = false;
 
             for (int i = 0; i < location.getGroup(position).lightCount(); i++) {
-                View lightView = LayoutInflater.from(context).inflate(R.layout.layout_light, null);
+                View lightView = LayoutInflater.from(context).inflate(R.layout.layout_list_light, null);
                 LightViewHolder lightViewHolder = new LightViewHolder(lightView);
                 holder.lightViewHolders.add(lightViewHolder);
 
@@ -121,10 +122,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
 
     class GroupViewHolder extends RecyclerView.ViewHolder
                                 implements View.OnClickListener {
-        private final LinearLayout lightLayout;
-        private final RelativeLayout groupLayout;
-        private final TextView groupNameTextView;
         private final ViewGroup viewGroup;
+        private final RelativeLayout groupLayout;
+        private final LinearLayout lightLayout;
+
+        private final TextView groupNameTextView;
 
         private String groupId;
 
@@ -163,6 +165,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
             viewGroup.removeView(groupLayout);
             viewGroup.addView(placeholderGroupLayout);
 
+            // TODO remove all but first two then zoom
+
             for(LightViewHolder holder : lightViewHolders) {
                 lightLayout.removeView(holder.lightLayout);
             }
@@ -174,20 +178,24 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
 
             eventBus.postUIMessage(
                     new NavigationActivity.ShowGroupFragmentEvent(groupRect,
-                                                                groupLayout,
-                                                                context.getString(R.string.fragment_name_group)));
+                            groupLayout,
+                            groupId));
         }
     }
 
     static class LightViewHolder {
         private final View lightView;
-        private TextView lightNameTextView;
-        private LinearLayout lightLayout;
+        private final TextView lightNameTextView;
+        private final ImageView lightImageView;
+        private final RelativeLayout lightLayout;
 
         public LightViewHolder(@NonNull final View view) {
             lightView = view;
-            lightLayout = (LinearLayout) view.findViewById(R.id.light_layout);
+            lightLayout = (RelativeLayout) view.findViewById(R.id.light_layout);
             lightNameTextView = (TextView) view.findViewById(R.id.light_name_textview);
+            this.lightImageView = (ImageView) view.findViewById(R.id.light_small_imageview);
+
+            lightImageView.setVisibility(View.VISIBLE);
         }
 
         public void setVisibility(int visibility) {

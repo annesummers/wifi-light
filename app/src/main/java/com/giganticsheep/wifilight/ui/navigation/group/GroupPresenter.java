@@ -22,15 +22,6 @@ public class GroupPresenter extends PresenterBase<GroupView> {
         injector.inject(this);
     }
 
-   /* @DebugLog
-    final public void fetchLightNetwork() {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
-        subscribe(lightControl.fetchLightNetwork());
-    }*/
-
     /**
      * Fetches the Group with the given id.  Subscribes to the model's method using
      * the Subscriber given.
@@ -53,7 +44,6 @@ public class GroupPresenter extends PresenterBase<GroupView> {
 
             @Override
             public void onNext(@NonNull final Group group) {
-                //subscribe(eventBus.postMessage(new GroupChangedEvent(group)));
                 getView().showGroup(group);
             }
         });

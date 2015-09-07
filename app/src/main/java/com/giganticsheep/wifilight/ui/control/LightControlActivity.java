@@ -79,12 +79,12 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     protected void attachInitialFragments() {
         fragmentViewState = new LightViewState();
 
-        attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0));
+        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0));
 
         showDetailsFragment = sharedPreferences.getBoolean(getString(R.string.preference_key_show_details), false);
 
         if(showDetailsFragment) {
-            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1));
+            addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1));
         }
     }
 

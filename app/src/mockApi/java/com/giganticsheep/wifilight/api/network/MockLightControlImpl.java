@@ -6,15 +6,16 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightConstants;
+import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
-import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
+import com.giganticsheep.wifilight.base.error.WifiLightException;
 import com.giganticsheep.wifilight.util.Constants;
 
 import rx.Observable;
@@ -33,6 +34,9 @@ public class MockLightControlImpl implements LightControl {
     private final LightNetwork testLightNetwork;
     private final EventBus eventBus;
 
+    private final Scheduler ioScheduler;
+    private final Scheduler uiScheduler;
+
     private Status status;
     private long timeout = 0L;
 
@@ -45,6 +49,9 @@ public class MockLightControlImpl implements LightControl {
                                 @NonNull final LightNetwork testLightNetwork) {
         this.eventBus = eventBus;
         this.testLightNetwork = testLightNetwork;
+
+        this.ioScheduler = ioScheduler;
+        this.uiScheduler = uiScheduler;
 
         this.status = Status.OK;
         this.errorSubscriber = new ErrorSubscriber(eventBus, errorStrings);
@@ -77,7 +84,9 @@ public class MockLightControlImpl implements LightControl {
                     }
 
                     subscriber.onCompleted();
-                }});
+                }})
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
             case OFF:
                 return offObservable();
             case ERROR:
@@ -114,7 +123,9 @@ public class MockLightControlImpl implements LightControl {
                     }
 
                     subscriber.onCompleted();
-                }});
+                }})
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
             case OFF:
                 return offObservable();
             case ERROR:
@@ -151,7 +162,9 @@ public class MockLightControlImpl implements LightControl {
                     }
 
                     subscriber.onCompleted();
-                }});
+                }})
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
             case OFF:
                 return offObservable();
             case ERROR:
@@ -188,7 +201,9 @@ public class MockLightControlImpl implements LightControl {
                     }
 
                     subscriber.onCompleted();
-                }});
+                }})
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
             case OFF:
                 return offObservable();
             case ERROR:
@@ -225,7 +240,9 @@ public class MockLightControlImpl implements LightControl {
                     }
 
                     subscriber.onCompleted();
-                }});
+                }})
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler);
             case OFF:
                 return offObservable();
             case ERROR:
@@ -263,7 +280,9 @@ public class MockLightControlImpl implements LightControl {
 
                         subscriber.onCompleted();
                     }
-                });
+                })
+                        .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
             case OFF:
                 return offObservable();
             case ERROR:
@@ -317,7 +336,9 @@ public class MockLightControlImpl implements LightControl {
 
                         subscriber.onCompleted();
                     }
-                });
+                })
+                        .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler);
             case ERROR:
                 return Observable.error(new Throwable("Error from server"));
             default:
@@ -335,7 +356,32 @@ public class MockLightControlImpl implements LightControl {
     @NonNull
     @Override
     public Observable<Group> fetchGroup(String groupId) {
-        return null;
+        if (status == Status.OK || status == Status.OFF) {
+            return Observable.create(new Observable.OnSubscribe<Group>() {
+
+                @Override
+                public void call(Subscriber<? super Group> subscriber) {
+                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                        Location location = testLightNetwork.getLightLocation(i);
+
+                        for(int j = 0; j < testLightNetwork.lightGroupCount(i); j++) {
+                            Group group = testLightNetwork.getLightGroup(i, j);
+                            if(group.getId().equals(groupId)) {
+                                subscriber.onNext(group);
+                                subscriber.onCompleted();
+                                return;
+                            }
+                        }
+                    }
+
+                    subscriber.onError(new WifiLightException("No Group with id " + groupId + " found"));
+                }
+            });
+        } else if (status == Status.ERROR) {
+            return Observable.error(new Throwable("Error from server"));
+        } else {
+            return Observable.error(new Throwable("Status unknown"));
+        }
     }
 
     @NonNull
@@ -346,16 +392,18 @@ public class MockLightControlImpl implements LightControl {
 
                 @Override
                 public void call(Subscriber<? super Location> subscriber) {
-                    for(int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
+                    for (int i = 0; i < testLightNetwork.lightLocationCount(); i++) {
                         Location location = testLightNetwork.getLightLocation(i);
-                        if(location.getId().equals(locationId)) {
+                        if (location.getId().equals(locationId)) {
                             subscriber.onNext(location);
                             subscriber.onCompleted();
+                            return;
                         }
                     }
+
+                    subscriber.onError(new WifiLightException("No Location with id " + locationId + " found"));
                 }
-            })
-            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork)));
+            });
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {
@@ -374,8 +422,7 @@ public class MockLightControlImpl implements LightControl {
                     subscriber.onNext(testLightNetwork);
                     subscriber.onCompleted();
                 }
-            })
-            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork)));
+            });
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {

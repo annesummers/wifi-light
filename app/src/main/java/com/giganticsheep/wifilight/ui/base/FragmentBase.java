@@ -145,7 +145,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
                 @Override
                 public void onGlobalLayout() {
                     removeOnGlobalLayoutListener(view, this);
-                    eventBus.postMessage(new ActivityBase.FragmentShownEvent());
+                    eventBus.postUIMessage(new ActivityBase.FragmentShownEvent());
                 }
             });
         }
