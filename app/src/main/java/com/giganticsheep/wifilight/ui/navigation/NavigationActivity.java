@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.navigation;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,16 +21,11 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.control.network.LightNetworkViewState;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationPresenter;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationView;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
@@ -43,8 +39,10 @@ import hugo.weaving.DebugLog;
  * Created by anne on 04/09/15. <p>
  * (*_*)
  */
-public class NavigationActivity extends ActivityBase<LocationView, LocationPresenter, NavigationActivityComponent>
-                                implements LocationView {
+public class NavigationActivity extends ActivityBase<NavigationView,
+                                                    NavigationPresenter,
+                                                    NavigationActivityComponent>
+                                implements NavigationView {
 
     private NavigationActivityComponent component;
 
@@ -53,10 +51,10 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     private TextView title;
 
     private ActionBarDrawerToggle drawerToggle;
-
-    private Location location;
-
     private LightNetworkViewState drawerViewState;
+
+    private String currentLocationId;
+    private String currentGroupId;
 
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.container_drawer) FrameLayout drawerContainerLayout;
@@ -67,6 +65,7 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     @InjectView(R.id.mask_layout) FrameLayout maskLayout;
 
     @InjectView(R.id.error_textview) TextView errorTextView;
+
     private boolean drawStateEnabled;
 
     @DebugLog
@@ -74,9 +73,15 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     protected final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        drawerViewState = new LightNetworkViewState();
+        if(savedInstanceState != null) {
+            //
+        }
+    }
 
-        subscribe(eventBus.registerForEvents(this), new SilentErrorSubscriber());
+    @DebugLog
+    @Override
+    protected void attachInitialFragments() {
+        drawerViewState = new LightNetworkViewState();
 
         attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
         attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 1));
@@ -185,14 +190,6 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         drawerToggle.onConfigurationChanged(config);
     }
 
-    @DebugLog
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        subscribe(eventBus.unregisterForEvents(this), new SilentErrorSubscriber());
-    }
-
     @Override
     protected boolean reinitialiseOnRotate() {
         return false;
@@ -226,6 +223,10 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         };
     }
 
+    public void onEventMainThread(final CloseDrawerEvent event) {
+        drawerLayout.post(() -> drawerLayout.closeDrawers());
+    }
+
     public ViewState getDrawerViewState() {
         return drawerViewState;
     }
@@ -252,13 +253,13 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     // MVP
 
     @Override
-    public LocationPresenter createPresenter() {
-        return new LocationPresenter(getComponent());
+    public NavigationPresenter createPresenter() {
+        return new NavigationPresenter(getComponent());
     }
 
     @Override
     public RestoreableViewState createViewState() {
-        return new LocationViewState();
+        return new NavigationViewState();
     }
 
     @Override
@@ -268,8 +269,8 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
 
     @NonNull
     @Override
-    public LocationViewState getViewState() {
-        return (LocationViewState) super.getViewState();
+    public NavigationViewState getViewState() {
+        return (NavigationViewState) super.getViewState();
     }
 
     @Override
@@ -284,10 +285,23 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
     }
 
     @Override
-    public void showLocation(@NonNull final Location location) {
-        getViewState().setShowLocation(location);
+    public void showGroup(final String groupId) {
+        getViewState().showGroup(groupId);
 
-        this.location = location;
+        //this.currentGroupId = groupId;
+
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+        lightNetworkLayout.setVisibility(View.VISIBLE);
+
+        setDrawerState(true);
+    }
+
+    @Override
+    public void showLocation(final String locationId) {
+        getViewState().showLocation(locationId);
+
+       // this.currentLocationId = locationId;
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
@@ -314,6 +328,40 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         setDrawerState(false);
     }
 
+    public void onEventMainThread(final ShowGroupFragmentEvent event) {
+        maskLayout.setVisibility(View.VISIBLE);
+
+        Animation zoomInAnimation = zoomInAnimation(event, 500);
+        zoomInAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                FragmentAttachmentDetails attachDetails = new FragmentAttachmentDetails(
+                        getString(R.string.fragment_name_group), 0);
+                attachDetails.addStringArg(WifiLightApplication.KEY_GROUP_ID, event.groupId);
+                attachNewFragment(attachDetails);
+
+                presenter.groupChanged(event.groupId);
+
+                setDrawerState(false);
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+        });
+
+        maskLayout.startAnimation(zoomInAnimation);
+    }
+
+    public void onEventMainThread(final FragmentShownEvent event) {
+        maskLayout.setVisibility(View.GONE);
+    }
+
     // Dagger
 
     @Override
@@ -335,9 +383,7 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
         return component;
     }
 
-    private void zoomShowFragment(@NonNull final ZoomShowFragmentEvent event) {
-        maskLayout.setVisibility(View.VISIBLE);
-
+    private Animation zoomInAnimation(@NonNull final ShowGroupFragmentEvent event, final int zoomDuration) {
         int marginRight = lightNetworkLayout.getWidth() -  event.width - event.locationX;
         int marginBottom = lightNetworkLayout.getHeight() - event.height -  event.locationY;
 
@@ -376,66 +422,33 @@ public class NavigationActivity extends ActivityBase<LocationView, LocationPrese
                 maskLayout.setLayoutParams(params);
             }
         };
-        a.setDuration(500);
-        a.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) { }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                attachFragment(new FragmentAttachmentDetails(event.fragmentName, 0));
+        a.setDuration(zoomDuration);
 
-                setDrawerState(false);
-                ActionBar actionBar = getSupportActionBar();
-                actionBar.setDisplayHomeAsUpEnabled(true);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) { }
-        });
-        maskLayout.startAnimation(a);
-
-    }
-
-    public void onEvent(final ZoomShowFragmentEvent event) {
-        // TODO event on UI thread
-        runOnUiThread(() -> {
-            zoomShowFragment(event);
-        });
-    }
-
-    public void onEvent(final CloseDrawerEvent event) {
-        // TODO event on UI thread
-        runOnUiThread(() -> {
-            drawerLayout.post(() -> drawerLayout.closeDrawers());
-        });
-    }
-
-    public void onEvent(final FragmentShownEvent event) {
-        // TODO event on UI thread
-        runOnUiThread(() -> {
-            maskLayout.setVisibility(View.GONE);
-        });
+        return a;
     }
 
     public static class CloseDrawerEvent { }
 
-    public static class ZoomShowFragmentEvent {
+    public static class ShowGroupFragmentEvent {
         final int locationX;
         final int locationY;
         final int width;
         final int height;
         final RelativeLayout startLayout;
-        final String fragmentName;
 
-        public ZoomShowFragmentEvent(int x, int y, int width, int height, RelativeLayout startLayout, String fragmentName) {
-            this.locationX = x;
-            this.locationY = y;
-            this.width = width;
-            this.height = height;
+        final String groupId;
+
+        public ShowGroupFragmentEvent(final Rect startRect,
+                                      final RelativeLayout startLayout,
+                                      final String groupId) {
+            this.locationX = startRect.left;
+            this.locationY = startRect.top;
+            this.width = startRect.width();
+            this.height = startRect.height();
 
             this.startLayout = startLayout;
-            this.fragmentName = fragmentName;
+            this.groupId = groupId;
         }
     }
 

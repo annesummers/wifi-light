@@ -28,6 +28,8 @@ class LightNetworkClickListener {
     private int checkedLightGroup = Constants.INVALID;*/
     private int checkedLightLocation = Constants.INVALID;
 
+    private int locationGroupPosition = 0;
+
    // private int locationPosition;
 
     private final ExpandableListView lightLocationListView;
@@ -69,14 +71,32 @@ class LightNetworkClickListener {
     }
 
     private void closeDrawer() {
-        presenter.subscribe(eventBus.postMessage(
-                new NavigationActivity.CloseDrawerEvent()));
+        eventBus.postMessage(new NavigationActivity.CloseDrawerEvent());
     }
 
     private void selectorChanged(@NonNull final LightSelector.SelectorType type,
                                    @Nullable final String id) {
-        presenter.subscribe(eventBus.postMessage(
-                new LightControl.LightSelectorChangedEvent(new LightSelector(type, id))));
+        eventBus.postMessage(new LightControl.LightSelectorChangedEvent(new LightSelector(type, id)));
+    }
+
+    public void checkDrawerItem(int lightLocationPosition) {
+        lightLocationListView.expandGroup(0);
+
+        int adjustedPos = getAdjustedPositionFromPackedPosition(
+                ExpandableListView.getPackedPositionForChild(
+                        locationGroupPosition,
+                        lightLocationPosition));
+
+        //  View childToClick = locationsListView.getChildAt(adjustedPos);
+        //   long id = adapter.getChildId(0, lightLocationPosition);
+
+        lightLocationListView.setSelectedChild(locationGroupPosition, lightLocationPosition, true);
+        lightLocationListView.setItemChecked(adjustedPos, true);
+    }
+
+    private int getAdjustedPositionFromPackedPosition(final long packedPos) {
+        int flatPost = lightLocationListView.getFlatListPosition(packedPos);
+        return flatPost - lightLocationListView.getFirstVisiblePosition();
     }
 
     /**
@@ -187,9 +207,14 @@ class LightNetworkClickListener {
             //selectorChanged(LightSelector.SelectorType.LIGHT, lightId);
 
             //presenter.setPosition(locationPosition, groupPosition, childPosition);
-            presenter.fetchLocation(locationId);
+           // presenter.fetchLocation(locationId);
+
+
+            presenter.setPosition(childPosition);
+            presenter.locationChanged(locationId);
 
             listView.expandGroup(groupPosition);
+            checkDrawerItem(childPosition);
             listView.setSelectedChild(groupPosition, childPosition, true);
 
             long packedPos = ExpandableListView.getPackedPositionForChild(groupPosition, childPosition);
@@ -199,9 +224,10 @@ class LightNetworkClickListener {
             //checkedLightLocation = Constants.INVALID;
             //checkedLightGroup = Constants.INVALID;
             //checkedLight = adjustedPos;
-            checkedLightLocation = adjustedPos;
 
             listView.setItemChecked(adjustedPos, true);
+
+            checkedLightLocation = adjustedPos;
 
             closeDrawer();
 
@@ -223,7 +249,7 @@ class LightNetworkClickListener {
                                     final int groupPosition,
                                     final int childPosition,
                                     final long id) {
-            String lightId = ((LightGroupAdapter) listView.getExpandableListAdapter()).getChild(groupPosition, childPosition);
+        /*    String lightId = ((LightGroupAdapter) listView.getExpandableListAdapter()).getChild(groupPosition, childPosition);
 
             selectorChanged(LightSelector.SelectorType.LIGHT, lightId);
 
@@ -244,7 +270,7 @@ class LightNetworkClickListener {
 
             listView.setItemChecked(adjustedPos, true);
 
-            closeDrawer();
+            closeDrawer();*/
 
             return true;
         }

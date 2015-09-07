@@ -37,7 +37,7 @@ public class LightNetworkViewStateTest {
                                          int locationPosition,
                                          int groupPosition,
                                          int lightPosition) {
-                Assert.fail("showLocation() instead of showLoading()");
+                Assert.fail("showLightGroup() instead of showLoading()");
             }
 
             @Override
@@ -77,7 +77,7 @@ public class LightNetworkViewStateTest {
                                          int locationPosition,
                                          int groupPosition,
                                          int lightPosition) {
-                Assert.fail("showLocation() instead of showError()");
+                Assert.fail("showLightGroup() instead of showError()");
             }
 
             @Override
@@ -117,7 +117,7 @@ public class LightNetworkViewStateTest {
                                          int locationPosition,
                                          int groupPosition,
                                          int lightPosition) {
-                Assert.fail("showLocation() instead of showError(Throwable)");
+                Assert.fail("showLightGroup() instead of showError(Throwable)");
             }
 
             @Override
@@ -149,7 +149,7 @@ public class LightNetworkViewStateTest {
         LightNetworkView view = new LightNetworkView() {
             @Override
             public void showLoading() {
-                Assert.fail("showLoading() instead of showLocation()");
+                Assert.fail("showLoading() instead of showLightGroup()");
             }
 
             @Override
@@ -162,12 +162,12 @@ public class LightNetworkViewStateTest {
 
             @Override
             public void showError() {
-                Assert.fail("showError() instead of showLocation()");
+                Assert.fail("showError() instead of showLightGroup()");
             }
 
             @Override
             public void showError(Throwable throwable) {
-                Assert.fail("showError(Throwable) instead of showLocation()");
+                Assert.fail("showError(Throwable) instead of showLightGroup()");
             }
         };
 

@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.navigation.location;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 
 import java.util.ArrayList;
@@ -32,7 +32,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
     private Location location = null;
     private boolean locationChanged = true;
 
-    //@Inject Activity activity;
     @Inject Context context;
     @Inject EventBus eventBus;
 
@@ -168,14 +167,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
                 lightLayout.removeView(holder.lightLayout);
             }
 
-            eventBus.postMessage(
-                    new NavigationActivity.ZoomShowFragmentEvent(location[0],
-                                                                location[1],
-                                                                width,
-                                                                height,
+            Rect groupRect = new Rect(location[0],
+                    location[1],
+                    location[0] + width,
+                    location[1] + height);
+
+            eventBus.postUIMessage(
+                    new NavigationActivity.ShowGroupFragmentEvent(groupRect,
                                                                 groupLayout,
-                                                                context.getString(R.string.fragment_name_group)))
-                    .subscribe(new SilentErrorSubscriber());
+                                                                context.getString(R.string.fragment_name_group)));
         }
     }
 
@@ -188,7 +188,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.GroupV
             lightView = view;
             lightLayout = (LinearLayout) view.findViewById(R.id.light_layout);
             lightNameTextView = (TextView) view.findViewById(R.id.light_name_textview);
-
         }
 
         public void setVisibility(int visibility) {

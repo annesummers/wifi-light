@@ -59,7 +59,7 @@ public class StatusFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new StatusPresenter(getLightControlActivity().getComponent());
+        return new StatusPresenter(getComponent());
     }
 
     @NonNull

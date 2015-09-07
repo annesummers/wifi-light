@@ -20,7 +20,6 @@ import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
-import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
@@ -65,12 +64,14 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        eventBus.registerForUIEvents(this);
+
         activityLayout = createActivityLayout();
 
         setContentView(activityLayout.layoutId());
 
         if(savedInstanceState != null) {
-            // TODO can we getLight Icepick to handle this?
+            // TODO can we get Icepick to handle this?
             Parcelable[] fragments = savedInstanceState.getParcelableArray(ATTACHED_FRAGMENTS_EXTRA);
 
             if(fragments != null) {
@@ -79,6 +80,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
                     attachedFragments.put(fragmentDetails.position, fragmentDetails);
                 }
             }
+        } else {
+            attachInitialFragments();
         }
 
         initialiseViews();
@@ -135,6 +138,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
         }
 
         compositeSubscription.unsubscribe();
+
+        eventBus.unregisterForEvents(this);
     }
 
     /**
@@ -188,10 +193,10 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
         FragmentBase fragment;
 
         try {
-            if(details.extra == Constants.INVALID) {
+            if(details.argsMap.size() == 0) {
                 fragment = FragmentBase.create(details.name, fragmentFactory);
             } else {
-                fragment = FragmentBase.create(details.name, details.extra, fragmentFactory);
+                fragment = FragmentBase.create(details.name, details.argsMap, fragmentFactory);
             }
 
             addFragment(details);
@@ -332,6 +337,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
     public static class FragmentShownEvent { }
 
     // abstract methods
+
+    protected abstract void attachInitialFragments();
 
     protected abstract ActivityLayout createActivityLayout();
 

@@ -3,17 +3,10 @@ package com.giganticsheep.wifilight.ui.control.network;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.model.Group;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.base.error.ErrorEvent;
-import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
-import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
 import hugo.weaving.DebugLog;
-import rx.Subscriber;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -37,7 +30,7 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
      *
      * @param id the id of the Light to fetch.
      */
-    @DebugLog
+   /* @DebugLog
     public void fetchLight(final String id) {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
@@ -55,7 +48,7 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
                 subscribe(eventBus.postMessage(new LightChangedEvent(light)));
             }
         });
-    }
+    }*/
 
     /**
      * Fetches the Group with the given id.  Subscribes to the model's method using
@@ -63,7 +56,7 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
      *
      * @param groupId the id of the group to fetch.
      */
-    @DebugLog
+  /*  @DebugLog
     public void fetchGroup(final String groupId) {
         subscribe(lightControl.fetchGroup(groupId), new Subscriber<Group>() {
 
@@ -80,15 +73,15 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
                 subscribe(eventBus.postMessage(new GroupChangedEvent(group)));
             }
         });
-    }
+    }*/
 
     /**
      * Fetches the Location with the given id.  Subscribes to the model's method using
      * the Subscriber given.
      *
-     * @param locationId the id of the group to fetch.
+     * @param locationId the id of the Location to fetch.
      */
-    @DebugLog
+   /* @DebugLog
     public void fetchLocation(final String locationId) {
         subscribe(lightControl.fetchLocation(locationId), new Subscriber<Location>() {
 
@@ -105,15 +98,19 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
                 subscribe(eventBus.postMessage(new LocationChangedEvent(location)));
             }
         });
-    }
+    }*/
 
-    @DebugLog
+    /*@DebugLog
     public void setPosition(final int locationPosition,
                             final int groupPosition,
                             final int lightPosition) {
         this.locationPosition = locationPosition;
         this.groupPosition = groupPosition;
         this.lightPosition = lightPosition;
+    }*/
+
+    public void locationChanged(final String locationId) {
+        eventBus.postMessage(new LocationChangedEvent(locationId));
     }
 
     /**
@@ -126,6 +123,7 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
         getView().showLightNetwork(event.lightNetwork(), locationPosition, groupPosition, lightPosition);
     }
 
+    @DebugLog
     public void setPosition(final int locationPosition) {
         this.locationPosition = locationPosition;
     }

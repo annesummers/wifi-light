@@ -15,10 +15,13 @@ import android.view.ViewTreeObserver;
 
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
+import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
+
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -32,8 +35,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V>>
-                                                        extends MvpViewStateFragment<V, P> {
+public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V>, C>
+                                                        extends MvpViewStateFragment<V, P>
+                                                        implements HasComponent<C>{
 
     private static final int INVALID = -1;
 
@@ -77,15 +81,15 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
      * Creates the named Fragment.
      *
      * @param name the name of the Fragment to create
+     * @param args the arguments for the Fragment
      * @param fragmentFactory the FragmentFactory used to create the Fragment
-     * @param extra the extra argument for the Fragment
      * @return the created Fragment
      * @throws Exception if the name of the fragment doesn't match any in the application
      */
     public static FragmentBase create(@NonNull final String name,
-                                      int extra,
+                                      @NonNull final Map<String, String> args,
                                       @NonNull final FragmentFactory fragmentFactory) throws Exception {
-        return fragmentFactory.createFragment(name, extra);
+        return fragmentFactory.createFragment(name, args);
     }
 
     /**
@@ -141,7 +145,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
                 @Override
                 public void onGlobalLayout() {
                     removeOnGlobalLayoutListener(view, this);
-                    subscribe(eventBus.postMessage(new ActivityBase.FragmentShownEvent()));
+                    eventBus.postMessage(new ActivityBase.FragmentShownEvent());
                 }
             });
         }

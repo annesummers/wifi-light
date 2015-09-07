@@ -2,10 +2,14 @@ package com.giganticsheep.wifilight.ui.navigation.location;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.model.Location;
+import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
 import hugo.weaving.DebugLog;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -18,23 +22,30 @@ public class LocationPresenter extends PresenterBase<LocationView> {
         injector.inject(this);
     }
 
-    @DebugLog
-    final public void fetchLightNetwork() {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
-        subscribe(lightControl.fetchLightNetwork());
-    }
-
     /**
      * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Location} to display.
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
     @DebugLog
-    public void onEvent(@NonNull final LocationChangedEvent event) {
-        getView().showLocation(event.getLocation());
+    public void onEventBackgroundThread(@NonNull final LocationChangedEvent event) {
+        subscribe(lightControl.fetchLocation(event.getLocationId()
+                ).observeOn(AndroidSchedulers.mainThread()),
+                new Subscriber<Location>() {
+                    @Override
+                    public void onCompleted() { }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        eventBus.postMessage(new ErrorEvent(e));
+                    }
+
+                    @Override
+                    public void onNext(Location location) {
+                        getView().showLocation(location);
+                    }
+                });
+
     }
 
     /**

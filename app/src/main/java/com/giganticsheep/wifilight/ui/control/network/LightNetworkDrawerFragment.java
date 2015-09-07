@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
-import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
@@ -30,9 +29,8 @@ import timber.log.Timber;
  * (*_*)
  */
 @FragmentArgsInherited
-public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, LightNetworkPresenter>
-                                         implements LightNetworkView,
-                                                HasComponent<LightNetworkDrawerFragmentComponent> {
+public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, LightNetworkPresenter, LightNetworkDrawerFragmentComponent>
+                                         implements LightNetworkView {
 
     private LightNetworkDrawerFragmentComponent component;
 
@@ -44,6 +42,7 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     @InjectView(R.id.drawer_layout) RelativeLayout drawerLayout;
 
     private LightLocationAdapter adapter;
+    LightNetworkClickListener lightNetworkClickListener;
 
     private final Map<Integer, Boolean> groupCheckedMap = new ArrayMap<>();
 
@@ -62,7 +61,7 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     @DebugLog
     @Override
     protected void initialiseViews(final View view) {
-        LightNetworkClickListener lightNetworkClickListener = new LightNetworkClickListener(component,
+        lightNetworkClickListener = new LightNetworkClickListener(component,
                                                                                             locationsListView);
 
         adapter = new LightLocationAdapter(component);
@@ -121,6 +120,26 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
 
             locationsListView.performItemClick(childToClick, adjustedPos, id);
       //  }
+    }
+
+    private void checkDrawerItem(final int lightLocationPosition) {//,
+        // final int lightGroupPosition,
+        //  final int lightPosition) {
+       /* if(lightGroupPosition == Constants.INVALID) {
+            // selected the location at lightLocationPosition
+        } else if (lightPosition == Constants.INVALID) {
+            int adjustedPos = getAdjustedPositionFromPackedPosition(
+                    ExpandableListView.getPackedPositionForGroup(lightGroupPosition));
+
+            View groupToClick = locationsListView.getChildAt(adjustedPos);
+            long id = adapter.getGroupId(lightGroupPosition);
+
+            locationsListView.performItemClick(groupToClick, adjustedPos, id);
+        } else {*/
+        lightNetworkClickListener.checkDrawerItem(lightLocationPosition);
+
+       // locationsListView.performItemClick(childToClick, adjustedPos, id);
+        //  }
     }
 
     private int getAdjustedPositionFromPackedPosition(final long packedPos) {

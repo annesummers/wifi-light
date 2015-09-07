@@ -2,10 +2,14 @@ package com.giganticsheep.wifilight.ui.navigation.group;
 
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
 import hugo.weaving.DebugLog;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -18,13 +22,41 @@ public class GroupPresenter extends PresenterBase<GroupView> {
         injector.inject(this);
     }
 
-    @DebugLog
+   /* @DebugLog
     final public void fetchLightNetwork() {
         if (isViewAttached()) {
             getView().showLoading();
         }
 
         subscribe(lightControl.fetchLightNetwork());
+    }*/
+
+    /**
+     * Fetches the Group with the given id.  Subscribes to the model's method using
+     * the Subscriber given.
+     *
+     * @param groupId the id of the v to fetch.
+     */
+    @DebugLog
+    public void fetchGroup(final String groupId) {
+        subscribe(lightControl.fetchGroup(groupId)
+                .observeOn(AndroidSchedulers.mainThread()),
+                new Subscriber<Group>() {
+
+            @Override
+            public void onCompleted() { }
+
+            @Override
+            public void onError(@NonNull final Throwable e) {
+                eventBus.postMessage(new ErrorEvent(e));
+            }
+
+            @Override
+            public void onNext(@NonNull final Group group) {
+                //subscribe(eventBus.postMessage(new GroupChangedEvent(group)));
+                getView().showGroup(group);
+            }
+        });
     }
 
     /**
@@ -33,8 +65,8 @@ public class GroupPresenter extends PresenterBase<GroupView> {
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
     @DebugLog
-    public void onEvent(@NonNull final GroupChangedEvent event) {
-        getView().showGroup(event.getGroup());
+    public void onEventBackgroundThread(@NonNull final GroupChangedEvent event) {
+        fetchGroup(event.getGroupId());
     }
 
     /**

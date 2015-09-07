@@ -36,8 +36,7 @@ public class ErrorSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable error) {
         Timber.e(error.getMessage());
-        eventBus.postMessage(new ErrorEvent(transformError(error)))
-                .subscribe(new SilentErrorSubscriber());
+        eventBus.postMessage(new ErrorEvent(transformError(error)));
     }
 
     @Override

@@ -14,15 +14,14 @@ import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.api.network.error.WifiLightAPIException;
-import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
-import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
-import com.giganticsheep.wifilight.base.error.WifiLightException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightNetworkException;
 import com.giganticsheep.wifilight.api.network.error.WifiLightServerException;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.IOScheduler;
 import com.giganticsheep.wifilight.base.dagger.UIScheduler;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
+import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
+import com.giganticsheep.wifilight.base.error.WifiLightException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,7 @@ public class LightControlImpl extends LightControlEventCatcher
 
         this.errorSubscriber = new ErrorSubscriber(eventBus, errorStrings);
 
-        eventBus.registerForEvents(this).subscribe(new SilentErrorSubscriber());
+        eventBus.registerForEvents(this);
     }
 
     @NonNull
@@ -328,8 +327,7 @@ public class LightControlImpl extends LightControlEventCatcher
 
             return lightNetwork;
         })
-        .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(lightNetwork))
-                .subscribe(errorSubscriber));
+        .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(lightNetwork)));
     }
 
     @DebugLog

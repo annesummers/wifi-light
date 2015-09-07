@@ -26,7 +26,7 @@ import timber.log.Timber;
  * (*_*)
  */
 @FragmentArgsInherited
-public class LocationFragment extends FragmentBase<LocationView, LocationPresenter>
+public class LocationFragment extends FragmentBase<LocationView, LocationPresenter, NavigationActivityComponent>
                                 implements LocationView {
 
     private LocationAdapter adapter;
@@ -48,9 +48,9 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
 
     @DebugLog
     @Override
-    protected void initialiseViews(final View view) {
+    protected void initialiseViews(@NonNull final View view) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new LocationAdapter(getNavigationActivity().getComponent());
+        adapter = new LocationAdapter(getComponent());
         groupsRecyclerView.setHasFixedSize(true);
         groupsRecyclerView.setLayoutManager(layoutManager);
         groupsRecyclerView.setAdapter(adapter);
@@ -60,11 +60,6 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_location;
-    }
-
-    @NonNull
-    private NavigationActivity getNavigationActivity() {
-        return (NavigationActivity) getActivity();
     }
 
     @Override
@@ -77,9 +72,11 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
         return true;
     }
 
+    // MVP
+
     @Override
     public LocationPresenter createPresenter() {
-        return new LocationPresenter(getNavigationActivity().getComponent());
+        return new LocationPresenter(getComponent());
     }
 
     @Override
@@ -125,7 +122,8 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
 
     // Dagger
 
-    private NavigationActivityComponent getComponent() {
+    @Override
+    public NavigationActivityComponent getComponent() {
         return ((NavigationActivity) getActivity()).getComponent();
     }
 

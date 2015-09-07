@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
+import com.giganticsheep.wifilight.ui.control.LightControlActivityComponent;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -17,7 +18,7 @@ import hugo.weaving.DebugLog;
  */
 
 @FragmentArgsInherited
-public abstract class LightFragmentBase extends FragmentBase<LightView, LightPresenterBase>
+public abstract class LightFragmentBase extends FragmentBase<LightView, LightPresenterBase, LightControlActivityComponent>
                                     implements LightView {
 
     protected OnLightSeekBarChangeListener seekBarChangeListener;
@@ -30,20 +31,10 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     }
 
     @Override
-    protected final void injectDependencies() {
-        getLightControlActivity().getComponent().inject(this);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
         getPresenter().onDestroy();
-    }
-
-    @NonNull
-    public final LightControlActivity getLightControlActivity() {
-        return (LightControlActivity) getActivity();
     }
 
     @Override
@@ -124,6 +115,24 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     @Override
     public void showError(Throwable throwable) {
         showError();
+    }
+
+    @NonNull
+    private final LightControlActivity getLightControlActivity() {
+        return (LightControlActivity) getActivity();
+    }
+
+    // Dagger
+
+    @NonNull
+    @Override
+    public LightControlActivityComponent getComponent() {
+        return getLightControlActivity().getComponent();
+    }
+
+    @Override
+    protected final void injectDependencies() {
+        getComponent().inject(this);
     }
 
     /**

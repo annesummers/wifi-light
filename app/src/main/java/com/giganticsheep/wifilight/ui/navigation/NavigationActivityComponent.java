@@ -23,6 +23,7 @@ import dagger.Component;
         dependencies = {WifiLightAppComponent.class},
         modules = { ActivityModule.class})
 public interface NavigationActivityComponent extends NavigationActivity.Injector,
+                                                NavigationPresenter.Injector,
                                                 LocationPresenter.Injector,
                                                 LocationFragment.Injector,
                                                 LocationAdapter.Injector,

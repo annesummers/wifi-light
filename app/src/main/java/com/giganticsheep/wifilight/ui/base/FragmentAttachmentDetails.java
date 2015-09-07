@@ -3,10 +3,14 @@ package com.giganticsheep.wifilight.ui.base;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.view.animation.Animation;
+import android.support.v4.util.ArrayMap;
 
 import com.giganticsheep.wifilight.util.Constants;
+import com.hannesdorfmann.parcelableplease.ParcelBagger;
+import com.hannesdorfmann.parcelableplease.annotation.Bagger;
 import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
+
+import java.util.Map;
 
 /**
  * Created by anne on 25/06/15.
@@ -18,6 +22,9 @@ public class FragmentAttachmentDetails implements Parcelable {
     int position;
     boolean addToBackStack;
     int extra;
+
+    @Bagger(FragmentAttachmentDetails.FragmentArgsMapBagger.class)
+    Map<String, String> argsMap = new ArrayMap<>();
 
     public FragmentAttachmentDetails(final String name,
                                      final int position) {
@@ -38,45 +45,19 @@ public class FragmentAttachmentDetails implements Parcelable {
 
     public FragmentAttachmentDetails() { }
 
-   /* private FragmentAttachmentDetails(@NonNull final Parcel in) {
-        name = in.readString();
-        extra = in.readInt();
-        position = in.readInt();
-        addToBackStack = in.readByte() != 0;
+    public void addStringArg(final String argName, final String arg) {
+        argsMap.put(argName, arg);
     }
 
-    public static final Creator<FragmentAttachmentDetails> CREATOR = new Creator<FragmentAttachmentDetails>() {
-        @NonNull
-        @Override
-        public FragmentAttachmentDetails createFromParcel(@NonNull final Parcel source) {
-            return new FragmentAttachmentDetails(source);
-        }
-
-        @NonNull
-        @Override
-        public FragmentAttachmentDetails[] newArray(final int size) {
-            return new FragmentAttachmentDetails[size];
-        }
-    };
-
-    public String name() {
-        return name;
+    @NonNull
+    @Override
+    public String toString() {
+        return "FragmentAttachmentDetails{" +
+                "position=" + position +
+                ", name='" + name + '\'' +
+                ", addToBackStack=" + addToBackStack +
+                '}';
     }
-
-    public int position() {
-        return position;
-    }
-
-      @Override
-    public void writeToParcel(@NonNull final Parcel parcel, final int flags) {
-        parcel.writeString(name);
-        parcel.writeInt(position);
-        parcel.writeByte((byte) (addToBackStack ? 1 : 0));
-    }
-
-    public boolean addToBackStack() {
-        return addToBackStack;
-    }*/
 
     @Override
     public int describeContents() {
@@ -100,13 +81,28 @@ public class FragmentAttachmentDetails implements Parcelable {
         }
     };
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "FragmentAttachmentDetails{" +
-                "position=" + position +
-                ", name='" + name + '\'' +
-                ", addToBackStack=" + addToBackStack +
-                '}';
+    public static class FragmentArgsMapBagger implements ParcelBagger<Map<String, String>> {
+
+        @Override
+        public void write(Map<String, String> map, Parcel out, int flags) {
+            out.writeInt(map.size());
+            for(Map.Entry<String, String> entry : map.entrySet()){
+                out.writeString(entry.getKey());
+                out.writeString(entry.getValue());
+            }
+        }
+
+        @Override
+        public Map<String, String> read(final Parcel in) {
+            int size = in.readInt();
+            Map<String, String> map = new ArrayMap<>(size);
+            for(int i = 0; i < size; i++){
+                String key = in.readString();
+                String value = in.readString();
+                map.put(key,value);
+            }
+
+            return map;
+        }
     }
 }

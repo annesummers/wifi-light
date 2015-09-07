@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.ui.control;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
@@ -39,7 +37,6 @@ import java.util.TimerTask;
 
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
-import timber.log.Timber;
 
 /**
  * The Activity containing the Fragments to control a {@link com.giganticsheep.wifilight.api.model.Light} and also to show the
@@ -79,24 +76,16 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
     @DebugLog
     @Override
-    protected final void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void attachInitialFragments() {
         fragmentViewState = new LightViewState();
 
-        if (savedInstanceState == null) {
-            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0));
+        attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_status), 0));
 
-            showDetailsFragment = sharedPreferences.getBoolean(getString(R.string.preference_key_show_details), false);
+        showDetailsFragment = sharedPreferences.getBoolean(getString(R.string.preference_key_show_details), false);
 
-            if(showDetailsFragment) {
-                attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1));
-            }
-        } else {
-            Timber.d("here");
+        if(showDetailsFragment) {
+            attachNewFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_light_details), 1));
         }
-
-        subscribe(eventBus.registerForEvents(this), new SilentErrorSubscriber());
     }
 
     @DebugLog
@@ -166,14 +155,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @DebugLog
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        subscribe(eventBus.unregisterForEvents(this), new SilentErrorSubscriber());
     }
 
     @NonNull

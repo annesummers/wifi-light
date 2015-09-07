@@ -7,7 +7,6 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
-import com.giganticsheep.wifilight.base.error.SilentErrorSubscriber;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import javax.inject.Inject;
@@ -35,14 +34,14 @@ public abstract class PresenterBase<V extends ViewBase> extends MvpBasePresenter
     public void attachView(@NonNull final V view) {
         super.attachView(view);
 
-        eventBus.registerForEvents(this).subscribe(new SilentErrorSubscriber());
+        eventBus.registerForEvents(this);
     }
 
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
 
-        eventBus.unregisterForEvents(this).subscribe(new SilentErrorSubscriber());
+        eventBus.unregisterForEvents(this);
     }
 
     /**

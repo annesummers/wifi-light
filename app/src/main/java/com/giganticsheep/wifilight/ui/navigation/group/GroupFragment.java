@@ -2,14 +2,18 @@ package com.giganticsheep.wifilight.ui.navigation.group;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
+import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -23,12 +27,15 @@ import timber.log.Timber;
  * (*_*)
  */
 @FragmentArgsInherited
-public class GroupFragment extends FragmentBase<GroupView, GroupPresenter>
+public class GroupFragment extends FragmentBase<GroupView, GroupPresenter, NavigationActivityComponent>
                                 implements GroupView {
 
     private GroupAdapter adapter;
 
+    @Arg String groupId;
+
     @InjectView(R.id.lights_recycler_view) RecyclerView lightsRecyclerView;
+    @InjectView(R.id.name_textview) TextView groupNameTextView;
 
     @DebugLog
     @Override
@@ -45,8 +52,14 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter>
     @DebugLog
     @Override
     protected void initialiseViews(@NonNull final View view) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         adapter = new GroupAdapter(getComponent());
+        lightsRecyclerView.setHasFixedSize(true);
+        lightsRecyclerView.setLayoutManager(layoutManager);
         lightsRecyclerView.setAdapter(adapter);
+        lightsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        //getPresenter().fetchGroup(groupId);
     }
 
     @Override
@@ -96,7 +109,10 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter>
     public void showGroup(@NonNull final Group group) {
         getViewState().setShowGroup(group);
 
+        groupNameTextView.setText(group.getName());
+
         adapter.setGroup(group);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -111,7 +127,8 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter>
 
     // Dagger
 
-    private NavigationActivityComponent getComponent() {
+    @Override
+    public NavigationActivityComponent getComponent() {
         return ((NavigationActivity) getActivity()).getComponent();
     }
 

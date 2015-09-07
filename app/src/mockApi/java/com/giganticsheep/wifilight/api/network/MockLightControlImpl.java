@@ -355,8 +355,7 @@ public class MockLightControlImpl implements LightControl {
                     }
                 }
             })
-            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork))
-                    .subscribe(errorSubscriber));
+            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork)));
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {
@@ -376,8 +375,7 @@ public class MockLightControlImpl implements LightControl {
                     subscriber.onCompleted();
                 }
             })
-            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork))
-                    .subscribe(errorSubscriber));
+            .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(testLightNetwork)));
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {

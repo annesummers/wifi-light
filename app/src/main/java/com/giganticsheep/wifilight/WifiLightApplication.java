@@ -25,6 +25,9 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
 
     private WifiLightAppComponent component;
 
+    private static final String KEY_LOCATION_ID = "key_location_id";
+    public static final String KEY_GROUP_ID = "key_group_id";
+
     @Override
     public final void onCreate() {
         super.onCreate();

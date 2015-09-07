@@ -36,7 +36,7 @@ public class ColourFragment extends LightFragmentBase {
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
-        return new ColourPresenter(getLightControlActivity().getComponent());
+        return new ColourPresenter(getComponent());
     }
 
     @NonNull

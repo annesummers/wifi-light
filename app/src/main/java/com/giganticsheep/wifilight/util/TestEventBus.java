@@ -7,61 +7,65 @@ import com.giganticsheep.wifilight.base.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-
 /**
  * Created by anne on 30/06/15.
  * (*_*)
  */
 public class TestEventBus implements EventBus {
 
+    private final List<Object> uiListeners = new ArrayList<>();
+
+    private final List<Object> uiMessages = new ArrayList<>();
+
     private final List<Object> listeners = new ArrayList<>();
 
     private final List<Object> messages = new ArrayList<>();
 
     @Override
-    public <T> Observable<T> postMessage(@NonNull final T messageObject) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(@NonNull Subscriber<? super T> subscriber) {
-                messages.add(messageObject);
-
-                subscriber.onNext(messageObject);
-                subscriber.onCompleted();
-            }
-        });
+    public void postMessage(@NonNull final Object messageObject) {
+        messages.add(messageObject);
     }
 
     @Override
-    public <T> Observable<T> registerForEvents(@NonNull final T myClass) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(@NonNull Subscriber<? super T> subscriber) {
-                listeners.add(myClass);
-
-                subscriber.onNext(myClass);
-                subscriber.onCompleted();
-            }
-        });
+    public void registerForEvents(@NonNull final Object myClass) {
+        listeners.add(myClass);
     }
 
     @Override
-    public <T> Observable<T> unregisterForEvents(@NonNull final T myClass) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(@NonNull Subscriber<? super T> subscriber) {
-                listeners.remove(myClass);
+    public void unregisterForEvents(@NonNull final Object myClass) {
+        listeners.remove(myClass);
+    }
 
-                subscriber.onNext(myClass);
-                subscriber.onCompleted();
-            }
-        });
+    @Override
+    public void postUIMessage(Object messageObject) {
+        uiMessages.add(messageObject);
+    }
+
+    @Override
+    public void registerForUIEvents(Object myClass) {
+        uiListeners.add(myClass);
+    }
+
+    @Override
+    public void unregisterForUIEvents(Object myClass) {
+        uiListeners.remove(myClass);
+    }
+
+    @Override
+    public void postMessageSticky(Object messageObject) {
+        messages.add(messageObject);
     }
 
     public Object popLastMessage() {
         Object lastMessage = messages.get(messages.size() - 1);
         messages.remove(lastMessage);
+
+        return lastMessage;
+    }
+
+    public Object popLastUIMessage() {
+        Object lastMessage = uiMessages.get(uiMessages.size() - 1);
+        uiMessages.remove(lastMessage);
 
         return lastMessage;
     }

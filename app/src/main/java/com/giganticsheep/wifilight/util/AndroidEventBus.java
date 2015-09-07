@@ -4,10 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.base.EventBus;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-
 /**
  * Created by anne on 30/06/15.
  * (*_*)
@@ -15,6 +11,7 @@ import rx.android.schedulers.AndroidSchedulers;
 public class AndroidEventBus implements EventBus {
 
     private final de.greenrobot.event.EventBus bus = new de.greenrobot.event.EventBus();
+    private final de.greenrobot.event.EventBus uiBus = new de.greenrobot.event.EventBus();
 
     /**
      * Posts a message to the global event bus.  Classes must register to receive messages
@@ -23,20 +20,8 @@ public class AndroidEventBus implements EventBus {
      * @param messageObject the object to post to the bus
      */
     @NonNull
-    public <T> Observable<T> postMessage(@NonNull final T messageObject) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(@NonNull Subscriber<? super T> subscriber) {
-                try {
-                    bus.post(messageObject);
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-
-                subscriber.onNext(messageObject);
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(AndroidSchedulers.mainThread());
+    public void postMessage(@NonNull final Object messageObject) {
+        bus.post(messageObject);
     }
 
     /**
@@ -44,20 +29,8 @@ public class AndroidEventBus implements EventBus {
      *
      * @param myClass the class to register
      */
-    public <T> Observable<T> registerForEvents(@NonNull final T myClass) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(@NonNull Subscriber<? super T> subscriber) {
-                try {
-                    bus.register(myClass);
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-
-                subscriber.onNext(myClass);
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(AndroidSchedulers.mainThread());
+    public void registerForEvents(@NonNull final Object myClass) {
+        bus.register(myClass);
     }
 
     /**
@@ -65,19 +38,41 @@ public class AndroidEventBus implements EventBus {
      *
      * @param myClass the class to unregister
      */
-    public <T> Observable<T> unregisterForEvents(@NonNull final T myClass) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(@NonNull Subscriber<? super T> subscriber) {
-                try {
-                    bus.unregister(myClass);
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
+    public void unregisterForEvents(@NonNull final Object myClass) {
+        bus.unregister(myClass);
+    }
 
-                subscriber.onNext(myClass);
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(AndroidSchedulers.mainThread());
+    /**
+     * Posts a message to the global event bus.  Classes must register to receive messages
+     * and much subscribe to  a specific message to receive it
+     *
+     * @param messageObject the object to post to the bus
+     */
+    @NonNull
+    public void postUIMessage(@NonNull final Object messageObject) {
+        uiBus.post(messageObject);
+    }
+
+    /**
+     * Registers the class myClass to receive events from the global event bus.
+     *
+     * @param myClass the class to register
+     */
+    public void registerForUIEvents(@NonNull final Object myClass) {
+        uiBus.registerSticky(myClass);
+    }
+
+    /**
+     * Unregisters the class myClass from the global event bus.
+     *
+     * @param myClass the class to unregister
+     */
+    public void unregisterForUIEvents(@NonNull final Object myClass) {
+        uiBus.unregister(myClass);
+    }
+
+    @Override
+    public void postMessageSticky(Object messageObject) {
+        bus.postSticky(messageObject);
     }
 }

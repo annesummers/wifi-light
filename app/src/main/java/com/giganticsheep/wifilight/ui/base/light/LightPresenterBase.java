@@ -8,9 +8,7 @@ import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
-import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
-import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 import com.giganticsheep.wifilight.util.Constants;
 
@@ -56,12 +54,12 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
 
             @Override
             public void onError(Throwable e) {
-                subscribe(eventBus.postMessage(new ErrorEvent(e)));
+                eventBus.postMessage(new ErrorEvent(e));
             }
 
             @Override
             public void onNext(Light light) {
-                subscribe(eventBus.postMessage(new LightChangedEvent(light)));
+                eventBus.postMessage(new LightChangedEvent(light));
             }
         });
     }
@@ -137,20 +135,20 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Group}.
      */
-    @DebugLog
+  /*  @DebugLog
     public void onEvent(@NonNull final GroupChangedEvent event) {
         handleGroupChanged(event.getGroup());
-    }
+    }*/
 
     /**
      * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Location} to display.
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
-    @DebugLog
+   /* @DebugLog
     public void onEvent(@NonNull final LocationChangedEvent event) {
         handleLocationChanged(event.getLocation());
-    }
+    }*/
 
     /**
      * The Injector interface is implemented by a Component that provides the injected

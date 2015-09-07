@@ -14,6 +14,8 @@ import com.giganticsheep.wifilight.ui.navigation.location.LocationFragmentBuilde
 import com.giganticsheep.wifilight.ui.status.StatusFragmentBuilder;
 import com.giganticsheep.wifilight.ui.white.WhiteFragmentBuilder;
 
+import java.util.Map;
+
 import rx.Observable;
 
 /**
@@ -82,12 +84,6 @@ public class FragmentFactory {
             return new LocationFragmentBuilder(name).build();
         }
 
-        if(name.equals(application.getString(R.string.fragment_name_group))) {
-            return new GroupFragmentBuilder(name).build();
-        }
-
-
-
         throw new Exception("Fragment does not exist");
     }
 
@@ -98,7 +94,12 @@ public class FragmentFactory {
      */
     @NonNull
     public final FragmentBase createFragment(@NonNull final String name,
-                                             final int extra) throws Exception {
+                                             final Map<String, String> args) throws Exception {
+
+        if(name.equals(application.getString(R.string.fragment_name_group))) {
+            return new GroupFragmentBuilder(name, args.get(WifiLightApplication.KEY_GROUP_ID)).build();
+        }
+
         throw new Exception("Fragment does not exist");
     }
 }
