@@ -350,7 +350,8 @@ public class MockLightControlImpl implements LightControl {
     @Override
     public Observable<Light> fetchLight(final String id) {
         return fetchLights(false)
-                .filter(light -> light.getId().equals(id));
+                .filter(light -> light.getId().equals(id))
+                .observeOn(uiScheduler);
     }
 
     @NonNull
@@ -376,7 +377,8 @@ public class MockLightControlImpl implements LightControl {
 
                     subscriber.onError(new WifiLightException("No Group with id " + groupId + " found"));
                 }
-            });
+            })
+                    .observeOn(uiScheduler);
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {
@@ -403,7 +405,8 @@ public class MockLightControlImpl implements LightControl {
 
                     subscriber.onError(new WifiLightException("No Location with id " + locationId + " found"));
                 }
-            });
+            })
+                    .observeOn(uiScheduler);
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {
@@ -422,7 +425,8 @@ public class MockLightControlImpl implements LightControl {
                     subscriber.onNext(testLightNetwork);
                     subscriber.onCompleted();
                 }
-            });
+            })
+                    .observeOn(uiScheduler);
         } else if (status == Status.ERROR) {
             return Observable.error(new Throwable("Error from server"));
         } else {

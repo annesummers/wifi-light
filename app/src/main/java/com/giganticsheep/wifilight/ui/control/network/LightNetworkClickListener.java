@@ -71,7 +71,7 @@ class LightNetworkClickListener {
     }
 
     private void closeDrawer() {
-        eventBus.postMessage(new NavigationActivity.CloseDrawerEvent());
+        eventBus.postUIMessage(new NavigationActivity.CloseDrawerEvent());
     }
 
     private void selectorChanged(@NonNull final LightSelector.SelectorType type,

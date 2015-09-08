@@ -2,8 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/light_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="@dimen/default_padding"
     android:background="@drawable/background_light">
 
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/light_imageview"
+        android:layout_below="@+id/light_small_imageview"
         style="@style/Theme.WifiLight.TextView.ItemTitle" />
 
 </RelativeLayout>

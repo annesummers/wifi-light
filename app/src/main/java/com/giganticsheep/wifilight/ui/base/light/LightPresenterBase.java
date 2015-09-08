@@ -6,7 +6,6 @@ import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
@@ -42,9 +41,9 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
      */
     @DebugLog
     public void fetchLight(final String id) {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
+       // if (isViewAttached()) {
+        //    getView().showLoading();
+       // }
 
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
@@ -54,14 +53,25 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
 
             @Override
             public void onError(Throwable e) {
-                eventBus.postMessage(new ErrorEvent(e));
+               // eventBus.postMessage(new ErrorEvent(e));
             }
 
             @Override
             public void onNext(Light light) {
-                eventBus.postMessage(new LightChangedEvent(light));
+                //eventBus.postMessage(new LightChangedEvent(light));
+                handleLightChanged(light);
             }
         });
+    }
+
+    /**
+     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Location} to display.
+     *
+     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
+     */
+    @DebugLog
+    public void onEventMainThread(@NonNull final LightChangedEvent event) {
+        fetchLight(event.getLightId());
     }
 
     /**
@@ -125,10 +135,10 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
      */
-    @DebugLog
-    public void onEvent(@NonNull final LightChangedEvent event) {
-        handleLightChanged(event.getLight());
-    }
+  //  @DebugLog
+   // public void onEvent(@NonNull final LightChangedEvent event) {
+     //   handleLightChanged(event.getLight());
+   // }
 
     /**
      * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Group} to display.
@@ -172,7 +182,11 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
 
         @Override
         public void onNext(@NonNull final LightStatus light) {
-            fetchLight(light.getId());
+            lightChanged(light.getId());
         }
+    }
+
+    public void lightChanged(String lightId) {
+        eventBus.postMessage(new LightChangedEvent(lightId));
     }
 }

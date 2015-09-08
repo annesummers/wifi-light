@@ -18,15 +18,15 @@
 
     <style name="Theme.WifiLight.TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/tab_selected</item>
-        <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
-        <item name="android:background">@color/tab_background</item>
+        <item name="tabIndicatorHeight">@dimen/tab_height</item>
+        <item name="android:background">@drawable/tab_selector</item>
         <item name="tabTextAppearance">@style/Theme.WifiLight.TabTextAppearance</item>
         <item name="tabSelectedTextColor">@color/text_tertiary</item>
     </style>
 
     <style name="Theme.WifiLight.TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_tertiary</item>
+        <item name="android:textColor">@color/text_secondary</item>
     </style>
 
     <style name="Theme.WifiLight.TextView.Label1" parent="TextAppearance.AppCompat.Body1">

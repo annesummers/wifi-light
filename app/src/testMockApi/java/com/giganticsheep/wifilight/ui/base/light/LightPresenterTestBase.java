@@ -100,7 +100,7 @@ public abstract class LightPresenterTestBase extends PresenterTestBase {
     protected void handleLightChangedEvent() {
         LightChangedEvent event = getCheckedEvent(LightChangedEvent.class);
 
-        presenter.handleLightChanged(event.getLight());
+        //presenter.handleLightChanged(event.getLight());
     }
 
     protected void handleErrorEvent() {

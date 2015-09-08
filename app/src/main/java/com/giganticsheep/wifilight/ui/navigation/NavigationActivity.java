@@ -367,6 +367,8 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                presenter.lightChanged(event.lightId);
+
                 Intent intent = new Intent();
                 intent.setClass(NavigationActivity.this, LightControlActivity.class);
 
@@ -381,6 +383,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
     }
 
     public void onEventMainThread(final FragmentShownEvent event) {
+        maskLayout.removeAllViews();
         maskLayout.setVisibility(View.GONE);
     }
 

@@ -1,19 +1,17 @@
 package com.giganticsheep.wifilight.ui.base;
 
-import com.giganticsheep.wifilight.api.model.Light;
-
 /**
  * Created by anne on 13/07/15.
  * (*_*)
  */
 public class LightChangedEvent {
-    private final Light light;
+    private final String lightId;
 
-    public LightChangedEvent(Light light) {
-        this.light = light;
+    public LightChangedEvent(String lightId) {
+        this.lightId = lightId;
     }
 
-    public final Light getLight() {
-        return light;
+    public final String getLightId() {
+        return lightId;
     }
 }

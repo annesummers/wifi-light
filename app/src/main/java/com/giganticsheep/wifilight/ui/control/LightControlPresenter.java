@@ -23,6 +23,11 @@ public class LightControlPresenter extends LightPresenterBase {
         super(injector);
     }
 
+    final public void reRegisterForEvents() {
+        eventBus.unregisterForEvents(this);
+        eventBus.registerForEvents(this);
+    }
+
     @DebugLog
     final public void fetchLightNetwork() {
         if (isViewAttached()) {
@@ -31,13 +36,10 @@ public class LightControlPresenter extends LightPresenterBase {
 
         subscribe(lightControl.fetchLightNetwork(), new Subscriber<LightNetwork>() {
             @Override
-            public void onCompleted() {
-
-            }
+            public void onCompleted() { }
 
             @Override
             public void onError(Throwable e) {
-
                 eventBus.postMessage(new ErrorEvent(e));
             }
 

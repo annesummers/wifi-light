@@ -6,6 +6,7 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.ui.base.GroupChangedEvent;
+import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
@@ -31,7 +32,8 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
 
         subscribe(lightControl.fetchLightNetwork(), new Subscriber<LightNetwork>() {
             @Override
-            public void onCompleted() { }
+            public void onCompleted() {
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -67,6 +69,10 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
 
     public void groupChanged(String groupId) {
         eventBus.postMessageSticky(new GroupChangedEvent(groupId));
+    }
+
+    public void lightChanged(String lightId) {
+        eventBus.postMessageSticky(new LightChangedEvent(lightId));
     }
 
     /**

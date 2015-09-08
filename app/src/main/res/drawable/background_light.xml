@@ -5,13 +5,13 @@
     <solid
         android:color="@color/background_light" />
     <stroke
-        android:width="3dp"
+        android:width="@dimen/outline_width"
         android:color="@color/background_secondary" />
     <corners
         android:radius="3dp" />
     <padding
-        android:left="@dimen/default_padding"
-        android:top="@dimen/default_padding"
-        android:right="@dimen/default_padding"
-        android:bottom="@dimen/default_padding" />
+        android:left="@dimen/outline_width"
+        android:top="@dimen/outline_width"
+        android:right="@dimen/outline_width"
+        android:bottom="@dimen/outline_width"/>
 </shape>

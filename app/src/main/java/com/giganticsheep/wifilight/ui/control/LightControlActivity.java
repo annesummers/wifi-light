@@ -1,6 +1,7 @@
 package com.giganticsheep.wifilight.ui.control;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -28,12 +29,8 @@ import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.ui.base.light.LightViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
-import com.giganticsheep.wifilight.util.Constants;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
@@ -122,6 +119,13 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        getPresenter().reRegisterForEvents();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
@@ -168,8 +172,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                         return R.id.container;
                     case 1:
                         return R.id.container2;
-                    case 2:
-                        return R.id.container_drawer;
                     default:
                         return 0;
 
@@ -178,7 +180,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
             @Override
             public int fragmentContainerCount() {
-                return 3;
+                return 2;
             }
 
             @Override
@@ -267,13 +269,15 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
 
         //setDrawerState(true);
 
-        Timer timer = new Timer();
+        // TODO pull the info from the server again
+
+       /* Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(() -> getPresenter().fetchLight(light.getId()));
+                getPresenter().lightChanged(light.getId());
             }
-        }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);
+        }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);*/
     }
 
     @DebugLog
@@ -308,6 +312,11 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         errorLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void onEventMainThread(final FragmentShownEvent event) {
+       // maskLayout.removeAllViews();
+       // maskLayout.setVisibility(View.GONE);
     }
 
     // Dagger

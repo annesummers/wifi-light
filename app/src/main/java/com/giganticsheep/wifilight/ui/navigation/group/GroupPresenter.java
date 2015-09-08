@@ -23,40 +23,30 @@ public class GroupPresenter extends PresenterBase<GroupView> {
     }
 
     /**
-     * Fetches the Group with the given id.  Subscribes to the model's method using
-     * the Subscriber given.
-     *
-     * @param groupId the id of the v to fetch.
-     */
-    @DebugLog
-    public void fetchGroup(final String groupId) {
-        subscribe(lightControl.fetchGroup(groupId)
-                .observeOn(AndroidSchedulers.mainThread()),
-                new Subscriber<Group>() {
-
-            @Override
-            public void onCompleted() { }
-
-            @Override
-            public void onError(@NonNull final Throwable e) {
-                eventBus.postMessage(new ErrorEvent(e));
-            }
-
-            @Override
-            public void onNext(@NonNull final Group group) {
-                getView().showGroup(group);
-            }
-        });
-    }
-
-    /**
      * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Location} to display.
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
     @DebugLog
     public void onEventBackgroundThread(@NonNull final GroupChangedEvent event) {
-        fetchGroup(event.getGroupId());
+        subscribe(lightControl.fetchGroup(event.getGroupId())
+                        .observeOn(AndroidSchedulers.mainThread()),
+                new Subscriber<Group>() {
+
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(@NonNull final Throwable e) {
+                        eventBus.postMessage(new ErrorEvent(e));
+                    }
+
+                    @Override
+                    public void onNext(@NonNull final Group group) {
+                        getView().showGroup(group);
+                    }
+                });
     }
 
     /**
