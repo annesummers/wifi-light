@@ -6,12 +6,14 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.colour.ColourFragmentBuilder;
-import com.giganticsheep.wifilight.ui.control.network.LightNetworkDrawerFragmentBuilder;
 import com.giganticsheep.wifilight.ui.details.DetailsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.effects.EffectsFragmentBuilder;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkDrawerFragmentBuilder;
 import com.giganticsheep.wifilight.ui.navigation.group.GroupFragmentBuilder;
 import com.giganticsheep.wifilight.ui.navigation.location.LocationFragmentBuilder;
-import com.giganticsheep.wifilight.ui.status.StatusFragmentBuilder;
+import com.giganticsheep.wifilight.ui.status.group.GroupStatusFragmentBuilder;
+import com.giganticsheep.wifilight.ui.status.light.LightStatusFragmentBuilder;
+import com.giganticsheep.wifilight.ui.status.location.LocationStatusFragmentBuilder;
 import com.giganticsheep.wifilight.ui.white.WhiteFragmentBuilder;
 
 import java.util.Map;
@@ -72,10 +74,6 @@ public class FragmentFactory {
             return new DetailsFragmentBuilder(name).build();
         }
 
-        if (name.equals(application.getString(R.string.fragment_name_light_status))) {
-            return new StatusFragmentBuilder(name).build();
-        }
-
         if (name.equals(application.getString(R.string.fragment_name_drawer))) {
             return new LightNetworkDrawerFragmentBuilder(name).build();
         }
@@ -83,6 +81,23 @@ public class FragmentFactory {
         if(name.equals(application.getString(R.string.fragment_name_location))) {
             return new LocationFragmentBuilder(name).build();
         }
+
+        if(name.equals(application.getString(R.string.fragment_name_group))) {
+            return new GroupFragmentBuilder(name).build();
+        }
+
+        if (name.equals(application.getString(R.string.fragment_name_light_status))) {
+            return new LightStatusFragmentBuilder(name).build();
+        }
+
+        if (name.equals(application.getString(R.string.fragment_name_group_status))) {
+            return new GroupStatusFragmentBuilder(name).build();
+        }
+
+        if (name.equals(application.getString(R.string.fragment_name_location_status))) {
+            return new LocationStatusFragmentBuilder(name).build();
+        }
+
 
         throw new Exception("Fragment does not exist");
     }
@@ -95,11 +110,6 @@ public class FragmentFactory {
     @NonNull
     public final FragmentBase createFragment(@NonNull final String name,
                                              final Map<String, String> args) throws Exception {
-
-        if(name.equals(application.getString(R.string.fragment_name_group))) {
-            return new GroupFragmentBuilder(name, args.get(WifiLightApplication.KEY_GROUP_ID)).build();
-        }
-
         throw new Exception("Fragment does not exist");
     }
 }

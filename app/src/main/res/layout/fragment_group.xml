@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_location">
+    android:padding="@dimen/default_padding"
+    android:background="@drawable/background_group">
 
     <include layout="@layout/layout_top"
         android:id="@+id/top_layout"/>

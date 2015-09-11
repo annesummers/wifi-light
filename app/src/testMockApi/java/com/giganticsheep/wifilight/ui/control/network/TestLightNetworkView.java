@@ -3,6 +3,7 @@ package com.giganticsheep.wifilight.ui.control.network;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.LightNetwork;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkView;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -19,8 +20,6 @@ public class TestLightNetworkView implements LightNetworkView {
 
     private LightNetwork lightNetwork;
     private int locationPosition;
-    private int groupPosition;
-    private int lightPosition;
 
     private int state;
 
@@ -30,15 +29,11 @@ public class TestLightNetworkView implements LightNetworkView {
 
     @Override
     public void showLightNetwork(final LightNetwork lightNetwork,
-                                 final int locationPosition,
-                                 final int groupPosition,
-                                 final int lightPosition) {
+                                 final int locationPosition) {
         state = STATE_SHOW_LIGHT_NETWORK;
 
         this.lightNetwork = lightNetwork;
         this.locationPosition = locationPosition;
-        this.groupPosition = groupPosition;
-        this.lightPosition = lightPosition;
     }
 
     @Override
@@ -62,14 +57,6 @@ public class TestLightNetworkView implements LightNetworkView {
 
     public LightNetwork getLightNetwork() {
         return lightNetwork;
-    }
-
-    public int getLightPosition() {
-        return lightPosition;
-    }
-
-    public int getGroupPosition() {
-        return groupPosition;
     }
 
     public int getLocationPosition() {

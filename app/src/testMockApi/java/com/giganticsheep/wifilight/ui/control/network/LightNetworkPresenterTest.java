@@ -5,6 +5,7 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.network.MockLightControlImpl;
 import com.giganticsheep.wifilight.ui.control.PresenterTestBase;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkPresenter;
 
 import org.junit.Before;
 import org.junit.Test;

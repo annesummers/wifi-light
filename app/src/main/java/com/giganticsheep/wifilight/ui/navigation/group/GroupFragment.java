@@ -13,7 +13,6 @@ import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
-import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -31,8 +30,6 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter, Navig
                                 implements GroupView {
 
     private GroupAdapter adapter;
-
-    @Arg String groupId;
 
     @InjectView(R.id.lights_recycler_view) RecyclerView lightsRecyclerView;
     @InjectView(R.id.name_textview) TextView groupNameTextView;

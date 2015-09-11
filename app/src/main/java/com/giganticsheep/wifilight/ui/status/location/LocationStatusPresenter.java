@@ -1,23 +1,28 @@
-package com.giganticsheep.wifilight.ui.navigation.location;
+package com.giganticsheep.wifilight.ui.status.location;
 
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
-import com.giganticsheep.wifilight.ui.base.PresenterBase;
+import com.giganticsheep.wifilight.ui.status.StatusPresenterBase;
 
 import hugo.weaving.DebugLog;
 import rx.Subscriber;
-import timber.log.Timber;
 
 /**
  * DESCRIPTION HERE ANNE <p>
- * Created by anne on 04/09/15. <p>
+ * Created by anne on 08/09/15. <p>
  * (*_*)
  */
-public class LocationPresenter extends PresenterBase<LocationView> {
+public class LocationStatusPresenter extends StatusPresenterBase<LocationStatusView> {
 
-    public LocationPresenter(@NonNull final Injector injector) {
+    /**
+     * Constructs the StatusPresenter object.  Injects itself into the supplied Injector.
+     *
+     * @param injector an Injector used to inject this object into a Component that will
+     *                 provide the injected class members.
+     */
+    public LocationStatusPresenter(@NonNull Injector injector) {
         injector.inject(this);
     }
 
@@ -34,16 +39,15 @@ public class LocationPresenter extends PresenterBase<LocationView> {
                     public void onCompleted() { }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Timber.e("fetchLocation", e);
-                    }
+                    public void onError(Throwable e) { }
 
                     @Override
-                    public void onNext(Location location) {
-                        getView().showLocation(location);
+                    public void onNext(final Location location) {
+                        if(isViewAttached()) {
+                            getView().showLocation(location);
+                        }
                     }
                 });
-
     }
 
     /**
@@ -55,8 +59,8 @@ public class LocationPresenter extends PresenterBase<LocationView> {
         /**
          * Injects the lightPresenter class into the Component implementing this interface.
          *
-         * @param locationPresenter the class to inject.
+         * @param presenter the class to inject.
          */
-        void inject(final LocationPresenter locationPresenter);
+        void inject(final LocationStatusPresenter presenter);
     }
 }

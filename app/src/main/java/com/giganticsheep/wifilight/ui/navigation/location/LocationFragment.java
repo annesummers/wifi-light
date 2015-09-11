@@ -6,7 +6,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Location;
@@ -32,7 +31,8 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     private LocationAdapter adapter;
 
     @InjectView(R.id.groups_recycler_view) RecyclerView groupsRecyclerView;
-    @InjectView(R.id.name_textview) TextView locationNameTextView;
+   // @InjectView(R.id.name_textview) TextView locationNameTextView;
+   // @InjectView(R.id.all_lights_button) Button allLightsButton;
 
     @DebugLog
     @Override
@@ -104,7 +104,7 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
     public void showLocation(@NonNull final Location location) {
         getViewState().setShowLocation(location);
 
-        locationNameTextView.setText(location.getName());
+        //locationNameTextView.setText(location.getName());
 
         adapter.setLocation(location);
         adapter.notifyDataSetChanged();

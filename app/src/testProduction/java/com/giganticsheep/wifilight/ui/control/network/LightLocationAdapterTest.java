@@ -7,6 +7,10 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.ui.UITestBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
+import com.giganticsheep.wifilight.ui.locations.LightLocationAdapter;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkDrawerFragment;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkDrawerFragmentComponent;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkDrawerFragmentModule;
 
 import org.junit.Assert;
 import org.junit.Before;

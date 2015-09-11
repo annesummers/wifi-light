@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
@@ -29,6 +28,7 @@ import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.ui.base.light.LightViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
+import com.giganticsheep.wifilight.ui.status.light.LightStatusViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
@@ -43,8 +43,10 @@ import hugo.weaving.DebugLog;
  *
  * (*_*)
  */
-public class LightControlActivity extends ActivityBase<LightView, LightControlPresenter, LightControlActivityComponent>
-                            implements LightView {
+public class LightControlActivity extends ActivityBase<LightView,
+                                                    LightControlPresenter,
+                                                    LightControlActivityComponent>
+                                implements LightView {
 
     public static final float DEFAULT_DURATION = 1.0F;
 
@@ -206,7 +208,7 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     @NonNull
     @Override
     public RestoreableViewState createViewState() {
-        return new LightViewState();
+        return new LightStatusViewState();
     }
 
     @Override
@@ -251,8 +253,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         loadingLayout.setVisibility(View.GONE);
         disconnectedLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
-
-        //setDrawerState(true);
     }
 
     @DebugLog
@@ -266,8 +266,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         disconnectedLayout.setVisibility(View.VISIBLE);
-
-        //setDrawerState(true);
 
         // TODO pull the info from the server again
 
@@ -291,8 +289,6 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
         loadingLayout.setVisibility(View.GONE);
         lightLayout.setVisibility(View.VISIBLE);
         disconnectedLayout.setVisibility(View.VISIBLE);
-
-        //setDrawerState(true);
     }
 
     @DebugLog
@@ -322,22 +318,29 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
     // Dagger
 
     @Override
+    public LightControlActivityComponent getComponent() {
+        return component;
+    }
+
+    @Override
     protected void injectDependencies() {
         super.injectDependencies();
 
-        WifiLightApplication application = ((WifiLightApplication)getApplication());
-
         component = DaggerLightControlActivityComponent.builder()
-                .wifiLightAppComponent(application.getComponent())
+                .wifiLightAppComponent(getWifiLightApplication().getComponent())
                 .activityModule(new ActivityModule(this))
                 .build();
 
         component.inject(this);
     }
 
-    @Override
-    public LightControlActivityComponent getComponent() {
-        return component;
+    /**
+     * The Injector interface is implemented by a Component that provides the injected
+     * class members, enabling a LightFragmentBase derived class to inject itself
+     * into the Component.
+     */
+    public interface Injector {
+        void inject(LightControlActivity activity);
     }
 
     private class LightFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -394,14 +397,5 @@ public class LightControlActivity extends ActivityBase<LightView, LightControlPr
                     return null;
             }
         }
-    }
-
-    /**
-     * The Injector interface is implemented by a Component that provides the injected
-     * class members, enabling a LightFragmentBase derived class to inject itself
-     * into the Component.
-     */
-    public interface Injector {
-        void inject(LightControlActivity lightControlActivity);
     }
 }

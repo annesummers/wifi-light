@@ -7,28 +7,6 @@
     android:layout_marginLeft="@dimen/default_margin"
     android:layout_marginRight="@dimen/default_margin">
 
-    <ToggleButton
-        android:id="@+id/power_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/default_half_margin"
-        android:layout_marginEnd="@dimen/default_half_margin"
-        android:layout_gravity="center_vertical"
-        android:text="@string/label_light_power"/>
-
-    <TextView
-        android:id="@+id/status_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginLeft="@dimen/default_half_margin"
-        android:layout_marginStart="@dimen/default_half_margin"
-        android:layout_toRightOf="@+id/power_toggle"
-        android:layout_toEndOf="@+id/power_toggle"
-        android:textSize="25sp"
-        android:text="DISCONNECTED"
-        android:gravity="center"
-        android:layout_alignTop="@+id/power_toggle"
-        android:layout_alignBottom="@+id/power_toggle" />
+    <include layout="@layout/layout_top"/>
 
 </RelativeLayout>

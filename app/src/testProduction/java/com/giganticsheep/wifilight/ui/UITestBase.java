@@ -1,12 +1,10 @@
 package com.giganticsheep.wifilight.ui;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 
 import com.giganticsheep.wifilight.WifiLightAppComponent;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.WifiLightTestBase;
-import com.giganticsheep.wifilight.ui.control.network.LightNetworkDrawerFragmentModule;
 
 import org.robolectric.RuntimeEnvironment;
 

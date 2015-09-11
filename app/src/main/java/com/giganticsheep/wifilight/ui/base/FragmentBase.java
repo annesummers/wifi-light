@@ -35,9 +35,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V>, C>
+public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V>, C extends ComponentBase>
                                                         extends MvpViewStateFragment<V, P>
-                                                        implements HasComponent<C>{
+                                                        implements HasComponent<C> {
 
     private static final int INVALID = -1;
 

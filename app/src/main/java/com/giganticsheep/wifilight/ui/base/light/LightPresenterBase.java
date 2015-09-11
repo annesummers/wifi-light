@@ -2,10 +2,8 @@ package com.giganticsheep.wifilight.ui.base.light;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.api.model.LightStatus;
-import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
@@ -13,6 +11,7 @@ import com.giganticsheep.wifilight.util.Constants;
 
 import hugo.weaving.DebugLog;
 import rx.Subscriber;
+import timber.log.Timber;
 
 /**
  * Base class for all the Presenters that show information about a Light.<p>
@@ -41,24 +40,18 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
      */
     @DebugLog
     public void fetchLight(final String id) {
-       // if (isViewAttached()) {
-        //    getView().showLoading();
-       // }
-
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
             @Override
-            public void onCompleted() {
-            }
+            public void onCompleted() { }
 
             @Override
             public void onError(Throwable e) {
-               // eventBus.postMessage(new ErrorEvent(e));
+                Timber.e("fetchLight", e);
             }
 
             @Override
             public void onNext(Light light) {
-                //eventBus.postMessage(new LightChangedEvent(light));
                 handleLightChanged(light);
             }
         });
@@ -97,32 +90,6 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
         }
     }
 
-    /**
-     * Called to provide common functionality for when the {@link com.giganticsheep.wifilight.api.model.Group}
-     * has changed.  Sets the {@link com.giganticsheep.wifilight.api.model.Group}
-     * in the associated view and calls to the view to show the correct screen depending on the
-     * status of the {@link com.giganticsheep.wifilight.api.model.Group}.
-     *
-     * @param group the new group.
-     */
-    @DebugLog
-    public void handleGroupChanged(@NonNull final Group group) {
-        // TODO show group
-    }
-
-    /**
-     * Called to provide common functionality for when the {@link com.giganticsheep.wifilight.api.model.Location}
-     * has changed.  Sets the @link com.giganticsheep.wifilight.api.model.Location}
-     * in the associated view and calls to the view to show the correct screen depending on the
-     * status of the @link com.giganticsheep.wifilight.api.model.Location}.
-     *
-     * @param location the new location.
-     */
-    @DebugLog
-    public void handleLocationChanged(@NonNull final Location location) {
-        // TODO show location
-    }
-
     @DebugLog
     public void handleError(Throwable error) {
         if (isViewAttached()) {
@@ -130,48 +97,9 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
         }
     }
 
-    /**
-     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Light} to display.
-     *
-     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Light}.
-     */
-  //  @DebugLog
-   // public void onEvent(@NonNull final LightChangedEvent event) {
-     //   handleLightChanged(event.getLight());
-   // }
-
-    /**
-     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Group} to display.
-     *
-     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Group}.
-     */
-  /*  @DebugLog
-    public void onEvent(@NonNull final GroupChangedEvent event) {
-        handleGroupChanged(event.getGroup());
-    }*/
-
-    /**
-     * Called with the details of a {@link com.giganticsheep.wifilight.api.model.Location} to display.
-     *
-     * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
-     */
-   /* @DebugLog
-    public void onEvent(@NonNull final LocationChangedEvent event) {
-        handleLocationChanged(event.getLocation());
-    }*/
-
-    /**
-     * The Injector interface is implemented by a Component that provides the injected
-     * class members, enabling a LightPresenterBase derived class to inject itself
-     * into the Component.
-     */
-    public interface Injector {
-        /**
-         * Injects the lightPresenter class into the Component implementing this interface.
-         *
-         * @param lightPresenter the class to inject.
-         */
-        void inject(final LightPresenterBase lightPresenter);
+    @DebugLog
+    public void lightChanged(@NonNull final String lightId) {
+        eventBus.postMessage(new LightChangedEvent(lightId));
     }
 
     public class SetLightSubscriber extends ErrorSubscriber<LightStatus> {
@@ -186,7 +114,12 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
         }
     }
 
-    public void lightChanged(String lightId) {
-        eventBus.postMessage(new LightChangedEvent(lightId));
+    /**
+     * The Injector interface is implemented by a Component that provides the injected
+     * class members, enabling a LightFragmentBase derived class to inject itself
+     * into the Component.
+     */
+    public interface Injector {
+        void inject(LightPresenterBase fragmentBase);
     }
 }

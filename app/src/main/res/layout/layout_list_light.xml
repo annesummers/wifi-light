@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/bulb_small"
-        android:visibility="gone"/>
+        android:layout_below="@+id/light_name_textview"
+        android:layout_centerHorizontal="true" />
 
     <ImageView
         android:id="@+id/light_imageview"
@@ -28,7 +29,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/light_small_imageview"
         style="@style/Theme.WifiLight.TextView.ItemTitle" />
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.control.LightControlActivityComponent;
+import com.giganticsheep.wifilight.ui.status.light.LightStatusViewState;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -18,13 +19,15 @@ import hugo.weaving.DebugLog;
  */
 
 @FragmentArgsInherited
-public abstract class LightFragmentBase extends FragmentBase<LightView, LightPresenterBase, LightControlActivityComponent>
+public abstract class LightFragmentBase extends FragmentBase<LightView,
+                                                            LightPresenterBase,
+                                                            LightControlActivityComponent>
                                     implements LightView {
 
     protected OnLightSeekBarChangeListener seekBarChangeListener;
 
     @Override
-    public final void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
@@ -54,7 +57,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
     public final ViewState createViewState() {
         ViewState viewState = getLightControlActivity().getFragmentViewState();
         if(viewState == null) {
-            viewState = new LightViewState();
+            viewState = new LightStatusViewState();
         }
 
         return viewState;
@@ -153,6 +156,6 @@ public abstract class LightFragmentBase extends FragmentBase<LightView, LightPre
      * into the Component.
      */
     public interface Injector {
-        void inject(LightFragmentBase lightFragment);
+        void inject(LightFragmentBase fragmentBase);
     }
 }

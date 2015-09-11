@@ -1,22 +1,26 @@
 package com.giganticsheep.wifilight.ui.status;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.daimajia.androidanimations.library.attention.ShakeAnimator;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.LightControl;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
+import com.giganticsheep.wifilight.api.model.LightSelector;
+import com.giganticsheep.wifilight.ui.base.ActivityBase;
+import com.giganticsheep.wifilight.ui.base.ComponentBase;
+import com.giganticsheep.wifilight.ui.base.FragmentBase;
+import com.giganticsheep.wifilight.ui.base.ViewBase;
+import com.giganticsheep.wifilight.ui.base.ViewStateBase;
+import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
@@ -26,13 +30,20 @@ import timber.log.Timber;
  * (*_*)
  */
 @FragmentArgsInherited
-public class StatusFragment extends LightFragmentBase {
+public abstract class StatusFragment<V extends ViewBase,
+                                    P extends StatusPresenterBase<V>,
+                                    C extends ComponentBase>
+                                                            extends FragmentBase<V, P, C>
+                                                            implements ViewBase {
 
-    @InjectView(R.id.power_toggle) ToggleButton powerToggle;
-    @InjectView(R.id.status_textview) TextView statusTextView;
+    @InjectView(R.id.power_toggle) protected ToggleButton powerToggle;
+    @InjectView(R.id.name_textview) protected TextView nameTextView;
+    @InjectView(R.id.all_lights_button) protected Button allLightsButton;
 
-    private boolean firstSetPower = false;
-    private boolean viewsEnabled = false;
+    protected boolean firstSetPower = false;
+    protected boolean viewsEnabled = false;
+
+    private LightSelector selector;
 
     public StatusFragment() {
         super();
@@ -42,62 +53,78 @@ public class StatusFragment extends LightFragmentBase {
 
     @DebugLog
     @OnCheckedChanged(R.id.power_toggle)
-    public synchronized void onPowerToggle(@NonNull final CompoundButton compoundButton,
+    public final synchronized void onPowerToggle(@NonNull final CompoundButton compoundButton,
                                            final boolean isChecked) {
         if(viewsEnabled){
             Timber.d("onPowerToggle() views enabled and firstSetPower is %s", firstSetPower ? "true" : "false");
             if(!firstSetPower) {
-                getLightStatusPresenter().setPower(isChecked);
+                getStatusPresenter().setPower(isChecked, selector);
             }
 
             firstSetPower = false;
         }
     }
 
-    // MVP
+    @OnClick(R.id.all_lights_button)
+    public final void onAllLightsClick(@NonNull final View view) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), LightControlActivity.class);
+        intent.putExtra(ActivityBase.ANIMATION_EXTRA, ActivityBase.ANIMATION_FADE);
 
-    @NonNull
-    @Override
-    public LightPresenterBase createPresenter() {
-        return new StatusPresenter(getComponent());
-    }
-
-    @NonNull
-    private StatusPresenter getLightStatusPresenter() {
-        return (StatusPresenter) super.getPresenter();
+        getActivity().overridePendingTransition(R.anim.hold, R.anim.push_out_to_right);
     }
 
     @Override
-    protected int getLayoutRes() {
+    protected final int getLayoutRes() {
         return R.layout.fragment_status;
     }
 
-    @DebugLog
     @Override
-    public synchronized void showLight(@NonNull final Light light) {
-        firstSetPower = true;
-        powerToggle.setChecked(light.getPower() == LightControl.Power.ON);
+    protected final boolean reinitialiseOnRotate() {
+        return false;
+    }
 
-        String oldStatus = (String) statusTextView.getText();
-        statusTextView.setText(getString(light.isConnected() ? R.string.label_light_connected
-                                                             : R.string.label_light_disconnected));
-
-        if(!oldStatus.equals(statusTextView.getText())) {
-            YoYo.with(Techniques.Shake)
-                    .duration(ShakeAnimator.DURATION)
-                    .playOn(statusTextView);
-        }
+    @Override
+    protected final boolean animateOnShow() {
+        return false;
     }
 
     @DebugLog
-    @Override
-    protected synchronized void enableViews(final boolean enable) {
+    protected final synchronized void enableViews(final boolean enable) {
         viewsEnabled = enable;
         powerToggle.setEnabled(enable);
     }
 
+    // MVP
+
+    @NonNull
+    private StatusPresenterBase getStatusPresenter() {
+        return super.getPresenter();
+    }
+
+    @NonNull
     @Override
-    protected boolean reinitialiseOnRotate() {
-        return false;
+    public ViewStateBase getViewState() {
+        return (ViewStateBase) super.getViewState();
+    }
+
+    @Override
+    public final void onNewViewStateInstance() {
+        getViewState().apply(this, false);
+    }
+
+    @Override
+    public final void showLoading() {
+        getViewState().setShowLoading();
+    }
+
+    @Override
+    public final void showError() {
+        getViewState().setShowError();
+    }
+
+    @Override
+    public final void showError(Throwable throwable) {
+        getViewState().setShowError(throwable);
     }
 }

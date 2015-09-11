@@ -18,7 +18,9 @@
     <string name="fragment_name_light_colour">Colour</string>
     <string name="fragment_name_light_effects">Effects</string>
     <string name="fragment_name_light_details">Details</string>
-    <string name="fragment_name_light_status">Status</string>
+    <string name="fragment_name_light_status">Light Status</string>
+    <string name="fragment_name_group_status">Group Status</string>
+    <string name="fragment_name_location_status">Location Status</string>
     <string name="fragment_name_light_white">White</string>
     <string name="fragment_name_drawer">Drawer</string>
 

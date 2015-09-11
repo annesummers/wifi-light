@@ -14,6 +14,7 @@ import android.support.v4.util.ArrayMap;
 import android.widget.Toast;
 
 import com.avast.android.dialogs.fragment.SimpleDialogFragment;
+import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
@@ -38,10 +39,15 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>, C> extends MvpViewStateActivity<V, P>
+public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>, C extends ComponentBase>
+                                                                                    extends MvpViewStateActivity<V, P>
                                                                                     implements HasComponent<C> {
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
+    public static final String ANIMATION_EXTRA = "animation_extra";
+
+    public static final int ANIMATION_NONE = 0;
+    public static final int ANIMATION_FADE = 1;
 
     @Icicle private final Map<Integer, FragmentAttachmentDetails> attachedFragments = new ArrayMap<>();
 
@@ -53,6 +59,8 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
 
     private DialogFragment errorDialog;
 
+    private int animation = ANIMATION_NONE;
+
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected FragmentFactory fragmentFactory;
@@ -63,6 +71,16 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            animation = extras.getInt(ANIMATION_EXTRA, ANIMATION_NONE);
+        }
+
+        switch (animation) {
+            case ANIMATION_FADE:
+                overridePendingTransition(R.anim.pull_in_from_left, R.anim.hold);
+        }
 
         eventBus.registerForUIEvents(this);
 
@@ -124,6 +142,16 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
         }
 
         fragmentAttachmentQueue.clear();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        switch (animation) {
+            case ANIMATION_FADE:
+                overridePendingTransition(R.anim.hold, R.anim.push_out_to_left);
+        }
     }
 
     @Override
@@ -330,7 +358,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
     }
 
     @NonNull
-    private WifiLightApplication getWifiLightApplication() {
+    protected WifiLightApplication getWifiLightApplication() {
         return (WifiLightApplication)getApplication();
     }
 

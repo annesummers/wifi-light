@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control.network;
+package com.giganticsheep.wifilight.ui.locations;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,21 +19,13 @@ import hugo.weaving.DebugLog;
  */
 public class LightLocationAdapter extends LightNetworkAdapterBase {
 
-  //  private final Map<Integer, List<LightGroupAdapter>> lightGroupAdapters = new ArrayMap<>();
-
-    //private final LightNetworkClickListener lightNetworkClickListener;
-
     @DebugLog
-    public LightLocationAdapter(@NonNull final Injector injector/*,
-                                @NonNull final LightNetworkClickListener lightNetworkClickListener*/) {
+    public LightLocationAdapter(@NonNull final Injector injector) {
         super(injector);
-
-        //this.lightNetworkClickListener = lightNetworkClickListener;
     }
 
     @Override
     public int getChildrenCount(final int groupPosition) {
-       // return lightNetwork.lightGroupCount(groupPosition);
         return lightNetwork.lightLocationCount();
     }
 
@@ -42,7 +34,6 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
     public String getChild(final int groupPosition,
                            final int childPosition) {
         return lightNetwork.getLightLocation(childPosition).getId();
-        //return lightNetwork.getLightGroup(groupPosition, groupPosition).getId();
     }
 
     @Override
@@ -59,19 +50,6 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
                              boolean isLastChild,
                             @Nullable View convertView,
                             final ViewGroup parent) {
-        /*GroupListViewHolder holder;
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_group_list, null);
-            holder = new GroupListViewHolder(convertView,
-                    lightNetworkClickListener,
-                    childPosition);
-            convertView.setTag(holder);
-        } else {
-            holder = (GroupListViewHolder) convertView.getTag();
-        }
-
-        holder.setViewData(lightGroupAdapters.get(groupPosition).get(childPosition));*/
         LocationViewHolder holder;
 
         if (convertView == null) {
@@ -89,12 +67,12 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
 
     @Override
     public String getGroup(final int groupPosition) {
-        return "Locations";//lightNetwork.getLightLocation(groupPosition).getId();
+        return "Locations";
     }
 
     @Override
     public int getGroupCount() {
-        return 1;//lightNetwork.lightLocationCount();
+        return 1;
     }
 
     @Override
@@ -109,29 +87,13 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
                              boolean isExpanded,
                              @Nullable View convertView,
                              final ViewGroup parent) {
-        /*LocationViewHolder holder;
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_location_item, null);
-            holder = new LocationViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (LocationViewHolder) convertView.getTag();
-        }
-
-        holder.setViewData(lightNetwork.getLightLocation(groupPosition));*/
-
         LocationsViewHolder holder;
 
         if (convertView == null) {
             convertView = LayoutInflater.from(fragment.getActivity()).inflate(R.layout.drawer_locations_item, null);
             holder = new LocationsViewHolder(convertView);
             convertView.setTag(holder);
-        }// else {
-         //   holder = (LocationsViewHolder) convertView.getTag();
-       // }
-
-        //holder.setViewData(lightNetwork.getLightLocation(groupPosition));
+        }
 
         return convertView;
     }
@@ -150,42 +112,7 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
     @Override
     public void setLightNetwork(@NonNull final LightNetwork lightNetwork) {
         super.setLightNetwork(lightNetwork);
-
-       /* for(int i = 0; i < lightNetwork.lightLocationCount(); i++) {
-            lightGroupAdapters.put(i, new ArrayList<>(lightNetwork.lightGroupCount(i)));
-            for(int j = 0; j < lightNetwork.lightGroupCount(i); j++) {
-                LightGroupAdapter lightGroupAdapter = new LightGroupAdapter(injector, i);
-                lightGroupAdapter.setLightNetwork(lightNetwork);
-                lightGroupAdapters.get(i).add(lightGroupAdapter);
-            }
-        }*/
     }
-
-    public void clickDrawerItem(final int lightGroupPosition,
-                                final int lightPosition) {
-
-    }
-
-    /*class GroupListViewHolder {
-        private LightGroupAdapter viewData;
-
-        final ExpandableListView groupListView;
-
-        public GroupListViewHolder(@NonNull final View view,
-                                   @NonNull final LightNetworkClickListener lightNetworkClickListener,
-                                   final int lightLocationPosition) {
-            groupListView = (ExpandableListView) view.findViewById(R.id.group_list);
-
-            groupListView.setOnGroupClickListener(lightNetworkClickListener.createLightGroupClickListener());
-            groupListView.setOnChildClickListener(lightNetworkClickListener.createLightClickListener(lightLocationPosition));
-        }
-
-        public void setViewData(@NonNull final LightGroupAdapter viewData) {
-            this.viewData = viewData;
-
-            groupListView.setAdapter(viewData);
-        }
-    }*/
 
     class LocationViewHolder {
         private Location viewData;
@@ -209,11 +136,5 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         public LocationsViewHolder(View view) {
             locationsTextView = (TextView) view.findViewById(R.id.locations_textview);
         }
-
-       // public void setViewData(@NonNull final Location viewData) {
-      //      this.viewData = viewData;
-
-       //     locationsTextView.setText(viewData.getName());
-       // }
     }
 }

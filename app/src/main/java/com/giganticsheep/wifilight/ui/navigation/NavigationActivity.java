@@ -25,7 +25,7 @@ import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
-import com.giganticsheep.wifilight.ui.control.network.LightNetworkViewState;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
@@ -61,7 +61,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
     @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
     @InjectView(R.id.error_layout) FrameLayout errorLayout;
-    @InjectView(R.id.light_network_layout) FrameLayout lightNetworkLayout;
+    @InjectView(R.id.light_network_layout) RelativeLayout lightNetworkLayout;
     @InjectView(R.id.mask_layout) FrameLayout maskLayout;
 
     @InjectView(R.id.error_textview) TextView errorTextView;
@@ -73,8 +73,9 @@ public class NavigationActivity extends ActivityBase<NavigationView,
     protected void attachInitialFragments() {
         drawerViewState = new LightNetworkViewState();
 
-        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
-        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 1));
+        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location_status), 0));
+        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 1));
+        addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 2));
     }
 
     @DebugLog
@@ -200,6 +201,8 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                     case 0:
                         return R.id.container;
                     case 1:
+                        return R.id.container2;
+                    case 2:
                         return R.id.container_drawer;
                     default:
                         return 0;
@@ -209,7 +212,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
             @Override
             public int fragmentContainerCount() {
-                return 2;
+                return 3;
             }
 
             @Override
@@ -337,7 +340,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
             public void onAnimationEnd(Animation animation) {
                 FragmentAttachmentDetails attachDetails = new FragmentAttachmentDetails(
                         getString(R.string.fragment_name_group), 0);
-                attachDetails.addStringArg(WifiLightApplication.KEY_GROUP_ID, event.groupId);
+                attachDetails.addStringArg(WifiLightApplication.KEY_ID, event.groupId);
                 attachNewFragment(attachDetails);
 
                 presenter.groupChanged(event.groupId);

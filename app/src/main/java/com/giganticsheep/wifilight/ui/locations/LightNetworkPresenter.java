@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control.network;
+package com.giganticsheep.wifilight.ui.locations;
 
 import android.support.annotation.NonNull;
 
@@ -16,8 +16,6 @@ import hugo.weaving.DebugLog;
 public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
 
     private int locationPosition;
-    private int groupPosition;
-    private int lightPosition;
 
     @DebugLog
     public LightNetworkPresenter(@NonNull final Injector injector) {
@@ -35,7 +33,7 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
      */
     @DebugLog
     public synchronized void onEventMainThread(@NonNull final LightControl.FetchLightNetworkEvent event) {
-        getView().showLightNetwork(event.lightNetwork(), locationPosition, groupPosition, lightPosition);
+        getView().showLightNetwork(event.lightNetwork(), locationPosition);
     }
 
     @DebugLog

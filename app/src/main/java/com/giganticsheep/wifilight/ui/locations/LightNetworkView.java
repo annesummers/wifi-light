@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control.network;
+package com.giganticsheep.wifilight.ui.locations;
 
 import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.ui.base.ViewBase;
@@ -16,7 +16,5 @@ public interface LightNetworkView extends ViewBase {
      * Show the getLight network view.
      */
     void showLightNetwork(LightNetwork lightNetwork,
-                          int locationPosition,
-                          int groupPosition,
-                          int lightPosition);
+                          int locationPosition);
 }

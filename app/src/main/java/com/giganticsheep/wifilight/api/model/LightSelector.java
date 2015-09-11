@@ -18,10 +18,25 @@ public class LightSelector {
     }
 
     public enum SelectorType {
+        ALL,
         LOCATION,
         GROUP,
-        LIGHT,
-        ALL
+        LIGHT;
+
+        public static SelectorType parse(int selectorType) {
+            switch (selectorType) {
+                case 0:
+                    return ALL;
+                case 1:
+                    return LOCATION;
+                case 2:
+                    return GROUP;
+                case 3:
+                    return LIGHT;
+                default:
+                    return ALL;
+            }
+        }
     }
 
     @NonNull

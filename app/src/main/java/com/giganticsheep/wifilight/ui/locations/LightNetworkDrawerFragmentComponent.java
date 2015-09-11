@@ -1,6 +1,7 @@
-package com.giganticsheep.wifilight.ui.control.network;
+package com.giganticsheep.wifilight.ui.locations;
 
 import com.giganticsheep.wifilight.WifiLightAppComponent;
+import com.giganticsheep.wifilight.ui.base.ComponentBase;
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
 
 import dagger.Component;
@@ -15,7 +16,8 @@ import dagger.Component;
 @Component(
         dependencies = {WifiLightAppComponent.class},
         modules = { LightNetworkDrawerFragmentModule.class})
-public interface LightNetworkDrawerFragmentComponent extends LightNetworkDrawerFragment.Injector,
+public interface LightNetworkDrawerFragmentComponent extends ComponentBase,
+                                                            LightNetworkDrawerFragment.Injector,
                                                             LightNetworkClickListener.Injector,
                                                             LightNetworkPresenter.Injector,
                                                             LightNetworkAdapterBase.Injector {

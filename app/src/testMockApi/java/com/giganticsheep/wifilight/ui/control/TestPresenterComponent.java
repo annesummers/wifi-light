@@ -4,7 +4,7 @@ import com.giganticsheep.wifilight.base.TestModule;
 import com.giganticsheep.wifilight.ui.WifiLightTestsComponent;
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
 import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.control.network.LightNetworkPresenter;
+import com.giganticsheep.wifilight.ui.locations.LightNetworkPresenter;
 
 import dagger.Component;
 

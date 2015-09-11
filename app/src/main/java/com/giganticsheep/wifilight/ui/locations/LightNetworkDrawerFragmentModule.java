@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control.network;
+package com.giganticsheep.wifilight.ui.locations;
 
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
 

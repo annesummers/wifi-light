@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.control.network;
+package com.giganticsheep.wifilight.ui.locations;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,7 +29,9 @@ import timber.log.Timber;
  * (*_*)
  */
 @FragmentArgsInherited
-public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, LightNetworkPresenter, LightNetworkDrawerFragmentComponent>
+public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
+                                                LightNetworkPresenter,
+                                                LightNetworkDrawerFragmentComponent>
                                          implements LightNetworkView {
 
     private LightNetworkDrawerFragmentComponent component;
@@ -148,11 +150,9 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView, L
     @DebugLog
     @Override
     public void showLightNetwork(@NonNull final LightNetwork lightNetwork,
-                                 final int locationPosition,
-                                 final int groupPosition,
-                                 final int lightPosition) {
+                                 final int locationPosition) {
 
-        getViewState().setShowLightNetwork(lightNetwork, locationPosition, groupPosition, lightPosition);
+        getViewState().setShowLightNetwork(lightNetwork, locationPosition);
 
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);

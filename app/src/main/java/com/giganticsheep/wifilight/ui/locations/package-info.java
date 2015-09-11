@@ -3,4 +3,4 @@
  * Created by anne on 28/08/15. <p>
  * (*_*)
  */
-package com.giganticsheep.wifilight.ui.control.network;
+package com.giganticsheep.wifilight.ui.locations;
