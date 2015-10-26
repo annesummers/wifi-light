@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationViewStateActivity;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
@@ -126,7 +126,7 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter, Navig
 
     @Override
     public NavigationActivityComponent getComponent() {
-        return ((NavigationActivity) getActivity()).getComponent();
+        return ((NavigationViewStateActivity) getActivity()).getComponent();
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.widget.ExpandableListView;
 import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.base.EventBus;
-import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationViewStateActivity;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +54,7 @@ class LightNetworkClickListener {
     }
 
     private void closeDrawer() {
-        eventBus.postUIMessage(new NavigationActivity.CloseDrawerEvent());
+        eventBus.postUIMessage(new NavigationViewStateActivity.CloseDrawerEvent());
     }
 
     private void selectorChanged(@NonNull final LightSelector.SelectorType type,

@@ -18,7 +18,7 @@
         android:launchMode="singleTop"
         android:theme="@style/Theme.WifiLight" >
         <activity
-            android:name=".ui.navigation.NavigationActivity"
+            android:name=".ui.navigation.NavigationViewStateActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait">

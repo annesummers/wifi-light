@@ -3,7 +3,7 @@ package com.giganticsheep.wifilight.ui.status.location;
 import android.support.annotation.NonNull;
 
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationViewStateActivity;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
 import com.giganticsheep.wifilight.ui.status.StatusFragment;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
@@ -55,9 +55,16 @@ public class LocationStatusFragment extends StatusFragment<LocationStatusView,
         nameTextView.setText(location.getName());
     }
 
+    // Dagger
+
     @Override
     public NavigationActivityComponent getComponent() {
-        return ((NavigationActivity) getActivity()).getComponent();
+        return ((NavigationViewStateActivity) getActivity()).getComponent();
+    }
+
+    @Override
+    public void injectDependencies() {
+        getComponent().inject(this);
     }
 
     /**

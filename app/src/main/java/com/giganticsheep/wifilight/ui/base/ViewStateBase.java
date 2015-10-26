@@ -11,7 +11,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class ViewStateBase<T extends ViewBase> implements RestoreableViewState<T> {
+public class ViewStateBase<V extends ViewBase> implements RestoreableViewState<V> {
 
     static final String KEY_STATE = "key_state";
     static final String KEY_ERROR = "key_error";
@@ -76,7 +76,7 @@ public class ViewStateBase<T extends ViewBase> implements RestoreableViewState<T
 
     @Nullable
     @Override
-    public RestoreableViewState<T> restoreInstanceState(Bundle bundle) {
+    public ViewStateBase<V> restoreInstanceState(Bundle bundle) {
         if (bundle == null) {
             return null;
         }

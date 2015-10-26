@@ -26,14 +26,11 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
 
     @DebugLog
     final public void fetchLightNetwork() {
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
+        getView().showLoading();
 
         subscribe(lightControl.fetchLightNetwork(), new Subscriber<LightNetwork>() {
             @Override
-            public void onCompleted() {
-            }
+            public void onCompleted() { }
 
             @Override
             public void onError(Throwable e) {

@@ -145,7 +145,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
                 @Override
                 public void onGlobalLayout() {
                     removeOnGlobalLayoutListener(view, this);
-                    eventBus.postUIMessage(new ActivityBase.FragmentShownEvent());
+                    eventBus.postUIMessage(new ViewStateActivityBase.FragmentShownEvent());
                 }
             });
         }
@@ -203,7 +203,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
      * @param attachmentDetails the details for the Fragment used when attaching to the Activity
      */
     @DebugLog
-    public final void attachToActivity(@NonNull final ActivityBase activity,
+    public final void attachToActivity(@NonNull final ViewStateActivityBase activity,
                                        @NonNull final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;
 
@@ -248,8 +248,8 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
      * @return the Activity associated with this Fragment
      */
     @NonNull
-    protected ActivityBase getBaseActivity() {
-        return (ActivityBase) getActivity();
+    protected ViewStateActivityBase getBaseActivity() {
+        return (ViewStateActivityBase) getActivity();
     }
 
     /**
@@ -294,7 +294,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
         subscribe(observable, new ErrorSubscriber<T>(eventBus, errorStrings));
     }
 
-    private void doAttachToActivity(@NonNull final ActivityBase activity) {
+    private void doAttachToActivity(@NonNull final ViewStateActivityBase activity) {
         final String name = attachmentDetails.name;
         final int position = attachmentDetails.position;
         final boolean addToBackStack = attachmentDetails.addToBackStack;

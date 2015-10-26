@@ -13,7 +13,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationViewStateActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
@@ -75,8 +75,8 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
     }
 
     @NonNull
-     private NavigationActivity getNavigationActivity() {
-        return (NavigationActivity) getActivity();
+     private NavigationViewStateActivity getNavigationActivity() {
+        return (NavigationViewStateActivity) getActivity();
      }
 
     @Override

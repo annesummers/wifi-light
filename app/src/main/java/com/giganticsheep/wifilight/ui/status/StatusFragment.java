@@ -10,7 +10,7 @@ import android.widget.ToggleButton;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightSelector;
-import com.giganticsheep.wifilight.ui.base.ActivityBase;
+import com.giganticsheep.wifilight.ui.base.ViewStateActivityBase;
 import com.giganticsheep.wifilight.ui.base.ComponentBase;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.base.ViewBase;
@@ -69,7 +69,7 @@ public abstract class StatusFragment<V extends ViewBase,
     public final void onAllLightsClick(@NonNull final View view) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), LightControlActivity.class);
-        intent.putExtra(ActivityBase.ANIMATION_EXTRA, ActivityBase.ANIMATION_FADE);
+        intent.putExtra(ViewStateActivityBase.ANIMATION_EXTRA, ViewStateActivityBase.ANIMATION_FADE);
 
         getActivity().overridePendingTransition(R.anim.hold, R.anim.push_out_to_right);
     }

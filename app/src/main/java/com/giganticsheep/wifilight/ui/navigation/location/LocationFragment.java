@@ -10,7 +10,7 @@ import android.view.View;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Location;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationViewStateActivity;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
@@ -124,7 +124,7 @@ public class LocationFragment extends FragmentBase<LocationView, LocationPresent
 
     @Override
     public NavigationActivityComponent getComponent() {
-        return ((NavigationActivity) getActivity()).getComponent();
+        return ((NavigationViewStateActivity) getActivity()).getComponent();
     }
 
     @Override

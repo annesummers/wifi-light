@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.base.ActivityBase;
+import com.giganticsheep.wifilight.ui.base.ViewStateActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
@@ -43,7 +43,7 @@ import hugo.weaving.DebugLog;
  *
  * (*_*)
  */
-public class LightControlActivity extends ActivityBase<LightView,
+public class LightControlActivity extends ViewStateActivityBase<LightView,
                                                     LightControlPresenter,
                                                     LightControlActivityComponent>
                                 implements LightView {

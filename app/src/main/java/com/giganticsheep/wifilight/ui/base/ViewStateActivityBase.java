@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.avast.android.dialogs.fragment.SimpleDialogFragment;
@@ -21,15 +22,15 @@ import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-import com.hannesdorfmann.mosby.mvp.MvpView;
-import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
+import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
+import icepick.Icepick;
 import icepick.Icicle;
 import rx.Observable;
 import rx.Subscriber;
@@ -39,9 +40,13 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 22/06/15.
  * (*_*)
  */
-public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>, C extends ComponentBase>
-                                                                                    extends MvpViewStateActivity<V, P>
-                                                                                    implements HasComponent<C> {
+public abstract class ViewStateActivityBase<V extends ViewBase,
+                                            P extends PresenterBase<V>,
+                                            S extends ViewStateBase<V>,
+                                            C extends ComponentBase>
+                                    extends AppCompatActivity
+                                    implements HasComponent<C>,
+                                                ViewBase {
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
     public static final String ANIMATION_EXTRA = "animation_extra";
@@ -61,16 +66,29 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
 
     private int animation = ANIMATION_NONE;
 
+    private P presenter;
+    private S viewState;
+
+    private boolean retainingInstanceState = false;
+    @Icicle boolean applyViewState;
+
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject protected FragmentFactory fragmentFactory;
     @Inject protected EventBus eventBus;
     @Inject protected ErrorStrings errorStrings;
     @Inject protected SharedPreferences sharedPreferences;
+    private boolean restoringViewState;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        injectDependencies();
+        Icepick.restoreInstanceState(this, savedInstanceState);
+
+        doCreatePresenter();
+        attachView();
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -99,15 +117,43 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
                 }
             }
         } else {
+            applyViewState = false;
             attachInitialFragments();
         }
 
+        loadData();
         initialiseViews();
+    }
+
+    protected abstract void loadData();
+
+    private void doCreatePresenter() {
+        P presenter = getPresenter();
+        if (presenter == null) {
+            presenter = createPresenter();
+        }
+        if (presenter == null) {
+            throw new NullPointerException("Presenter is null! Do you return null in createPresenter()?");
+        }
+
+        this.presenter = presenter;
+    }
+
+    @Override
+    public final void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        createOrRestoreViewState(savedInstanceState);
+        applyViewState();
     }
 
     @Override
     public final void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        saveViewState(outState);
+
+        Icepick.saveInstanceState(this, outState);
 
         final FragmentAttachmentDetails[] fragments = attachedFragments.values().toArray(
                 new FragmentAttachmentDetails[attachedFragments.size()]);
@@ -115,6 +161,43 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
         outState.putParcelableArray(ATTACHED_FRAGMENTS_EXTRA, fragments);
 
         fragmentsResumed = false;
+    }
+
+    /**
+     * Attaches the view to the presenter
+     */
+    private void attachView() {
+        P presenter = getPresenter();
+        if (presenter == null) {
+            throw new NullPointerException("Presenter returned from getPresenter() is null");
+        }
+        presenter.attachView(getView());
+    }
+
+    protected V getView() {
+        return (V) this;
+    }
+
+    /**
+     * Called to detach the view from presenter
+     */
+    private void detachView() {
+        P presenter = getPresenter();
+        if (presenter == null) {
+            throw new NullPointerException("Presenter returned from getPresenter() is null");
+        }
+        presenter.detachView(isRetainingInstance());
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+
+        ButterKnife.inject(this);
+    }
+
+    public P getPresenter() {
+        return presenter;
     }
 
     @Override
@@ -127,7 +210,88 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
 
             initialiseViews();
 
-            getViewState().apply(this, true);
+            applyViewState();
+        }
+    }
+
+    protected boolean createOrRestoreViewState(Bundle savedInstanceState) {
+        if (getViewState() != null) {
+            retainingInstanceState = true;
+            //applyViewState = true;
+            return true;
+        }
+
+        // Create view state
+        viewState = createViewState();
+        if (getViewState() == null) {
+            throw new NullPointerException(
+                    "ViewState is null! Do you return null in createViewState() method?");
+        }
+
+        // Try to restore data from bundle (savedInstanceState)
+        if (savedInstanceState != null) {
+
+            ViewStateBase restoredViewState =
+                    getViewState().restoreInstanceState(savedInstanceState);
+
+            boolean restoredFromBundle = restoredViewState != null;
+
+            if (restoredFromBundle) {
+                viewState = (S) restoredViewState;
+                retainingInstanceState = false;
+                //applyViewState = true;
+                return true;
+            }
+        }
+
+        // ViewState not restored, activity / fragment starting first time
+       // applyViewState = false;
+        return false;
+    }
+
+    public boolean applyViewState() {
+        if (applyViewState) {
+            setRestoringViewState(true);
+            getViewState().apply(getView(), retainingInstanceState);
+            setRestoringViewState(false);
+            onViewStateInstanceRestored(retainingInstanceState);
+            return true;
+        }
+
+        onNewViewStateInstance();
+        return false;
+    }
+
+    @Override
+    public void showLoading() {
+        getViewState().setShowLoading();
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+        getViewState().setShowError(throwable);
+    }
+
+    protected void setRestoringViewState(boolean restoring) {
+        restoringViewState = restoring;
+    }
+    protected boolean isRestoringViewState() {
+        return restoringViewState;
+    }
+
+    public void saveViewState(Bundle outState) {
+        boolean retainingInstanceState = isRetainingInstance();
+
+        ViewState viewState = getViewState();
+        if (viewState == null) {
+            throw new NullPointerException("ViewState is null! That's not allowed");
+        }
+
+        applyViewState = true;
+
+        // Save the viewstate
+        if (!retainingInstanceState) {
+            ((ViewStateBase) viewState).saveInstanceState(outState);
         }
     }
 
@@ -174,7 +338,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
      * @param message the message to show in the toast
      */
     public final void showToast(final String message) {
-        Toast.makeText(ActivityBase.this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(ViewStateActivityBase.this, message, Toast.LENGTH_LONG).show();
     }
 
     public final void showErrorDialog(final Throwable throwable) {
@@ -230,7 +394,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
             addFragment(details);
 
             if (fragmentsResumed()) {
-                fragment.attachToActivity(ActivityBase.this, details);
+                fragment.attachToActivity(ViewStateActivityBase.this, details);
             } else {
                 queueFragmentForAttachment(fragment, details);
             }
@@ -362,6 +526,14 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
         return (WifiLightApplication)getApplication();
     }
 
+    protected void injectDependencies() {
+
+    }
+
+    public S getViewState() {
+        return viewState;
+    }
+
     public static class FragmentShownEvent { }
 
     // abstract methods
@@ -371,4 +543,19 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
     protected abstract ActivityLayout createActivityLayout();
 
     protected abstract boolean reinitialiseOnRotate();
+
+    protected abstract P createPresenter();
+
+    protected boolean isRetainingInstance() {
+        return false;
+    }
+
+    public abstract S createViewState();
+    protected abstract void restoreInstanceState(Bundle savedInstanceState);
+
+    protected abstract void onNewViewStateInstance();
+
+    protected void onViewStateInstanceRestored(boolean retainingInstanceState) {
+
+    }
 }

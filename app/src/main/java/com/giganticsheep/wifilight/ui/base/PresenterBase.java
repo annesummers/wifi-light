@@ -7,7 +7,8 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
+import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
@@ -21,7 +22,8 @@ import rx.subscriptions.CompositeSubscription;
  * Created by anne on 30/08/15. <p>
  * (*_*)
  */
-public abstract class PresenterBase<V extends ViewBase> extends MvpBasePresenter<V> {
+public abstract class PresenterBase<V extends ViewBase>  {
+    private WeakReference<V> viewRef;
 
     @NonNull
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -30,18 +32,27 @@ public abstract class PresenterBase<V extends ViewBase> extends MvpBasePresenter
     @Inject protected ErrorStrings errorStrings;
     @Inject public LightControl lightControl;
 
-    @Override
     public void attachView(@NonNull final V view) {
-        super.attachView(view);
+        viewRef = new WeakReference<V>(view);
 
         eventBus.registerForEvents(this);
     }
 
-    @Override
     public void detachView(boolean retainInstance) {
-        super.detachView(retainInstance);
+        if (viewRef != null) {
+            viewRef.clear();
+            viewRef = null;
+        }
 
         eventBus.unregisterForEvents(this);
+    }
+
+    protected V getView() {
+        if(viewRef == null || viewRef.get() == null) {
+            //throw new ViewNotAttachedException();
+            return null;
+        }
+        return viewRef.get();
     }
 
     /**
@@ -84,5 +95,8 @@ public abstract class PresenterBase<V extends ViewBase> extends MvpBasePresenter
      */
     public <T> void subscribe(@NonNull final Observable<T> observable) {
         subscribe(observable, new ErrorSubscriber(eventBus, errorStrings));
+    }
+
+    private class ViewNotAttachedException extends Exception {
     }
 }

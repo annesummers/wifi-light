@@ -20,13 +20,15 @@ import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
-import com.giganticsheep.wifilight.ui.base.ActivityBase;
+import com.giganticsheep.wifilight.ui.base.ViewStateActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityLayout;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
+import com.giganticsheep.wifilight.ui.base.ViewStateBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.locations.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
+import com.hannesdorfmann.mosby.mvp.delegate.MvpViewStateInternalDelegate;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -39,8 +41,9 @@ import hugo.weaving.DebugLog;
  * Created by anne on 04/09/15. <p>
  * (*_*)
  */
-public class NavigationActivity extends ActivityBase<NavigationView,
+public class NavigationViewStateActivity extends ViewStateActivityBase<NavigationView,
                                                     NavigationPresenter,
+                                                    NavigationViewState,
                                                     NavigationActivityComponent>
                                 implements NavigationView {
 
@@ -127,9 +130,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
     }
 
     @Override
-    public final void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
+    public void loadData() {
         getPresenter().fetchLightNetwork();
     }
 
@@ -156,7 +157,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                     return true;
 
                 case R.id.action_refresh:
-                    getPresenter().fetchLightNetwork();
+                    loadData();
                     return true;
 
                 case R.id.action_about:
@@ -166,12 +167,12 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                             .start(this);
                     return true;
 
-                case android.R.id.home:
+                /*case android.R.id.home:
                     attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
 
                     ActionBar actionBar = getSupportActionBar();
                     actionBar.setDisplayHomeAsUpEnabled(false);
-                    return true;
+                    return true;*/
                 default:
                     return super.onOptionsItemSelected(item);
             }
@@ -257,24 +258,29 @@ public class NavigationActivity extends ActivityBase<NavigationView,
     }
 
     @Override
-    public RestoreableViewState createViewState() {
+    public NavigationViewState createViewState() {
         return new NavigationViewState();
     }
 
     @Override
+    protected void restoreInstanceState(Bundle savedInstanceState) {
+
+    }
+
+    @Override
     public void onNewViewStateInstance() {
-        getViewState().apply(this, true);
+
     }
 
     @NonNull
     @Override
     public NavigationViewState getViewState() {
-        return (NavigationViewState) super.getViewState();
+        return super.getViewState();
     }
 
     @Override
     public void showLoading() {
-        getViewState().setShowLoading();
+        super.showLoading();
 
         errorLayout.setVisibility(View.GONE);
         lightNetworkLayout.setVisibility(View.VISIBLE);
@@ -311,12 +317,12 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
     @Override
     public void showError() {
-        showError(new Exception("Unknown error"));
+        super.showError(new Exception("Unknown error"));
     }
 
     @Override
     public void showError(Throwable throwable) {
-        getViewState().setShowError(throwable);
+        super.showError(throwable);
 
         errorTextView.setText(throwable.getMessage());
 
@@ -343,7 +349,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                 attachDetails.addStringArg(WifiLightApplication.KEY_ID, event.groupId);
                 attachNewFragment(attachDetails);
 
-                presenter.groupChanged(event.groupId);
+                getPresenter().groupChanged(event.groupId);
 
                 setDrawerState(false);
                 ActionBar actionBar = getSupportActionBar();
@@ -370,10 +376,10 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                presenter.lightChanged(event.lightId);
+                getPresenter().lightChanged(event.lightId);
 
                 Intent intent = new Intent();
-                intent.setClass(NavigationActivity.this, LightControlActivity.class);
+                intent.setClass(NavigationViewStateActivity.this, LightControlActivity.class);
 
                 startActivity(intent);
             }
@@ -514,6 +520,6 @@ public class NavigationActivity extends ActivityBase<NavigationView,
          *
          * @param navigationActivity the class to inject.
          */
-        void inject(final NavigationActivity navigationActivity);
+        void inject(final NavigationViewStateActivity navigationActivity);
     }
 }

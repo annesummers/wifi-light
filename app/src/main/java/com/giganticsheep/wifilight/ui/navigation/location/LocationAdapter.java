@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
 import com.giganticsheep.wifilight.api.model.Location;
-import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationViewStateActivity;
 import com.giganticsheep.wifilight.ui.navigation.group.LightContainerAdapter;
 
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class LocationAdapter extends LightContainerAdapter<LocationAdapter.Group
             }
 
             eventBus.postUIMessage(
-                    new NavigationActivity.ShowGroupFragmentEvent(
+                    new NavigationViewStateActivity.ShowGroupFragmentEvent(
                             layoutRect,
                             lightContainerLayout,
                             groupId));

@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
-import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
+import com.giganticsheep.wifilight.ui.navigation.NavigationViewStateActivity;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -90,7 +90,7 @@ public class GroupAdapter extends LightContainerAdapter<GroupAdapter.ClickableLi
             detachLayoutAndAttachPaddedPlaceholder();
 
             eventBus.postUIMessage(
-                    new NavigationActivity.ShowLightControlActivityEvent(
+                    new NavigationViewStateActivity.ShowLightControlActivityEvent(
                             layoutRect,
                             lightContainerLayout,
                             lightId));
