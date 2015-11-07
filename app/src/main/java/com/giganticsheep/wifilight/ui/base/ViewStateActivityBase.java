@@ -22,7 +22,6 @@ import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
-import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import java.util.Map;
 
@@ -46,7 +45,10 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
                                             C extends ComponentBase>
                                     extends AppCompatActivity
                                     implements HasComponent<C>,
-                                                ViewBase {
+                                                ViewBase,
+                                                FrameworkCreator<S, P>{
+
+    private ViewHandler viewHandler;
 
     private static final String ATTACHED_FRAGMENTS_EXTRA = "attached_fragments_extra";
     public static final String ANIMATION_EXTRA = "animation_extra";
@@ -66,9 +68,6 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
 
     private int animation = ANIMATION_NONE;
 
-    private P presenter;
-    private S viewState;
-
     private boolean retainingInstanceState = false;
     @Icicle boolean applyViewState;
 
@@ -78,7 +77,6 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
     @Inject protected EventBus eventBus;
     @Inject protected ErrorStrings errorStrings;
     @Inject protected SharedPreferences sharedPreferences;
-    private boolean restoringViewState;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -87,8 +85,7 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
         injectDependencies();
         Icepick.restoreInstanceState(this, savedInstanceState);
 
-        doCreatePresenter();
-        attachView();
+        viewHandler = new ViewHandler<>(getView(), this);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -127,31 +124,18 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
 
     protected abstract void loadData();
 
-    private void doCreatePresenter() {
-        P presenter = getPresenter();
-        if (presenter == null) {
-            presenter = createPresenter();
-        }
-        if (presenter == null) {
-            throw new NullPointerException("Presenter is null! Do you return null in createPresenter()?");
-        }
-
-        this.presenter = presenter;
-    }
-
     @Override
     public final void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        createOrRestoreViewState(savedInstanceState);
-        applyViewState();
+        viewHandler.restoreInstanceState(savedInstanceState);
     }
 
     @Override
     public final void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        saveViewState(outState);
+        viewHandler.saveInstanceState(outState);
 
         Icepick.saveInstanceState(this, outState);
 
@@ -163,30 +147,8 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
         fragmentsResumed = false;
     }
 
-    /**
-     * Attaches the view to the presenter
-     */
-    private void attachView() {
-        P presenter = getPresenter();
-        if (presenter == null) {
-            throw new NullPointerException("Presenter returned from getPresenter() is null");
-        }
-        presenter.attachView(getView());
-    }
-
     protected V getView() {
         return (V) this;
-    }
-
-    /**
-     * Called to detach the view from presenter
-     */
-    private void detachView() {
-        P presenter = getPresenter();
-        if (presenter == null) {
-            throw new NullPointerException("Presenter returned from getPresenter() is null");
-        }
-        presenter.detachView(isRetainingInstance());
     }
 
     @Override
@@ -197,7 +159,7 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
     }
 
     public P getPresenter() {
-        return presenter;
+        return (P) viewHandler.getPresenter();
     }
 
     @Override
@@ -210,56 +172,8 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
 
             initialiseViews();
 
-            applyViewState();
+            viewHandler.configurationChanged();
         }
-    }
-
-    protected boolean createOrRestoreViewState(Bundle savedInstanceState) {
-        if (getViewState() != null) {
-            retainingInstanceState = true;
-            //applyViewState = true;
-            return true;
-        }
-
-        // Create view state
-        viewState = createViewState();
-        if (getViewState() == null) {
-            throw new NullPointerException(
-                    "ViewState is null! Do you return null in createViewState() method?");
-        }
-
-        // Try to restore data from bundle (savedInstanceState)
-        if (savedInstanceState != null) {
-
-            ViewStateBase restoredViewState =
-                    getViewState().restoreInstanceState(savedInstanceState);
-
-            boolean restoredFromBundle = restoredViewState != null;
-
-            if (restoredFromBundle) {
-                viewState = (S) restoredViewState;
-                retainingInstanceState = false;
-                //applyViewState = true;
-                return true;
-            }
-        }
-
-        // ViewState not restored, activity / fragment starting first time
-       // applyViewState = false;
-        return false;
-    }
-
-    public boolean applyViewState() {
-        if (applyViewState) {
-            setRestoringViewState(true);
-            getViewState().apply(getView(), retainingInstanceState);
-            setRestoringViewState(false);
-            onViewStateInstanceRestored(retainingInstanceState);
-            return true;
-        }
-
-        onNewViewStateInstance();
-        return false;
     }
 
     @Override
@@ -270,29 +184,6 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
     @Override
     public void showError(Throwable throwable) {
         getViewState().setShowError(throwable);
-    }
-
-    protected void setRestoringViewState(boolean restoring) {
-        restoringViewState = restoring;
-    }
-    protected boolean isRestoringViewState() {
-        return restoringViewState;
-    }
-
-    public void saveViewState(Bundle outState) {
-        boolean retainingInstanceState = isRetainingInstance();
-
-        ViewState viewState = getViewState();
-        if (viewState == null) {
-            throw new NullPointerException("ViewState is null! That's not allowed");
-        }
-
-        applyViewState = true;
-
-        // Save the viewstate
-        if (!retainingInstanceState) {
-            ((ViewStateBase) viewState).saveInstanceState(outState);
-        }
     }
 
     @Override
@@ -531,7 +422,7 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
     }
 
     public S getViewState() {
-        return viewState;
+        return (S) viewHandler.getViewState();
     }
 
     public static class FragmentShownEvent { }
@@ -544,18 +435,6 @@ public abstract class ViewStateActivityBase<V extends ViewBase,
 
     protected abstract boolean reinitialiseOnRotate();
 
-    protected abstract P createPresenter();
+    //protected abstract void restoreInstanceState(Bundle savedInstanceState);
 
-    protected boolean isRetainingInstance() {
-        return false;
-    }
-
-    public abstract S createViewState();
-    protected abstract void restoreInstanceState(Bundle savedInstanceState);
-
-    protected abstract void onNewViewStateInstance();
-
-    protected void onViewStateInstanceRestored(boolean retainingInstanceState) {
-
-    }
 }

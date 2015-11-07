@@ -2,16 +2,13 @@ package com.giganticsheep.wifilight.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public class ViewStateBase<V extends ViewBase> implements RestoreableViewState<V> {
+public class ViewStateBase<V extends ViewBase> {
 
     static final String KEY_STATE = "key_state";
     static final String KEY_ERROR = "key_error";
@@ -47,7 +44,6 @@ public class ViewStateBase<V extends ViewBase> implements RestoreableViewState<V
         state = STATE_SHOW_ERROR;
     }
 
-    @Override
     public void apply(@NonNull final ViewBase lightView,
                    final boolean retained) {
         switch (state) {
@@ -68,14 +64,11 @@ public class ViewStateBase<V extends ViewBase> implements RestoreableViewState<V
         }
     }
 
-    @Override
     public void saveInstanceState(Bundle bundle) {
         bundle.putInt(KEY_STATE, state);
         bundle.putSerializable(KEY_ERROR, error);
     }
 
-    @Nullable
-    @Override
     public ViewStateBase<V> restoreInstanceState(Bundle bundle) {
         if (bundle == null) {
             return null;

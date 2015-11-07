@@ -1,13 +1,11 @@
 package com.giganticsheep.wifilight.ui.base;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 25/07/15. <p>
  * (*_*)
  */
-public interface ViewBase extends MvpView {
+public interface ViewBase {
 
     /**
      * Show the loading view.
