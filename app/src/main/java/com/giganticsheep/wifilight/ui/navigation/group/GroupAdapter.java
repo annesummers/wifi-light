@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.ui.navigation.LightContainerAdapter;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 
 /**
@@ -16,7 +17,7 @@ import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
  * Created by anne on 04/09/15. <p>
  * (*_*)
  */
-public class GroupAdapter extends LightContainerAdapter<GroupAdapter.ClickableLightViewHolder>  {
+public class GroupAdapter extends LightContainerAdapter<GroupAdapter.ClickableLightViewHolder> {
 
     private Group group;
 

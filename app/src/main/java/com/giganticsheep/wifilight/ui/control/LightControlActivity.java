@@ -32,7 +32,7 @@ import com.giganticsheep.wifilight.ui.status.light.LightStatusViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 
 /**
@@ -43,9 +43,7 @@ import hugo.weaving.DebugLog;
  *
  * (*_*)
  */
-public class LightControlActivity extends ActivityBase<LightView,
-                                                    LightControlPresenter,
-                                                    LightControlActivityComponent>
+public class LightControlActivity extends FlowActivity
                                 implements LightView {
 
     public static final float DEFAULT_DURATION = 1.0F;
@@ -56,16 +54,16 @@ public class LightControlActivity extends ActivityBase<LightView,
 
     private LightViewState fragmentViewState;
 
-    @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
-    @InjectView(R.id.error_layout) FrameLayout errorLayout;
-    @InjectView(R.id.light_layout) LinearLayout lightLayout;
-    @InjectView(R.id.disconnected_layout) FrameLayout disconnectedLayout;
+    @Bind(R.id.loading_layout) FrameLayout loadingLayout;
+    @Bind(R.id.error_layout) FrameLayout errorLayout;
+    @Bind(R.id.light_layout) LinearLayout lightLayout;
+    @Bind(R.id.disconnected_layout) FrameLayout disconnectedLayout;
 
-    @InjectView(R.id.sliding_tabs) TabLayout tabLayout;
+    @Bind(R.id.sliding_tabs) TabLayout tabLayout;
 
-    @InjectView(R.id.action_toolbar) Toolbar toolbar;
+    @Bind(R.id.action_toolbar) Toolbar toolbar;
 
-    @InjectView(R.id.error_textview) TextView errorTextView;
+    @Bind(R.id.error_textview) TextView errorTextView;
 
     private TextView title;
 

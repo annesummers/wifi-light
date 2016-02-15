@@ -13,12 +13,10 @@ import com.giganticsheep.wifilight.api.model.LightSelector;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ComponentBase;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.base.ViewBase;
-import com.giganticsheep.wifilight.ui.base.ViewStateBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
@@ -36,9 +34,9 @@ public abstract class StatusFragment<V extends ViewBase,
                                                             extends FragmentBase<V, P, C>
                                                             implements ViewBase {
 
-    @InjectView(R.id.power_toggle) protected ToggleButton powerToggle;
-    @InjectView(R.id.name_textview) protected TextView nameTextView;
-    @InjectView(R.id.all_lights_button) protected Button allLightsButton;
+    @Bind(R.id.power_toggle) protected ToggleButton powerToggle;
+    @Bind(R.id.name_textview) protected TextView nameTextView;
+    @Bind(R.id.all_lights_button) protected Button allLightsButton;
 
     protected boolean firstSetPower = false;
     protected boolean viewsEnabled = false;

@@ -10,7 +10,7 @@ import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
 import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 
 /**
@@ -25,12 +25,12 @@ public class DetailsFragment extends LightFragmentBase {
         super();
     }
 
-    @InjectView(R.id.name_textview) TextView nameTextView;
-    @InjectView(R.id.id_textview) TextView idTextView;
-    @InjectView(R.id.hue_textview) TextView hueTextView;
-    @InjectView(R.id.saturation_textview) TextView saturationTextView;
-    @InjectView(R.id.brightness_textview) TextView brightnessTextView;
-    @InjectView(R.id.kelvin_textview) TextView kelvinTextView;
+    @Bind(R.id.name_textview) TextView nameTextView;
+    @Bind(R.id.id_textview) TextView idTextView;
+    @Bind(R.id.hue_textview) TextView hueTextView;
+    @Bind(R.id.saturation_textview) TextView saturationTextView;
+    @Bind(R.id.brightness_textview) TextView brightnessTextView;
+    @Bind(R.id.kelvin_textview) TextView kelvinTextView;
 
     @Override
     protected int getLayoutRes() {

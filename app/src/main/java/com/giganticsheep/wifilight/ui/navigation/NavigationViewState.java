@@ -2,8 +2,6 @@ package com.giganticsheep.wifilight.ui.navigation;
 
 import android.support.annotation.NonNull;
 
-import com.giganticsheep.wifilight.ui.base.ViewStateBase;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 04/09/15. <p>

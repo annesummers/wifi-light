@@ -16,7 +16,7 @@ import com.giganticsheep.wifilight.ui.navigation.NavigationActivityComponent;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
@@ -31,8 +31,8 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter, Navig
 
     private GroupAdapter adapter;
 
-    @InjectView(R.id.lights_recycler_view) RecyclerView lightsRecyclerView;
-    @InjectView(R.id.name_textview) TextView groupNameTextView;
+    @Bind(R.id.lights_recycler_view) RecyclerView lightsRecyclerView;
+    @Bind(R.id.name_textview) TextView groupNameTextView;
 
     @DebugLog
     @Override
@@ -83,7 +83,7 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter, Navig
 
     @Override
     public ViewState createViewState() {
-        return new GroupViewState();
+        return new GroupViewHandler();
     }
 
     @Override
@@ -93,8 +93,8 @@ public class GroupFragment extends FragmentBase<GroupView, GroupPresenter, Navig
 
     @NonNull
     @Override
-    public final GroupViewState getViewState() {
-        return (GroupViewState) super.getViewState();
+    public final GroupViewHandler getViewState() {
+        return (GroupViewHandler) super.getViewState();
     }
 
     @Override

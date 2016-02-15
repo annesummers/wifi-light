@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.ui.locations;
 
 import com.giganticsheep.wifilight.api.model.LightNetwork;
-import com.giganticsheep.wifilight.ui.base.ViewBase;
 
 /**
  * Interface implemented by the DrawerAdapter for the Presenter to control the UI.

@@ -8,7 +8,6 @@ import com.giganticsheep.wifilight.api.model.LightStatus;
 import com.giganticsheep.wifilight.base.error.ErrorSubscriber;
 import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
-import com.giganticsheep.wifilight.ui.base.ViewBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 
 import hugo.weaving.DebugLog;

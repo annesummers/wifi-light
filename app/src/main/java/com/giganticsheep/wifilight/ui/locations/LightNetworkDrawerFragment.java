@@ -19,7 +19,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
 import java.util.Map;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
@@ -36,12 +36,12 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
 
     private LightNetworkDrawerFragmentComponent component;
 
-    @InjectView(R.id.error_layout) FrameLayout errorLayout;
-    @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
+    @Bind(R.id.error_layout) FrameLayout errorLayout;
+    @Bind(R.id.loading_layout) FrameLayout loadingLayout;
 
-    @InjectView(R.id.drawer_textview) TextView drawerTextView;
-    @InjectView(R.id.location_list) ExpandableListView locationsListView;
-    @InjectView(R.id.drawer_layout) RelativeLayout drawerLayout;
+    @Bind(R.id.drawer_textview) TextView drawerTextView;
+    @Bind(R.id.location_list) ExpandableListView locationsListView;
+    @Bind(R.id.drawer_layout) RelativeLayout drawerLayout;
 
     private LightLocationAdapter adapter;
     LightNetworkClickListener lightNetworkClickListener;

@@ -3,7 +3,6 @@ package com.giganticsheep.wifilight.ui.navigation;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,26 +11,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.giganticsheep.nofragmentbase.ui.base.FlowActivity;
+import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
-import com.giganticsheep.wifilight.ui.base.ActivityLayout;
-import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.locations.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
-import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
-import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 
 /**
@@ -39,14 +37,11 @@ import hugo.weaving.DebugLog;
  * Created by anne on 04/09/15. <p>
  * (*_*)
  */
-public class NavigationActivity extends ActivityBase<NavigationView,
-                                                    NavigationPresenter,
-                                                    NavigationActivityComponent>
-                                implements NavigationView {
+public class NavigationActivity extends FlowActivity {
 
     private NavigationActivityComponent component;
 
-    @InjectView(R.id.action_toolbar) Toolbar toolbar;
+    @Bind(R.id.action_toolbar) Toolbar toolbar;
 
     private TextView title;
 
@@ -56,19 +51,19 @@ public class NavigationActivity extends ActivityBase<NavigationView,
     private String currentLocationId;
     private String currentGroupId;
 
-    @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
-    @InjectView(R.id.container_drawer) FrameLayout drawerContainerLayout;
+    @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @Bind(R.id.container_drawer) FrameLayout drawerContainerLayout;
 
-    @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
-    @InjectView(R.id.error_layout) FrameLayout errorLayout;
-    @InjectView(R.id.light_network_layout) RelativeLayout lightNetworkLayout;
-    @InjectView(R.id.mask_layout) FrameLayout maskLayout;
+    @Bind(R.id.loading_layout) FrameLayout loadingLayout;
+    @Bind(R.id.error_layout) FrameLayout errorLayout;
+    @Bind(R.id.light_network_layout) RelativeLayout lightNetworkLayout;
+    @Bind(R.id.mask_layout) FrameLayout maskLayout;
 
-    @InjectView(R.id.error_textview) TextView errorTextView;
+    @Bind(R.id.error_textview) TextView errorTextView;
 
     private boolean drawStateEnabled;
 
-    @DebugLog
+   /* @DebugLog
     @Override
     protected void attachInitialFragments() {
         drawerViewState = new LightNetworkViewState();
@@ -77,11 +72,34 @@ public class NavigationActivity extends ActivityBase<NavigationView,
         addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 1));
         addFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_drawer), 2));
     }
+*/
+    @Override
+    protected int additionalScreenCount() {
+        return 3;
+    }
+
+    @Override
+    protected ViewGroup getMainContainer() {
+        return lightNetworkLayout;
+    }
+
+    @Override
+    protected int layoutId() {
+        return 0;
+    }
+
+    @Override
+    protected Screen getInitialScreen() {
+        return null;
+    }
+
+    public void onEventMainThread(FullScreenLoadingEvent loadingEvent) {
+        loadingLayout.setVisibility(loadingEvent.isShow() ? View.VISIBLE : View.GONE);
+    }
 
     @DebugLog
     @Override
     protected void initialiseViews() {
-        super.initialiseViews();
 
         setSupportActionBar(toolbar);
 
@@ -124,13 +142,6 @@ public class NavigationActivity extends ActivityBase<NavigationView,
         });
 
         drawerLayout.post(() -> drawerToggle.syncState());
-    }
-
-    @Override
-    public final void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        getPresenter().fetchLightNetwork();
     }
 
     @Override
@@ -186,12 +197,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
 
         drawerToggle.onConfigurationChanged(config);
     }
-
-    @Override
-    protected boolean reinitialiseOnRotate() {
-        return false;
-    }
-
+/*
     @Override
     protected ActivityLayout createActivityLayout() {
         return new ActivityLayout() {
@@ -220,16 +226,16 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                 return R.layout.activity_navigation;
             }
         };
-    }
+    }*/
 
     public void onEventMainThread(final CloseDrawerEvent event) {
         drawerLayout.post(() -> drawerLayout.closeDrawers());
     }
 
-    public ViewState getDrawerViewState() {
+   /* public ViewState getDrawerViewState() {
         return drawerViewState;
     }
-
+*/
     private void setDrawerState(boolean isEnabled) {
         if ( isEnabled ) {
             drawStateEnabled = true;
@@ -250,7 +256,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
     }
 
     // MVP
-
+/*
     @Override
     public NavigationPresenter createPresenter() {
         return new NavigationPresenter(getComponent());
@@ -325,7 +331,7 @@ public class NavigationActivity extends ActivityBase<NavigationView,
         errorLayout.setVisibility(View.VISIBLE);
 
         setDrawerState(false);
-    }
+    }*/
 
     public void onEventMainThread(final ShowGroupFragmentEvent event) {
         maskLayout.setVisibility(View.VISIBLE);
@@ -385,13 +391,13 @@ public class NavigationActivity extends ActivityBase<NavigationView,
         maskLayout.startAnimation(zoomInAnimation);
     }
 
-    public void onEventMainThread(final FragmentShownEvent event) {
+    public void onEventMainThread(final ActivityBase.FragmentShownEvent event) {
         maskLayout.removeAllViews();
         maskLayout.setVisibility(View.GONE);
     }
 
     // Dagger
-
+/*
     @Override
     protected void injectDependencies() {
         super.injectDependencies();
@@ -404,13 +410,13 @@ public class NavigationActivity extends ActivityBase<NavigationView,
                 .build();
 
         component.inject(this);
-    }
-
+    }*/
+/*
     @Override
     public NavigationActivityComponent getComponent() {
         return component;
     }
-
+*/
     private Animation zoomInAnimation(@NonNull final AnimateEvent event,
                                       final int zoomDuration) {
         int marginRight = lightNetworkLayout.getWidth() -  event.width - event.locationX;

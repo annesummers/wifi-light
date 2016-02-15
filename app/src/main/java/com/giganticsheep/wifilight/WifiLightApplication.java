@@ -6,8 +6,11 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.network.NetworkDetails;
+import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.dagger.HasComponent;
+import com.giganticsheep.wifilight.base.error.ErrorStrings;
 
 import javax.inject.Inject;
 
@@ -27,6 +30,21 @@ public class WifiLightApplication extends Application implements HasComponent<Wi
 
     private static final String KEY_LOCATION_ID = "key_location_id";
     public static final String KEY_ID = "key_group_id";
+    private static LightControl engine;
+    private static EventBus eventBus;
+    private static ErrorStrings errorStrings;
+
+    public static LightControl getEngine() {
+        return engine;
+    }
+
+    public static EventBus getEventBus() {
+        return eventBus;
+    }
+
+    public static ErrorStrings getErrorStrings() {
+        return errorStrings;
+    }
 
     @Override
     public final void onCreate() {

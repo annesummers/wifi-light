@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.ui.status.light;
 
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.base.ViewBase;
 
 /**
  * DESCRIPTION HERE ANNE <p>

@@ -7,8 +7,6 @@ import com.giganticsheep.wifilight.ui.base.ActivityScope;
 import com.giganticsheep.wifilight.ui.navigation.group.GroupAdapter;
 import com.giganticsheep.wifilight.ui.navigation.group.GroupFragment;
 import com.giganticsheep.wifilight.ui.navigation.group.GroupPresenter;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationAdapter;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationFragment;
 import com.giganticsheep.wifilight.ui.navigation.location.LocationPresenter;
 import com.giganticsheep.wifilight.ui.status.group.GroupStatusFragment;
 import com.giganticsheep.wifilight.ui.status.group.GroupStatusPresenter;

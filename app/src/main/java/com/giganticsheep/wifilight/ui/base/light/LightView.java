@@ -1,7 +1,6 @@
 package com.giganticsheep.wifilight.ui.base.light;
 
 import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.base.ViewBase;
 
 /**
  * Interface implemented by Light UI elements for the Presenters to control the UI.

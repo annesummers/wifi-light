@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class WifiPreferenceActivity extends PreferenceActivity {
 
@@ -34,7 +34,7 @@ public class WifiPreferenceActivity extends PreferenceActivity {
 
     private WifiPreferenceActivityComponent component;
 
-    @InjectView(R.id.action_toolbar) Toolbar toolbar;
+    @Bind(R.id.action_toolbar) Toolbar toolbar;
 
     private TextView title;
 

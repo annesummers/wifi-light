@@ -14,7 +14,7 @@ import com.giganticsheep.wifilight.ui.base.light.OnLightSeekBarChangeListener;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 
 /**
@@ -25,8 +25,8 @@ import hugo.weaving.DebugLog;
 @FragmentArgsInherited
 public class WhiteFragment extends LightFragmentBase {
 
-    @InjectView(R.id.brightness_seekbar) SeekBar brightnessSeekbar;
-    @InjectView(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
+    @Bind(R.id.brightness_seekbar) SeekBar brightnessSeekbar;
+    @Bind(R.id.kelvin_seekbar) SeekBar kelvinSeekBar;
 
     public WhiteFragment() {
         super();
