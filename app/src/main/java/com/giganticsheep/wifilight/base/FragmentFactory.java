@@ -9,8 +9,6 @@ import com.giganticsheep.wifilight.ui.colour.ColourFragmentBuilder;
 import com.giganticsheep.wifilight.ui.details.DetailsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.effects.EffectsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.locations.LightNetworkDrawerFragmentBuilder;
-import com.giganticsheep.wifilight.ui.navigation.group.GroupFragmentBuilder;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationFragmentBuilder;
 import com.giganticsheep.wifilight.ui.status.group.GroupStatusFragmentBuilder;
 import com.giganticsheep.wifilight.ui.status.light.LightStatusFragmentBuilder;
 import com.giganticsheep.wifilight.ui.status.location.LocationStatusFragmentBuilder;
@@ -77,7 +75,7 @@ public class FragmentFactory {
         if (name.equals(application.getString(R.string.fragment_name_drawer))) {
             return new LightNetworkDrawerFragmentBuilder(name).build();
         }
-
+/*
         if(name.equals(application.getString(R.string.fragment_name_location))) {
             return new LocationFragmentBuilder(name).build();
         }
@@ -85,7 +83,7 @@ public class FragmentFactory {
         if(name.equals(application.getString(R.string.fragment_name_group))) {
             return new GroupFragmentBuilder(name).build();
         }
-
+*/
         if (name.equals(application.getString(R.string.fragment_name_light_status))) {
             return new LightStatusFragmentBuilder(name).build();
         }

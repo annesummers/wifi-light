@@ -1,16 +1,11 @@
 package com.giganticsheep.wifilight.ui.navigation;
 
 import com.giganticsheep.wifilight.WifiLightAppComponent;
-import com.giganticsheep.wifilight.ui.base.ComponentBase;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.ActivityScope;
-import com.giganticsheep.wifilight.ui.navigation.group.GroupAdapter;
-import com.giganticsheep.wifilight.ui.navigation.group.GroupFragment;
-import com.giganticsheep.wifilight.ui.navigation.group.GroupPresenter;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationAdapter;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationFragment;
-import com.giganticsheep.wifilight.ui.navigation.location.LocationPresenter;
-import com.giganticsheep.wifilight.ui.status.group.GroupStatusFragment;
+import com.giganticsheep.wifilight.ui.base.ComponentBase;
+import com.giganticsheep.wifilight.ui.navigation.group.LightGroupScreen;
+import com.giganticsheep.wifilight.ui.navigation.location.LocationScreen;
 import com.giganticsheep.wifilight.ui.status.group.GroupStatusPresenter;
 import com.giganticsheep.wifilight.ui.status.location.LocationStatusFragment;
 import com.giganticsheep.wifilight.ui.status.location.LocationStatusPresenter;
@@ -29,14 +24,9 @@ import dagger.Component;
         modules = { ActivityModule.class})
 public interface NavigationActivityComponent extends ComponentBase,
                                                 NavigationActivity.Injector,
-                                                NavigationPresenter.Injector,
-                                                LocationPresenter.Injector,
-                                                LocationFragment.Injector,
+                                                NavigationScreenGroup.Injector,
+                                                LocationScreen.Injector,
+                                                LightGroupScreen.Injector,
                                                 LocationStatusPresenter.Injector,
                                                 LocationStatusFragment.Injector,
-                                                LocationAdapter.Injector,
-                                                GroupPresenter.Injector,
-                                                GroupFragment.Injector,
-                                                GroupAdapter.Injector,
-                                                GroupStatusPresenter.Injector,
-                                                GroupStatusFragment.Injector { }
+                                                GroupStatusPresenter.Injector { }

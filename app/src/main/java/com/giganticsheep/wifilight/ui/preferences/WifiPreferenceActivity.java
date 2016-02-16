@@ -34,7 +34,7 @@ public class WifiPreferenceActivity extends PreferenceActivity {
 
     private WifiPreferenceActivityComponent component;
 
-    @InjectView(R.id.action_toolbar) Toolbar toolbar;
+    @InjectView(R.id.actionToolbar) Toolbar toolbar;
 
     private TextView title;
 

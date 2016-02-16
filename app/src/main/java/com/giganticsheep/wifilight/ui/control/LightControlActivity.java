@@ -63,7 +63,7 @@ public class LightControlActivity extends ActivityBase<LightView,
 
     @InjectView(R.id.sliding_tabs) TabLayout tabLayout;
 
-    @InjectView(R.id.action_toolbar) Toolbar toolbar;
+    @InjectView(R.id.actionToolbar) Toolbar toolbar;
 
     @InjectView(R.id.error_textview) TextView errorTextView;
 

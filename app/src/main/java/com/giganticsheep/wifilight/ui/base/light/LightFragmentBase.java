@@ -121,7 +121,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView,
     }
 
     @NonNull
-    private final LightControlActivity getLightControlActivity() {
+    public final LightControlActivity getLightControlActivity() {
         return (LightControlActivity) getActivity();
     }
 

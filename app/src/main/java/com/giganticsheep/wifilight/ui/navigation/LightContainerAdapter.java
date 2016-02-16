@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.navigation.group;
+package com.giganticsheep.wifilight.ui.navigation;
 
 import android.content.Context;
 import android.graphics.Rect;

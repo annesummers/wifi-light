@@ -41,7 +41,7 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
 
     @InjectView(R.id.drawer_textview) TextView drawerTextView;
     @InjectView(R.id.location_list) ExpandableListView locationsListView;
-    @InjectView(R.id.drawer_layout) RelativeLayout drawerLayout;
+    @InjectView(R.id.drawerLayout) RelativeLayout drawerLayout;
 
     private LightLocationAdapter adapter;
     LightNetworkClickListener lightNetworkClickListener;

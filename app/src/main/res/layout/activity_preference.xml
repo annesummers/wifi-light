@@ -7,12 +7,12 @@
 
     <include
         layout="@layout/layout_support_actionbar"
-        android:id="@+id/action_toolbar"/>
+        android:id="@+id/actionToolbar"/>
 
     <fragment class="com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity$ServerPreferencesFragment"
         android:id="@+id/preferences_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/action_toolbar" />
+        android:layout_below="@+id/actionToolbar" />
 
 </RelativeLayout>

@@ -8,7 +8,7 @@
 
     <include
         layout="@layout/layout_support_actionbar"
-        android:id="@+id/action_toolbar" />
+        android:id="@+id/actionToolbar" />
 
     <LinearLayout
         android:id="@+id/light_layout"
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/default_margin"
         android:padding="@dimen/default_padding"
-        android:layout_below="@+id/action_toolbar"
+        android:layout_below="@+id/actionToolbar"
         android:baselineAligned="false"
         android:animateLayoutChanges="true"
         android:visibility="gone">
@@ -66,18 +66,18 @@
     <include layout="@layout/layout_error"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_below="@+id/action_toolbar"
+        android:layout_below="@+id/actionToolbar"
         android:visibility="gone" />
 
     <include layout="@layout/layout_loading"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_below="@+id/action_toolbar"
+        android:layout_below="@+id/actionToolbar"
         android:visibility="gone"/>
 
     <include layout="@layout/layout_disconnected"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_below="@+id/action_toolbar"
+        android:layout_below="@+id/actionToolbar"
         android:visibility="gone"/>
 </RelativeLayout>

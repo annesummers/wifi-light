@@ -5,9 +5,7 @@
     android:id="@+id/error_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_tertiary"
-    android:visibility="gone"
-    tools:showIn="@layout/activity_main">
+    android:background="@color/background_tertiary">
 
     <RelativeLayout
         android:id="@+id/error_view"
