@@ -20,7 +20,6 @@ import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import java.util.Map;
 
 import butterknife.InjectView;
-import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 /**
@@ -48,7 +47,6 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
 
     private final Map<Integer, Boolean> groupCheckedMap = new ArrayMap<>();
 
-    @DebugLog
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +58,14 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
         }
     }
 
-    @DebugLog
     @Override
     protected void initialiseViews(final View view) {
         lightNetworkClickListener = new LightNetworkClickListener(component, locationsListView);
 
-        adapter = new LightLocationAdapter(component);
-        locationsListView.setAdapter(adapter);
+        if(adapter == null) {
+            adapter = new LightLocationAdapter(component);
+            locationsListView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -137,7 +136,7 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
         return new LightNetworkPresenter(component);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showLoading() {
         getViewState().setShowLoading();
@@ -147,7 +146,7 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
         drawerLayout.setVisibility(View.GONE);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showLightNetwork(@NonNull final LightNetwork lightNetwork,
                                  final int locationPosition) {
@@ -158,19 +157,24 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
         loadingLayout.setVisibility(View.GONE);
         drawerLayout.setVisibility(View.VISIBLE);
 
+        if(adapter == null) {
+            adapter = new LightLocationAdapter(component);
+            locationsListView.setAdapter(adapter);
+        }
+
         adapter.setLightNetwork(lightNetwork);
         adapter.notifyDataSetChanged();
 
         clickDrawerItem(locationPosition);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showError() {
         getViewState().setShowError();
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showError(Throwable throwable) {
         getViewState().setShowError(throwable);

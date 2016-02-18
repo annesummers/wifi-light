@@ -46,7 +46,7 @@ public class DetailsFragment extends LightFragmentBase {
     @Override
     protected void initialiseViews(View view) { }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showLight(@NonNull final Light light) {
         nameTextView.setText(light.getLabel());
@@ -63,7 +63,7 @@ public class DetailsFragment extends LightFragmentBase {
     @Override
     protected void destroyViews() { }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void onDestroy() {
         super.onDestroy();

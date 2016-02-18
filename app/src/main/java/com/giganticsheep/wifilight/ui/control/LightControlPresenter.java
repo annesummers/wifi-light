@@ -28,7 +28,7 @@ public class LightControlPresenter extends LightPresenterBase {
         eventBus.registerForEvents(this);
     }
 
-    @DebugLog
+    //@DebugLog
     final public void fetchLightNetwork() {
         if (isViewAttached()) {
             getView().showLoading();

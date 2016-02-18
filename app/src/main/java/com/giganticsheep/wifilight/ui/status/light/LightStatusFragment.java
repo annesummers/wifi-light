@@ -11,8 +11,6 @@ import com.giganticsheep.wifilight.ui.status.StatusFragment;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 
-import hugo.weaving.DebugLog;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 17/07/15. <p>
@@ -54,7 +52,7 @@ public class LightStatusFragment extends StatusFragment<LightStatusView,
         return (LightStatusViewState) super.getViewState();
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public synchronized void showLight(@NonNull final Light light) {
         getViewState().setShowLight(light);

@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.giganticsheep.nofragmentbase.ui.base.FlowActivity;
 import com.giganticsheep.nofragmentbase.ui.base.GridRecyclerViewRelativeLayoutContainer;
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.wifilight.R;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by anne on 24/11/15.
@@ -54,14 +52,7 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
     }
 
     @Override
-    protected void showLoading() {
-        EventBus.getDefault().post(new FlowActivity.FullScreenLoadingEvent(true));
-    }
-
-    @Override
-    protected void onCreated() {
-
-    }
+    protected void onCreated() { }
 
     @Override
     protected void setupViews() {
@@ -84,14 +75,17 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
 
     @Override
     public void showLocation(Location location) {
-        this.location = location;
+        if(location != this.location) {
+            this.location = location;
+
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     public class LocationAdapter extends LightContainerAdapter<LocationAdapter.GroupViewHolder> {
-        public LocationAdapter() {//@NonNull final Injector injector) {
-          //  injector.inject(this);
 
-            this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.list_group_item, null);
+        public LocationAdapter() {
+            this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.list_group_item, null);
             this.placeholderLightContainerLayout = (RelativeLayout) placeholderViewGroup.findViewById(R.id.group_layout);
         }
 
@@ -120,7 +114,7 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
                 boolean firstSet = false;
 
                 for (int i = 0; i < location.getGroup(position).lightCount(); i++) {
-                    View lightView = LayoutInflater.from(context).inflate(R.layout.layout_list_light, null);
+                    View lightView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_light, null);
                     LightViewHolder lightViewHolder = new LightViewHolder(lightView);
                     holder.lightViewHolders.add(lightViewHolder);
 
@@ -149,20 +143,6 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
 
             return location.groupCount();
         }
-
-        /**
-         * The Injector interface is implemented by a Component that provides the injected
-         * class members, enabling the LocationAdapter to inject itself
-         * into the Component.
-         */
-       // public interface Injector {
-            /**
-             * Injects the LocationAdapter class into the Component implementing this interface.
-             *
-             * @param adapter the class to inject.
-             */
-        //    void inject(final LocationAdapter adapter);
-      //  }
 
         class GroupViewHolder extends LightContainerAdapter.LightContainerViewHolder
                 implements View.OnClickListener {
@@ -196,7 +176,8 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
                     lightLayout.removeView(holder.lightContainerLayout);
                 }
 
-                eventBus.postUIMessage(
+                //eventBus.postUIMessage(
+                getScreenGroup().postControlEvent(
                         new NavigationActivity.ShowGroupFragmentEvent(
                                 layoutRect,
                                 lightContainerLayout,

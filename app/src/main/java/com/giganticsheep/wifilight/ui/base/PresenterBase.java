@@ -11,7 +11,6 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import javax.inject.Inject;
 
-import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
@@ -57,7 +56,7 @@ public abstract class PresenterBase<V extends ViewBase> extends MvpBasePresenter
      *
      * @param event contains the error details.
      */
-    @DebugLog
+    //@DebugLog
     public synchronized void onEvent(@NonNull final ErrorEvent event) {
         getView().showError(event.getError());
     }

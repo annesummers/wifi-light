@@ -7,8 +7,6 @@ import com.giganticsheep.wifilight.api.model.LightNetwork;
 
 import javax.inject.Inject;
 
-import hugo.weaving.DebugLog;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 23/08/15. <p>
@@ -22,7 +20,7 @@ public abstract class LightNetworkAdapterBase extends BaseExpandableListAdapter 
 
     protected LightNetwork lightNetwork = new LightNetwork();
 
-    @DebugLog
+    //@DebugLog
     LightNetworkAdapterBase(@NonNull final Injector injector) {
         this.injector = injector;
 

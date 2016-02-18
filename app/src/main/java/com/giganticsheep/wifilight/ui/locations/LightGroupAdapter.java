@@ -54,7 +54,7 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
         return lightPosition;
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     @Override
     public View getChildView(final int groupPosition,
@@ -92,7 +92,7 @@ public class LightGroupAdapter extends LightNetworkAdapterBase {
         return groupPosition;
     }
 
-    //@DebugLog
+    ////@DebugLog
     @NonNull
     @Override
     public View getGroupView(final int groupPosition,

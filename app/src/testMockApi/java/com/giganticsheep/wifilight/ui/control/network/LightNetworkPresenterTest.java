@@ -41,7 +41,7 @@ public class LightNetworkPresenterTest extends PresenterTestBase {
             return;
         }
 
-        view.showLightNetwork(new LightNetwork(), 0, 0, 0);
+        view.showLightNetwork(new LightNetwork(), 0);
 
         int oldViewState = view.getState();
 

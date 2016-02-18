@@ -45,7 +45,7 @@ public class GroupStatusFragment extends StatusFragment<GroupStatusView,
         return (GroupStatusViewState) super.getViewState();
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public synchronized void showGroup(@NonNull final Group group) {
         getViewState().setShowGroup(group);

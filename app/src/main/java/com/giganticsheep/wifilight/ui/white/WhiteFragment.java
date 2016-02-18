@@ -50,14 +50,14 @@ public class WhiteFragment extends LightFragmentBase {
         return R.layout.fragment_white;
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     protected void initialiseViews(@NonNull final View view) {
         brightnessSeekbar.setOnSeekBarChangeListener(seekBarChangeListener);
         kelvinSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showLight(@NonNull final Light light) {
         brightnessSeekbar.setProgress(light.getBrightness());

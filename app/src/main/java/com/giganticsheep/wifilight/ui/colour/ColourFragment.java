@@ -49,7 +49,7 @@ public class ColourFragment extends LightFragmentBase {
         return R.layout.fragment_colour;
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     protected void initialiseViews(View view) {
         hueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
@@ -57,7 +57,7 @@ public class ColourFragment extends LightFragmentBase {
         brightnessSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showLight(@NonNull final Light light) {
         hueSeekBar.setProgress(light.getHue());

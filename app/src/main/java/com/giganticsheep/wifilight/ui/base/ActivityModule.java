@@ -20,12 +20,6 @@ public class ActivityModule {
         this.activity = activity;
     }
 
-   // @ActivityScope
-   // /@Provides
-   // Activity provideActivity() {
-       // return activity;
-  //  }
-
     @ActivityScope
     @Provides
     Context provideContext() {

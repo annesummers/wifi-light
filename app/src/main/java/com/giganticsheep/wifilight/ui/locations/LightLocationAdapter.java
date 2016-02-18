@@ -11,15 +11,12 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.LightNetwork;
 import com.giganticsheep.wifilight.api.model.Location;
 
-import hugo.weaving.DebugLog;
-
 /**
  * Created by anne on 13/07/15.
  *
  */
 public class LightLocationAdapter extends LightNetworkAdapterBase {
 
-    @DebugLog
     public LightLocationAdapter(@NonNull final Injector injector) {
         super(injector);
     }
@@ -42,7 +39,6 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         return childPosition;
     }
 
-    //@DebugLog
     @NonNull
     @Override
     public View getChildView(final int groupPosition,
@@ -80,7 +76,6 @@ public class LightLocationAdapter extends LightNetworkAdapterBase {
         return groupPosition;
     }
 
-    //@DebugLog
     @NonNull
     @Override
     public View getGroupView(final int groupPosition,

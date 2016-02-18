@@ -3,6 +3,7 @@ package com.giganticsheep.nofragmentbase.ui.base;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +11,20 @@ import android.view.ViewGroup;
 import de.greenrobot.event.NoSubscriberEvent;
 import rx.Observable;
 import rx.Subscriber;
-import rx.subscriptions.CompositeSubscription;
+import rx.Subscription;
 
 /**
  * Created by anne on 03/11/15.
  */
-public abstract class Screen<V extends Screen.ViewActionBase> implements Parcelable {
+public abstract class Screen<V extends Screen.ViewActionBase> implements Parcelable,
+        SubscriptionHandler {
 
     private ScreenGroup screenGroup;
 
     private int inAnimation = android.R.animator.fade_in;
     private int outAnimation = android.R.animator.fade_out;
 
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private SubscriptionDelegate subscriptionDelegate = new SubscriptionDelegate();
 
     private ViewStateHandler viewState;
 
@@ -125,32 +127,25 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
 
     public void hide() {
         screenGroup.unRegisterForEvents(this);
-        compositeSubscription.unsubscribe();
+        clearSubscriptions();
     }
 
     public interface ViewActionBase { }
 
-    /**
-     * Called when there is an error.
-     *
-     * @param event contains the error details.
-     */
-    //  @DebugLog
-    // public synchronized void onEvent(@NonNull final ErrorEvent event) {
-    //     getView().showError(event.getError());
-    //  }
+    @Override
+    public <T> Subscription subscribe(@NonNull final Observable<T> observable,
+                                      @NonNull final Subscriber<T> subscriber) {
+        return subscriptionDelegate.subscribe(observable, subscriber);
+    }
 
-    /**
-     * Subscribes to observable with subscriber, retaining the resulting Subscription so
-     * when the Presenter is destroyed the Observable can be unsubscribed from.
-     *
-     * @param observable the Observable to subscribe to
-     * @param subscriber the Subscriber to subscribe with
-     * @param <T> the type the Observable is observing
-     */
-    protected <T> void subscribe(final Observable<T> observable,
-                                 final Subscriber<T> subscriber) {
-        compositeSubscription.add(observable.subscribe(subscriber));
+    @Override
+    public void shutdown() {
+        subscriptionDelegate.shutdown();
+    }
+
+    @Override
+    public void clearSubscriptions() {
+        subscriptionDelegate.clearSubscriptions();
     }
 
     public void onEventMainThread(FlowActivity.DismissErrorDialogEvent unused) {

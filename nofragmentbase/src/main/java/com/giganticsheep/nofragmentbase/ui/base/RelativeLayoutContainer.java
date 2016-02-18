@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-import de.greenrobot.event.EventBus;
 import flow.NotPersistent;
 
 /**
@@ -34,7 +33,6 @@ public abstract class RelativeLayoutContainer extends RelativeLayout
 
         containerDelegate.bindView();
         setupViews();
-        onCreated();
     }
 
     // from ViewContainer
@@ -66,6 +64,8 @@ public abstract class RelativeLayoutContainer extends RelativeLayout
     @Override
     public void setScreen(Screen screen) {
         containerDelegate.setScreen(screen);
+
+        onCreated();
     }
 
     @Override
@@ -103,21 +103,24 @@ public abstract class RelativeLayoutContainer extends RelativeLayout
         showData();
     }
 
+    protected void showLoading() {
+        getScreenGroup().postControlEvent(new FlowActivity.FullScreenLoadingEvent(false));
+    }
+
     protected void hideLoading() {
-        EventBus.getDefault().post(new FlowActivity.FullScreenLoadingEvent(false));
+        getScreenGroup().postControlEvent(new FlowActivity.FullScreenLoadingEvent(false));
     }
 
     private void showError(Throwable throwable) {
-        EventBus.getDefault().post(new FlowActivity.ShowErrorEvent(throwable));
+        getScreenGroup().postControlEvent(new FlowActivity.ShowErrorEvent(throwable));
     }
 
     private void showError(String error) {
-        EventBus.getDefault().post(new FlowActivity.ShowErrorEvent(error));
+        getScreenGroup().postControlEvent(new FlowActivity.ShowErrorEvent(error));
     }
 
     protected abstract Screen.ViewActionBase getViewAction();
 
-    protected abstract void showLoading();
     protected abstract void showData();
 
     protected abstract void setupViews();

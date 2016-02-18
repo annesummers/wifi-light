@@ -25,7 +25,7 @@ class ColourPresenter extends BrightnessPresenter {
      * @param hue the hue to set; an int between 0 and 360.
      * @param duration the duration to fade into the new hue.
      */
-    @DebugLog
+    //@DebugLog
     public void setHue(final int hue, float duration) {
         subscribe(lightControl.setHue(hue, duration), new SetLightSubscriber());
     }
@@ -36,7 +36,7 @@ class ColourPresenter extends BrightnessPresenter {
      * @param saturation the saturation to set; an int between 0 and 100.
      * @param duration the duration to fade into the new saturation.
      */
-    @DebugLog
+    //@DebugLog
     public void setSaturation(final int saturation, float duration) {
         subscribe(lightControl.setSaturation(saturation, duration), new SetLightSubscriber());
     }

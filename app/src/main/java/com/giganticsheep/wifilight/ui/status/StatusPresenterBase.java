@@ -25,7 +25,7 @@ public abstract class StatusPresenterBase<V extends ViewBase> extends PresenterB
      *
      * @param isOn
      */
-    @DebugLog
+    //@DebugLog
     public void setPower(final boolean isOn, final LightSelector selector) {
         if(isOn) {
             subscribe(lightControl.setPower(LightControl.Power.ON, LightControlActivity.DEFAULT_DURATION),
@@ -36,7 +36,7 @@ public abstract class StatusPresenterBase<V extends ViewBase> extends PresenterB
         }
     }
 
-    @DebugLog
+    //@DebugLog
     public void lightChanged(@NonNull final String lightId) {
         eventBus.postMessage(new LightChangedEvent(lightId));
     }

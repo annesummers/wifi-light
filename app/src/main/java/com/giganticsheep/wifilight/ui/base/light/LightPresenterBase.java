@@ -38,7 +38,7 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
      *
      * @param id the id of the Light to fetch.
      */
-    @DebugLog
+    //@DebugLog
     public void fetchLight(final String id) {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
@@ -62,7 +62,7 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
-    @DebugLog
+    //@DebugLog
     public void onEventMainThread(@NonNull final LightChangedEvent event) {
         fetchLight(event.getLightId());
     }
@@ -75,7 +75,7 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
      *
      * @param light the new Light.
      */
-    @DebugLog
+    //@DebugLog
     public void handleLightChanged(@NonNull final Light light) {
         if (isViewAttached()) {
             if (light.isConnected()) {
@@ -90,14 +90,14 @@ public abstract class LightPresenterBase extends PresenterBase<LightView> {
         }
     }
 
-    @DebugLog
+    //@DebugLog
     public void handleError(Throwable error) {
         if (isViewAttached()) {
             getView().showError(error);
         }
     }
 
-    @DebugLog
+    //@DebugLog
     public void lightChanged(@NonNull final String lightId) {
         eventBus.postMessage(new LightChangedEvent(lightId));
     }

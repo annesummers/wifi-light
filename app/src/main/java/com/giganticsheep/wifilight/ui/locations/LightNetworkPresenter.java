@@ -6,8 +6,6 @@ import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
-import hugo.weaving.DebugLog;
-
 /**
  * DESCRIPTION HERE ANNE <p>
  * Created by anne on 24/07/15. <p>
@@ -17,7 +15,6 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
 
     private int locationPosition;
 
-    @DebugLog
     public LightNetworkPresenter(@NonNull final Injector injector) {
         injector.inject(this);
     }
@@ -31,12 +28,11 @@ public class LightNetworkPresenter extends PresenterBase<LightNetworkView> {
      *
      * @param event a FetchLightsEvent
      */
-    @DebugLog
     public synchronized void onEventMainThread(@NonNull final LightControl.FetchLightNetworkEvent event) {
         getView().showLightNetwork(event.lightNetwork(), locationPosition);
     }
 
-    @DebugLog
+    //@DebugLog
     public void setPosition(final int locationPosition) {
         this.locationPosition = locationPosition;
     }

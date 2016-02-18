@@ -216,7 +216,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
      *
      * @param details the details of the fragment to attach
      */
-    @DebugLog
+    //@DebugLog
     protected final void attachNewFragment(@NonNull final FragmentAttachmentDetails details) {
         FragmentBase fragment;
 
@@ -239,7 +239,7 @@ public abstract class ActivityBase<V extends MvpView, P extends MvpPresenter<V>,
         }
     }
 
-    @DebugLog
+    //@DebugLog
     protected final void detachFragment(@NonNull String name) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 

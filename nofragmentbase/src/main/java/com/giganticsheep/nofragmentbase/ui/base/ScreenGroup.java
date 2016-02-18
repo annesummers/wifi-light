@@ -1,22 +1,45 @@
 package com.giganticsheep.nofragmentbase.ui.base;
 
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import de.greenrobot.event.EventBus;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
 
 /**
  * Created by anne on 11/11/15.
  */
-public abstract class ScreenGroup implements Parcelable {
+public abstract class ScreenGroup implements Parcelable,
+        SubscriptionHandler {
 
-    private final EventBus eventBus;
+    private final EventBus groupEventBus;
+
+    private SubscriptionDelegate subscriptionDelegate = new SubscriptionDelegate();
 
     public ScreenGroup() {
-        eventBus = new EventBus();
+        groupEventBus = new EventBus();
+    }
+
+    @Override
+    public <T> Subscription subscribe(@NonNull final Observable<T> observable,
+                                      @NonNull final Subscriber<T> subscriber) {
+        return subscriptionDelegate.subscribe(observable, subscriber);
+    }
+
+    @Override
+    public void shutdown() {
+        subscriptionDelegate.shutdown();
+    }
+
+    @Override
+    public void clearSubscriptions() {
+        subscriptionDelegate.clearSubscriptions();
     }
 
     public void postControlEvent(Object event) {
-        eventBus.post(event);
+        groupEventBus.post(event);
     }
 
     @Override
@@ -25,18 +48,18 @@ public abstract class ScreenGroup implements Parcelable {
     }
 
     public void registerForEvents(Screen screen) {
-        eventBus.register(screen);
+        groupEventBus.register(screen);
     }
 
     public void unRegisterForEvents(Screen screen) {
-        eventBus.unregister(screen);
+        groupEventBus.unregister(screen);
     }
 
     public void registerForEvents(FlowActivity activity) {
-        eventBus.register(activity);
+        groupEventBus.register(activity);
     }
 
     public void unRegisterForEvents(FlowActivity activity) {
-        eventBus.unregister(activity);
+        groupEventBus.unregister(activity);
     }
 }

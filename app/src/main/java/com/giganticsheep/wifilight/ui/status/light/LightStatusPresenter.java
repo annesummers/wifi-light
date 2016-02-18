@@ -32,7 +32,7 @@ public class LightStatusPresenter extends StatusPresenterBase<LightStatusView> {
      *
      * @param id the id of the Light to fetch.
      */
-    @DebugLog
+    //@DebugLog
     public void fetchLight(final String id) {
         subscribe(lightControl.fetchLight(id), new Subscriber<Light>() {
 
@@ -58,7 +58,7 @@ public class LightStatusPresenter extends StatusPresenterBase<LightStatusView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
-    @DebugLog
+    //@DebugLog
     public void onEventMainThread(@NonNull final LightChangedEvent event) {
         fetchLight(event.getLightId());
     }

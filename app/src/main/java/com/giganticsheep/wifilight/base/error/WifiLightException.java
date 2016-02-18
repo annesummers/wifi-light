@@ -24,7 +24,7 @@ public class WifiLightException extends Exception {
         this.errorString = reason != null ? reason : "";
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public String getMessage() {
         StringBuilder stringErrors = new StringBuilder();

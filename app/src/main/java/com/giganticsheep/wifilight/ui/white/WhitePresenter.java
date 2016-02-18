@@ -23,7 +23,7 @@ class WhitePresenter extends BrightnessPresenter {
      * @param kelvin the kelvin to set; an int between 2500 and 9000.
      * @param duration the duration to fade into the new kelvin.
      */
-    @DebugLog
+    //@DebugLog
     public void setKelvin(final int kelvin, float duration) {
         subscribe(lightControl.setKelvin(kelvin, duration), new SetLightSubscriber());
     }

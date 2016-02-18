@@ -36,7 +36,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
         this.locationPosition = locationPosition;
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void apply(@NonNull final LightNetworkView lightView,
                       final boolean retained) {
@@ -51,7 +51,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
         }
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void saveInstanceState(final Bundle bundle) {
         super.saveInstanceState(bundle);
@@ -60,7 +60,7 @@ public class LightNetworkViewState extends ViewStateBase<LightNetworkView> {
         bundle.putInt(KEY_LOCATION_POSITION, locationPosition);
     }
 
-    @DebugLog
+    //@DebugLog
     @Nullable
     @Override
     public RestoreableViewState<LightNetworkView> restoreInstanceState(final Bundle bundle) {

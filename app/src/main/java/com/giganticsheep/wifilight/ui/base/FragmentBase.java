@@ -25,7 +25,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import hugo.weaving.DebugLog;
 import icepick.Icicle;
 import rx.Observable;
 import rx.Subscriber;
@@ -202,7 +201,7 @@ public abstract class FragmentBase<V extends ViewBase, P extends PresenterBase<V
      * @param activity the Activity to attach to
      * @param attachmentDetails the details for the Fragment used when attaching to the Activity
      */
-    @DebugLog
+    //@DebugLog
     public final void attachToActivity(@NonNull final ActivityBase activity,
                                        @NonNull final FragmentAttachmentDetails attachmentDetails) {
         this.attachmentDetails = attachmentDetails;

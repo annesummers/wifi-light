@@ -73,7 +73,7 @@ public class LightControlActivity extends ActivityBase<LightView,
 
     // Views
 
-    @DebugLog
+    //@DebugLog
     @Override
     protected void attachInitialFragments() {
         fragmentViewState = new LightViewState();
@@ -87,7 +87,7 @@ public class LightControlActivity extends ActivityBase<LightView,
         }
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     protected void initialiseViews() {
         super.initialiseViews();
@@ -231,7 +231,7 @@ public class LightControlActivity extends ActivityBase<LightView,
         }
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showLoading() {
         getViewState().setShowLoading();
@@ -242,7 +242,7 @@ public class LightControlActivity extends ActivityBase<LightView,
         loadingLayout.setVisibility(View.VISIBLE);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showConnected(@NonNull final Light light) {
         getViewState().setShowConnected(light);
@@ -255,7 +255,7 @@ public class LightControlActivity extends ActivityBase<LightView,
         lightLayout.setVisibility(View.VISIBLE);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showConnecting(@NonNull final Light light) {
         getViewState().setShowConnecting(light);
@@ -278,7 +278,7 @@ public class LightControlActivity extends ActivityBase<LightView,
         }, Constants.LAST_SEEN_TIMEOUT_SECONDS * Constants.MILLISECONDS_IN_SECOND);*/
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showDisconnected(@NonNull final Light light) {
         getViewState().setShowDisconnected(light);
@@ -291,13 +291,13 @@ public class LightControlActivity extends ActivityBase<LightView,
         disconnectedLayout.setVisibility(View.VISIBLE);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showError() {
         showError(new Exception("Unknown error"));
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showError(@NonNull final Throwable throwable) {
         getViewState().setShowError(throwable);

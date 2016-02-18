@@ -21,7 +21,6 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 /**
@@ -51,7 +50,7 @@ public abstract class StatusFragment<V extends ViewBase,
 
     // Views
 
-    @DebugLog
+    //@DebugLog
     @OnCheckedChanged(R.id.power_toggle)
     public final synchronized void onPowerToggle(@NonNull final CompoundButton compoundButton,
                                            final boolean isChecked) {
@@ -89,7 +88,7 @@ public abstract class StatusFragment<V extends ViewBase,
         return false;
     }
 
-    @DebugLog
+    //@DebugLog
     protected final synchronized void enableViews(final boolean enable) {
         viewsEnabled = enable;
         powerToggle.setEnabled(enable);

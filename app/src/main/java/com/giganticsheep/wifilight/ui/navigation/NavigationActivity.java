@@ -31,10 +31,10 @@ import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.locations.LightNetworkViewState;
 import com.giganticsheep.wifilight.ui.navigation.group.LightGroupScreen;
+import com.giganticsheep.wifilight.ui.navigation.location.LocationScreen;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -43,7 +43,6 @@ import javax.inject.Inject;
 
 import butterknife.InjectView;
 import flow.Flow;
-import hugo.weaving.DebugLog;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -158,11 +157,12 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
 
     @Override
     protected Screen getInitialScreen() {
-        return new SplashScreen(getScreenGroup());
+        return new LocationScreen(getScreenGroup());
     }
 
     @Override
-    protected void onCreated() { }
+    protected void onCreated() {
+    }
 
     @Override
     protected int additionalScreenCount() {
@@ -269,10 +269,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
 
     public void onEventMainThread(ErrorEvent errorEvent) { }
 
-    @DebugLog
-    public void onEventMainThread(@NonNull final LocationChangedEvent event) {
-        Flow.get(NavigationActivity.this).set(new LightGroupScreen(getScreenGroup(), event.getLocationId()));
-    }
+    //@DebugLog
 
     public void onEventMainThread(final ShowGroupFragmentEvent event) {
         maskLayout.setVisibility(View.VISIBLE);

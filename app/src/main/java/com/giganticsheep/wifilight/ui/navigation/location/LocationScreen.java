@@ -17,10 +17,10 @@ public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewA
 
     private Location location;
 
-    public LocationScreen(ScreenGroup screenGroup, String locationId) {
+    public LocationScreen(ScreenGroup screenGroup) {
         super(screenGroup);
 
-        fetchLocation(locationId);
+        getViewState().setStateLoading();
     }
 
     protected LocationScreen(Parcel in) {
@@ -35,15 +35,23 @@ public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewA
     public void fetchLocation(String locationId) {
         getViewState().setStateLoading();
 
-        subscribe(lightControl.fetchLocation(locationId),
-                new ScreenSubscriber<Location>() {
-
+        lightControl.fetchLocation(locationId)
+                .subscribe(new ScreenSubscriber<Location>() {
                     @Override
                     public void onNext(Location location) {
                         LocationScreen.this.location = location;
                         setHasData();
                     }
                 });
+
+        /*subscribe(lightControl.fetchLocation(locationId), new ScreenSubscriber<Location>() {
+
+                    @Override
+                    public void onNext(Location location) {
+                        LocationScreen.this.location = location;
+                        setHasData();
+                    }
+                });*/
     }
 
     @Override

@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.giganticsheep.nofragmentbase.R;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 import de.greenrobot.event.NoSubscriberEvent;
 import flow.Flow;
 import flow.FlowDelegate;
@@ -41,7 +40,7 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
 
         setContentView(layoutId());
 
@@ -148,7 +147,7 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
     protected void onDestroy() {
         super.onDestroy();
 
-        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().unregister(this);
         screenGroup.unRegisterForEvents(this);
     }
 

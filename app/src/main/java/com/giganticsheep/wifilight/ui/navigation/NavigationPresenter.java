@@ -10,7 +10,6 @@ import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.LocationChangedEvent;
 import com.giganticsheep.wifilight.ui.base.PresenterBase;
 
-import hugo.weaving.DebugLog;
 import rx.Subscriber;
 
 /**
@@ -24,7 +23,7 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
         injector.inject(this);
     }
 
-    @DebugLog
+    //@DebugLog
     final public void fetchLightNetwork() {
         if (isViewAttached()) {
             getView().showLoading();
@@ -52,7 +51,7 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
-    @DebugLog
+    //@DebugLog
     public void onEventMainThread(@NonNull final LocationChangedEvent event) {
         getView().showLocation(event.getLocationId());
     }
@@ -62,7 +61,7 @@ public class NavigationPresenter extends PresenterBase<NavigationView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Group}.
      */
-    @DebugLog
+    //@DebugLog
     public void onEventMainThread(@NonNull final GroupChangedEvent event) {
         getView().showGroup(event.getGroupId());
     }

@@ -45,7 +45,7 @@ public class LocationStatusFragment extends StatusFragment<LocationStatusView,
         return (LocationStatusViewState) super.getViewState();
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public synchronized void showLocation(@NonNull final Location location) {
         getViewState().setShowLocation(location);

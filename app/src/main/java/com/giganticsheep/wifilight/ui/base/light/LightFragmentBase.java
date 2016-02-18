@@ -74,7 +74,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView,
         return (LightViewState) super.getViewState();
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public final void showLoading() {
         getViewState().setShowLoading();
@@ -82,7 +82,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView,
         enableViews(false);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showConnected(@NonNull final Light light) {
         getViewState().setShowConnected(light);
@@ -91,7 +91,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView,
         enableViews(true);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showConnecting(@NonNull final Light light) {
         getViewState().setShowConnecting(light);
@@ -100,7 +100,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView,
         enableViews(false);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showDisconnected(@NonNull final Light light) {
         getViewState().setShowDisconnected(light);
@@ -109,7 +109,7 @@ public abstract class LightFragmentBase extends FragmentBase<LightView,
         enableViews(false);
     }
 
-    @DebugLog
+    //@DebugLog
     @Override
     public void showError() {
         getViewState().setShowError();

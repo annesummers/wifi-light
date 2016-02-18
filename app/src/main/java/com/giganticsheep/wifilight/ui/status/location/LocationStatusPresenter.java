@@ -31,7 +31,7 @@ public class LocationStatusPresenter extends StatusPresenterBase<LocationStatusV
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
-    @DebugLog
+    //@DebugLog
     public void onEventMainThread(@NonNull final LocationChangedEvent event) {
         subscribe(lightControl.fetchLocation(event.getLocationId()),
                 new Subscriber<Location>() {

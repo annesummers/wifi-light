@@ -12,16 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.giganticsheep.nofragmentbase.ui.base.FlowActivity;
 import com.giganticsheep.nofragmentbase.ui.base.GridRecyclerViewRelativeLayoutContainer;
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
+import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.navigation.LightContainerAdapter;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by anne on 24/11/15.
@@ -47,15 +46,9 @@ public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
         return this;
     }
 
-
-    @Override
-    protected void showLoading() {
-        EventBus.getDefault().post(new FlowActivity.FullScreenLoadingEvent(true));
-    }
-
     @Override
     protected void onCreated() {
-
+        getScreenGroup().postControlEvent(new ActivityBase.FragmentShownEvent());
     }
 
     @Override
@@ -84,10 +77,8 @@ public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
 
     public class GroupAdapter extends LightContainerAdapter<GroupAdapter.ClickableLightViewHolder> {
 
-        public GroupAdapter() {//@NonNull final Injector injector) {
-            // injector.inject(this);
-
-            this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.list_light_item, null);
+        public GroupAdapter() {
+            this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.list_light_item, null);
             this.placeholderLightContainerLayout = (RelativeLayout) placeholderViewGroup.findViewById(R.id.light_layout);
         }
 
@@ -116,20 +107,6 @@ public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
 
             return group.lightCount();
         }
-        /**
-         * The Injector interface is implemented by a Component that provides the injected
-         * class members, enabling the LocationAdapter to inject itself
-         * into the Component.
-         */
-        //public interface Injector {
-
-        /**
-         * Injects the LocationAdapter class into the Component implementing this interface.
-         *
-         * @param adapter the class to inject.
-         */
-        //     void inject(final GroupAdapter adapter);
-        //  }
 
         public class ClickableLightViewHolder extends LightContainerAdapter.LightViewHolder
                 implements View.OnClickListener {
@@ -149,7 +126,8 @@ public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
                 Rect layoutRect = calculateRectOnScreen();
                 detachLayoutAndAttachPaddedPlaceholder();
 
-                eventBus.postUIMessage(
+                //eventBus.postUIMessage(
+                getScreenGroup().postControlEvent(
                         new NavigationActivity.ShowLightControlActivityEvent(
                                 layoutRect,
                                 lightContainerLayout,

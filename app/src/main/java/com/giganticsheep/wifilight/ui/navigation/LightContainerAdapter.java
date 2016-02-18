@@ -1,6 +1,5 @@
 package com.giganticsheep.wifilight.ui.navigation;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,9 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.base.EventBus;
-
-import javax.inject.Inject;
 
 /**
  * DESCRIPTION HERE ANNE <p>
@@ -21,9 +17,6 @@ import javax.inject.Inject;
  * (*_*)
  */
 public abstract class LightContainerAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> {
-
-    @Inject protected Context context;
-    @Inject protected EventBus eventBus;
     
     protected RelativeLayout placeholderLightContainerLayout;
     protected ViewGroup placeholderViewGroup;

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import hugo.weaving.DebugLog;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.Scheduler;
@@ -115,7 +114,7 @@ public class LightControlImpl extends LightControlEventCatcher
         return doSetColour(makeKelvinQuery(kelvin + LightConstants.KELVIN_BASE), makeDurationQuery(duration), currentSelector);
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     @Override
     public final Observable<LightStatus> togglePower() {
@@ -158,7 +157,7 @@ public class LightControlImpl extends LightControlEventCatcher
                 .observeOn(uiScheduler);
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     @Override
     public final Observable<LightStatus> setPower(@NonNull final Power power,
@@ -211,7 +210,7 @@ public class LightControlImpl extends LightControlEventCatcher
                 .observeOn(uiScheduler);
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     private synchronized Observable<Location> fetchLocations(final boolean fetchFromServer) {
         if(fetchFromServer || fetchLocationsObservable == null) {
@@ -264,7 +263,7 @@ public class LightControlImpl extends LightControlEventCatcher
         return fetchLocationsObservable;
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     private synchronized Observable<Group> fetchGroups() {
         if(fetchGroupsObservable == null) {
@@ -285,7 +284,7 @@ public class LightControlImpl extends LightControlEventCatcher
         return fetchGroupsObservable;
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     private synchronized Observable<Light> fetchLights() {
         if (fetchLightsObservable == null) {
@@ -306,7 +305,7 @@ public class LightControlImpl extends LightControlEventCatcher
         return fetchLightsObservable;
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     @Override
     public synchronized Observable<LightNetwork> fetchLightNetwork() {
@@ -330,7 +329,7 @@ public class LightControlImpl extends LightControlEventCatcher
         .doOnCompleted(() -> eventBus.postMessage(new FetchLightNetworkEvent(lightNetwork)));
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     @Override
     public final Observable<Light> fetchLight(@Nullable final String id) {
@@ -370,7 +369,7 @@ public class LightControlImpl extends LightControlEventCatcher
         currentSelector = selector;
     }
 
-    @DebugLog
+    //@DebugLog
     @NonNull
     private Observable<LightStatus> doSetColour(@NonNull final String colourQuery,
                                                 @NonNull final String durationQuery,

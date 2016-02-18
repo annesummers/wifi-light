@@ -32,7 +32,7 @@ public class GroupStatusPresenter extends StatusPresenterBase<GroupStatusView> {
      *
      * @param event contains the new {@link com.giganticsheep.wifilight.api.model.Location}.
      */
-    @DebugLog
+    //@DebugLog
     public void onEventMainThread(@NonNull final GroupChangedEvent event) {
         subscribe(lightControl.fetchGroup(event.getGroupId()),
                 new Subscriber<Group>() {
