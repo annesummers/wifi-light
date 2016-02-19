@@ -36,7 +36,7 @@
             style="@style/Theme.WifiLight.TextView.Label2"/>
 
         <TextView
-            android:id="@+id/name_textview"
+            android:id="@+id/nameTextView"
             grid:layout_row="0"
             grid:layout_rowSpan="1"
             grid:layout_column="1"

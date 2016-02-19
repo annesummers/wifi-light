@@ -20,7 +20,6 @@ import javax.inject.Inject;
 
 import flow.Flow;
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by anne on 15/02/16.
@@ -44,21 +43,34 @@ public class NavigationScreenGroup extends ScreenGroup implements HasComponent<N
     }
 
     public void fetchLightNetwork() {
-        subscribe(lightControl.fetchLightNetwork(), new Subscriber<LightNetwork>() {
-            @Override
-            public void onCompleted() { }
+        subscribe(lightControl.fetchLightNetwork(), new LightNetworkSubscriber(this));
+    }
 
-            @Override
-            public void onError(Throwable e) {
-                eventBus.postMessage(new ErrorEvent(e));
-                postControlEvent(new FlowActivity.ShowErrorEvent(e));
-            }
+    private static class LightNetworkSubscriber extends ScreenGroupSubscriber<LightNetwork> {
 
-            @Override
-            public void onNext(LightNetwork lightNetwork) {
-                eventBus.postMessageSticky(new LightControl.FetchLightNetworkEvent(lightNetwork));
+        public LightNetworkSubscriber(NavigationScreenGroup screenGroup) {
+            super(screenGroup);
+        }
+
+        @Override
+        public void onCompleted() { }
+
+        @Override
+        public void onError(Throwable e) {
+            NavigationScreenGroup screenGroup = (NavigationScreenGroup) screenGroupWeakReference.get();
+            if(screenGroup != null) {
+                screenGroup.eventBus.postMessage(new ErrorEvent(e));
+                screenGroup.postControlEvent(new FlowActivity.ShowErrorEvent(e));
             }
-        });
+        }
+
+        @Override
+        public void onNext(LightNetwork lightNetwork) {
+            NavigationScreenGroup screenGroup = (NavigationScreenGroup) screenGroupWeakReference.get();
+            if(screenGroup != null) {
+                screenGroup.eventBus.postMessageSticky(new LightControl.FetchLightNetworkEvent(lightNetwork));
+            }
+        }
     }
 
     public void onEventMainThread(@NonNull final LocationChangedEvent event) {

@@ -74,8 +74,21 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
                         if (screen != lastScreen) {
                             final View view = screen.inflateView(FlowActivity.this, getMainContainer());
 
-                            final Animator inAnimation = AnimatorInflater.loadAnimator(FlowActivity.this, screen.getInAnimation());
-                            final Animator outAnimation = AnimatorInflater.loadAnimator(FlowActivity.this, lastScreen.getOutAnimation());
+                            int inAnimation = screen.getInAnimation();
+                            int outAnimation = lastScreen.getOutAnimation();
+                            Animator inAnimator = null;
+                            Animator outAnimator = null;
+
+                            if(inAnimation > 0) {
+                                inAnimator = AnimatorInflater.loadAnimator(FlowActivity.this, inAnimation);
+                            }
+
+                            if(outAnimation > 0) {
+                                outAnimator = AnimatorInflater.loadAnimator(FlowActivity.this, outAnimation);
+                            }
+
+                            final Animator finalInAnimator = inAnimator;
+                            final Animator finalOutAnimator = outAnimator;
 
                             /*layoutTransition.disableTransitionType(LayoutTransition.APPEARING);
                             layoutTransition.disableTransitionType(LayoutTransition.DISAPPEARING);
@@ -83,38 +96,40 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
                             layoutTransition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
                             getMainContainer().setLayoutTransition(layoutTransition);*/
 
-                            inAnimation.setTarget(view);
+                            int childCount = getMainContainer().getChildCount();
+                            int additionalScreenCount = additionalScreenCount();
+                            if (childCount == additionalScreenCount + 1) {
+                                if(finalOutAnimator != null) {
+                                    finalOutAnimator.setTarget(getMainContainer().getChildAt(additionalScreenCount()));
+                                    finalOutAnimator.addListener(new Animator.AnimatorListener() {
 
-                            if (getMainContainer().getChildCount() == additionalScreenCount() + 1) {
-                                outAnimation.setTarget(getMainContainer().getChildAt(additionalScreenCount()));
+                                        @Override
+                                        public void onAnimationStart(Animator animation) { }
 
-                                outAnimation.addListener(new Animator.AnimatorListener() {
+                                        @Override
+                                        public void onAnimationEnd(Animator animation) {
+                                            lastScreen.hide();
 
-                                    @Override
-                                    public void onAnimationStart(Animator animation) {
-                                    }
+                                            addNewView(view, finalInAnimator);
+                                        }
 
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        lastScreen.hide();
-                                        inAnimation.start();
-                                        getMainContainer().addView(view);
-                                    }
+                                        @Override
+                                        public void onAnimationCancel(Animator animation) { }
 
-                                    @Override
-                                    public void onAnimationCancel(Animator animation) {
-                                    }
+                                        @Override
+                                        public void onAnimationRepeat(Animator animation) { }
+                                    });
+                                }
 
-                                    @Override
-                                    public void onAnimationRepeat(Animator animation) {
-                                    }
-                                });
+                                getMainContainer().removeViewAt(additionalScreenCount());
 
-                                getMainContainer().removeViewAt(1);
+                                if(finalOutAnimator != null) {
+                                    finalOutAnimator.start();
+                                } else {
+                                    lastScreen.hide();
 
-                                //getMainContainer().addView(view);
-                                // inAnimation.start();
-                                outAnimation.start();
+                                    addNewView(view, finalInAnimator);
+                                }
                             }
                         } else {
                             int childCount = getMainContainer().getChildCount();
@@ -122,17 +137,20 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
                             if (childCount == additionalScreenCount) {
                                 final View view = screen.inflateView(FlowActivity.this, getMainContainer());
 
-                                final Animator inAnimation = AnimatorInflater.loadAnimator(FlowActivity.this, screen.getInAnimation());
+                                int inAnimation = screen.getInAnimation();
+                                Animator inAnimator = null;
+
+                                if (inAnimation > 0) {
+                                    inAnimator = AnimatorInflater.loadAnimator(FlowActivity.this, inAnimation);
+                                }
+
                               /*  layoutTransition.disableTransitionType(LayoutTransition.DISAPPEARING);
                                 layoutTransition.disableTransitionType(LayoutTransition.APPEARING);
                                 layoutTransition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
                                 layoutTransition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
                                 getMainContainer().setLayoutTransition(layoutTransition);*/
 
-                                inAnimation.setTarget(view);
-
-                                getMainContainer().addView(view);
-                                inAnimation.start();
+                                addNewView(view, inAnimator);
                             }
                         }
 
@@ -141,6 +159,15 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
                 });
 
         onCreated();
+    }
+
+    private void addNewView(View view, Animator inAnimator) {
+        getMainContainer().addView(view);
+
+        if(inAnimator != null) {
+            inAnimator.setTarget(view);
+            inAnimator.start();
+        }
     }
 
     @Override

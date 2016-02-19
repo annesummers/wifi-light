@@ -3,6 +3,8 @@ package com.giganticsheep.nofragmentbase.ui.base;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.lang.ref.WeakReference;
+
 import de.greenrobot.event.EventBus;
 import rx.Observable;
 import rx.Subscriber;
@@ -61,5 +63,14 @@ public abstract class ScreenGroup implements Parcelable,
 
     public void unRegisterForEvents(FlowActivity activity) {
         groupEventBus.unregister(activity);
+    }
+
+    protected static abstract class ScreenGroupSubscriber<T> extends Subscriber<T> {
+
+        protected final WeakReference<ScreenGroup> screenGroupWeakReference;
+
+        public ScreenGroupSubscriber(ScreenGroup screenGroup) {
+            screenGroupWeakReference = new WeakReference<>(screenGroup);
+        }
     }
 }

@@ -11,7 +11,6 @@ import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import butterknife.InjectView;
-import hugo.weaving.DebugLog;
 
 /**
  * Created by anne on 25/06/15.
@@ -25,7 +24,7 @@ public class DetailsFragment extends LightFragmentBase {
         super();
     }
 
-    @InjectView(R.id.name_textview) TextView nameTextView;
+    @InjectView(R.id.nameTextView) TextView nameTextView;
     @InjectView(R.id.id_textview) TextView idTextView;
     @InjectView(R.id.hue_textview) TextView hueTextView;
     @InjectView(R.id.saturation_textview) TextView saturationTextView;

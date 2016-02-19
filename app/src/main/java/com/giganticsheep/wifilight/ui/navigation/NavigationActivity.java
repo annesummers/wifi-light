@@ -28,12 +28,11 @@ import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
 import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
-import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.locations.LightNetworkViewState;
-import com.giganticsheep.wifilight.ui.navigation.group.LightGroupScreen;
+import com.giganticsheep.wifilight.ui.navigation.room.RoomScreen;
 import com.giganticsheep.wifilight.ui.navigation.location.LocationScreen;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
@@ -146,7 +145,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
 
         drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.setToolbarNavigationClickListener(v -> {
-            //attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
+            Flow.get(this).goBack();
 
             actionBar.setDisplayHomeAsUpEnabled(false);
             setDrawerState(true);
@@ -161,8 +160,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
     }
 
     @Override
-    protected void onCreated() {
-    }
+    protected void onCreated() { }
 
     @Override
     protected int additionalScreenCount() {
@@ -208,10 +206,9 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
                     return true;
 
                 case android.R.id.home:
-                    //attachFragment(new FragmentAttachmentDetails(getString(R.string.fragment_name_location), 0));
+                    Flow.get(this).goBack();
 
-                    ActionBar actionBar = getSupportActionBar();
-                    actionBar.setDisplayHomeAsUpEnabled(false);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -263,13 +260,11 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
 
     // Event handling
 
-    public void onEventMainThread(FullScreenLoadingEvent loadingEvent) {
+    public void onEventMainThread(LoadingEvent loadingEvent) {
         loadingLayout.setVisibility(loadingEvent.isShow() ? View.VISIBLE : View.GONE);
     }
 
     public void onEventMainThread(ErrorEvent errorEvent) { }
-
-    //@DebugLog
 
     public void onEventMainThread(final ShowGroupFragmentEvent event) {
         maskLayout.setVisibility(View.VISIBLE);
@@ -277,30 +272,23 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
         Animation zoomInAnimation = zoomInAnimation(event, 500);
         zoomInAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
+            public void onAnimationStart(Animation animation) { }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-               // FragmentAttachmentDetails attachDetails = new FragmentAttachmentDetails(
-                  //      getString(R.string.fragment_name_group), 0);
-                //attachDetails.addStringArg(WifiLightApplication.KEY_ID, event.groupId);
-                //attachNewFragment(attachDetails);
+                RoomScreen roomScreen = new RoomScreen(getScreenGroup());
+                Flow.get(NavigationActivity.this).set(roomScreen);
 
-                //presenter.groupChanged(event.groupId);
-                //
-                Flow.get(NavigationActivity.this).set(new LightGroupScreen(getScreenGroup(), event.groupId));
+                roomScreen.fetchGroup(event.groupId);
 
                 setDrawerState(false);
-                ActionBar actionBar = getSupportActionBar();
-                actionBar.setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
                 supportInvalidateOptionsMenu();
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+            public void onAnimationRepeat(Animation animation) { }
         });
 
         maskLayout.startAnimation(zoomInAnimation);
@@ -331,7 +319,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
         maskLayout.startAnimation(zoomInAnimation);
     }
 
-    public void onEventMainThread(final ActivityBase.FragmentShownEvent event) {
+    public void onEventMainThread(final ViewShownEvent event) {
         maskLayout.removeAllViews();
         maskLayout.setVisibility(View.GONE);
     }
@@ -359,10 +347,12 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
 
         maskLayout.addView(event.startLayout);
 
-        int dLeft = left - lightNetworkLayout.getPaddingLeft();
-        int dRight = right - lightNetworkLayout.getPaddingRight();
-        int dTop = top - toolbar.getHeight() - lightNetworkLayout.getPaddingTop();
-        int dBottom = bottom - lightNetworkLayout.getPaddingBottom();
+        RelativeLayout.LayoutParams targetLayoutParams = (RelativeLayout.LayoutParams) lightNetworkLayout.getLayoutParams();
+
+        int dLeft = left - lightNetworkLayout.getPaddingLeft() - targetLayoutParams.leftMargin;
+        int dRight = right - lightNetworkLayout.getPaddingRight() - targetLayoutParams.rightMargin;
+        int dTop = top - toolbar.getHeight() - lightNetworkLayout.getPaddingTop() - targetLayoutParams.topMargin;
+        int dBottom = bottom - lightNetworkLayout.getPaddingBottom() - targetLayoutParams.bottomMargin;
 
         Animation a = new Animation() {
 
@@ -399,7 +389,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
         }
     }
 
-    public static class ShowLightControlActivityEvent extends AnimateEvent{
+    public static class ShowLightControlActivityEvent extends AnimateEvent {
 
         final String lightId;
 
@@ -443,112 +433,6 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
          */
         void inject(final NavigationActivity navigationActivity);
     }
-/*
-    @Override
-    protected ActivityLayout createActivityLayout() {
-        return new ActivityLayout() {
-            @Override
-            public int fragmentContainer(int position) {
-                switch (position) {
-                    case 0:
-                        return R.id.container;
-                    case 1:
-                        return R.id.container2;
-                    case 2:
-                        return R.id.container_drawer;
-                    default:
-                        return 0;
 
-                }
-            }
-
-            @Override
-            public int fragmentContainerCount() {
-                return 3;
-            }
-
-            @Override
-            public int layoutId() {
-                return R.layout.activity_navigation;
-            }
-        };
-    }*/
-
-    // MVP
-/*
-    @Override
-    public NavigationPresenter createPresenter() {
-        return new NavigationPresenter(getComponent());
-    }
-
-    @Override
-    public RestoreableViewState createViewState() {
-        return new NavigationViewState();
-    }
-
-    @Override
-    public void onNewViewStateInstance() {
-        getViewState().apply(this, true);
-    }
-
-    @NonNull
-    @Override
-    public NavigationViewState getViewState() {
-        return (NavigationViewState) super.getViewState();
-    }
-
-    @Override
-    public void showLoading() {
-        getViewState().setShowLoading();
-
-        errorLayout.setVisibility(View.GONE);
-        lightNetworkLayout.setVisibility(View.VISIBLE);
-        loadingLayout.setVisibility(View.VISIBLE);
-
-        setDrawerState(false);
-    }
-
-    @Override
-    public void showGroup(final String groupId) {
-        getViewState().showGroup(groupId);
-
-        //this.currentGroupId = groupId;
-
-        errorLayout.setVisibility(View.GONE);
-        loadingLayout.setVisibility(View.GONE);
-        lightNetworkLayout.setVisibility(View.VISIBLE);
-
-        setDrawerState(true);
-    }
-
-    @Override
-    public void showLocation(final String locationId) {
-        getViewState().showLocation(locationId);
-
-       // this.currentLocationId = locationId;
-
-        errorLayout.setVisibility(View.GONE);
-        loadingLayout.setVisibility(View.GONE);
-        lightNetworkLayout.setVisibility(View.VISIBLE);
-
-        setDrawerState(true);
-    }
-
-    @Override
-    public void showError() {
-        showError(new Exception("Unknown error"));
-    }
-
-    @Override
-    public void showError(Throwable throwable) {
-        getViewState().setShowError(throwable);
-
-        errorTextView.setText(throwable.getMessage());
-
-        loadingLayout.setVisibility(View.GONE);
-        lightNetworkLayout.setVisibility(View.VISIBLE);
-        errorLayout.setVisibility(View.VISIBLE);
-
-        setDrawerState(false);
-    }*/
+    public static class ViewShownEvent { }
 }

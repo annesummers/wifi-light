@@ -7,15 +7,15 @@ import android.widget.FrameLayout;
 /**
  * Created by anne on 15/02/16.
  */
-public class DumbFrameLayoutContainer extends FrameLayout
-                                    implements ViewContainer {
+public class DumbFrameLayoutContainer<S extends Screen> extends FrameLayout
+                                    implements ViewContainer<S> {
 
-    private final ContainerDelegate containerDelegate;
+    private final ContainerDelegate<S> containerDelegate;
 
     public DumbFrameLayoutContainer(Context context) {
         super(context);
 
-        containerDelegate = new ContainerDelegate(this);
+        containerDelegate = new ContainerDelegate<>(this);
     }
 
     public DumbFrameLayoutContainer(Context context, AttributeSet attrs) {
@@ -51,8 +51,13 @@ public class DumbFrameLayoutContainer extends FrameLayout
     }
 
     @Override
-    public void setScreen(Screen screen) {
+    public void setScreen(S screen) {
         containerDelegate.setScreen(screen);
+    }
+
+    @Override
+    public S getScreen() {
+        return containerDelegate.getScreen();
     }
 
     @Override

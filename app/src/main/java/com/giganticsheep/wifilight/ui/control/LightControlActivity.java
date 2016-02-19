@@ -28,12 +28,10 @@ import com.giganticsheep.wifilight.ui.base.FragmentAttachmentDetails;
 import com.giganticsheep.wifilight.ui.base.light.LightView;
 import com.giganticsheep.wifilight.ui.base.light.LightViewState;
 import com.giganticsheep.wifilight.ui.preferences.WifiPreferenceActivity;
-import com.giganticsheep.wifilight.ui.status.light.LightStatusViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestoreableViewState;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import butterknife.InjectView;
-import hugo.weaving.DebugLog;
 
 /**
  * The Activity containing the Fragments to control a {@link com.giganticsheep.wifilight.api.model.Light} and also to show the
@@ -208,7 +206,7 @@ public class LightControlActivity extends ActivityBase<LightView,
     @NonNull
     @Override
     public RestoreableViewState createViewState() {
-        return new LightStatusViewState();
+        return new LightViewState();
     }
 
     @Override

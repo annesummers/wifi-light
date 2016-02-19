@@ -7,7 +7,7 @@
     android:background="@drawable/background_location">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/groups_recycler_view"
+        android:id="@+id/groupsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

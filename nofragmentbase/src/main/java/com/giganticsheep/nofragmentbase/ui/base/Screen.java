@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
+
 import de.greenrobot.event.NoSubscriberEvent;
 import rx.Observable;
 import rx.Subscriber;
@@ -17,16 +19,15 @@ import rx.Subscription;
  * Created by anne on 03/11/15.
  */
 public abstract class Screen<V extends Screen.ViewActionBase> implements Parcelable,
-        SubscriptionHandler {
+                                                                        SubscriptionHandler {
 
     private ScreenGroup screenGroup;
+    private ViewStateHandler viewState;
 
     private int inAnimation = android.R.animator.fade_in;
     private int outAnimation = android.R.animator.fade_out;
 
-    private SubscriptionDelegate subscriptionDelegate = new SubscriptionDelegate();
-
-    private ViewStateHandler viewState;
+    private final SubscriptionDelegate subscriptionDelegate = new SubscriptionDelegate();
 
     public V getView() {
         return view;
@@ -45,7 +46,7 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
     }
 
     protected Screen(Parcel in) {
-        screenGroup = in.readParcelable(ScreenGroup.class.getClassLoader());
+        this.screenGroup = in.readParcelable(ScreenGroup.class.getClassLoader());
         this.screenGroup.registerForEvents(this);
 
         inAnimation = in.readInt();
@@ -91,16 +92,16 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
 
     void attachView(V view) {
         this.view = view;
+
         apply();
     }
 
     void detachView(V view) {
         this.view = null;
-        //apply();
     }
 
     private void apply() {
-        if(hasData) {
+        if(hasData && view != null) {
             showData();
         }
     }
@@ -173,4 +174,13 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
     }
 
     public void onEvent(NoSubscriberEvent event) { }
+
+    protected static abstract class ScreenSubscriber<T> extends Subscriber<T> {
+
+        protected final WeakReference<Screen> screenWeakReference;
+
+        public ScreenSubscriber(Screen screen) {
+            screenWeakReference = new WeakReference<>(screen);
+        }
+    }
 }

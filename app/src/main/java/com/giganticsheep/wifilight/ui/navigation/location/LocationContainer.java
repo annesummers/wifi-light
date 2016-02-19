@@ -10,9 +10,11 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.giganticsheep.nofragmentbase.ui.base.GridRecyclerViewRelativeLayoutContainer;
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
@@ -26,17 +28,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+import timber.log.Timber;
 
 /**
  * Created by anne on 24/11/15.
  */
-public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
+public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer<LocationScreen>
                                 implements LocationScreen.LocationViewAction {
 
     private Location location;
 
-    @InjectView(R.id.groups_recycler_view)
-    RecyclerView recyclerView;
+    @InjectView(R.id.powerToggle)
+    ToggleButton powerToggle;
+
+    @InjectView(R.id.nameTextView)
+    TextView nameTextView;
+
+    @InjectView(R.id.groupsRecyclerView)
+    RecyclerView groupsRecyclerView;
+
+    protected boolean firstSetPower = false;
 
     public LocationContainer(Context context) {
         super(context);
@@ -58,9 +71,9 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
     protected void setupViews() {
         super.setupViews();
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new LocationAdapter());
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        groupsRecyclerView.setHasFixedSize(true);
+        groupsRecyclerView.setAdapter(new LocationAdapter());
+        groupsRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
@@ -70,7 +83,7 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
 
     @Override
     protected RecyclerView getRecyclerView() {
-        return recyclerView;
+        return groupsRecyclerView;
     }
 
     @Override
@@ -78,8 +91,28 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
         if(location != this.location) {
             this.location = location;
 
-            recyclerView.getAdapter().notifyDataSetChanged();
+            firstSetPower = true;
+            groupsRecyclerView.getAdapter().notifyDataSetChanged();
+            nameTextView.setText(location.getName());
+
+            // TODO set the power toggle on if any light is on, off otherwise
         }
+    }
+
+    @OnCheckedChanged(R.id.powerToggle)
+    public final synchronized void onPowerToggle(@NonNull final CompoundButton compoundButton,
+                                                 final boolean isChecked) {
+        Timber.d("onPowerToggle() views enabled and firstSetPower is %s", firstSetPower ? "true" : "false");
+        if(!firstSetPower) {
+            getScreen().setPower(isChecked);
+        }
+
+        firstSetPower = false;
+    }
+
+    @OnClick(R.id.allLightsButton)
+    public final void onAllLightsClick() {
+        getScreen().onAllLightsClick();
     }
 
     public class LocationAdapter extends LightContainerAdapter<LocationAdapter.GroupViewHolder> {
@@ -176,7 +209,6 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer
                     lightLayout.removeView(holder.lightContainerLayout);
                 }
 
-                //eventBus.postUIMessage(
                 getScreenGroup().postControlEvent(
                         new NavigationActivity.ShowGroupFragmentEvent(
                                 layoutRect,

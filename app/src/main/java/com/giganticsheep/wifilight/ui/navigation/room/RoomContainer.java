@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.navigation.group;
+package com.giganticsheep.wifilight.ui.navigation.room;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -10,34 +10,47 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.giganticsheep.nofragmentbase.ui.base.GridRecyclerViewRelativeLayoutContainer;
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.model.Group;
-import com.giganticsheep.wifilight.ui.base.ActivityBase;
 import com.giganticsheep.wifilight.ui.navigation.LightContainerAdapter;
 import com.giganticsheep.wifilight.ui.navigation.NavigationActivity;
 
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+import timber.log.Timber;
 
 /**
  * Created by anne on 24/11/15.
  */
-public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
-        implements LightGroupScreen.ViewAction {
+public class RoomContainer extends GridRecyclerViewRelativeLayoutContainer<RoomScreen>
+                            implements RoomScreen.ViewAction {
 
     private Group group;
 
-    @InjectView(R.id.lights_recycler_view)
-    RecyclerView recyclerView;
+    @InjectView(R.id.powerToggle)
+    ToggleButton powerToggle;
 
-    public LightGroupContainer(Context context) {
+    @InjectView(R.id.nameTextView)
+    TextView nameTextView;
+
+    @InjectView(R.id.lightsRecyclerView)
+    RecyclerView lightsRecyclerView;
+
+    protected boolean firstSetPower = false;
+
+    public RoomContainer(Context context) {
         super(context);
     }
 
-    public LightGroupContainer(Context context, AttributeSet attrs) {
+    public RoomContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -48,16 +61,16 @@ public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
 
     @Override
     protected void onCreated() {
-        getScreenGroup().postControlEvent(new ActivityBase.FragmentShownEvent());
+        getScreenGroup().postControlEvent(new NavigationActivity.ViewShownEvent());
     }
 
     @Override
     protected void setupViews() {
         super.setupViews();
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new GroupAdapter());
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        lightsRecyclerView.setHasFixedSize(true);
+        lightsRecyclerView.setAdapter(new GroupAdapter());
+        lightsRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
@@ -67,15 +80,39 @@ public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
 
     @Override
     protected RecyclerView getRecyclerView() {
-        return recyclerView;
+        return lightsRecyclerView;
     }
 
     @Override
     public void showGroup(Group group) {
-        this.group = group;
+        if(group != this.group) {
+            this.group = group;
+
+            firstSetPower = true;
+            lightsRecyclerView.getAdapter().notifyDataSetChanged();
+            nameTextView.setText(group.getName());
+
+            // TODO set the power toggle on if any light is on, off otherwise
+        }
     }
 
-    public class GroupAdapter extends LightContainerAdapter<GroupAdapter.ClickableLightViewHolder> {
+    @OnCheckedChanged(R.id.powerToggle)
+    public final synchronized void onPowerToggle(@NonNull final CompoundButton compoundButton,
+                                                 final boolean isChecked) {
+        Timber.d("onPowerToggle() views enabled and firstSetPower is %s", firstSetPower ? "true" : "false");
+        if(!firstSetPower) {
+            getScreen().setPower(isChecked);
+        }
+
+        firstSetPower = false;
+    }
+
+    @OnClick(R.id.allLightsButton)
+    public final void onAllLightsClick() {
+        getScreen().onAllLightsClick();
+    }
+
+    private class GroupAdapter extends LightContainerAdapter<GroupAdapter.ClickableLightViewHolder> {
 
         public GroupAdapter() {
             this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.list_light_item, null);
@@ -126,7 +163,6 @@ public class LightGroupContainer extends GridRecyclerViewRelativeLayoutContainer
                 Rect layoutRect = calculateRectOnScreen();
                 detachLayoutAndAttachPaddedPlaceholder();
 
-                //eventBus.postUIMessage(
                 getScreenGroup().postControlEvent(
                         new NavigationActivity.ShowLightControlActivityEvent(
                                 layoutRect,

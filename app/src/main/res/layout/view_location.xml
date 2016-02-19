@@ -6,8 +6,11 @@
     android:padding="@dimen/default_padding"
     android:background="@drawable/background_location">
 
+    <include layout="@layout/layout_top"
+        android:id="@+id/top_layout"/>
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/groups_recycler_view"
+        android:id="@+id/groupsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </com.giganticsheep.wifilight.ui.navigation.location.LocationContainer>

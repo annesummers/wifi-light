@@ -2,6 +2,7 @@ package com.giganticsheep.wifilight.ui.navigation.location;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.nofragmentbase.ui.base.ScreenGroup;
@@ -20,6 +21,9 @@ public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewA
     public LocationScreen(ScreenGroup screenGroup) {
         super(screenGroup);
 
+        setInAnimation(0);
+        setOutAnimation(0);
+
         getViewState().setStateLoading();
     }
 
@@ -35,23 +39,23 @@ public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewA
     public void fetchLocation(String locationId) {
         getViewState().setStateLoading();
 
-        lightControl.fetchLocation(locationId)
-                .subscribe(new ScreenSubscriber<Location>() {
-                    @Override
-                    public void onNext(Location location) {
-                        LocationScreen.this.location = location;
-                        setHasData();
-                    }
-                });
+        subscribe(lightControl.fetchLocation(locationId), new RoomScreenSubscriber(this));
+    }
 
-        /*subscribe(lightControl.fetchLocation(locationId), new ScreenSubscriber<Location>() {
+    private static class RoomScreenSubscriber extends WifiLightScreenSubscriber<Location> {
 
-                    @Override
-                    public void onNext(Location location) {
-                        LocationScreen.this.location = location;
-                        setHasData();
-                    }
-                });*/
+        public RoomScreenSubscriber(Screen screen) {
+            super(screen);
+        }
+
+        @Override
+        public void onNext(@NonNull final Location location) {
+            LocationScreen screen = (LocationScreen) screenWeakReference.get();
+            if(screen != null) {
+                screen.location = location;
+                screen.setHasData();
+            }
+        }
     }
 
     @Override
@@ -64,11 +68,6 @@ public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewA
         getView().showLocation(location);
     }
 
-    /**
-     * DESCRIPTION HERE ANNE <p>
-     * Created by anne on 04/09/15. <p>
-     * (*_*)
-     */
     public interface LocationViewAction extends Screen.ViewActionBase {
         void showLocation(Location location);
     }

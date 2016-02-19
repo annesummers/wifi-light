@@ -7,14 +7,14 @@ import butterknife.ButterKnife;
 /**
  * Created by anne on 16/02/16.
  */
-public class ContainerDelegate {
+public class ContainerDelegate<S extends Screen> {
 
     private final ViewState viewState;
     private final Screen.ViewActionBase viewAction;
     private final ViewGroup viewGroup;
 
     private boolean isOnScreen = false;
-    private Screen screen;
+    private S screen;
 
     ContainerDelegate(ViewState viewState,
                              Screen.ViewActionBase viewAction,
@@ -77,7 +77,7 @@ public class ContainerDelegate {
         isOnScreen = false;
     }
 
-    void setScreen(Screen screen) {
+    void setScreen(S screen) {
         this.screen = screen;
     }
 
@@ -87,5 +87,9 @@ public class ContainerDelegate {
 
     boolean isOnScreen() {
         return isOnScreen;
+    }
+
+    public S getScreen() {
+        return screen;
     }
 }

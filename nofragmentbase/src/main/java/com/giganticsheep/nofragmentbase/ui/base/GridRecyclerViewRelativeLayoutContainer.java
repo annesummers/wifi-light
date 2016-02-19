@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 /**
  * Created by anne on 24/11/15.
  */
-public abstract class GridRecyclerViewRelativeLayoutContainer extends RelativeLayoutContainer {
+public abstract class GridRecyclerViewRelativeLayoutContainer<S extends Screen> extends RelativeLayoutContainer<S> {
 
     public GridRecyclerViewRelativeLayoutContainer(Context context) {
         super(context);

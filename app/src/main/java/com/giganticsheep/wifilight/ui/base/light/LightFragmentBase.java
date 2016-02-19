@@ -7,11 +7,8 @@ import com.giganticsheep.wifilight.api.model.Light;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.control.LightControlActivityComponent;
-import com.giganticsheep.wifilight.ui.status.light.LightStatusViewState;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
-
-import hugo.weaving.DebugLog;
 
 /**
  * Created by anne on 25/06/15.
@@ -56,9 +53,6 @@ public abstract class LightFragmentBase extends FragmentBase<LightView,
     @Override
     public final ViewState createViewState() {
         ViewState viewState = getLightControlActivity().getFragmentViewState();
-        if(viewState == null) {
-            viewState = new LightStatusViewState();
-        }
 
         return viewState;
     }

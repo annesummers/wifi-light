@@ -10,10 +10,10 @@ import flow.NotPersistent;
  * Created by anne on 08/11/15.
  */
 @NotPersistent
-public abstract class RelativeLayoutContainer extends RelativeLayout
-                                                implements ViewContainer, ViewState {
+public abstract class RelativeLayoutContainer<S extends Screen> extends RelativeLayout
+                                                implements ViewContainer<S>, ViewState {
 
-    private final ContainerDelegate containerDelegate;
+    private final ContainerDelegate<S> containerDelegate;
 
     public RelativeLayoutContainer(Context context) {
         super(context);
@@ -62,10 +62,15 @@ public abstract class RelativeLayoutContainer extends RelativeLayout
     }
 
     @Override
-    public void setScreen(Screen screen) {
+    public void setScreen(S screen) {
         containerDelegate.setScreen(screen);
 
         onCreated();
+    }
+
+    @Override
+    public S getScreen() {
+        return containerDelegate.getScreen();
     }
 
     @Override
