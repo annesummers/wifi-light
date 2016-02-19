@@ -35,8 +35,8 @@ public class LightNetworkDrawerFragment extends FragmentBase<LightNetworkView,
 
     private LightNetworkDrawerFragmentComponent component;
 
-    @InjectView(R.id.error_layout) FrameLayout errorLayout;
-    @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
+    @InjectView(R.id.errorLayout) FrameLayout errorLayout;
+    @InjectView(R.id.loadingLayout) FrameLayout loadingLayout;
 
     @InjectView(R.id.drawer_textview) TextView drawerTextView;
     @InjectView(R.id.location_list) ExpandableListView locationsListView;

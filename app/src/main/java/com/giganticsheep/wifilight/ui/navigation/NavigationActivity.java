@@ -26,6 +26,7 @@ import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.base.EventBus;
 import com.giganticsheep.wifilight.base.FragmentFactory;
+import com.giganticsheep.wifilight.base.dagger.HasComponent;
 import com.giganticsheep.wifilight.base.error.ErrorEvent;
 import com.giganticsheep.wifilight.base.error.ErrorStrings;
 import com.giganticsheep.wifilight.ui.base.ActivityModule;
@@ -48,7 +49,8 @@ import flow.Flow;
  * Created by anne on 04/09/15. <p>
  * (*_*)
  */
-public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
+public class NavigationActivity extends FlowActivity<NavigationScreenGroup>
+                                implements HasComponent<NavigationActivityComponent> {
 
     private NavigationActivityComponent component;
 
@@ -62,10 +64,11 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
     @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @InjectView(R.id.container_drawer) FrameLayout drawerContainerLayout;
 
-    @InjectView(R.id.loading_layout) FrameLayout loadingLayout;
-    @InjectView(R.id.error_layout) FrameLayout errorLayout;
-    @InjectView(R.id.lightNetworkLayout) RelativeLayout lightNetworkLayout;
+    @InjectView(R.id.loadingLayout) FrameLayout loadingLayout;
+    @InjectView(R.id.errorLayout) FrameLayout errorLayout;
     @InjectView(R.id.maskLayout) FrameLayout maskLayout;
+
+    @InjectView(R.id.lightNetworkLayout) RelativeLayout lightNetworkLayout;
 
     @InjectView(R.id.error_textview) TextView errorTextView;
 
@@ -84,7 +87,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
     }
 
     @Override
-    protected void createComponent() {
+    protected void createComponentAndInject() {
         WifiLightApplication application = ((WifiLightApplication)getApplication());
 
         component = DaggerNavigationActivityComponent.builder()
@@ -109,7 +112,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
 
-        title = (TextView) toolbar.findViewById(R.id.title_textview);
+        title = (TextView) toolbar.findViewById(R.id.titleTextView);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -254,6 +257,7 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
 
     //Dagger
 
+    @Override
     public NavigationActivityComponent getComponent() {
         return component;
     }
@@ -261,10 +265,14 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
     // Event handling
 
     public void onEventMainThread(LoadingEvent loadingEvent) {
-        loadingLayout.setVisibility(loadingEvent.isShow() ? View.VISIBLE : View.GONE);
+        loadingLayout.setVisibility(loadingEvent.isLoading() ? View.VISIBLE : View.GONE);
     }
 
     public void onEventMainThread(ErrorEvent errorEvent) { }
+
+    public void onEventMainThread(final SetTitleEvent event) {
+        title.setText(event.getTitle());
+    }
 
     public void onEventMainThread(final ShowGroupFragmentEvent event) {
         maskLayout.setVisibility(View.VISIBLE);
@@ -433,6 +441,4 @@ public class NavigationActivity extends FlowActivity<NavigationScreenGroup> {
          */
         void inject(final NavigationActivity navigationActivity);
     }
-
-    public static class ViewShownEvent { }
 }

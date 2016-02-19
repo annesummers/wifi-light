@@ -90,13 +90,18 @@ public class LocationContainer extends GridRecyclerViewRelativeLayoutContainer<L
     public void showLocation(Location location) {
         if(location != this.location) {
             this.location = location;
-
-            firstSetPower = true;
-            groupsRecyclerView.getAdapter().notifyDataSetChanged();
-            nameTextView.setText(location.getName());
-
-            // TODO set the power toggle on if any light is on, off otherwise
         }
+    }
+
+    @Override
+    public void showData() {
+        super.showData();
+
+        firstSetPower = true;
+        groupsRecyclerView.getAdapter().notifyDataSetChanged();
+        nameTextView.setText(location.getName());
+
+        // TODO set the power toggle on if any light is on, off otherwise
     }
 
     @OnCheckedChanged(R.id.powerToggle)

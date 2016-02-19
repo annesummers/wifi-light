@@ -21,7 +21,8 @@ import javax.inject.Inject;
 /**
  * Created by anne on 15/02/16.
  */
-public abstract class WifiLightScreen<T extends Screen.ViewActionBase> extends Screen<T> {
+public abstract class WifiLightScreen<A extends Screen.ViewActionBase, G extends ScreenGroup>
+                                                extends Screen<A, G> {
 
     @Inject protected EventBus eventBus;
     @Inject protected ErrorStrings errorStrings;

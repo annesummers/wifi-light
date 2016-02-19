@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.colour;
+package com.giganticsheep.wifilight.ui.control.colour;
 
 import android.support.annotation.NonNull;
 import android.widget.SeekBar;

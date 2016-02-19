@@ -1,13 +1,9 @@
-package com.giganticsheep.wifilight.ui.details;
+package com.giganticsheep.wifilight.ui.control.details;
 
-import android.support.annotation.NonNull;
-import android.view.View;
+import android.support.v4.app.Fragment;
 import android.widget.TextView;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import butterknife.InjectView;
@@ -18,7 +14,7 @@ import butterknife.InjectView;
  */
 
 @FragmentArgsInherited
-public class DetailsFragment extends LightFragmentBase {
+public class DetailsFragment extends Fragment {
 
     public DetailsFragment() {
         super();
@@ -31,7 +27,7 @@ public class DetailsFragment extends LightFragmentBase {
     @InjectView(R.id.brightness_textview) TextView brightnessTextView;
     @InjectView(R.id.kelvin_textview) TextView kelvinTextView;
 
-    @Override
+   /* @Override
     protected int getLayoutRes() {
         return R.layout.fragment_details;
     }
@@ -73,5 +69,5 @@ public class DetailsFragment extends LightFragmentBase {
     @Override
     protected boolean reinitialiseOnRotate() {
         return false;
-    }
+    }*/
 }

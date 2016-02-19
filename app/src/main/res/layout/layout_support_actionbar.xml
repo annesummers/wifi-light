@@ -9,7 +9,7 @@
     app:popupTheme="@style/Theme.WifiLight.ActionBar.Popup">
 
     <TextView
-        android:id="@+id/title_textview"
+        android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"

@@ -12,11 +12,13 @@ public class ViewStateHandler implements ViewState, Parcelable {
     public final static int STATE_SHOWING = 1;
     public final static int STATE_SHOW_ERROR = 2;
 
-    private int state;
+    public final static int STATE_MAX = STATE_SHOW_ERROR;
+
+    protected int state;
 
     private Throwable error;
 
-    private ViewState view;
+    protected ViewState view;
 
     public ViewStateHandler() {
         state = STATE_SHOW_LOADING;
@@ -27,7 +29,7 @@ public class ViewStateHandler implements ViewState, Parcelable {
         error = (Throwable) in.readSerializable();
     }
 
-    private void apply() {
+    protected void apply() {
         if(view != null) {
             switch (state) {
                 case STATE_SHOW_LOADING:
@@ -43,20 +45,6 @@ public class ViewStateHandler implements ViewState, Parcelable {
                     break;
             }
         }
-    }
-
-    private void setShowLoading() {
-        state = STATE_SHOW_LOADING;
-    }
-
-    private void setShowing() {
-        state = STATE_SHOWING;
-    }
-
-    private void setShowError(final Throwable throwable) {
-        state = STATE_SHOW_ERROR;
-
-        this.error = throwable;
     }
 
     @Override
@@ -102,8 +90,23 @@ public class ViewStateHandler implements ViewState, Parcelable {
 
     void detachView(ViewState view) {
         this.view = null;
-        // apply();
     }
+
+    private void setShowLoading() {
+        state = STATE_SHOW_LOADING;
+    }
+
+    private void setShowing() {
+        state = STATE_SHOWING;
+    }
+
+    private void setShowError(final Throwable throwable) {
+        state = STATE_SHOW_ERROR;
+
+        this.error = throwable;
+    }
+
+    // Parcelling
 
     @Override
     public int describeContents() {

@@ -2,7 +2,6 @@ package com.giganticsheep.wifilight.ui.base;
 
 import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.ui.UITestBase;
-import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.locations.LightNetworkViewState;
 

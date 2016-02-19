@@ -11,10 +11,10 @@ import com.giganticsheep.wifilight.BuildConfig;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.api.network.test.MockLight;
 import com.giganticsheep.wifilight.ui.UITestBase;
-import com.giganticsheep.wifilight.ui.colour.ColourFragment;
-import com.giganticsheep.wifilight.ui.details.DetailsFragment;
+import com.giganticsheep.wifilight.ui.control.colour.ColourFragment;
+import com.giganticsheep.wifilight.ui.control.details.DetailsFragment;
 import com.giganticsheep.wifilight.ui.status.StatusFragment;
-import com.giganticsheep.wifilight.ui.white.WhiteFragment;
+import com.giganticsheep.wifilight.ui.control.white.WhiteFragment;
 import com.giganticsheep.wifilight.util.Constants;
 
 import org.junit.After;
@@ -129,7 +129,7 @@ public class LightControlActivityTest extends UITestBase {
 
         LightControlActivity activity = createAndGetActivity();
 
-        ViewGroup tabs = (ViewGroup) activityController.get().findViewById(R.id.sliding_tabs);
+        ViewGroup tabs = (ViewGroup) activityController.get().findViewById(R.id.tabLayout);
 
         assertThat(tabs, not(nullValue()));
     }
@@ -160,10 +160,10 @@ public class LightControlActivityTest extends UITestBase {
             Timber.e(e, "Exception thrown");
         }
 
-        View loadingView = activity.findViewById(R.id.loading_layout);
-        View errorView = activity.findViewById(R.id.error_layout);
-        View mainView = activity.findViewById(R.id.light_layout);
-        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+        View loadingView = activity.findViewById(R.id.loadingLayout);
+        View errorView = activity.findViewById(R.id.errorLayout);
+        View mainView = activity.findViewById(R.id.controlLayout);
+        View disconnectedView = activity.findViewById(R.id.disconnectedLayout);
 
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
@@ -211,10 +211,10 @@ public class LightControlActivityTest extends UITestBase {
 
         activity.showLoading();
 
-        View loadingView = activity.findViewById(R.id.loading_layout);
-        View errorView = activity.findViewById(R.id.error_layout);
-        View mainView = activity.findViewById(R.id.light_layout);
-        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+        View loadingView = activity.findViewById(R.id.loadingLayout);
+        View errorView = activity.findViewById(R.id.errorLayout);
+        View mainView = activity.findViewById(R.id.controlLayout);
+        View disconnectedView = activity.findViewById(R.id.disconnectedLayout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
@@ -232,10 +232,10 @@ public class LightControlActivityTest extends UITestBase {
 
         activity.showError();
 
-        View loadingView = activity.findViewById(R.id.loading_layout);
-        View errorView = activity.findViewById(R.id.error_layout);
-        View mainView = activity.findViewById(R.id.light_layout);
-        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+        View loadingView = activity.findViewById(R.id.loadingLayout);
+        View errorView = activity.findViewById(R.id.errorLayout);
+        View mainView = activity.findViewById(R.id.controlLayout);
+        View disconnectedView = activity.findViewById(R.id.disconnectedLayout);
 
         assertThat(errorView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(loadingView.getVisibility(), equalTo(View.GONE));
@@ -253,10 +253,10 @@ public class LightControlActivityTest extends UITestBase {
 
         activity.showConnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
 
-        View loadingView = activity.findViewById(R.id.loading_layout);
-        View errorView = activity.findViewById(R.id.error_layout);
-        View mainView = activity.findViewById(R.id.light_layout);
-        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+        View loadingView = activity.findViewById(R.id.loadingLayout);
+        View errorView = activity.findViewById(R.id.errorLayout);
+        View mainView = activity.findViewById(R.id.controlLayout);
+        View disconnectedView = activity.findViewById(R.id.disconnectedLayout);
 
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
@@ -274,10 +274,10 @@ public class LightControlActivityTest extends UITestBase {
 
         activity.showConnecting(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
 
-        View loadingView = activity.findViewById(R.id.loading_layout);
-        View errorView = activity.findViewById(R.id.error_layout);
-        View mainView = activity.findViewById(R.id.light_layout);
-        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+        View loadingView = activity.findViewById(R.id.loadingLayout);
+        View errorView = activity.findViewById(R.id.errorLayout);
+        View mainView = activity.findViewById(R.id.controlLayout);
+        View disconnectedView = activity.findViewById(R.id.disconnectedLayout);
 
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
@@ -295,10 +295,10 @@ public class LightControlActivityTest extends UITestBase {
 
         activity.showDisconnected(new MockLight(Constants.TEST_ID, Constants.TEST_LABEL));
 
-        View loadingView = activity.findViewById(R.id.loading_layout);
-        View errorView = activity.findViewById(R.id.error_layout);
-        View mainView = activity.findViewById(R.id.light_layout);
-        View disconnectedView = activity.findViewById(R.id.disconnected_layout);
+        View loadingView = activity.findViewById(R.id.loadingLayout);
+        View errorView = activity.findViewById(R.id.errorLayout);
+        View mainView = activity.findViewById(R.id.controlLayout);
+        View disconnectedView = activity.findViewById(R.id.disconnectedLayout);
 
         assertThat(mainView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));
@@ -332,9 +332,9 @@ public class LightControlActivityTest extends UITestBase {
 
         shadowActivity.clickMenuItem(R.id.action_refresh);
 
-        View loadingView = activity.findViewById(R.id.loading_layout);
-        View errorView = activity.findViewById(R.id.error_layout);
-        View mainView = activity.findViewById(R.id.light_layout);
+        View loadingView = activity.findViewById(R.id.loadingLayout);
+        View errorView = activity.findViewById(R.id.errorLayout);
+        View mainView = activity.findViewById(R.id.controlLayout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.VISIBLE));
         assertThat(errorView.getVisibility(), equalTo(View.GONE));

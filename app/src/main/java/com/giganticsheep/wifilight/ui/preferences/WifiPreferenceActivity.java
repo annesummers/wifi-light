@@ -65,7 +65,7 @@ public class WifiPreferenceActivity extends PreferenceActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        title = (TextView) toolbar.findViewById(R.id.title_textview);
+        title = (TextView) toolbar.findViewById(R.id.titleTextView);
         title.setText("Settings");
     }
 

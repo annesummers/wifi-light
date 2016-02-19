@@ -69,7 +69,7 @@ public abstract class LightContainerAdapter<T extends RecyclerView.ViewHolder> e
         public LightViewHolder(@NonNull final View view) {
             super(view);
 
-            this.lightContainerLayout = (RelativeLayout) view.findViewById(R.id.light_layout);
+            this.lightContainerLayout = (RelativeLayout) view.findViewById(R.id.controlLayout);
             this.lightNameTextView = (TextView) view.findViewById(R.id.light_name_textview);
             this.lightImageView = (ImageView) view.findViewById(R.id.light_small_imageview);
 

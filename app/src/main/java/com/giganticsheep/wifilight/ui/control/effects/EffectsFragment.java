@@ -1,12 +1,7 @@
-package com.giganticsheep.wifilight.ui.effects;
+package com.giganticsheep.wifilight.ui.control.effects;
 
-import android.support.annotation.NonNull;
-import android.view.View;
+import android.support.v4.app.Fragment;
 
-import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 /**
@@ -14,12 +9,12 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
  * (*_*)
  */
 @FragmentArgsInherited
-public class EffectsFragment extends LightFragmentBase {
+public class EffectsFragment extends Fragment {
 
     public EffectsFragment() {
         super();
     }
-
+/*
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
@@ -49,5 +44,5 @@ public class EffectsFragment extends LightFragmentBase {
     @Override
     protected boolean reinitialiseOnRotate() {
         return false;
-    }
+    }*/
 }

@@ -59,8 +59,8 @@ public class LightNetworkDrawerFragmentTest extends UITestBase {
 
        // assertThat(fragment.getViewState().state(), equalTo(LightNetworkViewState.STATE_SHOW_LOADING));
 
-        View loadingView = fragment.getView().findViewById(R.id.loading_layout);
-        View errorView = fragment.getView().findViewById(R.id.error_layout);
+        View loadingView = fragment.getView().findViewById(R.id.loadingLayout);
+        View errorView = fragment.getView().findViewById(R.id.errorLayout);
         View mainView = fragment.getView().findViewById(R.id.drawerLayout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.VISIBLE));
@@ -78,8 +78,8 @@ public class LightNetworkDrawerFragmentTest extends UITestBase {
 
       //  assertThat(fragment.getViewState().state(), equalTo(LightNetworkViewState.STATE_SHOW_LIGHT_NETWORK));
 
-        View loadingView = fragment.getView().findViewById(R.id.loading_layout);
-        View errorView = fragment.getView().findViewById(R.id.error_layout);
+        View loadingView = fragment.getView().findViewById(R.id.loadingLayout);
+        View errorView = fragment.getView().findViewById(R.id.errorLayout);
         View mainView = fragment.getView().findViewById(R.id.drawerLayout);
 
         assertThat(loadingView.getVisibility(), equalTo(View.GONE));

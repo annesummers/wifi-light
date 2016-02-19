@@ -18,8 +18,8 @@ import rx.Subscription;
 /**
  * Created by anne on 03/11/15.
  */
-public abstract class Screen<V extends Screen.ViewActionBase> implements Parcelable,
-                                                                        SubscriptionHandler {
+public abstract class Screen<V extends Screen.ViewActionBase, G extends ScreenGroup>
+        implements Parcelable, SubscriptionHandler {
 
     private ScreenGroup screenGroup;
     private ViewStateHandler viewState;
@@ -40,7 +40,7 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
         this.screenGroup = screenGroup;
         this.screenGroup.registerForEvents(this);
 
-        this.viewState = new ViewStateHandler();
+        this.viewState = createViewState();
 
         injectDependencies();
     }
@@ -84,11 +84,36 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
         return outAnimation;
     }
 
-    protected abstract void injectDependencies();
+    public ViewState getViewState() {
+        return viewState;
+    }
 
-    protected abstract int layoutId();
+    public void hide() {
+        screenGroup.unRegisterForEvents(this);
+        clearSubscriptions();
+    }
 
-    protected abstract void showData();
+    protected ViewStateHandler createViewState() {
+        return new ViewStateHandler();
+    }
+
+    @Override
+    public <T> Subscription subscribe(@NonNull final Observable<T> observable,
+                                      @NonNull final Subscriber<T> subscriber) {
+        return subscriptionDelegate.subscribe(observable, subscriber);
+    }
+
+    @Override
+    public void shutdown() {
+        subscriptionDelegate.shutdown();
+    }
+
+    @Override
+    public void clearSubscriptions() {
+        subscriptionDelegate.clearSubscriptions();
+    }
+
+    // View handling
 
     void attachView(V view) {
         this.view = view;
@@ -98,12 +123,6 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
 
     void detachView(V view) {
         this.view = null;
-    }
-
-    private void apply() {
-        if(hasData && view != null) {
-            showData();
-        }
     }
 
     protected void setHasData() {
@@ -122,43 +141,13 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
         this.viewState.detachView(viewState);
     }
 
-    public ViewState getViewState() {
-        return viewState;
+    private void apply() {
+        if(hasData && view != null) {
+            doAction();
+        }
     }
 
-    public void hide() {
-        screenGroup.unRegisterForEvents(this);
-        clearSubscriptions();
-    }
-
-    public interface ViewActionBase { }
-
-    @Override
-    public <T> Subscription subscribe(@NonNull final Observable<T> observable,
-                                      @NonNull final Subscriber<T> subscriber) {
-        return subscriptionDelegate.subscribe(observable, subscriber);
-    }
-
-    @Override
-    public void shutdown() {
-        subscriptionDelegate.shutdown();
-    }
-
-    @Override
-    public void clearSubscriptions() {
-        subscriptionDelegate.clearSubscriptions();
-    }
-
-    public void onEventMainThread(FlowActivity.DismissErrorDialogEvent unused) {
-        getViewState().setStateShowing();
-
-       /* if (waitingToShow) {
-            if (isOnScreen() && isAttached) {
-                waitingToShow = false;
-                showData();
-            }
-        }*/
-    }
+    // Parcelling
 
     @Override
     public int describeContents() {
@@ -173,7 +162,28 @@ public abstract class Screen<V extends Screen.ViewActionBase> implements Parcela
         dest.writeParcelable(viewState, flags);
     }
 
+    // Event handling
+
     public void onEvent(NoSubscriberEvent event) { }
+
+    public void onEventMainThread(FlowActivity.DismissErrorDialogEvent unused) {
+        getViewState().setStateShowing();
+
+       /* if (waitingToShow) {
+            if (isOnScreen() && isAttached) {
+                waitingToShow = false;
+                doAction();
+            }
+        }*/
+    }
+
+    protected abstract void injectDependencies();
+
+    protected abstract int layoutId();
+
+    protected abstract void doAction();
+
+    public interface ViewActionBase { }
 
     protected static abstract class ScreenSubscriber<T> extends Subscriber<T> {
 

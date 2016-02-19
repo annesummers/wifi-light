@@ -11,7 +11,7 @@
         android:id="@+id/actionToolbar" />
 
     <LinearLayout
-        android:id="@+id/light_layout"
+        android:id="@+id/controlLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/default_margin"
@@ -29,7 +29,7 @@
             android:layout_weight="1">
 
             <android.support.design.widget.TabLayout
-                android:id="@+id/sliding_tabs"
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_height"
                 style="@style/Theme.WifiLight.TabLayout"/>
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:layout_below="@+id/sliding_tabs" />
+                android:layout_below="@+id/tabLayout" />
         </RelativeLayout>
 
         <RelativeLayout

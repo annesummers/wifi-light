@@ -1,4 +1,4 @@
-package com.giganticsheep.wifilight.ui.details;
+package com.giganticsheep.wifilight.ui.control.details;
 
 import android.support.annotation.NonNull;
 import android.widget.TextView;

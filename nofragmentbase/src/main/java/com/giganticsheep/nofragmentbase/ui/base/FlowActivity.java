@@ -44,7 +44,7 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
 
         setContentView(layoutId());
 
-        createComponent();
+        createComponentAndInject();
 
         //ButterKnife.bind(this);
         ButterKnife.inject(this);
@@ -366,7 +366,7 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
 
     protected abstract int layoutId();
 
-    protected abstract void createComponent();
+    protected abstract void createComponentAndInject();
     protected abstract G createScreenGroup();
     protected abstract void initialiseViews();
     protected abstract Screen getInitialScreen();
@@ -527,7 +527,7 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
             this.show = showProgress;
         }
 
-        public boolean isShow() {
+        public boolean isLoading() {
             return show;
         }
     }
@@ -537,4 +537,18 @@ public abstract class FlowActivity<G extends ScreenGroup> extends AppCompatActiv
             super(show);
         }
     }
+
+    public static class SetTitleEvent {
+        private final String title;
+
+        public SetTitleEvent(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
+    public static class ViewShownEvent { }
 }

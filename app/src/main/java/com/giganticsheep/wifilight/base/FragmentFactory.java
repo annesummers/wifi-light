@@ -5,11 +5,7 @@ import android.support.annotation.NonNull;
 import com.giganticsheep.wifilight.R;
 import com.giganticsheep.wifilight.WifiLightApplication;
 import com.giganticsheep.wifilight.ui.base.FragmentBase;
-import com.giganticsheep.wifilight.ui.colour.ColourFragmentBuilder;
-import com.giganticsheep.wifilight.ui.details.DetailsFragmentBuilder;
-import com.giganticsheep.wifilight.ui.effects.EffectsFragmentBuilder;
 import com.giganticsheep.wifilight.ui.locations.LightNetworkDrawerFragmentBuilder;
-import com.giganticsheep.wifilight.ui.white.WhiteFragmentBuilder;
 
 import java.util.Map;
 
@@ -53,7 +49,7 @@ public class FragmentFactory {
      */
     @NonNull
     public final FragmentBase createFragment(@NonNull final String name) throws Exception {
-        if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
+       /* if (name.equals(application.getString(R.string.fragment_name_light_colour))) {
             return new ColourFragmentBuilder(name).build();
         }
 
@@ -67,7 +63,7 @@ public class FragmentFactory {
 
         if (name.equals(application.getString(R.string.fragment_name_light_details))) {
             return new DetailsFragmentBuilder(name).build();
-        }
+        }*/
 
         if (name.equals(application.getString(R.string.fragment_name_drawer))) {
             return new LightNetworkDrawerFragmentBuilder(name).build();

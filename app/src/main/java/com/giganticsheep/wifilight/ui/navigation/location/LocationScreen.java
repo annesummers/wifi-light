@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.nofragmentbase.ui.base.FlowActivity;
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.nofragmentbase.ui.base.ScreenGroup;
 import com.giganticsheep.wifilight.R;
@@ -14,7 +15,7 @@ import com.giganticsheep.wifilight.ui.navigation.NavigationScreenGroup;
 /**
  * Created by anne on 24/11/15.
  */
-public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewAction> {
+public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewAction, NavigationScreenGroup> {
 
     private Location location;
 
@@ -64,8 +65,10 @@ public class LocationScreen extends WifiLightScreen<LocationScreen.LocationViewA
     }
 
     @Override
-    protected void showData() {
+    protected void doAction() {
         getView().showLocation(location);
+
+        getScreenGroup().postControlEvent(new FlowActivity.SetTitleEvent(location.getName()));
     }
 
     public interface LocationViewAction extends Screen.ViewActionBase {

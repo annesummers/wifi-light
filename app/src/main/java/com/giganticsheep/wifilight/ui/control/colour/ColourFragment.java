@@ -1,27 +1,19 @@
-package com.giganticsheep.wifilight.ui.colour;
+package com.giganticsheep.wifilight.ui.control.colour;
 
-import android.support.annotation.NonNull;
-import android.view.View;
+import android.support.v4.app.Fragment;
 import android.widget.SeekBar;
 
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.model.Light;
-import com.giganticsheep.wifilight.ui.base.light.LightFragmentBase;
-import com.giganticsheep.wifilight.ui.base.light.LightPresenterBase;
-import com.giganticsheep.wifilight.ui.base.light.LightSeekBarWrapper;
-import com.giganticsheep.wifilight.ui.base.light.OnLightSeekBarChangeListener;
-import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentArgsInherited;
 
 import butterknife.InjectView;
-import hugo.weaving.DebugLog;
 
 /**
  * Created by anne on 22/06/15.
  * (*_*)
  */
 @FragmentArgsInherited
-public class ColourFragment extends LightFragmentBase {
+public class ColourFragment extends Fragment {
 
     @InjectView(R.id.hue_seekbar) SeekBar hueSeekBar;
     @InjectView(R.id.saturation_seekbar) SeekBar saturationSeekBar;
@@ -30,9 +22,9 @@ public class ColourFragment extends LightFragmentBase {
     public ColourFragment() {
         super();
 
-        seekBarChangeListener = new OnLightSeekBarChangeListener(new ColourSeekBarWrapper());
+        //seekBarChangeListener = new OnLightSeekBarChangeListener(new ColourSeekBarWrapper());
     }
-
+/*
     @NonNull
     @Override
     public LightPresenterBase createPresenter() {
@@ -85,5 +77,5 @@ public class ColourFragment extends LightFragmentBase {
                 getLightColourPresenter().setBrightness(value, LightControlActivity.DEFAULT_DURATION);
             }
         }
-    }
+    }*/
 }

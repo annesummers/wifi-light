@@ -109,11 +109,11 @@ public abstract class RelativeLayoutContainer<S extends Screen> extends Relative
     }
 
     protected void showLoading() {
-        getScreenGroup().postControlEvent(new FlowActivity.FullScreenLoadingEvent(false));
+        getScreenGroup().postControlEvent(new FlowActivity.LoadingEvent(true));
     }
 
     protected void hideLoading() {
-        getScreenGroup().postControlEvent(new FlowActivity.FullScreenLoadingEvent(false));
+        getScreenGroup().postControlEvent(new FlowActivity.LoadingEvent(false));
     }
 
     private void showError(Throwable throwable) {

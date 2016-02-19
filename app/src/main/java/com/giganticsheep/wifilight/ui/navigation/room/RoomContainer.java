@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.giganticsheep.nofragmentbase.ui.base.FlowActivity;
 import com.giganticsheep.nofragmentbase.ui.base.GridRecyclerViewRelativeLayoutContainer;
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.wifilight.R;
@@ -61,7 +62,7 @@ public class RoomContainer extends GridRecyclerViewRelativeLayoutContainer<RoomS
 
     @Override
     protected void onCreated() {
-        getScreenGroup().postControlEvent(new NavigationActivity.ViewShownEvent());
+        getScreenGroup().postControlEvent(new FlowActivity.ViewShownEvent());
     }
 
     @Override
@@ -87,13 +88,18 @@ public class RoomContainer extends GridRecyclerViewRelativeLayoutContainer<RoomS
     public void showGroup(Group group) {
         if(group != this.group) {
             this.group = group;
-
-            firstSetPower = true;
-            lightsRecyclerView.getAdapter().notifyDataSetChanged();
-            nameTextView.setText(group.getName());
-
-            // TODO set the power toggle on if any light is on, off otherwise
         }
+    }
+
+    @Override
+    public void showData() {
+        super.showData();
+
+        firstSetPower = true;
+        lightsRecyclerView.getAdapter().notifyDataSetChanged();
+        nameTextView.setText(group.getName());
+
+        // TODO set the power toggle on if any light is on, off otherwise
     }
 
     @OnCheckedChanged(R.id.powerToggle)
@@ -116,7 +122,7 @@ public class RoomContainer extends GridRecyclerViewRelativeLayoutContainer<RoomS
 
         public GroupAdapter() {
             this.placeholderViewGroup = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.list_light_item, null);
-            this.placeholderLightContainerLayout = (RelativeLayout) placeholderViewGroup.findViewById(R.id.light_layout);
+            this.placeholderLightContainerLayout = (RelativeLayout) placeholderViewGroup.findViewById(R.id.controlLayout);
         }
 
         @Override

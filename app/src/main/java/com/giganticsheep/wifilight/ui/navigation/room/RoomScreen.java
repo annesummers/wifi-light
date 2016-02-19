@@ -4,21 +4,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.giganticsheep.nofragmentbase.ui.base.FlowActivity;
 import com.giganticsheep.nofragmentbase.ui.base.Screen;
 import com.giganticsheep.nofragmentbase.ui.base.ScreenGroup;
 import com.giganticsheep.wifilight.R;
-import com.giganticsheep.wifilight.api.LightControl;
 import com.giganticsheep.wifilight.api.model.Group;
-import com.giganticsheep.wifilight.api.model.LightStatus;
-import com.giganticsheep.wifilight.ui.base.LightChangedEvent;
 import com.giganticsheep.wifilight.ui.base.WifiLightScreen;
-import com.giganticsheep.wifilight.ui.control.LightControlActivity;
 import com.giganticsheep.wifilight.ui.navigation.NavigationScreenGroup;
 
 /**
  * Created by anne on 24/11/15.
  */
-public class RoomScreen extends WifiLightScreen<RoomScreen.ViewAction> {
+public class RoomScreen extends WifiLightScreen<RoomScreen.ViewAction, NavigationScreenGroup> {
 
     private Group group;
 
@@ -66,8 +63,10 @@ public class RoomScreen extends WifiLightScreen<RoomScreen.ViewAction> {
     }
 
     @Override
-    protected void showData() {
+    protected void doAction() {
         getView().showGroup(group);
+
+        getScreenGroup().postControlEvent(new FlowActivity.SetTitleEvent(group.getName()));
     }
 
     public interface ViewAction extends Screen.ViewActionBase {
